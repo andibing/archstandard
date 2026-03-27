@@ -1,0 +1,598 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hldstandard.org/schema/v1.0.0/hld-standard.schema.json",
+  "title": "HLD Standard Document",
+  "description": "Schema for High Level Design / Solution Architecture Description documents conforming to the HLD Standard v1.0.0",
+  "type": "object",
+  "required": ["schemaVersion", "documentControl", "executiveSummary", "architecturalViews", "riskGovernance"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Version of the HLD Standard schema this document conforms to"
+    },
+    "documentControl": {
+      "$ref": "#/$defs/documentControl"
+    },
+    "executiveSummary": {
+      "$ref": "#/$defs/executiveSummary"
+    },
+    "stakeholders": {
+      "$ref": "#/$defs/stakeholders"
+    },
+    "architecturalViews": {
+      "$ref": "#/$defs/architecturalViews"
+    },
+    "qualityPillars": {
+      "$ref": "#/$defs/qualityPillars"
+    },
+    "lifecycleManagement": {
+      "$ref": "#/$defs/lifecycleManagement"
+    },
+    "riskGovernance": {
+      "$ref": "#/$defs/riskGovernance"
+    },
+    "appendices": {
+      "$ref": "#/$defs/appendices"
+    },
+    "organisationProfile": {
+      "$ref": "#/$defs/organisationProfile"
+    },
+    "customSections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/customSection" },
+      "description": "Organisation-specific additional sections"
+    }
+  },
+  "$defs": {
+    "maturityLevel": {
+      "type": "string",
+      "enum": ["minimum", "recommended", "comprehensive"],
+      "description": "The maturity level at which this section becomes required"
+    },
+    "qualityPillarRef": {
+      "type": "string",
+      "enum": [
+        "operational-excellence",
+        "reliability",
+        "performance",
+        "cost-optimisation",
+        "sustainability"
+      ],
+      "description": "Reference to a quality pillar"
+    },
+    "frameworkRef": {
+      "type": "object",
+      "properties": {
+        "framework": {
+          "type": "string",
+          "enum": ["iso42010", "4plus1", "aws-waf", "azure-waf", "togaf"]
+        },
+        "reference": { "type": "string" }
+      },
+      "required": ["framework"]
+    },
+    "documentControl": {
+      "type": "object",
+      "description": "Section 0: Document Control",
+      "required": ["metadata"],
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "required": ["title", "solutionName", "version", "status"],
+          "properties": {
+            "title": { "type": "string" },
+            "solutionName": { "type": "string" },
+            "applicationId": { "type": "string" },
+            "authors": { "type": "array", "items": { "type": "string" } },
+            "owner": { "type": "string" },
+            "version": { "type": "string" },
+            "status": { "type": "string", "enum": ["draft", "in-review", "approved", "superseded"] },
+            "createdDate": { "type": "string", "format": "date" },
+            "lastUpdated": { "type": "string", "format": "date" },
+            "classification": { "type": "string" }
+          }
+        },
+        "changeHistory": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "version": { "type": "string" },
+              "date": { "type": "string", "format": "date" },
+              "author": { "type": "string" },
+              "description": { "type": "string" }
+            },
+            "required": ["version", "date", "description"]
+          }
+        },
+        "contributors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "role": { "type": "string" },
+              "contributionType": { "type": "string", "enum": ["author", "reviewer", "approver"] }
+            },
+            "required": ["name", "role", "contributionType"]
+          }
+        },
+        "purpose": { "type": "string" },
+        "scope": { "type": "string" }
+      }
+    },
+    "executiveSummary": {
+      "type": "object",
+      "description": "Section 1: Executive Summary",
+      "required": ["solutionOverview"],
+      "properties": {
+        "solutionOverview": { "type": "string" },
+        "businessContext": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "driver": { "type": "string" },
+              "description": { "type": "string" },
+              "priority": { "type": "string", "enum": ["high", "medium", "low"] }
+            }
+          }
+        },
+        "inScope": { "type": "string" },
+        "outOfScope": { "type": "string" },
+        "keyDecisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "decision": { "type": "string" },
+              "rationale": { "type": "string" },
+              "impact": { "type": "string" }
+            }
+          }
+        },
+        "projectDetails": {
+          "type": "object",
+          "properties": {
+            "projectName": { "type": "string" },
+            "projectCode": { "type": "string" },
+            "projectManager": { "type": "string" },
+            "estimatedCapex": { "type": "string" },
+            "estimatedOpex": { "type": "string" },
+            "targetGoLive": { "type": "string", "format": "date" }
+          }
+        },
+        "businessCriticality": {
+          "type": "string",
+          "enum": ["tier-1-critical", "tier-2-high", "tier-3-medium", "tier-4-low", "tier-5-minimal"]
+        }
+      }
+    },
+    "stakeholders": {
+      "type": "object",
+      "description": "Section 2: Stakeholders & Concerns",
+      "properties": {
+        "register": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stakeholder": { "type": "string" },
+              "role": { "type": "string" },
+              "concerns": { "type": "array", "items": { "type": "string" } },
+              "relevantViews": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "compliance": {
+          "type": "object",
+          "properties": {
+            "regulatoryRequirements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "regulation": { "type": "string" },
+                  "applicability": { "type": "string" },
+                  "designImpact": { "type": "string" }
+                }
+              }
+            },
+            "supportsRegulatedActivities": { "type": "boolean" },
+            "regulatedActivityDetails": { "type": "string" }
+          }
+        }
+      }
+    },
+    "architecturalViews": {
+      "type": "object",
+      "description": "Section 3: Architectural Views",
+      "properties": {
+        "logicalView": {
+          "type": "object",
+          "description": "3.1 Logical View",
+          "properties": {
+            "applicationArchitectureDiagram": { "type": "string", "description": "Reference to diagram file or embedded content" },
+            "components": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "type": { "type": "string" },
+                  "description": { "type": "string" },
+                  "technology": { "type": "string" },
+                  "owner": { "type": "string" }
+                },
+                "required": ["name", "type", "description"]
+              }
+            },
+            "serviceMapping": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "serviceId": { "type": "string" },
+                  "serviceName": { "type": "string" },
+                  "capabilityId": { "type": "string" },
+                  "capabilityName": { "type": "string" }
+                }
+              }
+            },
+            "designPatterns": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "pattern": { "type": "string" },
+                  "whereApplied": { "type": "string" },
+                  "rationale": { "type": "string" }
+                }
+              }
+            },
+            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+          }
+        },
+        "processView": {
+          "type": "object",
+          "description": "3.2 Process View",
+          "properties": {
+            "dataFlowDiagrams": { "type": "array", "items": { "type": "string" } },
+            "internalConnectivity": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source": { "type": "string" },
+                  "destination": { "type": "string" },
+                  "protocol": { "type": "string" },
+                  "authentication": { "type": "string" },
+                  "purpose": { "type": "string" }
+                },
+                "required": ["source", "destination", "protocol"]
+              }
+            },
+            "externalIntegrations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "sourceApp": { "type": "string" },
+                  "destinationApp": { "type": "string" },
+                  "protocol": { "type": "string" },
+                  "authentication": { "type": "string" },
+                  "purpose": { "type": "string" }
+                },
+                "required": ["sourceApp", "destinationApp", "protocol"]
+              }
+            },
+            "apis": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "type": { "type": "string", "enum": ["REST", "GraphQL", "gRPC", "SOAP", "Event", "Other"] },
+                  "direction": { "type": "string", "enum": ["exposed", "consumed"] },
+                  "format": { "type": "string" },
+                  "version": { "type": "string" }
+                }
+              }
+            },
+            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+          }
+        },
+        "physicalView": {
+          "type": "object",
+          "description": "3.3 Physical View",
+          "properties": {
+            "deploymentDiagram": { "type": "string" },
+            "hosting": {
+              "type": "object",
+              "properties": {
+                "venueType": { "type": "array", "items": { "type": "string" } },
+                "regions": { "type": "array", "items": { "type": "string" } },
+                "serviceModel": { "type": "array", "items": { "type": "string" } },
+                "cloudProvider": { "type": "string" }
+              }
+            },
+            "compute": {
+              "type": "object",
+              "properties": {
+                "servers": { "type": "array", "items": { "type": "object" } },
+                "containers": { "type": "object" },
+                "serverless": { "type": "object" },
+                "hpc": { "type": "object" },
+                "aiMl": { "type": "object" }
+              }
+            },
+            "networking": { "type": "object" },
+            "environments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string" },
+                  "description": { "type": "string" },
+                  "count": { "type": "string" },
+                  "computeSolution": { "type": "string" }
+                }
+              }
+            },
+            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+          }
+        },
+        "dataView": {
+          "type": "object",
+          "description": "3.4 Data View",
+          "properties": {
+            "dataStores": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "technology": { "type": "string" },
+                  "authoritative": { "type": "boolean" },
+                  "retentionPeriod": { "type": "string" },
+                  "dataSize": { "type": "string" },
+                  "classification": { "type": "string", "enum": ["public", "internal", "restricted", "highly-restricted"] },
+                  "personalData": { "type": "boolean" },
+                  "encryptionLevel": { "type": "string" },
+                  "keyManagement": { "type": "string" }
+                },
+                "required": ["name", "technology", "classification"]
+              }
+            },
+            "dataLifecycle": { "type": "object" },
+            "privacyAssessments": { "type": "array", "items": { "type": "object" } },
+            "dataTransfers": { "type": "array", "items": { "type": "object" } },
+            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+          }
+        },
+        "securityView": {
+          "type": "object",
+          "description": "3.5 Security View",
+          "properties": {
+            "securityOverview": { "type": "object" },
+            "iam": {
+              "type": "object",
+              "properties": {
+                "authenticationModel": { "type": "object" },
+                "authorisationModel": { "type": "object" },
+                "sessionManagement": { "type": "object" },
+                "privilegedAccess": { "type": "object" }
+              }
+            },
+            "networkSecurity": { "type": "object" },
+            "dataProtection": {
+              "type": "object",
+              "properties": {
+                "encryptionAtRest": { "type": "object" },
+                "secretManagement": { "type": "object" }
+              }
+            },
+            "securityMonitoring": { "type": "object" },
+            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+          }
+        },
+        "scenarios": {
+          "type": "object",
+          "description": "3.6 Scenarios",
+          "properties": {
+            "useCases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "name": { "type": "string" },
+                  "actors": { "type": "array", "items": { "type": "string" } },
+                  "trigger": { "type": "string" },
+                  "preconditions": { "type": "string" },
+                  "mainFlow": { "type": "string" },
+                  "postconditions": { "type": "string" },
+                  "viewsInvolved": { "type": "array", "items": { "type": "string" } }
+                },
+                "required": ["id", "name"]
+              }
+            },
+            "adrs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "title": { "type": "string" },
+                  "status": { "type": "string", "enum": ["proposed", "accepted", "superseded", "deprecated"] },
+                  "date": { "type": "string", "format": "date" },
+                  "context": { "type": "string" },
+                  "decision": { "type": "string" },
+                  "alternatives": { "type": "string" },
+                  "consequences": { "type": "string" },
+                  "qualityPillarTradeoffs": { "type": "string" }
+                },
+                "required": ["id", "title", "status", "context", "decision"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "qualityPillars": {
+      "type": "object",
+      "description": "Section 4: Quality Pillars",
+      "properties": {
+        "operationalExcellence": { "type": "object" },
+        "reliability": { "type": "object" },
+        "performance": { "type": "object" },
+        "costOptimisation": { "type": "object" },
+        "sustainability": { "type": "object" },
+        "tradeoffs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pillars": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } },
+              "description": { "type": "string" },
+              "rationale": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "lifecycleManagement": {
+      "type": "object",
+      "description": "Section 5: Lifecycle Management",
+      "properties": {
+        "softwareDevelopment": { "type": "object" },
+        "serviceTransition": { "type": "object" },
+        "releaseManagement": { "type": "object" },
+        "operations": { "type": "object" },
+        "maintainability": { "type": "object" },
+        "endOfLife": { "type": "object" },
+        "exitPlanning": { "type": "object" }
+      }
+    },
+    "riskGovernance": {
+      "type": "object",
+      "description": "Section 6: Risk & Governance",
+      "required": ["designRisks"],
+      "properties": {
+        "designRisks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "riskEvent": { "type": "string" },
+              "mitigationPlan": { "type": "string" },
+              "residualRisk": { "type": "string", "enum": ["high", "medium", "low"] },
+              "targetDate": { "type": "string" },
+              "owner": { "type": "string" }
+            },
+            "required": ["id", "riskEvent", "residualRisk"]
+          }
+        },
+        "guardrailExceptions": { "type": "object" },
+        "complianceTraceability": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "standard": { "type": "string" },
+              "requirement": { "type": "string" },
+              "howSatisfied": { "type": "string" },
+              "evidenceSection": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "appendices": {
+      "type": "object",
+      "description": "Section 7: Appendices",
+      "properties": {
+        "glossary": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "term": { "type": "string" },
+              "definition": { "type": "string" }
+            }
+          }
+        },
+        "references": { "type": "array", "items": { "type": "object" } },
+        "approvals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": { "type": "string" },
+              "name": { "type": "string" },
+              "date": { "type": "string", "format": "date" },
+              "reference": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "organisationProfile": {
+      "type": "object",
+      "description": "Organisation-specific configuration that maps generic sections to specific tools, standards, and processes",
+      "properties": {
+        "organisationName": { "type": "string" },
+        "internalStandards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "version": { "type": "string" },
+              "mappedSections": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "governanceGates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gateName": { "type": "string" },
+              "requiredMaturityLevel": { "$ref": "#/$defs/maturityLevel" },
+              "requiredSections": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "tooling": {
+          "type": "object",
+          "description": "Organisation-specific tool mappings",
+          "properties": {
+            "cmdb": { "type": "string" },
+            "portfolioManagement": { "type": "string" },
+            "secretStore": { "type": "string" },
+            "cicd": { "type": "string" },
+            "monitoring": { "type": "string" },
+            "siem": { "type": "string" }
+          }
+        }
+      }
+    },
+    "customSection": {
+      "type": "object",
+      "description": "An organisation-specific custom section",
+      "required": ["id", "title", "content"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "content": { "type": "string" },
+        "maturityLevel": { "$ref": "#/$defs/maturityLevel" },
+        "parentSection": { "type": "string", "description": "ID of the parent section this should be nested under" }
+      }
+    }
+  }
+}

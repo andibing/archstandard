@@ -1,0 +1,135 @@
+---
+title: JSON Schema
+description: The formal JSON Schema definition for HLD Standard documents.
+---
+
+## Overview
+
+The HLD Standard defines a formal **JSON Schema** (v1.0.0) that enables:
+
+- **Validation** - Validate HLD documents against the standard structure
+- **Generation** - Generate blank templates in multiple formats (JSON, Markdown, Word)
+- **Tooling** - Build tooling that reads, writes, and processes HLD documents programmatically
+- **Extensibility** - Add organisation-specific sections via `customSections` and `organisationProfile`
+
+## Schema Location
+
+The schema file is located at [`/schema/hld-standard.schema.json`](https://github.com/your-org/hld-standard/blob/main/schema/hld-standard.schema.json) in the repository.
+
+**Schema ID:** `https://hldstandard.org/schema/v1.0.0/hld-standard.schema.json`
+
+## Schema Structure
+
+The schema maps directly to the standard's sections:
+
+```
+hld-standard.schema.json
+├── schemaVersion          "1.0.0"
+├── documentControl        Section 0: metadata, history, contributors
+├── executiveSummary       Section 1: overview, context, scope, decisions
+├── stakeholders           Section 2: register, concerns, compliance
+├── architecturalViews     Section 3
+│   ├── logicalView        3.1: components, services, patterns
+│   ├── processView        3.2: connectivity, integrations, APIs
+│   ├── physicalView       3.3: hosting, compute, networking, environments
+│   ├── dataView           3.4: data stores, classification, privacy
+│   ├── securityView       3.5: IAM, encryption, monitoring
+│   └── scenarios          3.6: use cases, ADRs
+├── qualityPillars         Section 4: five pillars + tradeoffs
+├── lifecycleManagement    Section 5: SDLC, operations, exit planning
+├── riskGovernance         Section 6: risks, exceptions, compliance
+├── appendices             Section 7: glossary, references, approvals
+├── organisationProfile    Organisation-specific configuration
+└── customSections[]       Extension point for additional sections
+```
+
+## Key Schema Features
+
+### Maturity Levels
+
+Sections use a `maturityLevel` enum with three values:
+
+```json
+{ "type": "string", "enum": ["minimum", "recommended", "comprehensive"] }
+```
+
+### Quality Pillar References
+
+Any section can reference applicable quality pillars:
+
+```json
+{
+  "qualityPillarRefs": ["reliability", "performance", "cost-optimisation"]
+}
+```
+
+### Organisation Profile
+
+The `organisationProfile` extension allows mapping the generic standard to organisation-specific tools and governance:
+
+```json
+{
+  "organisationProfile": {
+    "organisationName": "Acme Corp",
+    "tooling": {
+      "cmdb": "ServiceNow",
+      "secretStore": "HashiCorp Vault",
+      "monitoring": "Datadog"
+    },
+    "governanceGates": [
+      {
+        "gateName": "Dev/Test ARB",
+        "requiredMaturityLevel": "minimum",
+        "requiredSections": ["documentControl", "executiveSummary", "architecturalViews.logicalView"]
+      },
+      {
+        "gateName": "Production ARB",
+        "requiredMaturityLevel": "recommended"
+      }
+    ]
+  }
+}
+```
+
+### Custom Sections
+
+Add organisation-specific sections without modifying the core schema:
+
+```json
+{
+  "customSections": [
+    {
+      "id": "cloud-governance",
+      "title": "Cloud Governance",
+      "description": "Organisation-specific cloud governance requirements",
+      "content": "...",
+      "maturityLevel": "recommended",
+      "parentSection": "physicalView"
+    }
+  ]
+}
+```
+
+## Required vs Optional Fields
+
+The schema enforces only the **Minimum** maturity level as required:
+
+| Required Field | Section |
+|---------------|---------|
+| `schemaVersion` | Root |
+| `documentControl.metadata` | 0. Document Control |
+| `executiveSummary.solutionOverview` | 1. Executive Summary |
+| `architecturalViews` | 3. Architectural Views |
+| `riskGovernance.designRisks` | 6. Risk & Governance |
+
+All other fields are optional, allowing progressive adoption from Minimum through Comprehensive maturity levels.
+
+## Validation Example
+
+```bash
+# Using ajv-cli
+npx ajv validate -s schema/hld-standard.schema.json -d my-hld.json
+
+# Using Python jsonschema
+python -m jsonschema -i my-hld.json schema/hld-standard.schema.json
+```
