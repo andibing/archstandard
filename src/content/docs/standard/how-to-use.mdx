@@ -1,65 +1,108 @@
 ---
-title: How to Use This Standard
-description: Guidance on adopting the HLD Standard for your organisation and projects.
+title: "2. Conformance and Usage"
+description: "How to adopt the HLD Standard, maturity targets, and document lifecycle."
 ---
 
-## Getting Started
+import { Aside } from '@astrojs/starlight/components';
+
+## 2.1 Terminology
+
+The key words "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "MAY", and "OPTIONAL" in this standard are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174).
+
+| Keyword | Meaning |
+|---------|---------|
+| **SHALL** | An absolute requirement of the standard |
+| **SHALL NOT** | An absolute prohibition |
+| **SHOULD** | Recommended; there may be valid reasons to deviate but the implications must be understood |
+| **SHOULD NOT** | Not recommended; there may be valid reasons to include but the implications must be understood |
+| **MAY** / **OPTIONAL** | Truly optional; include at the author's discretion |
+
+These keywords map to the standard's maturity levels as follows:
+
+| Maturity Level | Keyword | Governance Gate |
+|---------------|---------|-----------------|
+| <span class="maturity-indicator maturity-minimum">Minimum</span> | SHALL | Development / Test review |
+| <span class="maturity-indicator maturity-recommended">Recommended</span> | SHOULD | Production approval |
+| <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | MAY | Enterprise review |
+
+## 2.2 Adopting the Standard
 
 ### Step 1: Determine Your Maturity Target
 
-Choose the maturity level appropriate for your project:
+Select the maturity level appropriate for your project phase and governance requirements:
 
-| Level | When to Use | Typical Context |
-|-------|------------|-----------------|
-| <span class="maturity-indicator maturity-minimum">Minimum</span> | Early-stage designs, dev/test reviews, PoCs | Development ARB, design spike documentation |
-| <span class="maturity-indicator maturity-recommended">Recommended</span> | Production-bound designs | Production ARB, governance review |
-| <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | Critical systems, regulated environments | Enterprise architecture review, audit evidence |
+- **Minimum** — For early-stage designs, proofs of concept, or development/test architecture reviews. Complete all sections marked <span class="maturity-indicator maturity-minimum">Minimum</span>.
+- **Recommended** — For production-bound designs requiring formal governance approval. Complete all sections marked <span class="maturity-indicator maturity-minimum">Minimum</span> and <span class="maturity-indicator maturity-recommended">Recommended</span>.
+- **Comprehensive** — For critical, regulated, or enterprise-scale systems. Complete all sections.
 
 ### Step 2: Complete the Relevant Sections
 
-Work through each section of the standard. Sections tagged above your target maturity level can be marked as "Not Applicable" or deferred.
+Work through each section of the standard in order. Sections above your target maturity level MAY be marked as "Not Applicable" or deferred to a later revision.
 
-### Step 3: Use Quality Pillars as a Review Lens
+Where a section is not relevant to the solution (e.g., IoT Devices for a purely cloud-based API), it SHALL be explicitly marked as "Not Applicable" with a brief justification, rather than omitted.
 
-After completing the architectural views, use the Quality Pillars (Section 4) to review your design:
+### Step 3: Evaluate Against Quality Pillars
 
-1. For each pillar, evaluate whether your design adequately addresses the concerns
-2. Document any tradeoffs between pillars (e.g., cost vs. resilience)
-3. Reference specific quality pillar requirements from within your architectural views
+After completing the architectural views (Section 3), evaluate the design against each Quality Pillar (Section 4):
 
-## Document Lifecycle
+1. For each pillar, assess whether the design adequately addresses the quality concerns
+2. Document any tradeoffs between pillars and the rationale for the chosen balance
+3. Cross-reference specific pillar requirements from within the architectural views
 
-The HLD is a **living artefact**:
+### Step 4: Validate and Submit for Review
 
-- It describes the **current state** of the solution architecture
-- It must be updated when architecturally significant changes are made
-- Multiple teams may update it in parallel for different change activities
-- It is governed through your organisation's architecture review process
+1. If using machine-readable output, validate the document against the JSON Schema (see [Schema](/standard/schema/))
+2. Submit for governance review at the appropriate gate for your maturity level
 
-## Organisation Customisation
+## 2.3 Document Lifecycle
 
-The standard is designed to be extended with organisation-specific content:
+An HLD document produced to this standard is a **living artefact**:
 
-1. **Organisation Profile** - Map generic sections to your specific tools, standards, and governance processes
-2. **Custom Sections** - Add organisation-specific sections using the JSON schema extension points
-3. **Standards Traceability** - Reference your internal design principles, patterns, and standards within each section
-4. **Governance Gates** - Map maturity levels to your architecture review board (ARB) stages
+- It SHALL describe the **current state** of the solution architecture
+- It SHALL be updated when architecturally significant changes are made
+- It MAY be updated by multiple teams or change activities, either sequentially or in parallel
+- It SHALL NOT be owned by a single project team; ownership rests with the accountable architect for the solution
+- Changes to the design SHOULD be approved through the organisation's architecture governance process
 
-## Output Formats
+<Aside type="tip" title="Incremental Updates">
+If a project seeks only to make incremental changes to a solution documented in an existing HLD, only the sections relevant to the change need to be updated. The remaining sections SHALL remain unchanged and continue to describe the current state.
+</Aside>
 
-The standard's JSON schema enables generation in multiple formats:
+## 2.4 Organisation Customisation
 
-- **Web** - Interactive documentation site (this site)
-- **Markdown** - For inclusion in git repositories alongside code
-- **Word/DOCX** - For formal governance submissions and offline review
-- **JSON** - Machine-readable for tooling integration
+This standard is designed to be adopted without modification. However, organisations MAY extend it in the following ways:
 
-## Section Conventions
+1. **Organisation Profile** — Map generic sections to specific internal tools, standards, and governance processes using the `organisationProfile` field in the JSON Schema
+2. **Custom Sections** — Add organisation-specific sections using the `customSections` extension point without modifying the core standard structure
+3. **Standards Traceability** — Reference internal design principles, patterns, and standards within the compliance traceability section (Section 6.4)
+4. **Governance Gate Mapping** — Map the three maturity levels to specific architecture review board (ARB) stages
 
-Throughout this standard, you will see:
+Organisations SHALL NOT remove or renumber core sections of the standard. Where a core section is not applicable, it SHALL be retained with a "Not Applicable" designation.
 
-- **Guidance** boxes explaining what content belongs in each section
-- **Framework Alignment** badges showing which industry frameworks map to each section
-- **Maturity Level** indicators showing when each section is required
-- **Quality Pillar References** showing cross-cutting quality concerns
-- **Example Prompts** (`[...]`) indicating where solution-specific content should be added
+## 2.5 Output Formats
+
+The standard's JSON Schema enables generation and validation in multiple formats:
+
+| Format | Use Case |
+|--------|----------|
+| **Web** | Interactive documentation site (this site) |
+| **Markdown** | Inclusion in git repositories alongside code |
+| **Word / DOCX** | Formal governance submissions and offline review |
+| **JSON** | Machine-readable for tooling integration and validation |
+
+See [Templates](/standard/templates/) for downloadable blank templates in each format.
+
+## 2.6 Normative References
+
+This standard references the following specifications:
+
+| Reference | Title | Application |
+|-----------|-------|-------------|
+| [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) | Key words for use in RFCs to Indicate Requirement Levels | Terminology conventions (Section 2.1) |
+| [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) | Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words | Clarification that keywords are normative only when capitalised |
+| [ISO/IEC/IEEE 42010:2022](https://www.iso.org/standard/74393.html) | Software, systems and enterprise — Architecture description | Meta-model for viewpoints, views, and correspondences (Section 3) |
+| [ISO/IEC 25010:2023](https://www.iso.org/standard/35733.html) | Systems and software quality models | Quality attribute definitions informing Quality Pillars (Section 4) |
+| [NIST SP 800-53 Rev. 5](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final) | Security and Privacy Controls | Security control categories referenced in Section 3.5 |
+| [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/) | AWS Well-Architected Framework (6 Pillars) | Quality Pillar definitions (Section 4) |
+| [Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/well-architected/) | Azure Well-Architected Framework (5 Pillars) | Quality Pillar definitions with tradeoff guidance (Section 4) |
+| [TOGAF Standard, 10th Edition](https://www.opengroup.org/togaf) | The Open Group Architecture Framework | Architecture domain alignment |

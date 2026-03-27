@@ -1,0 +1,288 @@
+# HLD-STD-001 v1.0.0 — High Level Design Document Template
+# This file conforms to the HLD Standard JSON Schema v1.0.0
+# See: https://hldstandard.org/standard/schema/
+
+schemaVersion: "1.0.0"
+
+# ─────────────────────────────────────────────
+# Section 0: Document Control
+# ─────────────────────────────────────────────
+documentControl:
+  metadata:
+    title: ""                          # Document title
+    solutionName: ""                   # Name of the solution being documented
+    applicationId: ""                  # Unique identifier (e.g., CMDB ID)
+    authors: []                        # List of author names
+    owner: ""                          # Accountable architect
+    version: "0.1"                     # Semantic version (MAJOR.MINOR)
+    status: "draft"                    # draft | in-review | approved | superseded
+    createdDate: ""                    # ISO 8601 date (YYYY-MM-DD)
+    lastUpdated: ""                    # ISO 8601 date (YYYY-MM-DD)
+    classification: ""                 # Document security classification
+  changeHistory:
+    - version: "0.1"
+      date: ""
+      author: ""
+      description: "Initial draft"
+  contributors:
+    - name: ""
+      role: ""
+      contributionType: "author"       # author | reviewer | approver
+  purpose: ""                          # Purpose of this HLD document
+  scope: ""                            # Scope boundaries
+
+# ─────────────────────────────────────────────
+# Section 1: Executive Summary
+# ─────────────────────────────────────────────
+executiveSummary:
+  solutionOverview: ""                 # Brief summary of the solution (1-2 paragraphs)
+  businessContext:
+    - driver: ""
+      description: ""
+      priority: "high"                 # high | medium | low
+  inScope: ""                          # What this HLD covers
+  outOfScope: ""                       # What is explicitly excluded
+  keyDecisions:
+    - decision: ""
+      rationale: ""
+      impact: ""
+  projectDetails:
+    projectName: ""
+    projectCode: ""
+    projectManager: ""
+    estimatedCapex: ""
+    estimatedOpex: ""
+    targetGoLive: ""                   # ISO 8601 date
+  businessCriticality: ""              # tier-1-critical | tier-2-high | tier-3-medium | tier-4-low | tier-5-minimal
+
+# ─────────────────────────────────────────────
+# Section 2: Stakeholders & Concerns
+# ─────────────────────────────────────────────
+stakeholders:
+  register:
+    - stakeholder: ""
+      role: ""
+      concerns: []
+      relevantViews: []
+  compliance:
+    regulatoryRequirements:
+      - regulation: ""
+        applicability: ""
+        designImpact: ""
+    supportsRegulatedActivities: false
+    regulatedActivityDetails: ""
+
+# ─────────────────────────────────────────────
+# Section 3: Architectural Views
+# ─────────────────────────────────────────────
+architecturalViews:
+
+  # 3.1 Logical View
+  logicalView:
+    applicationArchitectureDiagram: "" # Reference to diagram file
+    components:
+      - name: ""
+        type: ""                       # Application | Service | API | Database | Queue | etc.
+        description: ""
+        technology: ""
+        owner: ""
+    serviceMapping:
+      - serviceId: ""
+        serviceName: ""
+        capabilityId: ""
+        capabilityName: ""
+    designPatterns:
+      - pattern: ""
+        whereApplied: ""
+        rationale: ""
+    qualityPillarRefs: []              # e.g., ["performance", "reliability"]
+
+  # 3.2 Process View
+  processView:
+    dataFlowDiagrams: []               # References to diagram files
+    internalConnectivity:
+      - source: ""
+        destination: ""
+        protocol: ""                   # e.g., "HTTPS/TLS 1.3"
+        authentication: ""            # e.g., "mTLS"
+        purpose: ""
+    externalIntegrations:
+      - sourceApp: ""
+        destinationApp: ""
+        protocol: ""
+        authentication: ""
+        purpose: ""
+    apis:
+      - name: ""
+        type: "REST"                   # REST | GraphQL | gRPC | SOAP | Event | Other
+        direction: "exposed"           # exposed | consumed
+        format: ""
+        version: ""
+    qualityPillarRefs: []
+
+  # 3.3 Physical View
+  physicalView:
+    deploymentDiagram: ""              # Reference to diagram file
+    hosting:
+      venueType: []                    # Cloud | SaaS | On-Premises | Hybrid
+      regions: []                      # UK | EU | US | Asia
+      serviceModel: []                 # IaaS | PaaS | SaaS | FaaS
+      cloudProvider: ""                # AWS | Azure | GCP | Other
+    compute:
+      servers: []
+      containers: {}
+      serverless: {}
+      hpc: {}
+      aiMl: {}
+    networking: {}
+    environments:
+      - type: "development"
+        description: ""
+        count: ""
+        computeSolution: ""
+      - type: "production"
+        description: ""
+        count: ""
+        computeSolution: ""
+    qualityPillarRefs: []
+
+  # 3.4 Data View
+  dataView:
+    dataStores:
+      - name: ""
+        technology: ""                 # e.g., "PostgreSQL", "S3", "Redis"
+        authoritative: false
+        retentionPeriod: ""
+        dataSize: ""
+        classification: "internal"     # public | internal | restricted | highly-restricted
+        personalData: false
+        encryptionLevel: ""
+        keyManagement: ""
+    dataLifecycle: {}
+    privacyAssessments: []
+    dataTransfers: []
+    qualityPillarRefs: []
+
+  # 3.5 Security View
+  securityView:
+    securityOverview: {}
+    iam:
+      authenticationModel: {}
+      authorisationModel: {}
+      sessionManagement: {}
+      privilegedAccess: {}
+    networkSecurity: {}
+    dataProtection:
+      encryptionAtRest: {}
+      secretManagement: {}
+    securityMonitoring: {}
+    qualityPillarRefs: []
+
+  # 3.6 Scenarios
+  scenarios:
+    useCases:
+      - id: "UC-01"
+        name: ""
+        actors: []
+        trigger: ""
+        preconditions: ""
+        mainFlow: ""
+        postconditions: ""
+        viewsInvolved: []
+    adrs:
+      - id: "ADR-001"
+        title: ""
+        status: "proposed"             # proposed | accepted | superseded | deprecated
+        date: ""
+        context: ""
+        decision: ""
+        alternatives: ""
+        consequences: ""
+        qualityPillarTradeoffs: ""
+
+# ─────────────────────────────────────────────
+# Section 4: Quality Pillars
+# ─────────────────────────────────────────────
+qualityPillars:
+  operationalExcellence: {}
+  reliability: {}
+  performance: {}
+  costOptimisation: {}
+  sustainability: {}
+  tradeoffs:
+    - pillars: []                      # e.g., ["reliability", "cost-optimisation"]
+      description: ""
+      rationale: ""
+
+# ─────────────────────────────────────────────
+# Section 5: Lifecycle Management
+# ─────────────────────────────────────────────
+lifecycleManagement:
+  softwareDevelopment: {}
+  serviceTransition: {}
+  releaseManagement: {}
+  operations: {}
+  maintainability: {}
+  endOfLife: {}
+  exitPlanning: {}
+
+# ─────────────────────────────────────────────
+# Section 6: Risk & Governance
+# ─────────────────────────────────────────────
+riskGovernance:
+  designRisks:
+    - id: "R-001"
+      riskEvent: ""
+      mitigationPlan: ""
+      residualRisk: "medium"           # high | medium | low
+      targetDate: ""
+      owner: ""
+  guardrailExceptions: {}
+  complianceTraceability:
+    - standard: ""
+      requirement: ""
+      howSatisfied: ""
+      evidenceSection: ""
+
+# ─────────────────────────────────────────────
+# Section 7: Appendices
+# ─────────────────────────────────────────────
+appendices:
+  glossary:
+    - term: ""
+      definition: ""
+  references: []
+  approvals:
+    - role: ""
+      name: ""
+      date: ""
+      reference: ""
+
+# ─────────────────────────────────────────────
+# Organisation Profile (OPTIONAL)
+# Map generic sections to your organisation's
+# specific tools, standards, and governance.
+# ─────────────────────────────────────────────
+# organisationProfile:
+#   organisationName: ""
+#   tooling:
+#     cmdb: ""
+#     secretStore: ""
+#     monitoring: ""
+#     siem: ""
+#   governanceGates:
+#     - gateName: ""
+#       requiredMaturityLevel: "minimum"
+#       requiredSections: []
+
+# ─────────────────────────────────────────────
+# Custom Sections (OPTIONAL)
+# Add organisation-specific sections.
+# ─────────────────────────────────────────────
+# customSections:
+#   - id: ""
+#     title: ""
+#     description: ""
+#     content: ""
+#     maturityLevel: "recommended"
+#     parentSection: ""

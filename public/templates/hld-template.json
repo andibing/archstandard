@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "",
+      "solutionName": "",
+      "applicationId": "",
+      "authors": [],
+      "owner": "",
+      "version": "0.1",
+      "status": "draft",
+      "createdDate": "",
+      "lastUpdated": "",
+      "classification": ""
+    },
+    "changeHistory": [
+      {
+        "version": "0.1",
+        "date": "",
+        "author": "",
+        "description": "Initial draft"
+      }
+    ],
+    "contributors": [
+      {
+        "name": "",
+        "role": "",
+        "contributionType": "author"
+      }
+    ],
+    "purpose": "",
+    "scope": ""
+  },
+  "executiveSummary": {
+    "solutionOverview": "",
+    "businessContext": [
+      {
+        "driver": "",
+        "description": "",
+        "priority": "high"
+      }
+    ],
+    "inScope": "",
+    "outOfScope": "",
+    "keyDecisions": [
+      {
+        "decision": "",
+        "rationale": "",
+        "impact": ""
+      }
+    ],
+    "projectDetails": {
+      "projectName": "",
+      "projectCode": "",
+      "projectManager": "",
+      "estimatedCapex": "",
+      "estimatedOpex": "",
+      "targetGoLive": ""
+    },
+    "businessCriticality": ""
+  },
+  "stakeholders": {
+    "register": [
+      {
+        "stakeholder": "",
+        "role": "",
+        "concerns": [],
+        "relevantViews": []
+      }
+    ],
+    "compliance": {
+      "regulatoryRequirements": [],
+      "supportsRegulatedActivities": false,
+      "regulatedActivityDetails": ""
+    }
+  },
+  "architecturalViews": {
+    "logicalView": {
+      "applicationArchitectureDiagram": "",
+      "components": [],
+      "serviceMapping": [],
+      "designPatterns": [],
+      "qualityPillarRefs": []
+    },
+    "processView": {
+      "dataFlowDiagrams": [],
+      "internalConnectivity": [],
+      "externalIntegrations": [],
+      "apis": [],
+      "qualityPillarRefs": []
+    },
+    "physicalView": {
+      "deploymentDiagram": "",
+      "hosting": {
+        "venueType": [],
+        "regions": [],
+        "serviceModel": [],
+        "cloudProvider": ""
+      },
+      "compute": {},
+      "networking": {},
+      "environments": [],
+      "qualityPillarRefs": []
+    },
+    "dataView": {
+      "dataStores": [],
+      "dataLifecycle": {},
+      "privacyAssessments": [],
+      "dataTransfers": [],
+      "qualityPillarRefs": []
+    },
+    "securityView": {
+      "securityOverview": {},
+      "iam": {
+        "authenticationModel": {},
+        "authorisationModel": {},
+        "sessionManagement": {},
+        "privilegedAccess": {}
+      },
+      "networkSecurity": {},
+      "dataProtection": {
+        "encryptionAtRest": {},
+        "secretManagement": {}
+      },
+      "securityMonitoring": {},
+      "qualityPillarRefs": []
+    },
+    "scenarios": {
+      "useCases": [],
+      "adrs": []
+    }
+  },
+  "qualityPillars": {
+    "operationalExcellence": {},
+    "reliability": {},
+    "performance": {},
+    "costOptimisation": {},
+    "sustainability": {},
+    "tradeoffs": []
+  },
+  "lifecycleManagement": {
+    "softwareDevelopment": {},
+    "serviceTransition": {},
+    "releaseManagement": {},
+    "operations": {},
+    "maintainability": {},
+    "endOfLife": {},
+    "exitPlanning": {}
+  },
+  "riskGovernance": {
+    "designRisks": [],
+    "guardrailExceptions": {},
+    "complianceTraceability": []
+  },
+  "appendices": {
+    "glossary": [],
+    "references": [],
+    "approvals": []
+  }
+}

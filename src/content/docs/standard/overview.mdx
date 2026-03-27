@@ -1,72 +1,101 @@
 ---
-title: Overview
-description: Introduction to the HLD Standard - purpose, scope, and structure.
+title: "1. Overview"
+description: "Scope, purpose, audience, and structural overview of the HLD Standard."
 ---
 
-## What is the HLD Standard?
+import { Aside } from '@astrojs/starlight/components';
 
-The **HLD Standard** is a versioned, extensible framework for producing High Level Design (HLD) and Solution Architecture Description (SAD) documents. It provides a consistent structure for documenting the architecture of any solution, whether deployed on-premises, in the cloud, or in hybrid environments.
+<Aside type="note" title="Section Maturity">
+<span class="maturity-indicator maturity-minimum">Minimum</span> — This section SHALL be completed for all HLD documents.
+</Aside>
 
-## Purpose
+## 1.1 Purpose
 
-An HLD document produced to this standard serves multiple functions:
+This standard defines the required structure and content for **High Level Design (HLD)** and **Solution Architecture Description (SAD)** documents. An HLD document conforming to this standard serves the following functions:
 
-- **Communication** - Provides a shared understanding of the solution architecture across all stakeholders
-- **Governance** - Enables architectural review boards and governance processes to evaluate the design
-- **Traceability** - Links design decisions to business requirements, quality attributes, and standards
-- **Reference** - Acts as a living document that describes the current-state architecture
-- **Evidence** - Demonstrates that the solution is well-architected against industry best practices
+1. **Communication** — Provides a shared understanding of the solution architecture across all stakeholders
+2. **Governance** — Enables architectural review boards and governance processes to evaluate the design against quality criteria
+3. **Traceability** — Establishes links between design decisions, business requirements, quality attributes, and applicable standards
+4. **Reference** — Acts as a living document that accurately describes the current-state architecture
+5. **Evidence** — Demonstrates that the solution is well-architected against industry-recognised frameworks
 
-## Structure
+## 1.2 Scope
 
-The standard is organized into **three tiers**:
+This standard applies to the documentation of any technology solution architecture, regardless of:
 
-### Tier 1: Architectural Views (Sections 3.1 - 3.6)
+- **Deployment model** — cloud-native, on-premises, hybrid, multi-cloud, or SaaS
+- **Scale** — from single applications to multi-application ecosystems
+- **Industry** — the standard is organisation-agnostic and sector-neutral
+- **Lifecycle stage** — new builds, migrations, modernisations, or incremental changes
 
-Six complementary views that describe the architecture from different stakeholder perspectives, aligned with the 4+1 Architectural View Model and ISO/IEC 42010:
+## 1.3 Audience
 
-| View | Stakeholder Focus | Describes |
-|------|------------------|-----------|
-| **Logical View** | Solution Architects, Developers | Application components, services, patterns |
-| **Process View** | Integrators, Operations | Data flows, integrations, API contracts |
-| **Physical View** | Infrastructure Engineers, DevOps | Deployment, hosting, networking, environments |
-| **Data View** | Data Architects, DBA, Compliance | Data stores, classification, privacy, lifecycle |
-| **Security View** | Security Architects, CISO | IAM, encryption, threat model, monitoring |
-| **Scenarios** | All Stakeholders | Key use cases, Architecture Decision Records |
+This standard is intended for use by:
 
-### Tier 2: Quality Pillars (Sections 4.1 - 4.5)
+| Role | Primary Sections |
+|------|-----------------|
+| **Solution Architects** | All sections — primary authors of HLD documents |
+| **Enterprise Architects** | Framework Alignment, Quality Pillars, Governance |
+| **Security Architects** | Section 3.5 (Security View), Quality Pillars |
+| **Infrastructure Engineers** | Section 3.3 (Physical View), Quality Pillars |
+| **Development Leads** | Section 3.1 (Logical View), Section 5 (Lifecycle) |
+| **Architecture Review Boards** | All sections — as a review and governance framework |
 
-Cross-cutting quality attributes that are evaluated **across** all architectural views:
+## 1.4 Document Structure
+
+The standard organises an HLD document into three tiers:
+
+### Tier 1 — Architectural Views (Sections 3.1 – 3.6)
+
+Six complementary views describe the architecture from distinct stakeholder perspectives, aligned with Kruchten's 4+1 Architectural View Model (extended with dedicated Data and Security views) and the ISO/IEC 42010 viewpoint concept:
+
+| View | Viewpoint | Primary Stakeholders |
+|------|-----------|---------------------|
+| **3.1 Logical View** | Application architecture, components, patterns | Architects, Developers |
+| **3.2 Process View** | Data flows, integrations, interfaces | Integrators, Architects |
+| **3.3 Physical View** | Deployment, hosting, networking, environments | Infrastructure, DevOps |
+| **3.4 Data View** | Data stores, classification, privacy, lifecycle | Data Architects, Compliance |
+| **3.5 Security View** | IAM, encryption, monitoring, threat model | Security, CISO, Compliance |
+| **3.6 Scenarios** | Key use cases, architecture decision records | All Stakeholders |
+
+No single view provides a complete description of the architecture. Together, the six views provide a holistic picture addressable by all stakeholder concerns.
+
+### Tier 2 — Quality Pillars (Sections 4.1 – 4.5)
+
+Five cross-cutting quality attributes are evaluated **across** all architectural views. These are derived from the AWS and Azure Well-Architected Frameworks:
 
 | Pillar | Focus |
 |--------|-------|
-| **Operational Excellence** | Observability, monitoring, operational procedures |
-| **Reliability & Resilience** | DR, scalability, fault tolerance, backup/recovery |
-| **Performance Efficiency** | Performance requirements, resource optimisation |
-| **Cost Optimisation** | Cost analysis, FinOps practices |
-| **Sustainability** | Energy efficiency, carbon impact, resource efficiency |
+| **4.1 Operational Excellence** | Observability, monitoring, operational procedures |
+| **4.2 Reliability & Resilience** | DR, scalability, fault tolerance, backup and recovery |
+| **4.3 Performance Efficiency** | Performance requirements, resource optimisation |
+| **4.4 Cost Optimisation** | Cost analysis, FinOps practices |
+| **4.5 Sustainability** | Energy efficiency, carbon impact, resource efficiency |
 
-### Tier 3: Lifecycle & Governance (Sections 5 - 6)
+### Tier 3 — Lifecycle & Governance (Sections 5 – 7)
 
-Supporting sections that address how the solution is developed, operated, and governed throughout its lifecycle.
+Supporting sections address how the solution is developed, operated, governed, and retired throughout its lifecycle.
 
-## Maturity Levels
+## 1.5 Maturity Levels
 
-Each section in the standard is tagged with a **maturity level** that indicates when it should be completed:
+Each section in this standard is assigned a maturity level that defines when it SHALL, SHOULD, or MAY be completed:
 
-- <span class="maturity-indicator maturity-minimum">Minimum</span> - Required for all designs, including development/test reviews
-- <span class="maturity-indicator maturity-recommended">Recommended</span> - Required for production approval and governance reviews
-- <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> - For mature, enterprise-grade documentation
+| Level | Keyword | Requirement | Typical Gate |
+|-------|---------|-------------|-------------|
+| <span class="maturity-indicator maturity-minimum">Minimum</span> | SHALL | Required for **all** HLD documents | Development / Test review |
+| <span class="maturity-indicator maturity-recommended">Recommended</span> | SHOULD | Required for **production-grade** designs | Production approval |
+| <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | MAY | For **mature, enterprise-grade** documentation | Enterprise architecture review |
 
-This enables progressive adoption: start with Minimum sections for early-stage designs, and expand to Comprehensive for production-critical systems.
+This enables progressive adoption: begin with Minimum sections for early-stage designs, and expand to Comprehensive for production-critical and regulated systems.
 
-## Applicability
+## 1.6 Conformance
 
-The standard applies equally to:
+An HLD document **conforms** to this standard when:
 
-- Cloud-native solutions (AWS, Azure, GCP)
-- On-premises infrastructure
-- Hybrid and multi-cloud architectures
-- SaaS integrations
-- Edge and IoT deployments
-- Legacy modernisation projects
+1. All sections marked <span class="maturity-indicator maturity-minimum">Minimum</span> are completed
+2. The document structure follows the section numbering and hierarchy defined herein
+3. Architectural views address the stakeholder concerns identified in Section 2
+4. Quality pillars are evaluated as cross-cutting lenses across the architectural views
+5. The document is validated against the JSON Schema (HLD-STD-001 Schema v1.0.0) if machine-readable output is required
+
+A document that additionally completes all <span class="maturity-indicator maturity-recommended">Recommended</span> sections achieves **full conformance**.

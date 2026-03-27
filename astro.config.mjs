@@ -5,15 +5,15 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'HLD Standard',
-			description: 'A versioned, extensible standard for High Level Design and Solution Architecture documentation.',
+			title: 'HLD-STD-001',
+			description: 'High Level Design Standard — A formal standard for Solution Architecture and HLD documentation.',
 			customCss: ['./src/styles/custom.css'],
 			sidebar: [
 				{
 					label: 'Introduction',
 					items: [
-						{ label: 'Overview', slug: 'standard/overview' },
-						{ label: 'How to Use This Standard', slug: 'standard/how-to-use' },
+						{ label: '1. Overview', slug: 'standard/overview' },
+						{ label: '2. Conformance and Usage', slug: 'standard/how-to-use' },
 						{ label: 'Framework Alignment', slug: 'standard/framework-alignment' },
 					],
 				},
@@ -79,6 +79,7 @@ export default defineConfig({
 				{
 					label: 'Resources',
 					items: [
+						{ label: 'Templates', slug: 'standard/templates' },
 						{ label: 'JSON Schema', slug: 'standard/schema' },
 						{ label: 'Version History', slug: 'standard/version-history' },
 					],
