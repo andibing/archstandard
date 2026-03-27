@@ -1,0 +1,64 @@
+---
+title: "4.3 Performance Efficiency"
+description: Performance requirements, resource optimisation, and network performance.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+<span class="framework-badge badge-aws-waf">AWS Performance</span>
+<span class="framework-badge badge-azure-waf">Azure Performance</span>
+
+## Purpose
+
+Performance Efficiency focuses on using computing resources efficiently to meet requirements and maintaining that efficiency as demand changes and technologies evolve.
+
+## 4.3.1 Performance Requirements
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Key Performance Indicators
+
+| Metric | Target | Measurement Method |
+|--------|--------|-------------------|
+| Response time (P50 / P95 / P99) | *[e.g., < 200ms / < 500ms / < 1s]* | *[how measured]* |
+| Throughput | *[e.g., 1000 requests/sec]* | *[how measured]* |
+| Concurrent users | *[e.g., 10,000 simultaneous]* | *[how measured]* |
+| Batch processing time | *[e.g., < 2 hours for daily batch]* | *[how measured]* |
+| Data processing latency | *[e.g., < 5 seconds end-to-end]* | *[how measured]* |
+
+### Performance Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| Performance testing approach | *[load testing, stress testing, soak testing]* |
+| Testing tools | *[e.g., JMeter, Gatling, k6, Locust]* |
+| Testing environment | *[which environment, how it compares to production]* |
+| Testing frequency | *[when performance tests are run]* |
+
+## 4.3.2 Resource Optimisation
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Document how the solution optimises resource usage:
+
+| Strategy | Implementation |
+|----------|---------------|
+| Right-sizing | *[how compute resources are sized appropriately]* |
+| Caching | *[caching layers and strategies]* |
+| Connection pooling | *[database and service connection management]* |
+| Asynchronous processing | *[use of queues, background jobs]* |
+| Content delivery | *[CDN usage for static assets]* |
+| Database optimisation | *[indexing strategy, query optimisation]* |
+
+## 4.3.3 Network Performance
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Cross-reference Section 3.3.3 for network topology. This section documents performance-specific network considerations:
+
+| Attribute | Detail |
+|-----------|--------|
+| Latency requirements | *[round-trip time expectations]* |
+| Bandwidth requirements | *[data transfer volumes]* |
+| QoS requirements | *[quality of service needs]* |
+| Content delivery strategy | *[CDN, edge caching, regional deployment]* |
+| Network optimisation | *[compression, connection reuse, protocol choice]* |

@@ -1,0 +1,48 @@
+---
+title: "4. Quality Pillars"
+description: Cross-cutting quality attributes evaluated across all architectural views.
+---
+
+<span class="framework-badge badge-aws-waf">AWS WAF</span>
+<span class="framework-badge badge-azure-waf">Azure WAF</span>
+
+## Purpose
+
+Quality Pillars are **cross-cutting evaluation lenses** applied across all architectural views. They are derived from the AWS Well-Architected Framework (6 pillars) and Azure Well-Architected Framework (5 pillars), unified into five pillars that address the key non-functional quality attributes of any solution.
+
+Unlike the Architectural Views (Section 3), which describe **what** the solution is, Quality Pillars evaluate **how well** it is designed.
+
+## The Five Pillars
+
+| # | Pillar | AWS WAF | Azure WAF | Focus |
+|---|--------|---------|-----------|-------|
+| 4.1 | **Operational Excellence** | Operational Excellence | Operational Excellence | Observability, monitoring, operational procedures |
+| 4.2 | **Reliability & Resilience** | Reliability | Reliability | DR, scalability, fault tolerance, backup/recovery |
+| 4.3 | **Performance Efficiency** | Performance Efficiency | Performance Efficiency | Performance requirements, resource optimisation |
+| 4.4 | **Cost Optimisation** | Cost Optimization | Cost Optimization | Cost analysis, FinOps, cost-effective design |
+| 4.5 | **Sustainability** | Sustainability | *(not a separate pillar)* | Energy, carbon, resource efficiency |
+
+:::note[Security as a View, Not Just a Pillar]
+In the AWS and Azure frameworks, **Security** is a quality pillar. In this standard, Security is elevated to a full **Architectural View** (Section 3.5) because of the depth of documentation required for IAM, encryption, network security, and monitoring. The Security View inherently addresses the security quality pillar.
+:::
+
+## How to Use Quality Pillars
+
+1. **Design Phase** - Use each pillar's guidance to inform design decisions
+2. **Review Phase** - Evaluate the completed design against each pillar
+3. **Traceoff Documentation** - Where pillar requirements conflict (e.g., cost vs. resilience), document the tradeoff and the rationale for the chosen balance
+4. **Cross-Reference** - Reference specific pillar concerns within the Architectural Views using the quality pillar callout format
+
+## Pillar Tradeoffs
+
+Optimising for one pillar may come at the expense of another. Key tradeoffs to consider:
+
+| Tradeoff | Description |
+|----------|-------------|
+| **Reliability vs. Cost** | Higher availability requires redundant infrastructure |
+| **Performance vs. Cost** | Better performance may require more powerful (expensive) resources |
+| **Security vs. Usability** | Stronger security controls may increase friction for users |
+| **Sustainability vs. Performance** | Energy-efficient choices may not be the highest-performing |
+| **Reliability vs. Sustainability** | DR environments and redundancy consume additional resources |
+
+Document any significant tradeoffs in Section 3.6 (Scenarios / ADRs).

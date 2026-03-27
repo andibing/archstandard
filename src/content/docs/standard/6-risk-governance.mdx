@@ -1,0 +1,88 @@
+---
+title: "6. Risk & Governance"
+description: Design risks, guardrail exceptions, architectural decisions, and compliance traceability.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Purpose
+
+This section documents the risks inherent in the design, any exceptions to policies or standards, and the governance traceability that demonstrates the design has been reviewed and approved.
+
+## 6.1 Design Risks & Mitigations
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Document all identified design risks and their mitigation plans:
+
+| Risk # | Risk Event / Issue | Mitigation / Remediation Plan | Residual Risk | Target Date | Owner |
+|--------|-------------------|------------------------------|--------------|-------------|-------|
+| R-001 | *[describe the risk]* | *[tactical and/or strategic plan]* | High / Medium / Low | *[date or acceptance]* | *[person]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Consider risks related to:
+- **Technical** - Technology choices, complexity, integration, performance
+- **Security** - Vulnerabilities, access control gaps, data exposure
+- **Operational** - Supportability, monitoring gaps, skill availability
+- **Delivery** - Timeline, dependencies, resource availability
+- **Commercial** - Vendor risk, licensing, cost overruns
+- **Compliance** - Regulatory gaps, standards non-conformance
+</div>
+
+## 6.2 Guardrail Exceptions
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document any exceptions to organisational policies, standards, or guardrails:
+
+### Policy Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create any exception to current policies and standards? | Yes / No |
+| If yes, have exceptions been logged and accepted through the exceptions process? | Yes / No / N/A |
+
+### Process Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create an issue against the process library? | Yes / No |
+| If yes, has this been acknowledged by the process owner? | Yes / No / N/A |
+
+### Risk Profile Impact
+
+| Question | Response |
+|----------|----------|
+| Does the design materially change the organisation's technology risk profile? | Yes / No |
+| If yes, has this been evaluated with Risk and Controls teams? | Yes / No / N/A |
+
+## 6.3 Architectural Decisions Log
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Provide a summary index of all Architecture Decision Records. Full ADR details are in Section 3.6.2.
+
+| ADR # | Title | Status | Date | Impact |
+|-------|-------|--------|------|--------|
+| ADR-001 | *[title]* | Accepted / Proposed / Superseded | *[date]* | *[brief impact summary]* |
+
+## 6.4 Compliance Traceability
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Map design elements to the standards and principles they satisfy:
+
+| Standard / Principle | Requirement | How the Design Satisfies It | Evidence Section |
+|---------------------|-------------|---------------------------|-----------------|
+| *[standard ID]* | *[requirement text]* | *[design approach]* | *[section reference]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+This table provides traceability between external standards/principles and the HLD content that demonstrates compliance. It enables reviewers and auditors to verify that all applicable requirements are addressed in the design.
+
+Organisations may use this section to map to their internal design principles (e.g., STAR principles), industry standards (e.g., PCI-DSS, ISO 27001), or regulatory requirements.
+</div>

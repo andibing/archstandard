@@ -1,0 +1,67 @@
+---
+title: "4.4 Cost Optimisation"
+description: Cost influence, analysis, implications, and FinOps practices.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+<span class="framework-badge badge-aws-waf">AWS Cost</span>
+<span class="framework-badge badge-azure-waf">Azure Cost</span>
+
+## Purpose
+
+Cost Optimisation focuses on delivering the solution at the lowest reasonable cost while meeting all other quality requirements. It covers cost-aware design decisions, cost analysis, and ongoing cost management practices.
+
+## 4.4.1 Cost Influence & Analysis
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Design Cost Decisions
+
+How do the design decisions in hosting, compute, networking, data storage, and resiliency demonstrate cost-effectiveness?
+
+| Posture | Selected | Detail |
+|---------|----------|--------|
+| Design decisions chosen for specific reasons other than cost | [ ] | *[describe why]* |
+| Most cost-effective options intentionally not selected | [ ] | *[describe why and the tradeoffs]* |
+| Most cost-effective options selected | [ ] | *[describe the analysis]* |
+
+### Cost Analysis
+
+Has cost analysis or modelling been performed to inform design decisions?
+
+- [ ] **No** - A cost analysis has not been performed
+- [ ] **Yes** - *[describe the analysis approach, tools used (e.g., cloud pricing calculators, TCO models), and key findings]*
+
+## 4.4.2 Cost Implications
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Has the design been constrained in ways that do not fully meet requirements because of cost?
+
+- [ ] **No** - The design fully meets requirements; cost has not impacted the design
+- [ ] **Yes** - *[describe how and why cost constrained the design, and the impact]*
+
+## 4.4.3 FinOps Practices
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Document ongoing cost management practices:
+
+| Practice | Implementation |
+|----------|---------------|
+| Cost monitoring | *[dashboards, alerts, tools]* |
+| Cost allocation | *[tagging strategy, cost centres]* |
+| Reserved capacity | *[reserved instances, savings plans, committed use]* |
+| Rightsizing reviews | *[process and frequency for reviewing resource utilisation]* |
+| Waste elimination | *[process for identifying and removing unused resources]* |
+| Budget governance | *[budget alerts, approval thresholds]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Consider documenting:
+- Expected monthly/annual run cost breakdown by component
+- Cost comparison of alternatives considered
+- Cost optimisation opportunities identified but deferred
+- Triggers that would necessitate cost re-evaluation (e.g., scale events, contract renewals)
+</div>
