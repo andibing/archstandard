@@ -1,0 +1,142 @@
+---
+title: "3.4 Data View"
+description: Data architecture, storage, classification, lifecycle, privacy, and transfers.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-togaf">TOGAF Data</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Purpose
+
+The Data View describes how data is stored, classified, protected, and managed throughout its lifecycle. It addresses the concerns of data architects, DBAs, compliance officers, and privacy teams.
+
+## 3.4.1 Data Architecture & Storage
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+### Data Footprint
+
+Document all data stores used by the solution, including business data, logs, caches, and temporary stores:
+
+| Data Name | Store Technology | Authoritative? | Retention Period | Data Size | Classification | Personal Data? | Encryption Level | Key Management |
+|-----------|-----------------|---------------|-----------------|-----------|---------------|---------------|-----------------|---------------|
+| *[name]* | *[e.g., PostgreSQL, S3, Redis]* | Yes / No | *[period]* | *[size]* | Public / Internal / Restricted / Highly Restricted | Yes / No | None / Storage / Container / Application | *[method]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+For each data store, document:
+- **Data Store Technology** - The specific technology (e.g., SQL Server, S3 Bucket, Azure Blob)
+- **Authoritative Data Store** - Is this the master/authoritative store of the data?
+- **Retention Period** - How long is data retained before deletion?
+- **Security Classification** - Highest classification of data in the store
+- **Personal Data** - Does it contain PII or sensitive personal data (SPI)?
+- **Encryption** - Level of encryption applied (storage, container, application)
+- **Key Management** - How encryption keys are managed (vendor-managed, HSM, custom)
+</div>
+
+### Storage Systems
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+If specific storage systems need provisioning:
+
+| Attribute | Detail |
+|-----------|--------|
+| **Storage Product** | *[vendor / product]* |
+| **Storage Size** | *[TB]* |
+| **Storage Type** | SAN / NAS / Object / Block / File |
+| **Storage Protocol** | NFS / SMB / iSCSI / Other |
+| **Replication** | Synchronous / Asynchronous / Snapshot / None |
+| **Minimum RPO** | *[recovery point objective]* |
+
+## 3.4.2 Data Classification
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Summarise the data classification profile of the solution:
+
+| Classification Level | Data Types | Handling Requirements |
+|---------------------|------------|----------------------|
+| **Public** | *[...]* | Open access |
+| **Internal / Corporate** | *[...]* | Internal access controls |
+| **Restricted** | *[...]* | Encrypted, access-controlled, audited |
+| **Highly Restricted** | *[...]* | Encrypted, strict access, enhanced monitoring |
+
+## 3.4.3 Data Lifecycle
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Describe how data moves through its lifecycle:
+
+| Stage | Description | Controls |
+|-------|-------------|----------|
+| **Creation / Ingestion** | How data enters the solution | *[validation, classification]* |
+| **Processing** | How data is transformed or used | *[access controls, audit]* |
+| **Storage** | How data is stored at rest | *[encryption, backup]* |
+| **Sharing / Transfer** | How data is shared or moved | *[encryption in transit, authorisation]* |
+| **Archival** | How data is archived | *[archive storage, retrieval SLA]* |
+| **Deletion / Purging** | How data is securely removed | *[secure deletion method, schedule]* |
+
+## 3.4.4 Data Privacy & Protection
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Privacy Assessments
+
+| Assessment Type | ID | Status | Link |
+|----------------|-----|--------|------|
+| *[PIA / DPIA / LIA]* | *[ID]* | *[status]* | *[link]* |
+
+### Use of Production Data for Testing
+
+| Approach | Selected |
+|----------|----------|
+| Only Public/Internal data is used | [ ] |
+| Restricted/Highly Restricted attributes are deleted first | [ ] |
+| Sensitive data is masked (describe method below) | [ ] |
+| Sensitive production data is used (provide justification below) | [ ] |
+| Production data is not used for testing | [ ] |
+
+*[Additional details on data masking, access controls, duration, and destruction]*
+
+### Data Integrity
+
+Does the solution include specific data integrity controls beyond standard hardware, protocol, and access controls?
+
+- [ ] Yes - *[describe integrity controls]*
+- [ ] No
+
+### Data on End User Devices
+
+Does the solution allow data to be downloaded to or stored on end-user devices?
+
+- [ ] Yes - *[describe data protection measures]*
+- [ ] No
+
+## 3.4.5 Data Transfers & Sovereignty
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Data Transfers to Third Parties
+
+| Destination | Data Type | Classification | Transfer Method | Protection |
+|------------|-----------|---------------|----------------|------------|
+| *[third party]* | *[data description]* | *[classification]* | *[method]* | *[encryption, contracts]* |
+
+### Data Sovereignty
+
+Are there data sovereignty or residency requirements?
+
+- [ ] Yes - *[describe requirements and how they are met]*
+- [ ] No
+
+<div class="quality-pillar-ref">
+
+**Quality Pillar Cross-References:**
+- **4.2 Reliability** - Data backup and recovery strategies
+- **4.4 Cost** - Storage costs, data transfer costs
+- **4.5 Sustainability** - Data volume minimisation, efficient storage formats
+
+</div>

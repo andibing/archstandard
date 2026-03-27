@@ -1,0 +1,81 @@
+---
+title: "2. Stakeholders & Concerns"
+description: Stakeholder register, concerns matrix, and compliance context.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+<span class="framework-badge badge-togaf">TOGAF</span>
+
+## Purpose
+
+ISO/IEC 42010 requires that an architecture description identify stakeholders and their concerns. This section ensures the HLD addresses the needs of all relevant parties and documents the compliance and regulatory context.
+
+## 2.1 Stakeholder Register
+
+Identify all stakeholders with an interest in the solution's architecture:
+
+| Stakeholder | Role / Group | Key Concerns | Relevant Views |
+|-------------|-------------|--------------|----------------|
+| Business Owner | Business | Business value, cost, timeline | Executive Summary, Cost |
+| Solution Architect | Architecture | Design integrity, standards compliance | All views |
+| Security Architect | Security | Threat model, access control, data protection | Security View |
+| Infrastructure Engineer | Operations | Deployment, scaling, networking | Physical View |
+| Data Architect | Data Management | Data storage, classification, privacy | Data View |
+| Development Lead | Development | Component design, integration patterns | Logical View, Process View |
+| Operations / SRE | Operations | Observability, incident response, reliability | Quality Pillars |
+| Compliance Officer | Compliance | Regulatory adherence, audit evidence | Governance |
+| *[additional stakeholders]* | *[role]* | *[concerns]* | *[views]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Consider stakeholders from:
+- **Business** - sponsors, product owners, end users
+- **Technology** - architects, engineers, developers, DBAs
+- **Operations** - SRE, support teams, NOC
+- **Security & Compliance** - CISO office, risk, audit
+- **External** - vendors, customers, regulators, partners
+</div>
+
+## 2.2 Concerns Matrix
+
+Map stakeholder concerns to the views and sections that address them:
+
+| Concern | Stakeholder(s) | Addressed In |
+|---------|---------------|-------------|
+| Solution meets business requirements | Business Owner | 1. Executive Summary, 3.6 Scenarios |
+| Solution is secure and compliant | Security Architect, Compliance | 3.5 Security View, 6. Governance |
+| Solution is reliable and recoverable | Operations, Business | 4.2 Reliability & Resilience |
+| Solution is cost-effective | Business Owner, Finance | 4.4 Cost Optimisation |
+| Solution can be operated and monitored | Operations / SRE | 4.1 Operational Excellence |
+| Data is properly managed and protected | Data Architect, Compliance | 3.4 Data View |
+| Solution can scale to meet demand | Infrastructure Engineer | 4.2 Reliability, 3.3 Physical View |
+| *[additional concerns]* | *[stakeholders]* | *[sections]* |
+
+## 2.3 Compliance & Regulatory Context
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document the regulatory and compliance landscape that applies to this solution:
+
+### Regulatory Requirements
+
+| Regulation / Standard | Applicability | Impact on Design |
+|----------------------|--------------|-----------------|
+| *[e.g., GDPR, PCI-DSS, SOX, FCA]* | *[how it applies]* | *[design implications]* |
+
+### Regulated Activities
+
+Does the solution support any regulated activities?
+
+- [ ] Yes - *[describe which regulated activities and entities]*
+- [ ] No
+
+### Compliance Standards
+
+List any internal or external standards that the design must conform to:
+
+| Standard | Version | Applicability |
+|----------|---------|--------------|
+| *[e.g., internal security standard]* | *[version]* | *[which sections]* |

@@ -1,40 +1,52 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: HLD Standard
+description: A versioned, extensible standard for High Level Design and Solution Architecture documentation.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: A unified, view-model aligned standard for Solution Architecture and High Level Design documentation. Built on ISO/IEC 42010, 4+1 Views, and AWS/Azure Well-Architected Frameworks.
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Read the Standard
+      link: /standard/overview/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
+    - text: View JSON Schema
+      link: /standard/schema/
       variant: minimal
+      icon: document
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+## Core Principles
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+	<Card title="View-Model Aligned" icon="open-book">
+		Organized around architectural viewpoints (Logical, Process, Physical, Data, Security, Scenarios) aligned with Kruchten's 4+1 model and ISO/IEC 42010.
 	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
+	<Card title="Quality Pillars as Cross-Cuts" icon="approve-check-circle">
+		Operational Excellence, Reliability, Performance, Cost, and Sustainability are evaluation lenses applied across all views - inspired by AWS and Azure Well-Architected Frameworks.
 	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	<Card title="Schema-Driven" icon="setting">
+		A formal JSON Schema enables validation and generation of HLD documents in multiple formats: Markdown, Word, or web pages.
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	<Card title="Maturity Levels" icon="up-caret">
+		Every section is tagged as Minimum, Recommended, or Comprehensive - enabling progressive adoption from lightweight designs to full enterprise documentation.
 	</Card>
 </CardGrid>
+
+## Framework Alignment
+
+This standard synthesizes and aligns with established architecture frameworks:
+
+| Framework | How It Is Used |
+|-----------|---------------|
+| **ISO/IEC 42010** | Meta-model: stakeholders, concerns, viewpoints, views, correspondences |
+| **4+1 Architectural View Model** | Six architectural views structure (Logical, Process, Physical, Data, Security + Scenarios) |
+| **AWS Well-Architected Framework** | Six quality pillars as cross-cutting evaluation lenses |
+| **Azure Well-Architected Framework** | Five pillars with explicit tradeoff documentation |
+| **TOGAF** | Architecture domains (Business, Data, Application, Technology) inform view content |
+
+## Standard Version
+
+**Current Version:** 1.0.0
+
+The standard uses semantic versioning. See the [Version History](/standard/version-history/) for details.

@@ -1,0 +1,174 @@
+---
+title: "3.3 Physical View"
+description: Deployment architecture, hosting, compute, networking, and environments.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-4plus1">4+1 Physical</span>
+<span class="framework-badge badge-togaf">TOGAF Technology</span>
+
+## Purpose
+
+The Physical View describes the infrastructure that hosts and supports the solution - servers, containers, networks, cloud services, and deployment environments. It addresses the concerns of infrastructure engineers, DevOps teams, and platform engineers.
+
+## 3.3.1 Deployment Architecture Diagram
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Provide a diagram showing the infrastructure that drives the solution.
+
+*[Insert deployment architecture diagram]*
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Show: physical/virtual servers, containers, cloud services, storage, networks, firewalls, load balancers, internet gateways, SaaS platforms, and any other infrastructure components. Include cloud regions, availability zones, and VPCs where applicable.
+</div>
+
+## 3.3.2 Hosting & Infrastructure
+
+### Hosting Venues
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+| Attribute | Selection |
+|-----------|----------|
+| **Hosting Venue Type** | Cloud / SaaS / On-Premises / Hybrid / Outsourced |
+| **Hosting Region(s)** | *[e.g., UK, EU, US, Asia, Other]* |
+| **Service Model** | IaaS / PaaS / SaaS / FaaS / Other |
+| **Cloud Provider** | AWS / Azure / GCP / Other / N/A |
+| **Account / Subscription Type** | *[organisation-specific account type]* |
+
+### Compute
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+#### Servers (Physical / Virtual)
+
+| Instance Name | Instance Type | vCPU | Memory (GB) | Storage | Quantity | OS |
+|--------------|--------------|------|-------------|---------|----------|-----|
+| *[name]* | *[type/size]* | *[n]* | *[n]* | *[n TB]* | *[n]* | *[OS version]* |
+
+#### Containers
+
+| Attribute | Detail |
+|-----------|--------|
+| **Container Platform** | EKS / AKS / GKE / Docker / Kubernetes / Other |
+| **Base Image(s)** | *[e.g., Alpine, Node, NGINX]* |
+| **Cluster Size** | *[number of nodes]* |
+
+#### Serverless
+
+| Attribute | Detail |
+|-----------|--------|
+| **Serverless Services** | *[e.g., AWS Lambda, Azure Functions]* |
+| **Function Details** | *[description of serverless components]* |
+
+#### High Performance Computing
+
+| Attribute | Detail |
+|-----------|--------|
+| **HPC Requirements** | *[e.g., GPU, FPGA, specialised compute]* |
+
+#### Artificial Intelligence / Machine Learning
+
+| Attribute | Detail |
+|-----------|--------|
+| **AI/ML Components** | *[training and inference infrastructure]* |
+
+### Security Agents
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document security agents deployed on compute resources:
+
+- [ ] Anti-Malware
+- [ ] Endpoint Detection and Response (EDR)
+- [ ] Vulnerability Management
+- [ ] Other: *[...]*
+
+## 3.3.3 Network Topology & Connectivity
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+### Connectivity Summary
+
+| Question | Response |
+|----------|----------|
+| Is this an internet-facing application? | Yes / No - *[details]* |
+| Outbound internet connectivity required? | Yes / No - *[details]* |
+| Cloud-to-on-premises connectivity required? | Yes / No - *[details]* |
+| Wireless networking required? | Yes / No - *[details]* |
+| Third-party / co-location connectivity required? | Yes / No - *[details]* |
+| Cloud network peering required? | Yes / No - *[details]* |
+
+### Network Bandwidth
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Metric | Value |
+|--------|-------|
+| Peak egress bandwidth to internet | *[Mb/s]* |
+| Peak ingress bandwidth from internet | *[Mb/s]* |
+| Peak bandwidth between on-prem and cloud | *[Mb/s]* |
+| Traffic characteristics | *[constant / burst / periodic]* |
+| QoS requirements | *[details]* |
+| Network performance expectations | *[latency, jitter, etc.]* |
+
+### Internet Perimeter Protection
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Control | Implemented | Detail |
+|---------|------------|--------|
+| DDoS Protection | Yes / No | *[service used]* |
+| Rate Limiting | Yes / No | *[details]* |
+| Source IP Restrictions | Yes / No | *[IP allowlist, geo-blocking]* |
+| Web Application Firewall (WAF) | Yes / No | *[product]* |
+| Client Verification Controls | Yes / No | *[details]* |
+| File Upload Protection | Yes / No | *[malware scanning approach]* |
+
+## 3.3.4 Environments
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Environment | Description | Count & Venue | Compute Solution |
+|------------|-------------|--------------|-----------------|
+| Development | Software development only | *[...]* | *[...]* |
+| Test / QA | Component and integration testing | *[...]* | *[...]* |
+| Staging / Pre-Production | Production-like environment for validation | *[...]* | *[...]* |
+| Production | Live service environment | *[...]* | *[...]* |
+| DR | Disaster recovery environment | *[...]* | *[...]* |
+
+### Connectivity Between Environments
+
+Does the solution require connectivity between environment tiers (e.g., production to non-production)?
+
+- [ ] Yes - *[describe which components and data flows]*
+- [ ] No
+
+## 3.3.5 End User Compute & IoT
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+### End User Compute
+
+Document any end-user device requirements (VDI, BYOD, mobile, desktop software):
+
+*[...]*
+
+### IoT Devices
+
+Document any IoT devices (printers, scanners, cameras, sensors, etc.):
+
+*[...]*
+
+<div class="quality-pillar-ref">
+
+**Quality Pillar Cross-References:**
+- **4.2 Reliability** - Infrastructure design directly determines availability and recovery capability
+- **4.3 Performance** - Compute sizing and network design affect performance
+- **4.4 Cost** - Infrastructure choices are the primary cost driver
+- **4.5 Sustainability** - Hosting venue and compute efficiency affect environmental impact
+
+</div>

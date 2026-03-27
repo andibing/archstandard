@@ -1,0 +1,72 @@
+---
+title: Overview
+description: Introduction to the HLD Standard - purpose, scope, and structure.
+---
+
+## What is the HLD Standard?
+
+The **HLD Standard** is a versioned, extensible framework for producing High Level Design (HLD) and Solution Architecture Description (SAD) documents. It provides a consistent structure for documenting the architecture of any solution, whether deployed on-premises, in the cloud, or in hybrid environments.
+
+## Purpose
+
+An HLD document produced to this standard serves multiple functions:
+
+- **Communication** - Provides a shared understanding of the solution architecture across all stakeholders
+- **Governance** - Enables architectural review boards and governance processes to evaluate the design
+- **Traceability** - Links design decisions to business requirements, quality attributes, and standards
+- **Reference** - Acts as a living document that describes the current-state architecture
+- **Evidence** - Demonstrates that the solution is well-architected against industry best practices
+
+## Structure
+
+The standard is organized into **three tiers**:
+
+### Tier 1: Architectural Views (Sections 3.1 - 3.6)
+
+Six complementary views that describe the architecture from different stakeholder perspectives, aligned with the 4+1 Architectural View Model and ISO/IEC 42010:
+
+| View | Stakeholder Focus | Describes |
+|------|------------------|-----------|
+| **Logical View** | Solution Architects, Developers | Application components, services, patterns |
+| **Process View** | Integrators, Operations | Data flows, integrations, API contracts |
+| **Physical View** | Infrastructure Engineers, DevOps | Deployment, hosting, networking, environments |
+| **Data View** | Data Architects, DBA, Compliance | Data stores, classification, privacy, lifecycle |
+| **Security View** | Security Architects, CISO | IAM, encryption, threat model, monitoring |
+| **Scenarios** | All Stakeholders | Key use cases, Architecture Decision Records |
+
+### Tier 2: Quality Pillars (Sections 4.1 - 4.5)
+
+Cross-cutting quality attributes that are evaluated **across** all architectural views:
+
+| Pillar | Focus |
+|--------|-------|
+| **Operational Excellence** | Observability, monitoring, operational procedures |
+| **Reliability & Resilience** | DR, scalability, fault tolerance, backup/recovery |
+| **Performance Efficiency** | Performance requirements, resource optimisation |
+| **Cost Optimisation** | Cost analysis, FinOps practices |
+| **Sustainability** | Energy efficiency, carbon impact, resource efficiency |
+
+### Tier 3: Lifecycle & Governance (Sections 5 - 6)
+
+Supporting sections that address how the solution is developed, operated, and governed throughout its lifecycle.
+
+## Maturity Levels
+
+Each section in the standard is tagged with a **maturity level** that indicates when it should be completed:
+
+- <span class="maturity-indicator maturity-minimum">Minimum</span> - Required for all designs, including development/test reviews
+- <span class="maturity-indicator maturity-recommended">Recommended</span> - Required for production approval and governance reviews
+- <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> - For mature, enterprise-grade documentation
+
+This enables progressive adoption: start with Minimum sections for early-stage designs, and expand to Comprehensive for production-critical systems.
+
+## Applicability
+
+The standard applies equally to:
+
+- Cloud-native solutions (AWS, Azure, GCP)
+- On-premises infrastructure
+- Hybrid and multi-cloud architectures
+- SaaS integrations
+- Edge and IoT deployments
+- Legacy modernisation projects

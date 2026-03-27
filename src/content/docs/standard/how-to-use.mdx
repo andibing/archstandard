@@ -1,0 +1,65 @@
+---
+title: How to Use This Standard
+description: Guidance on adopting the HLD Standard for your organisation and projects.
+---
+
+## Getting Started
+
+### Step 1: Determine Your Maturity Target
+
+Choose the maturity level appropriate for your project:
+
+| Level | When to Use | Typical Context |
+|-------|------------|-----------------|
+| <span class="maturity-indicator maturity-minimum">Minimum</span> | Early-stage designs, dev/test reviews, PoCs | Development ARB, design spike documentation |
+| <span class="maturity-indicator maturity-recommended">Recommended</span> | Production-bound designs | Production ARB, governance review |
+| <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | Critical systems, regulated environments | Enterprise architecture review, audit evidence |
+
+### Step 2: Complete the Relevant Sections
+
+Work through each section of the standard. Sections tagged above your target maturity level can be marked as "Not Applicable" or deferred.
+
+### Step 3: Use Quality Pillars as a Review Lens
+
+After completing the architectural views, use the Quality Pillars (Section 4) to review your design:
+
+1. For each pillar, evaluate whether your design adequately addresses the concerns
+2. Document any tradeoffs between pillars (e.g., cost vs. resilience)
+3. Reference specific quality pillar requirements from within your architectural views
+
+## Document Lifecycle
+
+The HLD is a **living artefact**:
+
+- It describes the **current state** of the solution architecture
+- It must be updated when architecturally significant changes are made
+- Multiple teams may update it in parallel for different change activities
+- It is governed through your organisation's architecture review process
+
+## Organisation Customisation
+
+The standard is designed to be extended with organisation-specific content:
+
+1. **Organisation Profile** - Map generic sections to your specific tools, standards, and governance processes
+2. **Custom Sections** - Add organisation-specific sections using the JSON schema extension points
+3. **Standards Traceability** - Reference your internal design principles, patterns, and standards within each section
+4. **Governance Gates** - Map maturity levels to your architecture review board (ARB) stages
+
+## Output Formats
+
+The standard's JSON schema enables generation in multiple formats:
+
+- **Web** - Interactive documentation site (this site)
+- **Markdown** - For inclusion in git repositories alongside code
+- **Word/DOCX** - For formal governance submissions and offline review
+- **JSON** - Machine-readable for tooling integration
+
+## Section Conventions
+
+Throughout this standard, you will see:
+
+- **Guidance** boxes explaining what content belongs in each section
+- **Framework Alignment** badges showing which industry frameworks map to each section
+- **Maturity Level** indicators showing when each section is required
+- **Quality Pillar References** showing cross-cutting quality concerns
+- **Example Prompts** (`[...]`) indicating where solution-specific content should be added

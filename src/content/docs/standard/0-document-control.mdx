@@ -1,0 +1,70 @@
+---
+title: "0. Document Control"
+description: Metadata, change history, contributors, and document purpose.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Purpose
+
+This section captures the administrative metadata for the HLD document, ensuring it is versioned, traceable, and governed appropriately.
+
+## 0.1 Document Metadata
+
+| Field | Description |
+|-------|-------------|
+| **Document Title** | The formal title of this HLD document |
+| **Application / Solution Name** | The name of the system being documented |
+| **Application ID** | Unique identifier (e.g., from a CMDB or portfolio tool) |
+| **Author(s)** | Primary author(s) of the document |
+| **Owner** | The accountable architect for this document |
+| **Version** | Current document version (use semantic versioning) |
+| **Status** | Draft / In Review / Approved / Superseded |
+| **Created Date** | Date the document was first created |
+| **Last Updated** | Date of the most recent update |
+| **Classification** | Document security classification |
+
+## 0.2 Change History
+
+Track all significant changes to the document:
+
+| Version | Date | Author / Editor | Description of Change |
+|---------|------|-----------------|----------------------|
+| 0.1 | *[date]* | *[name]* | Initial draft |
+| ... | ... | ... | ... |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+- Use semantic versioning: `MAJOR.MINOR` (e.g., 1.0 for first approved version, 1.1 for minor updates, 2.0 for significant redesign)
+- Record who made each change and why
+- This is a living document - it should be updated whenever architecturally significant changes are made to the solution
+</div>
+
+## 0.3 Contributors & Approvals
+
+| Name | Role | Contribution Type |
+|------|------|------------------|
+| *[name]* | *[role]* | Author / Reviewer / Approver |
+
+## 0.4 Document Purpose & Scope
+
+Describe the purpose of this specific HLD document:
+
+- What solution or application does it describe?
+- What is the scope boundary of this document?
+- What is explicitly out of scope?
+- What other documents does it relate to (e.g., detailed designs, operational runbooks)?
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+The HLD document serves as:
+- A **reference document** describing the current-state solution architecture
+- **Evidence** that the solution is well-architected
+- **Input** to architecture governance and review processes
+- A **living artefact** that must be updated when architecturally significant changes are made
+
+It should contain design details that are relatively **static**. Dynamic or frequently changing information belongs in operational documentation.
+</div>

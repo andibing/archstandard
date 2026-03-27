@@ -1,0 +1,90 @@
+---
+title: "3.6 Scenarios"
+description: Key use cases and Architecture Decision Records that validate the design.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+<span class="framework-badge badge-4plus1">4+1 Scenarios</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Purpose
+
+Scenarios are the "+1" in the 4+1 View Model. They serve as the connective tissue between all other views, validating that the architecture works end-to-end for key use cases. In ISO 42010 terms, they document **correspondences** between views.
+
+This section also captures Architecture Decision Records (ADRs) - the significant decisions that shaped the design and the rationale behind them.
+
+## 3.6.1 Key Use Cases
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document the most architecturally significant use cases. Each use case should trace through multiple views to validate the design:
+
+### Use Case Template
+
+**UC-[nn]: [Use Case Name]**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | *[who initiates this use case]* |
+| **Trigger** | *[what starts the flow]* |
+| **Pre-conditions** | *[required state before execution]* |
+| **Main Flow** | *[step-by-step description]* |
+| **Post-conditions** | *[state after successful execution]* |
+| **Views Involved** | Logical / Process / Physical / Data / Security |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Select 3-5 use cases that are most architecturally significant:
+- The primary happy-path user journey
+- A high-volume or performance-critical flow
+- A failure/recovery scenario
+- A security-relevant scenario (e.g., authentication, data access)
+- An integration-heavy scenario
+
+Each use case should demonstrate how components from the Logical View communicate (Process View), are deployed (Physical View), handle data (Data View), and are secured (Security View).
+</div>
+
+## 3.6.2 Architecture Decision Records (ADRs)
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document the key architectural decisions using the ADR format:
+
+### ADR Template
+
+**ADR-[nnn]: [Decision Title]**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Proposed / Accepted / Superseded / Deprecated |
+| **Date** | *[decision date]* |
+| **Context** | *[what is the issue or question]* |
+| **Decision** | *[what was decided]* |
+| **Alternatives Considered** | *[what other options were evaluated]* |
+| **Consequences** | *[positive and negative implications]* |
+| **Quality Pillar Tradeoffs** | *[which pillars are affected and how]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Record decisions that:
+- Are difficult or expensive to reverse
+- Involve significant tradeoffs between quality pillars
+- Deviate from standard patterns or policies
+- Were debated or where multiple valid approaches existed
+- Affect multiple views or stakeholders
+
+ADRs should be immutable once accepted. If a decision is reversed, create a new ADR that supersedes the original rather than editing it.
+</div>
+
+### Example ADRs to Consider
+
+| Category | Example Decision |
+|----------|-----------------|
+| Platform | Choice of cloud provider, hosting venue, service model |
+| Architecture | Monolith vs. microservices, event-driven vs. request-response |
+| Data | Choice of database technology, caching strategy |
+| Security | Authentication approach, encryption standards |
+| Integration | Synchronous vs. asynchronous, API style |
+| Resilience | Active-active vs. active-passive, DR strategy |

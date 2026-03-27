@@ -1,0 +1,90 @@
+---
+title: Framework Alignment
+description: How the HLD Standard maps to established architecture frameworks.
+---
+
+## Alignment Model
+
+The HLD Standard uses **ISO/IEC 42010** as its meta-model and maps to multiple established frameworks. This page documents the traceability between each section of the standard and its source frameworks.
+
+## ISO/IEC 42010 Alignment
+
+The standard follows the ISO 42010 conceptual model:
+
+| ISO 42010 Concept | HLD Standard Mapping |
+|-------------------|---------------------|
+| System of Interest | The solution being documented |
+| Stakeholders | Section 2: Stakeholders & Concerns |
+| Concerns | Section 2: Concerns Matrix |
+| Architecture Viewpoint | Section 3: Six defined viewpoints |
+| Architecture View | The content within each Section 3.x |
+| Model Kind | Diagrams, tables, and descriptions within views |
+| Correspondences | Cross-references between views and Quality Pillar refs |
+| Architecture Description | The complete HLD document |
+
+## 4+1 View Model Alignment
+
+| 4+1 View | HLD Standard Section | Key Content |
+|----------|---------------------|-------------|
+| Logical View | 3.1 Logical View | Component architecture, service mapping |
+| Process View | 3.2 Process View | Data flows, integrations, interfaces |
+| Development View | 5. Lifecycle Management | CI/CD, SDLC, tooling |
+| Physical View | 3.3 Physical View | Deployment, infrastructure, networking |
+| +1 Scenarios | 3.6 Scenarios | Use cases, ADRs |
+| *(Extended)* | 3.4 Data View | Data architecture (from RM-ODP Information viewpoint) |
+| *(Extended)* | 3.5 Security View | Security architecture (cross-cutting in 4+1, elevated to full view) |
+
+:::note
+The standard extends the classic 4+1 model with dedicated **Data** and **Security** views. In the original 4+1 model, these are cross-cutting concerns spread across all views. Modern enterprise architecture demands they be treated as first-class views due to regulatory, compliance, and data governance requirements.
+:::
+
+## AWS Well-Architected Framework Alignment
+
+| AWS Pillar | HLD Standard Section | Notes |
+|------------|---------------------|-------|
+| Operational Excellence | 4.1 Operational Excellence | Observability, procedures, automation |
+| Security | 3.5 Security View + 4.1 | Security as a view AND operational concern |
+| Reliability | 4.2 Reliability & Resilience | DR, scalability, fault tolerance |
+| Performance Efficiency | 4.3 Performance Efficiency | Sizing, optimisation, benchmarking |
+| Cost Optimization | 4.4 Cost Optimisation | FinOps, cost analysis |
+| Sustainability | 4.5 Sustainability | Energy, carbon, resource efficiency |
+
+## Azure Well-Architected Framework Alignment
+
+| Azure Pillar | HLD Standard Section | Notes |
+|-------------|---------------------|-------|
+| Reliability | 4.2 Reliability & Resilience | Resiliency, availability, recovery |
+| Security | 3.5 Security View | Threat protection, IAM, encryption |
+| Cost Optimization | 4.4 Cost Optimisation | Rate optimisation, usage efficiency |
+| Operational Excellence | 4.1 Operational Excellence | Observability, DevOps, safe deployment |
+| Performance Efficiency | 4.3 Performance Efficiency | Scaling, load testing, capacity |
+
+## TOGAF Architecture Domains
+
+| TOGAF Domain | HLD Standard Section(s) |
+|-------------|------------------------|
+| Business Architecture | 1. Executive Summary, 2. Stakeholders |
+| Data Architecture | 3.4 Data View |
+| Application Architecture | 3.1 Logical View, 3.2 Process View |
+| Technology Architecture | 3.3 Physical View |
+
+## Section-to-Framework Traceability Matrix
+
+| Standard Section | ISO 42010 | 4+1 | AWS WAF | Azure WAF | TOGAF |
+|-----------------|-----------|-----|---------|-----------|-------|
+| 0. Document Control | AD metadata | - | - | - | - |
+| 1. Executive Summary | - | - | - | - | Business |
+| 2. Stakeholders | Stakeholders, Concerns | - | - | - | Business |
+| 3.1 Logical View | Viewpoint, View | Logical | - | - | Application |
+| 3.2 Process View | Viewpoint, View | Process | - | - | Application |
+| 3.3 Physical View | Viewpoint, View | Physical | - | - | Technology |
+| 3.4 Data View | Viewpoint, View | *(extended)* | - | - | Data |
+| 3.5 Security View | Viewpoint, View | *(extended)* | Security | Security | - |
+| 3.6 Scenarios | Correspondences | +1 Scenarios | - | - | - |
+| 4.1 Ops Excellence | - | - | Ops Excellence | Ops Excellence | - |
+| 4.2 Reliability | - | - | Reliability | Reliability | - |
+| 4.3 Performance | - | - | Perf Efficiency | Perf Efficiency | - |
+| 4.4 Cost | - | - | Cost Optimization | Cost Optimization | - |
+| 4.5 Sustainability | - | - | Sustainability | - | - |
+| 5. Lifecycle | - | Development | Ops Excellence | Ops Excellence | - |
+| 6. Risk & Governance | Correspondences | - | - | - | - |

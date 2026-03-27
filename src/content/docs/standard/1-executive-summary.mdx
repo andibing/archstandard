@@ -1,0 +1,106 @@
+---
+title: "1. Executive Summary"
+description: Solution overview, business context, scope, and key decisions.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-togaf">TOGAF</span>
+
+## Purpose
+
+The Executive Summary provides a concise overview of the solution for all stakeholders, including non-technical decision-makers. It establishes the business context and frames the architectural decisions that follow.
+
+## 1.1 Solution Overview
+
+Provide a brief (1-2 paragraph) summary of the solution:
+
+- What does the solution do?
+- What business problem does it solve?
+- What is the high-level approach?
+
+*[...]*
+
+## 1.2 Business Context & Drivers
+
+Describe the business drivers that led to this solution:
+
+| Driver | Description | Priority |
+|--------|------------|----------|
+| *[business driver]* | *[description]* | High / Medium / Low |
+
+Consider:
+- Business requirements and objectives
+- Regulatory or compliance drivers
+- Technology modernisation goals
+- Cost reduction or efficiency targets
+- Market or competitive pressures
+
+## 1.3 Scope
+
+### In Scope
+
+Define what this HLD covers:
+
+- Which applications, services, or components?
+- Which environments (production, DR, test)?
+- Which user groups or business functions?
+
+### Out of Scope
+
+Explicitly state what is excluded:
+
+- Related systems documented elsewhere
+- Future phases not covered in this design
+- Detailed designs (covered in separate documents)
+
+## 1.4 Key Decisions & Constraints
+
+Summarise the most significant architectural decisions and any constraints that shaped the design:
+
+| Decision / Constraint | Rationale | Impact |
+|----------------------|-----------|--------|
+| *[decision]* | *[why]* | *[effect on design]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Constraints may include:
+- **Technical** - Existing technology stack, platform mandates
+- **Organisational** - Team capabilities, vendor relationships
+- **Financial** - Budget limits, cost targets
+- **Regulatory** - Compliance requirements, data residency
+- **Time** - Delivery deadlines, phased rollouts
+</div>
+
+## 1.5 Project Details
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+If this HLD is produced as part of a specific project or change activity:
+
+| Field | Value |
+|-------|-------|
+| **Project Name** | *[...]* |
+| **Project Code / ID** | *[...]* |
+| **Project Manager** | *[...]* |
+| **Estimated Solution Cost (Capex)** | *[...]* |
+| **Estimated Solution Cost (Opex)** | *[...]* |
+| **Target Go-Live Date** | *[...]* |
+
+## 1.6 Business Criticality
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Classify the business criticality of the solution:
+
+| Tier | Description |
+|------|-------------|
+| **Tier 1: Critical** | Service failure causes immediate, severe business impact |
+| **Tier 2: High Impact** | Service failure significantly impacts business operations |
+| **Tier 3: Medium Impact** | Service failure impacts operations but workarounds exist |
+| **Tier 4: Low Impact** | Service failure has limited business impact |
+| **Tier 5: Minimal** | Service failure has negligible impact |
+
+Selected criticality: *[...]*
+
+This classification drives requirements for resilience, recovery time objectives, and governance rigour throughout the design.
