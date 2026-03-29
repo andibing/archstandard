@@ -5,13 +5,13 @@ description: "Scope, purpose, audience, and structural overview of ADS-001."
 
 import { Aside } from '@astrojs/starlight/components';
 
-<Aside type="note" title="Section Maturity">
+<Aside type="note" title="Documentation Depth">
 <span class="maturity-indicator maturity-minimum">Minimum</span> — This section SHALL be completed for all Solution Architecture Documents.
 </Aside>
 
 ## 1.1 Purpose
 
-This standard defines the required structure and content for **Solution Architecture Documents (SADs)**. The architectural views and quality pillars within a SAD constitute the **High Level Design (HLD)** of the solution.
+This standard defines the required structure and content for **Solution Architecture Documents (SADs)**. The architectural views and quality attributes within a SAD constitute the **High Level Design (HLD)** of the solution.
 
 A Solution Architecture Document conforming to this standard serves the following functions:
 
@@ -37,9 +37,9 @@ This standard is intended for use by:
 | Role | Primary Sections |
 |------|-----------------|
 | **Solution Architects** | All sections — primary authors of SADs |
-| **Enterprise Architects** | Framework Alignment, Quality Pillars, Governance |
-| **Security Architects** | Section 3.5 (Security View), Quality Pillars |
-| **Infrastructure Engineers** | Section 3.3 (Physical View), Quality Pillars |
+| **Enterprise Architects** | Framework Alignment, Quality Attributes, Governance |
+| **Security Architects** | Section 3.5 (Security View), Quality Attributes |
+| **Infrastructure Engineers** | Section 3.3 (Physical View), Quality Attributes |
 | **Development Leads** | Section 3.1 (Logical View), Section 5 (Lifecycle) |
 | **Architecture Review Boards** | All sections — as a review and governance framework |
 
@@ -56,7 +56,7 @@ Together, these views form the **High Level Design (HLD)** of the solution:
 | View | Viewpoint | Primary Stakeholders |
 |------|-----------|---------------------|
 | **3.1 Logical View** | Application architecture, components, patterns | Architects, Developers |
-| **3.2 Process View** | Data flows, integrations, interfaces | Integrators, Architects |
+| **3.2 Integration & Data Flow View** | Data flows, integrations, interfaces | Integrators, Architects |
 | **3.3 Physical View** | Deployment, hosting, networking, environments | Infrastructure, DevOps |
 | **3.4 Data View** | Data stores, classification, privacy, lifecycle | Data Architects, Compliance |
 | **3.5 Security View** | IAM, encryption, monitoring, threat model | Security, CISO, Compliance |
@@ -64,7 +64,7 @@ Together, these views form the **High Level Design (HLD)** of the solution:
 
 No single view provides a complete description of the architecture. Together, the six views provide a holistic picture addressable by all stakeholder concerns.
 
-### Tier 2 — Quality Pillars (Sections 4.1 – 4.5)
+### Tier 2 — Quality Attributes (Sections 4.1 – 4.5)
 
 Five cross-cutting quality attributes are evaluated **across** all architectural views. These are derived from the AWS and Azure Well-Architected Frameworks:
 
@@ -80,9 +80,9 @@ Five cross-cutting quality attributes are evaluated **across** all architectural
 
 Supporting sections address how the solution is developed, operated, governed, and retired throughout its lifecycle.
 
-## 1.5 Maturity Levels
+## 1.5 Documentation Depths
 
-Each section in this standard is assigned a maturity level that defines when it SHALL, SHOULD, or MAY be completed:
+Each section in this standard is assigned a documentation depth that defines when it SHALL, SHOULD, or MAY be completed:
 
 | Level | Keyword | Requirement | Typical Gate |
 |-------|---------|-------------|-------------|

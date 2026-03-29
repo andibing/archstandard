@@ -45,7 +45,7 @@ ads-001.schema.json
 
 ## Key Schema Features
 
-### Maturity Levels
+### Documentation Depths
 
 Sections use a `maturityLevel` enum with three values:
 
@@ -53,9 +53,9 @@ Sections use a `maturityLevel` enum with three values:
 { "type": "string", "enum": ["minimum", "recommended", "comprehensive"] }
 ```
 
-### Quality Pillar References
+### Quality Attribute References
 
-Any section can reference applicable quality pillars:
+Any section can reference applicable quality attributes:
 
 ```json
 {
@@ -112,7 +112,7 @@ Add organisation-specific sections without modifying the core schema:
 
 ## Required vs Optional Fields
 
-The schema enforces only the **Minimum** maturity level as required:
+The schema enforces only the **Minimum** documentation depth as required:
 
 | Required Field | Section |
 |---------------|---------|
@@ -122,7 +122,7 @@ The schema enforces only the **Minimum** maturity level as required:
 | `architecturalViews` | 3. Architectural Views |
 | `riskGovernance.designRisks` | 6. Risk & Governance |
 
-All other fields are optional, allowing progressive adoption from Minimum through Comprehensive maturity levels.
+All other fields are optional, allowing progressive adoption from Minimum through Comprehensive documentation depths.
 
 ## Validation Example
 

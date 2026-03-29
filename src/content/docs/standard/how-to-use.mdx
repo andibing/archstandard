@@ -17,9 +17,9 @@ The key words "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "MAY", and "OPTIONAL
 | **SHOULD NOT** | Not recommended; there may be valid reasons to include but the implications must be understood |
 | **MAY** / **OPTIONAL** | Truly optional; include at the author's discretion |
 
-These keywords map to the standard's maturity levels as follows:
+These keywords map to the standard's documentation depths as follows:
 
-| Maturity Level | Keyword | Governance Gate |
+| Documentation Depth | Keyword | Governance Gate |
 |---------------|---------|-----------------|
 | <span class="maturity-indicator maturity-minimum">Minimum</span> | SHALL | Development / Test review |
 | <span class="maturity-indicator maturity-recommended">Recommended</span> | SHOULD | Production approval |
@@ -29,7 +29,7 @@ These keywords map to the standard's maturity levels as follows:
 
 ### Step 1: Determine Your Maturity Target
 
-Select the maturity level appropriate for your project phase and governance requirements:
+Select the documentation depth appropriate for your project phase and governance requirements:
 
 - **Minimum** — For early-stage designs, proofs of concept, or development/test architecture reviews. Complete all sections marked <span class="maturity-indicator maturity-minimum">Minimum</span>.
 - **Recommended** — For production-bound designs requiring formal governance approval. Complete all sections marked <span class="maturity-indicator maturity-minimum">Minimum</span> and <span class="maturity-indicator maturity-recommended">Recommended</span>.
@@ -37,22 +37,22 @@ Select the maturity level appropriate for your project phase and governance requ
 
 ### Step 2: Complete the Relevant Sections
 
-Work through each section of the standard in order. Sections above your target maturity level MAY be marked as "Not Applicable" or deferred to a later revision.
+Work through each section of the standard in order. Sections above your target documentation depth SHOULD be **omitted entirely** rather than included with empty or "Not Applicable" content. This keeps the document focused and avoids template bloat.
 
-Where a section is not relevant to the solution (e.g., IoT Devices for a purely cloud-based API), it SHALL be explicitly marked as "Not Applicable" with a brief justification, rather than omitted.
+Where a section at or below your target depth is genuinely not relevant to the solution (e.g., IoT Devices for a purely cloud-based API), it SHOULD also be omitted. Only include sections that add value to the reader.
 
-### Step 3: Evaluate Against Quality Pillars
+### Step 3: Evaluate Against Quality Attributes
 
-After completing the architectural views (Section 3), evaluate the design against each Quality Pillar (Section 4):
+After completing the architectural views (Section 3), evaluate the design against each Quality Attribute (Section 4):
 
-1. For each pillar, assess whether the design adequately addresses the quality concerns
-2. Document any tradeoffs between pillars and the rationale for the chosen balance
-3. Cross-reference specific pillar requirements from within the architectural views
+1. For each quality attribute, assess whether the design adequately addresses the concerns
+2. Document any tradeoffs between quality attributes and the rationale for the chosen balance
+3. Cross-reference specific quality attribute requirements from within the architectural views
 
 ### Step 4: Validate and Submit for Review
 
 1. If using machine-readable output, validate the document against the JSON Schema (see [Schema](/standard/schema/))
-2. Submit for governance review at the appropriate gate for your maturity level
+2. Submit for governance review at the appropriate gate for your documentation depth
 
 ## 2.3 Document Lifecycle
 
@@ -75,9 +75,9 @@ This standard is designed to be adopted without modification. However, organisat
 1. **Organisation Profile** — Map generic sections to specific internal tools, standards, and governance processes using the `organisationProfile` field in the JSON Schema
 2. **Custom Sections** — Add organisation-specific sections using the `customSections` extension point without modifying the core standard structure
 3. **Standards Traceability** — Reference internal design principles, patterns, and standards within the compliance traceability section (Section 6.4)
-4. **Governance Gate Mapping** — Map the three maturity levels to specific architecture review board (ARB) stages
+4. **Governance Gate Mapping** — Map the three documentation depths to specific architecture review board (ARB) stages
 
-Organisations SHALL NOT remove or renumber core sections of the standard. Where a core section is not applicable, it SHALL be retained with a "Not Applicable" designation.
+Organisations SHALL NOT renumber core sections of the standard. Sections that are not applicable to the solution SHOULD be omitted entirely to keep documents focused and readable.
 
 ## 2.5 Output Formats
 
@@ -101,8 +101,9 @@ This standard references the following specifications:
 | [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) | Key words for use in RFCs to Indicate Requirement Levels | Terminology conventions (Section 2.1) |
 | [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) | Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words | Clarification that keywords are normative only when capitalised |
 | [ISO/IEC/IEEE 42010:2022](https://www.iso.org/standard/74393.html) | Software, systems and enterprise — Architecture description | Meta-model for viewpoints, views, and correspondences (Section 3) |
-| [ISO/IEC 25010:2023](https://www.iso.org/standard/35733.html) | Systems and software quality models | Quality attribute definitions informing Quality Pillars (Section 4) |
+| [ISO/IEC 25010:2023](https://www.iso.org/standard/35733.html) | Systems and software quality models | Quality attribute definitions informing Quality Attributes (Section 4) |
 | [NIST SP 800-53 Rev. 5](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final) | Security and Privacy Controls | Security control categories referenced in Section 3.5 |
-| [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/) | AWS Well-Architected Framework (6 Pillars) | Quality Pillar definitions (Section 4) |
-| [Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/well-architected/) | Azure Well-Architected Framework (5 Pillars) | Quality Pillar definitions with tradeoff guidance (Section 4) |
+| [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/) | AWS Well-Architected Framework (6 Pillars) | Quality Attribute definitions (Section 4) |
+| [Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/well-architected/) | Azure Well-Architected Framework (5 Pillars) | Quality attribute definitions with tradeoff guidance (Section 4) |
+| [GCP Architecture Framework](https://cloud.google.com/architecture/framework) | Google Cloud Architecture Framework (6 Pillars) | Quality attribute definitions with cross-pillar perspectives (Section 4) |
 | [TOGAF Standard, 10th Edition](https://www.opengroup.org/togaf) | The Open Group Architecture Framework | Architecture domain alignment |

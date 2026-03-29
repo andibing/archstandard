@@ -41,7 +41,7 @@ export default defineConfig({
 					items: [
 						{ label: 'Views Overview', slug: 'standard/3-views-overview' },
 						{ label: '3.1 Logical View', slug: 'standard/3-1-logical-view' },
-						{ label: '3.2 Process View', slug: 'standard/3-2-process-view' },
+						{ label: '3.2 Integration & Data Flow', slug: 'standard/3-2-process-view' },
 						{ label: '3.3 Physical View (Infra)', slug: 'standard/3-3-physical-view' },
 						{ label: '3.4 Data View', slug: 'standard/3-4-data-view' },
 						{ label: '3.5 Security View', slug: 'standard/3-5-security-view' },

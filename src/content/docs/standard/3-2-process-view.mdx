@@ -1,14 +1,20 @@
 ---
-title: "3.2 Process View"
-description: Data flows, integration architecture, and API/interface contracts.
+title: "3.2 Integration & Data Flow View"
+description: Data flows, integration architecture, connectivity, and API/interface contracts.
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+
 <span class="maturity-indicator maturity-minimum">Minimum</span>
-<span class="framework-badge badge-4plus1">4+1 Process</span>
+<span class="framework-badge badge-4plus1">4+1 Process (adapted)</span>
 
 ## Purpose
 
-The Process View describes the runtime behaviour of the solution - how data flows through the system, how components communicate, and how the solution integrates with internal and external systems. It addresses the concerns of integrators, operations teams, and architects.
+The Integration & Data Flow View describes how data moves through the solution, how components communicate, and how the solution integrates with internal and external systems. It addresses the concerns of integrators, operations teams, and architects.
+
+<Aside type="note" title="Naming">
+This view is adapted from Kruchten's **Process View**, which originally focused on concurrency and runtime process decomposition. In modern solution architecture, the primary concerns at this level are data flows, integration patterns, and interface contracts. The name has been updated to reflect this contemporary usage.
+</Aside>
 
 ## 3.2.1 Data Flow Diagrams
 
@@ -80,7 +86,7 @@ Document the key APIs and interfaces exposed or consumed by the solution:
 
 <div class="quality-pillar-ref">
 
-**Quality Pillar Cross-References:**
+**Quality Attribute Cross-References:**
 - **4.1 Operational Excellence** - Integration failures are a major source of incidents
 - **4.2 Reliability** - External dependencies affect reliability posture
 - **4.3 Performance** - Network latency and throughput in integration paths

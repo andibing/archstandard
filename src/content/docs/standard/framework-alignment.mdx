@@ -19,7 +19,7 @@ The standard follows the ISO 42010 conceptual model:
 | Architecture Viewpoint | Section 3: Six defined viewpoints |
 | Architecture View | The content within each Section 3.x |
 | Model Kind | Diagrams, tables, and descriptions within views |
-| Correspondences | Cross-references between views and Quality Pillar refs |
+| Correspondences | Cross-references between views and Quality Attribute refs |
 | Architecture Description | The complete Solution Architecture Document |
 
 ## 4+1 View Model Alignment
@@ -27,7 +27,7 @@ The standard follows the ISO 42010 conceptual model:
 | 4+1 View | ADS-001 Section | Key Content |
 |----------|---------------------|-------------|
 | Logical View | 3.1 Logical View | Component architecture, service mapping |
-| Process View | 3.2 Process View | Data flows, integrations, interfaces |
+| Integration & Data Flow View | 3.2 Integration & Data Flow View | Data flows, integrations, interfaces |
 | Development View | 5. Lifecycle Management | CI/CD, SDLC, tooling |
 | Physical View | 3.3 Physical View | Deployment, infrastructure, networking |
 | +1 Scenarios | 3.6 Scenarios | Use cases, ADRs |
@@ -65,7 +65,7 @@ The standard extends the classic 4+1 model with dedicated **Data** and **Securit
 |-------------|------------------------|
 | Business Architecture | 1. Executive Summary, 2. Stakeholders |
 | Data Architecture | 3.4 Data View |
-| Application Architecture | 3.1 Logical View, 3.2 Process View |
+| Application Architecture | 3.1 Logical View, 3.2 Integration & Data Flow View |
 | Technology Architecture | 3.3 Physical View |
 
 ## Section-to-Framework Traceability Matrix
@@ -76,7 +76,7 @@ The standard extends the classic 4+1 model with dedicated **Data** and **Securit
 | 1. Executive Summary | - | - | - | - | Business |
 | 2. Stakeholders | Stakeholders, Concerns | - | - | - | Business |
 | 3.1 Logical View | Viewpoint, View | Logical | - | - | Application |
-| 3.2 Process View | Viewpoint, View | Process | - | - | Application |
+| 3.2 Integration & Data Flow View | Viewpoint, View | Process | - | - | Application |
 | 3.3 Physical View | Viewpoint, View | Physical | - | - | Technology |
 | 3.4 Data View | Viewpoint, View | *(extended)* | - | - | Data |
 | 3.5 Security View | Viewpoint, View | *(extended)* | Security | Security | - |

@@ -3,7 +3,7 @@ title: "ADS-001: The Architecture Description Standard"
 description: A prescriptive standard defining the structure, content, and quality requirements for Solution Architecture Documents.
 template: splash
 hero:
-  tagline: "Version 1.0.0 — A prescriptive standard defining the structure, content, and quality requirements for Solution Architecture Documents (SADs). The architectural views and quality pillars within a SAD constitute the High Level Design (HLD) of the solution."
+  tagline: "Version 1.0.0 — A prescriptive standard defining the structure, content, and quality requirements for Solution Architecture Documents (SADs). The architectural views and quality attributes within a SAD constitute the High Level Design (HLD) of the solution."
   actions:
     - text: Read the Standard
       link: /standard/overview/
@@ -32,7 +32,7 @@ It is built upon — but is not a replica of — ISO/IEC/IEEE 42010, which defin
 |------|--------------|-----------------|
 | **Architecture Description** | The ISO 42010 formal term for the work product | The standard itself (ADS-001) aligns to this concept |
 | **Solution Architecture Document (SAD)** | The enterprise-practice name for the document | The document you produce using this standard |
-| **High Level Design (HLD)** | The conceptual-level design content | Sections 3–4 (Architectural Views + Quality Pillars) within the SAD |
+| **High Level Design (HLD)** | The conceptual-level design content | Sections 3–4 (Architectural Views + Quality Attributes) within the SAD |
 
 ## Scope
 
@@ -49,7 +49,7 @@ This standard defines the required and recommended structure for Solution Archit
 	<Card title="Architectural Views" icon="open-book">
 		Six views describing the solution from distinct stakeholder perspectives: Logical, Process, Physical, Data, Security, and Scenarios. These form the core High Level Design.
 	</Card>
-	<Card title="Quality Pillars" icon="approve-check-circle">
+	<Card title="Quality Attributes" icon="approve-check-circle">
 		Five cross-cutting evaluation lenses — Operational Excellence, Reliability, Performance, Cost, and Sustainability — applied across all views.
 	</Card>
 	<Card title="Lifecycle & Governance" icon="setting">
@@ -64,8 +64,8 @@ This standard defines the required and recommended structure for Solution Archit
 
 ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concrete, actionable structure that ISO 42010 deliberately leaves to implementers. It goes well beyond ISO 42010 by incorporating:
 
-- **Quality Pillars from AWS/Azure Well-Architected Frameworks** — Operational Excellence, Reliability, Performance Efficiency, Cost Optimisation, and Sustainability as cross-cutting evaluation lenses applied across all architectural views
-- **Maturity Levels with RFC 2119 requirement keywords** — every section is tagged as SHALL (Minimum), SHOULD (Recommended), or MAY (Comprehensive), enabling progressive adoption from lightweight designs to full enterprise documentation
+- **Quality Attributes from AWS, Azure, and GCP Well-Architected Frameworks** — Operational Excellence, Reliability, Performance Efficiency, Cost Optimisation, and Sustainability as cross-cutting evaluation lenses applied across all architectural views
+- **Documentation Depths with RFC 2119 requirement keywords** — every section is tagged as SHALL (Minimum), SHOULD (Recommended), or MAY (Comprehensive), enabling progressive adoption from lightweight designs to full enterprise documentation
 - **Security as a dedicated Architectural View** — ISO 42010 does not prescribe specific viewpoints; ADS-001 elevates Security to a first-class view covering IAM, encryption, threat modelling, and monitoring
 - **Lifecycle Management** — CI/CD pipelines, service transition, release management, operations, maintainability, and exit planning
 - **Risk & Governance with compliance traceability** — design risks, guardrail exceptions, architecture decision records, and a traceability matrix linking design elements to the standards they satisfy
@@ -78,9 +78,9 @@ ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concret
 |--------|------------------------|------------------------|
 | **Type** | Meta-standard (conceptual model) | Prescriptive standard (template-level) |
 | **Prescribes sections?** | No — defines concepts only | Yes — defines exact sections, tables, and content |
-| **Prescribes quality criteria?** | No | Yes — five quality pillars from AWS/Azure WAF |
+| **Prescribes quality criteria?** | No | Yes — five quality attributes from AWS/Azure WAF |
 | **Provides templates?** | No | Yes — Markdown, YAML, JSON templates |
-| **Defines maturity levels?** | No | Yes — Minimum, Recommended, Comprehensive |
+| **Defines documentation depths?** | No | Yes — Minimum, Recommended, Comprehensive |
 | **Includes security view?** | Not specifically | Yes — full dedicated Security View |
 | **Includes lifecycle?** | No | Yes — CI/CD, operations, exit planning |
 | **JSON Schema?** | No | Yes — machine-readable validation |
@@ -91,8 +91,9 @@ ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concret
 |-----------|-------|-----------------|
 | ISO/IEC/IEEE 42010:2022 | Architecture Description | Conceptual model: stakeholders, concerns, viewpoints, views |
 | Kruchten 4+1 | Architectural View Model | Six-view structure (extended with Data and Security views) |
-| AWS Well-Architected | Framework (6 Pillars) | Quality pillar definitions and evaluation criteria |
-| Azure Well-Architected | Framework (5 Pillars) | Quality pillar definitions with tradeoff documentation |
+| AWS Well-Architected | Framework (6 Pillars) | Quality attribute definitions and evaluation criteria |
+| Azure Well-Architected | Framework (5 Pillars) | Quality attribute definitions with tradeoff documentation |
+| GCP Architecture | Framework (6 Pillars) | Quality attribute definitions with cross-pillar perspectives |
 | TOGAF 10th Edition | The Open Group Architecture Framework | Architecture domain alignment |
 | RFC 2119 / RFC 8174 | Requirement Level Key Words | SHALL / SHOULD / MAY terminology |
 
@@ -100,7 +101,7 @@ ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concret
 
 The key words "SHALL", "SHOULD", "MAY", and "OPTIONAL" in this standard are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174):
 
-| Maturity Level | Keyword | Meaning |
+| Documentation Depth | Keyword | Meaning |
 |---------------|---------|---------|
 | **Minimum** | SHALL | Required for all Solution Architecture Documents |
 | **Recommended** | SHOULD | Required for production-grade designs |
