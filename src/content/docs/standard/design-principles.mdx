@@ -1,0 +1,76 @@
+---
+title: "Design Principles"
+description: "Core design principles underpinning ADS-001, including atomic field design and multi-format compatibility."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Atomic Field Design
+
+ADS-001 is designed with **atomic fields** — structured, discrete values rather than free-text wherever possible. This is a core principle of the standard.
+
+### Why Atomic Fields?
+
+| Benefit | Description |
+|---------|-------------|
+| **Reduced ambiguity** | Authors select from defined options rather than inventing prose |
+| **Machine-processable** | Tooling can aggregate, compare, validate, and report across SADs |
+| **Faster to complete** | Checkboxes and selections are quicker than blank text fields |
+| **Comparable** | Two SADs can be structurally compared and diffed |
+| **Translatable** | Enum values can be mapped to any language without ambiguity |
+| **Governance-ready** | Review boards can verify completeness programmatically |
+
+### How It Works Across Formats
+
+The same atomic field renders differently depending on the output format, but carries identical meaning:
+
+| Schema Type | JSON / YAML | Markdown / Word | Confluence / Wiki |
+|------------|-------------|-----------------|-------------------|
+| `boolean` | `true` / `false` | Checkbox: ☑ / ☐ | Checkbox macro |
+| `enum` (single) | `"active-active"` | Radio button or bold selection | Status macro or dropdown |
+| `enum` (array) | `["aws", "azure"]` | Multiple checkboxes: ☑ AWS ☑ Azure | Multi-select macro |
+| `yesNoNa` | `"yes"` / `"no"` / `"not-applicable"` | ☑ Yes ☐ No ☐ N/A | Status macro |
+| `riskLevel` | `"high"` | **HIGH** (with colour) | Status lozenge |
+| `integer` / `number` | `4096` | Numeric field | Numeric field |
+| `string` (constrained) | `"PT4H"` (ISO 8601) | "4 hours" | Duration field |
+| `string` (free-text) | Prose | Prose | Prose |
+
+<Aside type="tip" title="Free-Text Fields">
+Free-text fields are still used where structured options are not practical (e.g., `solutionOverview`, `mitigationPlan`, `rationale`). However, even these are scoped — they have a specific purpose described in the schema, not open-ended "notes" fields.
+</Aside>
+
+### Atomic Field Categories in ADS-001
+
+The schema uses the following atomic patterns:
+
+| Pattern | Example Fields | Values |
+|---------|---------------|--------|
+| **Yes / No / N/A** | `internetFacing`, `thirdPartyHosted`, `backupEnabled` | `yes`, `no`, `not-applicable` |
+| **Risk Level** | `residualRisk`, `confidentiality`, `integrity` | `critical`, `high`, `medium`, `low`, `negligible` |
+| **Classification** | `classification` | `public`, `internal`, `restricted`, `highly-restricted` |
+| **Status** | `document status`, `ADR status`, `risk status` | Defined per context |
+| **Technology Enum** | `protocol`, `authenticationMethod`, `secretStore` | Defined per field |
+| **Sizing Category** | `dataSizeCategory`, `clusterSize` | Banded ranges |
+| **Duration** | `retentionPeriod`, `rtoTarget` | ISO 8601 or banded categories |
+| **Criticality** | `businessCriticality` | `tier-1-critical` through `tier-5-minimal` |
+| **ID Pattern** | `UC-01`, `ADR-001`, `R-001` | Regex-constrained strings |
+
+## Multi-Format Compatibility
+
+ADS-001 is designed to work equally well as:
+
+- **A human-authored document** (Word, Confluence, wiki) — where atomic fields become checkboxes, dropdown menus, and radio buttons
+- **A machine-readable file** (JSON, YAML, Markdown) — where atomic fields are enums, booleans, and typed values
+- **A web form** — where atomic fields map directly to form controls
+
+The JSON Schema is the single source of truth. All output formats are derived from it, ensuring consistency regardless of how the SAD is authored or consumed.
+
+## Extensibility Without Ambiguity
+
+When organisations add custom sections via the `customSections` extension point, they SHOULD follow the same atomic field principles:
+
+1. Use `boolean` for yes/no questions
+2. Define `enum` values for any field with a finite set of valid answers
+3. Use typed fields (`integer`, `number`, `date`) for measurable values
+4. Reserve free-text `string` fields for genuinely open-ended content
+5. Add `description` to every field to clarify its purpose

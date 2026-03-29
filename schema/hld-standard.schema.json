@@ -2,75 +2,46 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://archstandard.org/schema/v1.0.0/ads-001.schema.json",
   "title": "ADS-001: Solution Architecture Document",
-  "description": "Schema for Solution Architecture Documents conforming to ADS-001: The Architecture Description Standard v1.0.0",
+  "description": "Schema for Solution Architecture Documents conforming to ADS-001: The Architecture Description Standard v1.0.0. Fields are designed to be atomic — using enums, booleans, and structured options to reduce ambiguity and enable machine processing.",
   "type": "object",
   "required": ["schemaVersion", "documentControl", "executiveSummary", "architecturalViews", "riskGovernance"],
   "properties": {
     "schemaVersion": {
       "type": "string",
       "const": "1.0.0",
-      "description": "Version of the HLD Standard schema this document conforms to"
+      "description": "Version of the ADS-001 schema this document conforms to"
     },
-    "documentControl": {
-      "$ref": "#/$defs/documentControl"
-    },
-    "executiveSummary": {
-      "$ref": "#/$defs/executiveSummary"
-    },
-    "stakeholders": {
-      "$ref": "#/$defs/stakeholders"
-    },
-    "architecturalViews": {
-      "$ref": "#/$defs/architecturalViews"
-    },
-    "qualityPillars": {
-      "$ref": "#/$defs/qualityPillars"
-    },
-    "lifecycleManagement": {
-      "$ref": "#/$defs/lifecycleManagement"
-    },
-    "riskGovernance": {
-      "$ref": "#/$defs/riskGovernance"
-    },
-    "appendices": {
-      "$ref": "#/$defs/appendices"
-    },
-    "organisationProfile": {
-      "$ref": "#/$defs/organisationProfile"
-    },
+    "documentControl": { "$ref": "#/$defs/documentControl" },
+    "executiveSummary": { "$ref": "#/$defs/executiveSummary" },
+    "stakeholders": { "$ref": "#/$defs/stakeholders" },
+    "architecturalViews": { "$ref": "#/$defs/architecturalViews" },
+    "qualityPillars": { "$ref": "#/$defs/qualityPillars" },
+    "lifecycleManagement": { "$ref": "#/$defs/lifecycleManagement" },
+    "riskGovernance": { "$ref": "#/$defs/riskGovernance" },
+    "appendices": { "$ref": "#/$defs/appendices" },
+    "organisationProfile": { "$ref": "#/$defs/organisationProfile" },
     "customSections": {
       "type": "array",
-      "items": { "$ref": "#/$defs/customSection" },
-      "description": "Organisation-specific additional sections"
+      "items": { "$ref": "#/$defs/customSection" }
     }
   },
   "$defs": {
     "maturityLevel": {
       "type": "string",
-      "enum": ["minimum", "recommended", "comprehensive"],
-      "description": "The maturity level at which this section becomes required"
+      "enum": ["minimum", "recommended", "comprehensive"]
     },
     "qualityPillarRef": {
       "type": "string",
-      "enum": [
-        "operational-excellence",
-        "reliability",
-        "performance",
-        "cost-optimisation",
-        "sustainability"
-      ],
-      "description": "Reference to a quality pillar"
+      "enum": ["operational-excellence", "reliability", "performance", "cost-optimisation", "sustainability"]
     },
-    "frameworkRef": {
-      "type": "object",
-      "properties": {
-        "framework": {
-          "type": "string",
-          "enum": ["iso42010", "4plus1", "aws-waf", "azure-waf", "togaf"]
-        },
-        "reference": { "type": "string" }
-      },
-      "required": ["framework"]
+    "riskLevel": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "negligible"]
+    },
+    "yesNoNa": {
+      "type": "string",
+      "enum": ["yes", "no", "not-applicable"],
+      "description": "Atomic tri-state for yes/no questions with an N/A option"
     },
     "documentControl": {
       "type": "object",
@@ -86,36 +57,40 @@
             "applicationId": { "type": "string" },
             "authors": { "type": "array", "items": { "type": "string" } },
             "owner": { "type": "string" },
-            "version": { "type": "string" },
+            "version": { "type": "string", "pattern": "^\\d+\\.\\d+(\\.\\d+)?$" },
             "status": { "type": "string", "enum": ["draft", "in-review", "approved", "superseded"] },
             "createdDate": { "type": "string", "format": "date" },
             "lastUpdated": { "type": "string", "format": "date" },
-            "classification": { "type": "string" }
+            "classification": {
+              "type": "string",
+              "enum": ["public", "internal", "confidential", "restricted"]
+            }
           }
         },
         "changeHistory": {
           "type": "array",
           "items": {
             "type": "object",
+            "required": ["version", "date", "description"],
             "properties": {
               "version": { "type": "string" },
               "date": { "type": "string", "format": "date" },
               "author": { "type": "string" },
+              "changeType": { "type": "string", "enum": ["initial-draft", "minor-update", "major-update", "review-revision", "approval"] },
               "description": { "type": "string" }
-            },
-            "required": ["version", "date", "description"]
+            }
           }
         },
         "contributors": {
           "type": "array",
           "items": {
             "type": "object",
+            "required": ["name", "role", "contributionType"],
             "properties": {
               "name": { "type": "string" },
               "role": { "type": "string" },
               "contributionType": { "type": "string", "enum": ["author", "reviewer", "approver"] }
-            },
-            "required": ["name", "role", "contributionType"]
+            }
           }
         },
         "purpose": { "type": "string" },
@@ -125,7 +100,7 @@
     "executiveSummary": {
       "type": "object",
       "description": "Section 1: Executive Summary",
-      "required": ["solutionOverview"],
+      "required": ["solutionOverview", "businessCriticality"],
       "properties": {
         "solutionOverview": { "type": "string" },
         "businessContext": {
@@ -134,21 +109,29 @@
             "type": "object",
             "properties": {
               "driver": { "type": "string" },
+              "driverType": {
+                "type": "string",
+                "enum": ["regulatory", "cost-reduction", "modernisation", "new-capability", "risk-mitigation", "security", "performance", "scalability", "end-of-life", "merger-acquisition", "other"]
+              },
               "description": { "type": "string" },
-              "priority": { "type": "string", "enum": ["high", "medium", "low"] }
+              "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"] }
             }
           }
         },
-        "inScope": { "type": "string" },
-        "outOfScope": { "type": "string" },
+        "inScope": { "type": "array", "items": { "type": "string" } },
+        "outOfScope": { "type": "array", "items": { "type": "string" } },
         "keyDecisions": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
               "decision": { "type": "string" },
+              "constraintType": {
+                "type": "string",
+                "enum": ["technical", "organisational", "financial", "regulatory", "time", "vendor", "other"]
+              },
               "rationale": { "type": "string" },
-              "impact": { "type": "string" }
+              "reversibility": { "type": "string", "enum": ["easily-reversible", "reversible-with-effort", "difficult-to-reverse", "irreversible"] }
             }
           }
         },
@@ -158,8 +141,9 @@
             "projectName": { "type": "string" },
             "projectCode": { "type": "string" },
             "projectManager": { "type": "string" },
-            "estimatedCapex": { "type": "string" },
-            "estimatedOpex": { "type": "string" },
+            "estimatedCapex": { "type": "number", "description": "Estimated capital expenditure in base currency" },
+            "estimatedOpex": { "type": "number", "description": "Estimated annual operational expenditure in base currency" },
+            "currency": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "ISO 4217 currency code" },
             "targetGoLive": { "type": "string", "format": "date" }
           }
         },
@@ -179,28 +163,38 @@
             "type": "object",
             "properties": {
               "stakeholder": { "type": "string" },
-              "role": { "type": "string" },
+              "roleType": {
+                "type": "string",
+                "enum": ["business-owner", "solution-architect", "enterprise-architect", "security-architect", "data-architect", "infrastructure-engineer", "developer", "operations-sre", "compliance", "project-manager", "vendor", "end-user", "external-customer", "other"]
+              },
               "concerns": { "type": "array", "items": { "type": "string" } },
-              "relevantViews": { "type": "array", "items": { "type": "string" } }
+              "relevantViews": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["logical", "process", "physical", "data", "security", "scenarios"] }
+              }
             }
           }
         },
         "compliance": {
           "type": "object",
           "properties": {
+            "supportsRegulatedActivities": { "$ref": "#/$defs/yesNoNa" },
+            "regulatedActivityDetails": { "type": "string" },
             "regulatoryRequirements": {
               "type": "array",
               "items": {
                 "type": "object",
                 "properties": {
                   "regulation": { "type": "string" },
+                  "regulationType": {
+                    "type": "string",
+                    "enum": ["data-protection", "financial-services", "healthcare", "security", "industry-specific", "internal-policy", "other"]
+                  },
                   "applicability": { "type": "string" },
                   "designImpact": { "type": "string" }
                 }
               }
-            },
-            "supportsRegulatedActivities": { "type": "boolean" },
-            "regulatedActivityDetails": { "type": "string" }
+            }
           }
         }
       }
@@ -213,30 +207,22 @@
           "type": "object",
           "description": "3.1 Logical View",
           "properties": {
-            "applicationArchitectureDiagram": { "type": "string", "description": "Reference to diagram file or embedded content" },
+            "diagrams": { "type": "array", "items": { "type": "string" } },
             "components": {
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["name", "componentType"],
                 "properties": {
                   "name": { "type": "string" },
-                  "type": { "type": "string" },
+                  "componentType": {
+                    "type": "string",
+                    "enum": ["web-application", "api-service", "backend-service", "batch-job", "message-broker", "database", "cache", "file-storage", "search-engine", "cdn", "gateway", "load-balancer", "queue", "stream", "ml-model", "other"]
+                  },
                   "description": { "type": "string" },
                   "technology": { "type": "string" },
-                  "owner": { "type": "string" }
-                },
-                "required": ["name", "type", "description"]
-              }
-            },
-            "serviceMapping": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "serviceId": { "type": "string" },
-                  "serviceName": { "type": "string" },
-                  "capabilityId": { "type": "string" },
-                  "capabilityName": { "type": "string" }
+                  "owner": { "type": "string" },
+                  "status": { "type": "string", "enum": ["new", "existing-unchanged", "existing-modified", "to-be-decommissioned"] }
                 }
               }
             },
@@ -245,7 +231,10 @@
               "items": {
                 "type": "object",
                 "properties": {
-                  "pattern": { "type": "string" },
+                  "pattern": {
+                    "type": "string",
+                    "enum": ["microservices", "monolith", "modular-monolith", "event-driven", "cqrs", "saga", "strangler-fig", "sidecar", "api-gateway", "bff", "circuit-breaker", "pub-sub", "request-response", "batch-processing", "stream-processing", "data-lake", "data-mesh", "other"]
+                  },
                   "whereApplied": { "type": "string" },
                   "rationale": { "type": "string" }
                 }
@@ -258,33 +247,50 @@
           "type": "object",
           "description": "3.2 Process View",
           "properties": {
-            "dataFlowDiagrams": { "type": "array", "items": { "type": "string" } },
+            "diagrams": { "type": "array", "items": { "type": "string" } },
             "internalConnectivity": {
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["source", "destination", "protocol", "encrypted"],
                 "properties": {
                   "source": { "type": "string" },
                   "destination": { "type": "string" },
-                  "protocol": { "type": "string" },
-                  "authentication": { "type": "string" },
+                  "protocol": {
+                    "type": "string",
+                    "enum": ["https", "http", "grpc", "grpc-tls", "tcp", "tcp-tls", "amqp", "amqps", "mqtt", "mqtts", "kafka", "websocket", "wss", "jdbc", "odbc", "sftp", "ftps", "smtp", "smtps", "ldaps", "ssh", "other"]
+                  },
+                  "encrypted": { "type": "boolean" },
+                  "authenticationMethod": {
+                    "type": "string",
+                    "enum": ["mtls", "oauth2", "api-key", "jwt", "saml", "oidc", "basic-auth", "certificate", "iam-role", "kerberos", "none", "other"]
+                  },
+                  "direction": { "type": "string", "enum": ["unidirectional", "bidirectional"] },
+                  "synchronicity": { "type": "string", "enum": ["synchronous", "asynchronous", "event-driven"] },
                   "purpose": { "type": "string" }
-                },
-                "required": ["source", "destination", "protocol"]
+                }
               }
             },
             "externalIntegrations": {
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["sourceApp", "destinationApp", "protocol", "encrypted"],
                 "properties": {
                   "sourceApp": { "type": "string" },
                   "destinationApp": { "type": "string" },
-                  "protocol": { "type": "string" },
-                  "authentication": { "type": "string" },
+                  "integrationType": { "type": "string", "enum": ["internal-app", "external-service", "saas", "partner", "customer-facing"] },
+                  "protocol": {
+                    "type": "string",
+                    "enum": ["https", "http", "grpc", "grpc-tls", "tcp", "tcp-tls", "amqp", "amqps", "mqtt", "kafka", "sftp", "ftps", "smtp", "smtps", "other"]
+                  },
+                  "encrypted": { "type": "boolean" },
+                  "authenticationMethod": {
+                    "type": "string",
+                    "enum": ["mtls", "oauth2", "api-key", "jwt", "saml", "oidc", "basic-auth", "certificate", "iam-role", "none", "other"]
+                  },
                   "purpose": { "type": "string" }
-                },
-                "required": ["sourceApp", "destinationApp", "protocol"]
+                }
               }
             },
             "apis": {
@@ -293,10 +299,12 @@
                 "type": "object",
                 "properties": {
                   "name": { "type": "string" },
-                  "type": { "type": "string", "enum": ["REST", "GraphQL", "gRPC", "SOAP", "Event", "Other"] },
+                  "apiType": { "type": "string", "enum": ["rest", "graphql", "grpc", "soap", "websocket", "event-stream", "file-transfer", "other"] },
                   "direction": { "type": "string", "enum": ["exposed", "consumed"] },
-                  "format": { "type": "string" },
-                  "version": { "type": "string" }
+                  "dataFormat": { "type": "string", "enum": ["json", "xml", "protobuf", "avro", "csv", "parquet", "binary", "other"] },
+                  "version": { "type": "string" },
+                  "authenticated": { "type": "boolean" },
+                  "rateLimited": { "type": "boolean" }
                 }
               }
             },
@@ -307,38 +315,110 @@
           "type": "object",
           "description": "3.3 Physical View",
           "properties": {
-            "deploymentDiagram": { "type": "string" },
+            "diagrams": { "type": "array", "items": { "type": "string" } },
             "hosting": {
               "type": "object",
               "properties": {
-                "venueType": { "type": "array", "items": { "type": "string" } },
-                "regions": { "type": "array", "items": { "type": "string" } },
-                "serviceModel": { "type": "array", "items": { "type": "string" } },
-                "cloudProvider": { "type": "string" }
+                "venueTypes": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["public-cloud", "private-cloud", "on-premises", "saas", "hybrid", "co-location", "edge"] }
+                },
+                "regions": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "ISO 3166-1 country codes or cloud region identifiers"
+                },
+                "serviceModels": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["iaas", "paas", "saas", "faas", "caas", "dbaas", "other"] }
+                },
+                "cloudProviders": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["aws", "azure", "gcp", "oracle-cloud", "ibm-cloud", "alibaba-cloud", "other", "none"] }
+                }
               }
             },
             "compute": {
               "type": "object",
               "properties": {
-                "servers": { "type": "array", "items": { "type": "object" } },
-                "containers": { "type": "object" },
-                "serverless": { "type": "object" },
-                "hpc": { "type": "object" },
-                "aiMl": { "type": "object" }
+                "computeTypes": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["physical-server", "virtual-machine", "container", "serverless-function", "edge-compute", "hpc", "gpu", "none"] }
+                },
+                "servers": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "instanceType": { "type": "string" },
+                      "vCpu": { "type": "integer" },
+                      "memoryGb": { "type": "number" },
+                      "storageTb": { "type": "number" },
+                      "quantity": { "type": "integer" },
+                      "os": {
+                        "type": "string",
+                        "enum": ["rhel", "amazon-linux", "ubuntu", "debian", "centos", "windows-server", "suse", "other"]
+                      }
+                    }
+                  }
+                },
+                "containers": {
+                  "type": "object",
+                  "properties": {
+                    "platform": { "type": "string", "enum": ["eks", "aks", "gke", "openshift", "docker-swarm", "ecs", "fargate", "cloud-run", "other", "none"] },
+                    "baseImages": { "type": "array", "items": { "type": "string" } },
+                    "clusterSize": { "type": "string", "enum": ["1-10-nodes", "11-50-nodes", "51-100-nodes", "100-plus-nodes"] }
+                  }
+                },
+                "serverless": {
+                  "type": "object",
+                  "properties": {
+                    "services": { "type": "array", "items": { "type": "string" } },
+                    "used": { "type": "boolean" }
+                  }
+                }
               }
             },
-            "networking": { "type": "object" },
+            "networking": {
+              "type": "object",
+              "properties": {
+                "internetFacing": { "type": "boolean" },
+                "outboundInternet": { "type": "boolean" },
+                "cloudToOnPrem": { "type": "boolean" },
+                "thirdPartyConnectivity": { "type": "boolean" },
+                "cloudPeering": { "type": "boolean" },
+                "wirelessRequired": { "type": "boolean" },
+                "peakEgressMbps": { "type": "number" },
+                "peakIngressMbps": { "type": "number" },
+                "trafficPattern": { "type": "string", "enum": ["constant", "periodic", "burst", "seasonal", "unpredictable"] },
+                "latencyRequirement": { "type": "string", "enum": ["ultra-low-sub-1ms", "low-sub-10ms", "moderate-sub-100ms", "standard-sub-1s", "tolerant-above-1s", "not-applicable"] },
+                "ddosProtection": { "$ref": "#/$defs/yesNoNa" },
+                "ddosProvider": { "type": "string", "enum": ["aws-shield", "azure-ddos", "cloudflare", "akamai", "gcp-cloud-armor", "arbor", "other", "none"] },
+                "wafEnabled": { "$ref": "#/$defs/yesNoNa" },
+                "wafProvider": { "type": "string", "enum": ["aws-waf", "azure-waf", "cloudflare-waf", "gcp-cloud-armor", "f5", "imperva", "other", "none"] },
+                "rateLimiting": { "type": "boolean" }
+              }
+            },
             "environments": {
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["environmentType"],
                 "properties": {
-                  "type": { "type": "string" },
-                  "description": { "type": "string" },
-                  "count": { "type": "string" },
-                  "computeSolution": { "type": "string" }
+                  "environmentType": {
+                    "type": "string",
+                    "enum": ["development", "test", "qa", "integration-test", "staging", "pre-production", "production", "dr", "sandbox", "demo", "performance-test"]
+                  },
+                  "count": { "type": "integer" },
+                  "venue": { "type": "string" },
+                  "autoScaleDown": { "type": "boolean", "description": "Does this environment scale down or shut off when not in use?" }
                 }
               }
+            },
+            "securityAgents": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["anti-malware", "edr", "vulnerability-management", "dlp", "hids", "fim", "other"] }
             },
             "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
           }
@@ -351,23 +431,58 @@
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["name", "storeType", "classification"],
                 "properties": {
                   "name": { "type": "string" },
+                  "storeType": {
+                    "type": "string",
+                    "enum": ["relational-db", "nosql-document", "nosql-key-value", "nosql-graph", "nosql-columnar", "object-storage", "block-storage", "file-storage", "data-warehouse", "data-lake", "cache", "message-queue", "search-index", "time-series-db", "in-memory", "other"]
+                  },
                   "technology": { "type": "string" },
                   "authoritative": { "type": "boolean" },
-                  "retentionPeriod": { "type": "string" },
-                  "dataSize": { "type": "string" },
+                  "retentionPeriod": {
+                    "type": "string",
+                    "enum": ["transient", "hours", "days", "weeks", "months", "1-year", "2-5-years", "5-10-years", "10-plus-years", "indefinite"]
+                  },
+                  "dataSizeCategory": {
+                    "type": "string",
+                    "enum": ["under-1gb", "1-100gb", "100gb-1tb", "1-10tb", "10-100tb", "100tb-1pb", "over-1pb"]
+                  },
                   "classification": { "type": "string", "enum": ["public", "internal", "restricted", "highly-restricted"] },
-                  "personalData": { "type": "boolean" },
-                  "encryptionLevel": { "type": "string" },
-                  "keyManagement": { "type": "string" }
-                },
-                "required": ["name", "technology", "classification"]
+                  "containsPersonalData": { "type": "boolean" },
+                  "containsSensitivePersonalData": { "type": "boolean" },
+                  "encryptionLevel": {
+                    "type": "string",
+                    "enum": ["none", "storage-level", "logical-container", "application-level", "field-level"]
+                  },
+                  "keyManagement": {
+                    "type": "string",
+                    "enum": ["provider-managed", "customer-managed-kms", "hsm", "byok", "custom", "none"]
+                  }
+                }
               }
             },
-            "dataLifecycle": { "type": "object" },
-            "privacyAssessments": { "type": "array", "items": { "type": "object" } },
-            "dataTransfers": { "type": "array", "items": { "type": "object" } },
+            "productionDataForTesting": {
+              "type": "string",
+              "enum": ["not-used", "public-only", "sensitive-deleted", "masked", "used-with-justification"]
+            },
+            "dataIntegrityControls": { "$ref": "#/$defs/yesNoNa" },
+            "dataOnEndUserDevices": { "$ref": "#/$defs/yesNoNa" },
+            "dataSovereigntyRequired": { "$ref": "#/$defs/yesNoNa" },
+            "dataSovereigntyDetails": { "type": "string" },
+            "dataTransfers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "destination": { "type": "string" },
+                  "destinationType": { "type": "string", "enum": ["internal", "third-party", "regulator", "customer", "partner"] },
+                  "classification": { "type": "string", "enum": ["public", "internal", "restricted", "highly-restricted"] },
+                  "transferMethod": { "type": "string", "enum": ["api", "sftp", "email", "message-queue", "database-replication", "file-share", "manual", "other"] },
+                  "encrypted": { "type": "boolean" }
+                }
+              }
+            },
             "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
           }
         },
@@ -375,25 +490,76 @@
           "type": "object",
           "description": "3.5 Security View",
           "properties": {
-            "securityOverview": { "type": "object" },
-            "iam": {
+            "thirdPartyHosted": { "$ref": "#/$defs/yesNoNa" },
+            "thirdPartyRiskAssessed": { "$ref": "#/$defs/yesNoNa" },
+            "businessImpact": {
               "type": "object",
               "properties": {
-                "authenticationModel": { "type": "object" },
-                "authorisationModel": { "type": "object" },
-                "sessionManagement": { "type": "object" },
-                "privilegedAccess": { "type": "object" }
+                "confidentiality": { "$ref": "#/$defs/riskLevel" },
+                "integrity": { "$ref": "#/$defs/riskLevel" },
+                "availability": { "$ref": "#/$defs/riskLevel" },
+                "nonRepudiation": { "$ref": "#/$defs/riskLevel" }
               }
             },
-            "networkSecurity": { "type": "object" },
-            "dataProtection": {
+            "authentication": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "accessType": { "type": "string", "enum": ["end-user-internal", "end-user-external", "it-operations", "service-account", "api-consumer"] },
+                  "method": { "type": "string", "enum": ["sso-saml", "sso-oidc", "mfa", "certificate", "api-key", "oauth2", "basic-auth", "kerberos", "passwordless", "custom"] },
+                  "usesGroupWideAuth": { "type": "boolean" }
+                }
+              }
+            },
+            "authorisation": {
               "type": "object",
               "properties": {
-                "encryptionAtRest": { "type": "object" },
-                "secretManagement": { "type": "object" }
+                "model": { "type": "string", "enum": ["rbac", "abac", "pbac", "acl", "custom"] },
+                "entitlementStore": { "type": "string" },
+                "provisioningProcess": { "type": "string", "enum": ["automated-idm", "manual-request", "self-service", "api-driven", "other"] },
+                "recertificationEnabled": { "type": "boolean" },
+                "segregationOfDutiesEnforced": { "type": "boolean" }
               }
             },
-            "securityMonitoring": { "type": "object" },
+            "privilegedAccess": {
+              "type": "object",
+              "properties": {
+                "pamSolution": { "type": "string" },
+                "justInTimeAccess": { "type": "boolean" },
+                "sessionRecording": { "type": "boolean" },
+                "breakGlassProcess": { "type": "boolean" }
+              }
+            },
+            "encryptionAtRest": {
+              "type": "object",
+              "properties": {
+                "implemented": { "type": "boolean" },
+                "level": { "type": "string", "enum": ["storage-level", "logical-container", "application-level", "field-level"] },
+                "keyType": { "type": "string", "enum": ["symmetric", "asymmetric"] },
+                "algorithm": { "type": "string" },
+                "keyGeneration": { "type": "string", "enum": ["hsm-fips140-l3", "hsm-fips140-l2", "kms", "software", "other"] },
+                "keyStorage": { "type": "string", "enum": ["hsm", "kms", "software-keystore", "other"] },
+                "keyRotationDays": { "type": "integer" }
+              }
+            },
+            "secretManagement": {
+              "type": "object",
+              "properties": {
+                "secretStore": { "type": "string", "enum": ["hashicorp-vault", "aws-secrets-manager", "azure-key-vault", "gcp-secret-manager", "cyberark", "custom", "none"] },
+                "distribution": { "type": "string", "enum": ["runtime-retrieval", "deployment-time", "environment-variable", "mounted-volume", "other"] },
+                "rotation": { "type": "string", "enum": ["automatic", "manual-scheduled", "manual-ad-hoc", "not-rotated"] }
+              }
+            },
+            "securityMonitoring": {
+              "type": "object",
+              "properties": {
+                "siemIntegration": { "type": "boolean" },
+                "siemTool": { "type": "string" },
+                "securityEventLogging": { "type": "boolean" },
+                "intrusionDetection": { "type": "boolean" }
+              }
+            },
             "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
           }
         },
@@ -405,25 +571,27 @@
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["id", "name"],
                 "properties": {
-                  "id": { "type": "string" },
+                  "id": { "type": "string", "pattern": "^UC-\\d+$" },
                   "name": { "type": "string" },
                   "actors": { "type": "array", "items": { "type": "string" } },
                   "trigger": { "type": "string" },
-                  "preconditions": { "type": "string" },
                   "mainFlow": { "type": "string" },
-                  "postconditions": { "type": "string" },
-                  "viewsInvolved": { "type": "array", "items": { "type": "string" } }
-                },
-                "required": ["id", "name"]
+                  "viewsInvolved": {
+                    "type": "array",
+                    "items": { "type": "string", "enum": ["logical", "process", "physical", "data", "security"] }
+                  }
+                }
               }
             },
             "adrs": {
               "type": "array",
               "items": {
                 "type": "object",
+                "required": ["id", "title", "status", "context", "decision"],
                 "properties": {
-                  "id": { "type": "string" },
+                  "id": { "type": "string", "pattern": "^ADR-\\d+$" },
                   "title": { "type": "string" },
                   "status": { "type": "string", "enum": ["proposed", "accepted", "superseded", "deprecated"] },
                   "date": { "type": "string", "format": "date" },
@@ -431,9 +599,8 @@
                   "decision": { "type": "string" },
                   "alternatives": { "type": "string" },
                   "consequences": { "type": "string" },
-                  "qualityPillarTradeoffs": { "type": "string" }
-                },
-                "required": ["id", "title", "status", "context", "decision"]
+                  "affectedPillars": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+                }
               }
             }
           }
@@ -444,18 +611,82 @@
       "type": "object",
       "description": "Section 4: Quality Pillars",
       "properties": {
-        "operationalExcellence": { "type": "object" },
-        "reliability": { "type": "object" },
-        "performance": { "type": "object" },
-        "costOptimisation": { "type": "object" },
-        "sustainability": { "type": "object" },
+        "operationalExcellence": {
+          "type": "object",
+          "properties": {
+            "loggingCentralised": { "type": "boolean" },
+            "loggingTool": { "type": "string" },
+            "monitoringTool": { "type": "string" },
+            "tracingEnabled": { "type": "boolean" },
+            "alertingConfigured": { "type": "boolean" },
+            "runbooksDocumented": { "type": "boolean" }
+          }
+        },
+        "reliability": {
+          "type": "object",
+          "properties": {
+            "drStrategy": {
+              "type": "string",
+              "enum": ["active-active", "active-passive", "pilot-light", "warm-standby", "backup-restore", "none"]
+            },
+            "multiVenueDeployment": { "type": "boolean" },
+            "rtoTarget": { "type": "string", "description": "ISO 8601 duration e.g. PT4H for 4 hours" },
+            "rpoTarget": { "type": "string", "description": "ISO 8601 duration e.g. PT1H for 1 hour" },
+            "scalability": {
+              "type": "string",
+              "enum": ["no-dynamic-scaling", "manual-scaling", "partial-auto-scaling", "full-auto-scaling"]
+            },
+            "faultToleranceDesigned": { "type": "boolean" },
+            "chaosTestingPractised": { "type": "boolean" },
+            "backupEnabled": { "type": "boolean" },
+            "backupType": { "type": "string", "enum": ["full", "incremental", "differential", "continuous", "snapshot"] },
+            "backupFrequency": { "type": "string", "enum": ["real-time", "hourly", "daily", "weekly", "monthly"] },
+            "backupImmutable": { "type": "boolean" },
+            "backupEncrypted": { "type": "boolean" }
+          }
+        },
+        "performance": {
+          "type": "object",
+          "properties": {
+            "p95ResponseTimeMs": { "type": "integer" },
+            "targetThroughputRps": { "type": "integer" },
+            "targetConcurrentUsers": { "type": "integer" },
+            "performanceTestingApproach": {
+              "type": "string",
+              "enum": ["load-testing", "stress-testing", "soak-testing", "spike-testing", "none"]
+            },
+            "cachingUsed": { "type": "boolean" },
+            "cdnUsed": { "type": "boolean" }
+          }
+        },
+        "costOptimisation": {
+          "type": "object",
+          "properties": {
+            "costAnalysisPerformed": { "type": "boolean" },
+            "designConstrainedByCost": { "type": "boolean" },
+            "reservedCapacity": { "type": "boolean" },
+            "costMonitoringEnabled": { "type": "boolean" },
+            "taggingStrategy": { "type": "boolean" }
+          }
+        },
+        "sustainability": {
+          "type": "object",
+          "properties": {
+            "hostingLocationOptimisedForCarbon": { "type": "boolean" },
+            "nonProdAutoShutdown": { "type": "boolean" },
+            "resourcesRightsized": { "type": "boolean" },
+            "workloadPattern": { "type": "string", "enum": ["constant", "variable-predictable", "variable-unpredictable"] },
+            "continuousAvailabilityRequired": { "type": "boolean" }
+          }
+        },
         "tradeoffs": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "pillars": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } },
+              "pillarsInvolved": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } },
               "description": { "type": "string" },
+              "chosenPriority": { "$ref": "#/$defs/qualityPillarRef" },
               "rationale": { "type": "string" }
             }
           }
@@ -466,13 +697,26 @@
       "type": "object",
       "description": "Section 5: Lifecycle Management",
       "properties": {
-        "softwareDevelopment": { "type": "object" },
-        "serviceTransition": { "type": "object" },
-        "releaseManagement": { "type": "object" },
-        "operations": { "type": "object" },
-        "maintainability": { "type": "object" },
-        "endOfLife": { "type": "object" },
-        "exitPlanning": { "type": "object" }
+        "internallyDeveloped": { "type": "boolean" },
+        "sourceControl": { "type": "string", "enum": ["github", "gitlab", "bitbucket", "azure-devops", "svn", "other", "none"] },
+        "cicdPlatform": { "type": "string", "enum": ["github-actions", "gitlab-ci", "jenkins", "azure-pipelines", "circleci", "argo", "tekton", "other", "none"] },
+        "sast": { "type": "string", "enum": ["semgrep", "sonarqube", "coverity", "checkmarx", "veracode", "snyk-code", "other", "none"] },
+        "dast": { "$ref": "#/$defs/yesNoNa" },
+        "sca": { "type": "string", "enum": ["snyk", "blackduck", "dependabot", "renovate", "whitesource", "other", "none"] },
+        "containerScanning": { "$ref": "#/$defs/yesNoNa" },
+        "migrationStrategy": {
+          "type": "string",
+          "enum": ["big-bang", "blue-green", "canary", "rolling", "strangler-fig", "parallel-run", "phased", "not-applicable"]
+        },
+        "releaseFrequency": {
+          "type": "string",
+          "enum": ["continuous", "daily", "weekly", "fortnightly", "monthly", "quarterly", "ad-hoc"]
+        },
+        "supportModel": { "type": "string", "enum": ["internal-team", "vendor-managed", "managed-service", "community", "hybrid"] },
+        "supportHours": { "type": "string", "enum": ["24x7", "business-hours", "extended-hours", "follow-the-sun"] },
+        "intendedLifespan": { "type": "string", "enum": ["under-1-year", "1-3-years", "3-5-years", "5-10-years", "10-plus-years", "indefinite"] },
+        "exitPlanDocumented": { "type": "boolean" },
+        "vendorLockInLevel": { "type": "string", "enum": ["none", "low", "moderate", "high", "critical"] }
       }
     },
     "riskGovernance": {
@@ -484,18 +728,28 @@
           "type": "array",
           "items": {
             "type": "object",
+            "required": ["id", "riskEvent", "likelihood", "impact", "residualRisk"],
             "properties": {
-              "id": { "type": "string" },
+              "id": { "type": "string", "pattern": "^R-\\d+$" },
               "riskEvent": { "type": "string" },
+              "riskCategory": {
+                "type": "string",
+                "enum": ["technical", "security", "operational", "delivery", "commercial", "compliance", "other"]
+              },
+              "likelihood": { "$ref": "#/$defs/riskLevel" },
+              "impact": { "$ref": "#/$defs/riskLevel" },
               "mitigationPlan": { "type": "string" },
-              "residualRisk": { "type": "string", "enum": ["high", "medium", "low"] },
-              "targetDate": { "type": "string" },
-              "owner": { "type": "string" }
-            },
-            "required": ["id", "riskEvent", "residualRisk"]
+              "residualRisk": { "$ref": "#/$defs/riskLevel" },
+              "targetDate": { "type": "string", "format": "date" },
+              "owner": { "type": "string" },
+              "status": { "type": "string", "enum": ["open", "mitigating", "accepted", "closed"] }
+            }
           }
         },
-        "guardrailExceptions": { "type": "object" },
+        "policyExceptions": { "$ref": "#/$defs/yesNoNa" },
+        "policyExceptionsAccepted": { "$ref": "#/$defs/yesNoNa" },
+        "processExceptions": { "$ref": "#/$defs/yesNoNa" },
+        "riskProfileImpact": { "$ref": "#/$defs/yesNoNa" },
         "complianceTraceability": {
           "type": "array",
           "items": {
@@ -504,7 +758,8 @@
               "standard": { "type": "string" },
               "requirement": { "type": "string" },
               "howSatisfied": { "type": "string" },
-              "evidenceSection": { "type": "string" }
+              "evidenceSection": { "type": "string" },
+              "complianceStatus": { "type": "string", "enum": ["compliant", "partially-compliant", "non-compliant", "not-applicable"] }
             }
           }
         }
@@ -524,7 +779,18 @@
             }
           }
         },
-        "references": { "type": "array", "items": { "type": "object" } },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "version": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "description": { "type": "string" }
+            }
+          }
+        },
         "approvals": {
           "type": "array",
           "items": {
@@ -533,7 +799,7 @@
               "role": { "type": "string" },
               "name": { "type": "string" },
               "date": { "type": "string", "format": "date" },
-              "reference": { "type": "string" }
+              "decision": { "type": "string", "enum": ["approved", "approved-with-conditions", "rejected", "deferred"] }
             }
           }
         }
@@ -541,7 +807,7 @@
     },
     "organisationProfile": {
       "type": "object",
-      "description": "Organisation-specific configuration that maps generic sections to specific tools, standards, and processes",
+      "description": "Organisation-specific configuration mapping generic sections to specific tools, standards, and processes",
       "properties": {
         "organisationName": { "type": "string" },
         "internalStandards": {
@@ -569,7 +835,6 @@
         },
         "tooling": {
           "type": "object",
-          "description": "Organisation-specific tool mappings",
           "properties": {
             "cmdb": { "type": "string" },
             "portfolioManagement": { "type": "string" },
@@ -583,7 +848,6 @@
     },
     "customSection": {
       "type": "object",
-      "description": "An organisation-specific custom section",
       "required": ["id", "title", "content"],
       "properties": {
         "id": { "type": "string" },
@@ -591,7 +855,7 @@
         "description": { "type": "string" },
         "content": { "type": "string" },
         "maturityLevel": { "$ref": "#/$defs/maturityLevel" },
-        "parentSection": { "type": "string", "description": "ID of the parent section this should be nested under" }
+        "parentSection": { "type": "string" }
       }
     }
   }
