@@ -4,6 +4,30 @@
 	--sl-color-accent-low: #1a365d;
 	--sl-color-accent: #2b6cb0;
 	--sl-color-accent-high: #bee3f8;
+	/* Widen the content area to accommodate wide tables */
+	--sl-content-width: 55rem;
+}
+
+/* Allow wide tables to use full content width without horizontal scroll */
+.sl-markdown-content table {
+	font-size: 0.85rem;
+	word-break: normal;
+}
+
+.sl-markdown-content th,
+.sl-markdown-content td {
+	padding: 0.4rem 0.6rem;
+}
+
+/* On smaller screens, allow table scroll but make it obvious */
+@media (max-width: 72rem) {
+	.sl-markdown-content table {
+		font-size: 0.8rem;
+	}
+	.sl-markdown-content th,
+	.sl-markdown-content td {
+		padding: 0.3rem 0.4rem;
+	}
 }
 
 /* Framework alignment badges */
