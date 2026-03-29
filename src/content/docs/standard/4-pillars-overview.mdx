@@ -1,5 +1,5 @@
 ---
-title: "4. Quality Attributes"
+title: "4. Architectural Quality Attributes"
 description: Cross-cutting quality attributes evaluated across all architectural views.
 ---
 
@@ -8,34 +8,34 @@ description: Cross-cutting quality attributes evaluated across all architectural
 
 ## Purpose
 
-Quality Attributes are **cross-cutting evaluation lenses** applied across all architectural views. They are derived from the AWS Well-Architected Framework (6 pillars) and Azure Well-Architected Framework (5 pillars), unified into five pillars that address the key non-functional quality attributes of any solution.
+Architectural Quality Attributes are **cross-cutting evaluation lenses** applied across all architectural views. They are derived from the Well-Architected Frameworks published by AWS (6 pillars), Azure (5 pillars), and GCP (6 pillars), unified into five quality attributes that address the key architectural concerns of any solution.
 
 Unlike the Architectural Views (Section 3), which describe **what** the solution is, Quality Attributes evaluate **how well** it is designed.
 
-## The Five Pillars
+## The Five Quality Attributes
 
-| # | Pillar | AWS WAF | Azure WAF | Focus |
-|---|--------|---------|-----------|-------|
-| 4.1 | **Operational Excellence** | Operational Excellence | Operational Excellence | Observability, monitoring, operational procedures |
-| 4.2 | **Reliability & Resilience** | Reliability | Reliability | DR, scalability, fault tolerance, backup/recovery |
-| 4.3 | **Performance Efficiency** | Performance Efficiency | Performance Efficiency | Performance requirements, resource optimisation |
-| 4.4 | **Cost Optimisation** | Cost Optimization | Cost Optimization | Cost analysis, FinOps, cost-effective design |
-| 4.5 | **Sustainability** | Sustainability | *(not a separate pillar)* | Energy, carbon, resource efficiency |
+| # | Quality Attribute | AWS WAF | Azure WAF | GCP AF | Focus |
+|---|------------------|---------|-----------|--------|-------|
+| 4.1 | **Operational Excellence** | Operational Excellence | Operational Excellence | Operational Excellence | Observability, monitoring, operational procedures |
+| 4.2 | **Reliability & Resilience** | Reliability | Reliability | Reliability | DR, scalability, fault tolerance, backup/recovery |
+| 4.3 | **Performance Efficiency** | Performance Efficiency | Performance Efficiency | Performance Optimization | Performance requirements, resource optimisation |
+| 4.4 | **Cost Optimisation** | Cost Optimization | Cost Optimization | Cost Optimization | Cost analysis, FinOps, cost-effective design |
+| 4.5 | **Sustainability** | Sustainability | *(not separate)* | Sustainability | Energy, carbon, resource efficiency |
 
-:::note[Security as a View, Not Just a Pillar]
-In the AWS and Azure frameworks, **Security** is a quality attribute. In this standard, Security is elevated to a full **Architectural View** (Section 3.5) because of the depth of documentation required for IAM, encryption, network security, and monitoring. The Security View inherently addresses the security quality attribute.
+:::note[Security as a View, Not Just a Quality Attribute]
+In the cloud Well-Architected Frameworks, **Security** is a quality attribute (pillar). In this standard, Security is elevated to a full **Architectural View** (Section 3.5) because of the depth of documentation required for IAM, encryption, network security, and monitoring. The Security View inherently addresses the security quality attribute.
 :::
 
 ## How to Use Quality Attributes
 
-1. **Design Phase** - Use each pillar's guidance to inform design decisions
-2. **Review Phase** - Evaluate the completed design against each pillar
-3. **Traceoff Documentation** - Where pillar requirements conflict (e.g., cost vs. resilience), document the tradeoff and the rationale for the chosen balance
-4. **Cross-Reference** - Reference specific pillar concerns within the Architectural Views using the quality attribute callout format
+1. **Design Phase** — Use each quality attribute's guidance to inform design decisions
+2. **Review Phase** — Evaluate the completed design against each quality attribute
+3. **Tradeoff Documentation** — Where quality attribute requirements conflict (e.g., cost vs. resilience), document the tradeoff and the rationale for the chosen balance
+4. **Cross-Reference** — Reference specific quality attribute concerns within the Architectural Views using the quality attribute callout format
 
-## Pillar Tradeoffs
+## Quality Attribute Tradeoffs
 
-Optimising for one pillar may come at the expense of another. Key tradeoffs to consider:
+Optimising for one quality attribute may come at the expense of another. Key tradeoffs to consider:
 
 | Tradeoff | Description |
 |----------|-------------|

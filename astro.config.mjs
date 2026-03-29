@@ -49,9 +49,9 @@ export default defineConfig({
 					],
 				},
 				{
-					label: '4. Quality Pillars',
+					label: '4. Quality Attributes',
 					items: [
-						{ label: 'Pillars Overview', slug: 'standard/4-pillars-overview' },
+						{ label: 'Overview', slug: 'standard/4-pillars-overview' },
 						{ label: '4.1 Operational Excellence', slug: 'standard/4-1-operational-excellence' },
 						{ label: '4.2 Reliability & Resilience', slug: 'standard/4-2-reliability' },
 						{ label: '4.3 Performance Efficiency', slug: 'standard/4-3-performance' },
