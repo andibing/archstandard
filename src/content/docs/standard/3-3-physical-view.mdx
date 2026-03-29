@@ -1,7 +1,9 @@
 ---
-title: "3.3 Physical View"
-description: Deployment architecture, hosting, compute, networking, and environments.
+title: "3.3 Physical View (Infrastructure & Deployment)"
+description: Deployment architecture, hosting, compute, networking, and environments — covering physical, virtual, and cloud infrastructure.
 ---
+
+import { Aside } from '@astrojs/starlight/components';
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 <span class="framework-badge badge-4plus1">4+1 Physical</span>
@@ -9,7 +11,11 @@ description: Deployment architecture, hosting, compute, networking, and environm
 
 ## Purpose
 
-The Physical View describes the infrastructure that hosts and supports the solution - servers, containers, networks, cloud services, and deployment environments. It addresses the concerns of infrastructure engineers, DevOps teams, and platform engineers.
+The Physical View describes **all infrastructure** that hosts and supports the solution — whether physical hardware, virtual machines, containers, serverless functions, or cloud-managed services. It addresses the concerns of infrastructure engineers, DevOps teams, platform engineers, and cloud architects.
+
+<Aside type="note" title="Why 'Physical View'?">
+The name "Physical View" is retained for alignment with Kruchten's 4+1 Architectural View Model, where it originally described the mapping of software to hardware. In modern practice, this view encompasses **all deployment infrastructure** regardless of abstraction level — from bare-metal servers to fully managed cloud services. It is equivalent to the **Technology Architecture** domain in TOGAF and the **Deployment View** in some other frameworks.
+</Aside>
 
 ## 3.3.1 Deployment Architecture Diagram
 
