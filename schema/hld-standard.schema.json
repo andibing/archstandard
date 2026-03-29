@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://hldstandard.org/schema/v1.0.0/hld-standard.schema.json",
-  "title": "HLD Standard Document",
-  "description": "Schema for High Level Design / Solution Architecture Description documents conforming to the HLD Standard v1.0.0",
+  "$id": "https://archstandard.org/schema/v1.0.0/ads-001.schema.json",
+  "title": "ADS-001: Solution Architecture Document",
+  "description": "Schema for Solution Architecture Documents conforming to ADS-001: The Architecture Description Standard v1.0.0",
   "type": "object",
   "required": ["schemaVersion", "documentControl", "executiveSummary", "architecturalViews", "riskGovernance"],
   "properties": {

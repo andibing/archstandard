@@ -1,29 +1,29 @@
 ---
 title: JSON Schema
-description: The formal JSON Schema definition for HLD Standard documents.
+description: The formal JSON Schema definition for ADS-001 documents.
 ---
 
 ## Overview
 
-The HLD Standard defines a formal **JSON Schema** (v1.0.0) that enables:
+The ADS-001 defines a formal **JSON Schema** (v1.0.0) that enables:
 
-- **Validation** - Validate HLD documents against the standard structure
+- **Validation** - Validate Solution Architecture Documents against the standard structure
 - **Generation** - Generate blank templates in multiple formats (JSON, Markdown, Word)
-- **Tooling** - Build tooling that reads, writes, and processes HLD documents programmatically
+- **Tooling** - Build tooling that reads, writes, and processes Solution Architecture Documents programmatically
 - **Extensibility** - Add organisation-specific sections via `customSections` and `organisationProfile`
 
 ## Schema Location
 
-The schema file is located at [`/schema/hld-standard.schema.json`](https://github.com/your-org/hld-standard/blob/main/schema/hld-standard.schema.json) in the repository.
+The schema file is located at [`/schema/ads-001.schema.json`](https://github.com/archstandard/ads-001/blob/main/schema/ads-001.schema.json) in the repository.
 
-**Schema ID:** `https://hldstandard.org/schema/v1.0.0/hld-standard.schema.json`
+**Schema ID:** `https://archstandard.org/schema/v1.0.0/ads-001.schema.json`
 
 ## Schema Structure
 
 The schema maps directly to the standard's sections:
 
 ```
-hld-standard.schema.json
+ads-001.schema.json
 ├── schemaVersion          "1.0.0"
 ├── documentControl        Section 0: metadata, history, contributors
 ├── executiveSummary       Section 1: overview, context, scope, decisions
@@ -128,8 +128,8 @@ All other fields are optional, allowing progressive adoption from Minimum throug
 
 ```bash
 # Using ajv-cli
-npx ajv validate -s schema/hld-standard.schema.json -d my-hld.json
+npx ajv validate -s schema/ads-001.schema.json -d my-hld.json
 
 # Using Python jsonschema
-python -m jsonschema -i my-hld.json schema/hld-standard.schema.json
+python -m jsonschema -i my-hld.json schema/ads-001.schema.json
 ```

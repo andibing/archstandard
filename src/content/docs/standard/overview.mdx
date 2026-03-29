@@ -1,17 +1,19 @@
 ---
 title: "1. Overview"
-description: "Scope, purpose, audience, and structural overview of the HLD Standard."
+description: "Scope, purpose, audience, and structural overview of ADS-001."
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
 <Aside type="note" title="Section Maturity">
-<span class="maturity-indicator maturity-minimum">Minimum</span> — This section SHALL be completed for all HLD documents.
+<span class="maturity-indicator maturity-minimum">Minimum</span> — This section SHALL be completed for all Solution Architecture Documents.
 </Aside>
 
 ## 1.1 Purpose
 
-This standard defines the required structure and content for **High Level Design (HLD)** and **Solution Architecture Description (SAD)** documents. An HLD document conforming to this standard serves the following functions:
+This standard defines the required structure and content for **Solution Architecture Documents (SADs)**. The architectural views and quality pillars within a SAD constitute the **High Level Design (HLD)** of the solution.
+
+A Solution Architecture Document conforming to this standard serves the following functions:
 
 1. **Communication** — Provides a shared understanding of the solution architecture across all stakeholders
 2. **Governance** — Enables architectural review boards and governance processes to evaluate the design against quality criteria
@@ -34,7 +36,7 @@ This standard is intended for use by:
 
 | Role | Primary Sections |
 |------|-----------------|
-| **Solution Architects** | All sections — primary authors of HLD documents |
+| **Solution Architects** | All sections — primary authors of SADs |
 | **Enterprise Architects** | Framework Alignment, Quality Pillars, Governance |
 | **Security Architects** | Section 3.5 (Security View), Quality Pillars |
 | **Infrastructure Engineers** | Section 3.3 (Physical View), Quality Pillars |
@@ -43,11 +45,13 @@ This standard is intended for use by:
 
 ## 1.4 Document Structure
 
-The standard organises an HLD document into three tiers:
+A Solution Architecture Document conforming to ADS-001 is organised into three tiers:
 
 ### Tier 1 — Architectural Views (Sections 3.1 – 3.6)
 
-Six complementary views describe the architecture from distinct stakeholder perspectives, aligned with Kruchten's 4+1 Architectural View Model (extended with dedicated Data and Security views) and the ISO/IEC 42010 viewpoint concept:
+Six complementary views describe the architecture from distinct stakeholder perspectives, aligned with Kruchten's 4+1 Architectural View Model (extended with dedicated Data and Security views) and the ISO/IEC 42010 viewpoint concept.
+
+Together, these views form the **High Level Design (HLD)** of the solution:
 
 | View | Viewpoint | Primary Stakeholders |
 |------|-----------|---------------------|
@@ -82,7 +86,7 @@ Each section in this standard is assigned a maturity level that defines when it 
 
 | Level | Keyword | Requirement | Typical Gate |
 |-------|---------|-------------|-------------|
-| <span class="maturity-indicator maturity-minimum">Minimum</span> | SHALL | Required for **all** HLD documents | Development / Test review |
+| <span class="maturity-indicator maturity-minimum">Minimum</span> | SHALL | Required for **all** SADs | Development / Test review |
 | <span class="maturity-indicator maturity-recommended">Recommended</span> | SHOULD | Required for **production-grade** designs | Production approval |
 | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | MAY | For **mature, enterprise-grade** documentation | Enterprise architecture review |
 
@@ -90,12 +94,12 @@ This enables progressive adoption: begin with Minimum sections for early-stage d
 
 ## 1.6 Conformance
 
-An HLD document **conforms** to this standard when:
+A Solution Architecture Document **conforms** to this standard when:
 
 1. All sections marked <span class="maturity-indicator maturity-minimum">Minimum</span> are completed
 2. The document structure follows the section numbering and hierarchy defined herein
 3. Architectural views address the stakeholder concerns identified in Section 2
 4. Quality pillars are evaluated as cross-cutting lenses across the architectural views
-5. The document is validated against the JSON Schema (HLD-STD-001 Schema v1.0.0) if machine-readable output is required
+5. The document is validated against the JSON Schema (ADS-001 Schema v1.0.0) if machine-readable output is required
 
 A document that additionally completes all <span class="maturity-indicator maturity-recommended">Recommended</span> sections achieves **full conformance**.

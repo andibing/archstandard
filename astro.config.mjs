@@ -5,8 +5,8 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'HLD-STD-001',
-			description: 'High Level Design Standard — A formal standard for Solution Architecture and HLD documentation.',
+			title: 'ArchStandard',
+			description: 'ADS-001: The Architecture Description Standard — defining the structure and content of Solution Architecture Documents.',
 			customCss: ['./src/styles/custom.css'],
 			sidebar: [
 				{

@@ -1,6 +1,7 @@
-# HLD-STD-001 v1.0.0 — High Level Design Document Template
-# This file conforms to the HLD Standard JSON Schema v1.0.0
-# See: https://hldstandard.org/standard/schema/
+# ADS-001 v1.0.0 — Solution Architecture Document Template
+# This file conforms to the ADS-001 JSON Schema v1.0.0
+# Published by: ArchStandard (archstandard.org)
+# See: https://archstandard.org/standard/schema/
 
 schemaVersion: "1.0.0"
 
