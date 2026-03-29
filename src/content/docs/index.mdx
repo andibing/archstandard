@@ -60,7 +60,19 @@ This standard defines the required and recommended structure for Solution Archit
 	</Card>
 </CardGrid>
 
-## How ADS-001 Differs from ISO/IEC 42010
+## Beyond ISO/IEC 42010
+
+ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concrete, actionable structure that ISO 42010 deliberately leaves to implementers. It goes well beyond ISO 42010 by incorporating:
+
+- **Quality Pillars from AWS/Azure Well-Architected Frameworks** — Operational Excellence, Reliability, Performance Efficiency, Cost Optimisation, and Sustainability as cross-cutting evaluation lenses applied across all architectural views
+- **Maturity Levels with RFC 2119 requirement keywords** — every section is tagged as SHALL (Minimum), SHOULD (Recommended), or MAY (Comprehensive), enabling progressive adoption from lightweight designs to full enterprise documentation
+- **Security as a dedicated Architectural View** — ISO 42010 does not prescribe specific viewpoints; ADS-001 elevates Security to a first-class view covering IAM, encryption, threat modelling, and monitoring
+- **Lifecycle Management** — CI/CD pipelines, service transition, release management, operations, maintainability, and exit planning
+- **Risk & Governance with compliance traceability** — design risks, guardrail exceptions, architecture decision records, and a traceability matrix linking design elements to the standards they satisfy
+- **JSON Schema for multi-format generation** — a formal schema enabling validation and generation of Solution Architecture Documents in JSON, YAML, Markdown, or Word
+- **Downloadable templates** — ready-to-use blank templates in Markdown, YAML, and JSON formats
+
+### Comparison with ISO/IEC 42010
 
 | Aspect | ISO/IEC/IEEE 42010:2022 | ADS-001 (This Standard) |
 |--------|------------------------|------------------------|
@@ -72,8 +84,6 @@ This standard defines the required and recommended structure for Solution Archit
 | **Includes security view?** | Not specifically | Yes — full dedicated Security View |
 | **Includes lifecycle?** | No | Yes — CI/CD, operations, exit planning |
 | **JSON Schema?** | No | Yes — machine-readable validation |
-
-ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concrete, actionable structure that ISO 42010 deliberately leaves to implementers.
 
 ## Normative References
 
