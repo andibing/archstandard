@@ -474,4 +474,4 @@
 |------|------|------|----------|
 | Solution Architect | | | ☐ Approved ☐ Approved with Conditions ☐ Rejected ☐ Deferred |
 | Security Architect | | | ☐ Approved ☐ Approved with Conditions ☐ Rejected ☐ Deferred |
-| ARB | | | ☐ Approved ☐ Approved with Conditions ☐ Rejected ☐ Deferred |
+| ARB / Design Authority | | | ☐ Approved ☐ Approved with Conditions ☐ Rejected ☐ Deferred |
