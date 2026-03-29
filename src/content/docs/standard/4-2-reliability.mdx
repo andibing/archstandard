@@ -55,7 +55,29 @@ Has the application been designed to tolerate unexpected disruptions such as fai
   - Testing practices (chaos engineering, game days)
 - [ ] **No** - *[describe why not]*
 
-## 4.2.4 Backup & Recovery
+## 4.2.4 Failure Modes & Recovery Behaviour
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document how the solution behaves when individual components or dependencies fail:
+
+| Component / Dependency | Failure Mode | Detection Method | Recovery Behaviour | User Impact |
+|----------------------|-------------|-----------------|-------------------|-------------|
+| *[component]* | *[how it fails]* | *[how detected: health check, alert, timeout]* | *[auto-restart, failover, graceful degradation, manual intervention]* | *[full outage, degraded service, transparent]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+For each critical component, consider:
+- **What happens when it becomes unavailable?** Does the solution fail entirely, degrade gracefully, or continue with reduced functionality?
+- **How is the failure detected?** Health checks, heartbeats, error thresholds, timeouts?
+- **How is it recovered?** Automatic restart, failover to secondary, circuit breaker, manual intervention?
+- **What do users experience?** Full outage, degraded experience, increased latency, or transparent failover?
+
+This section is frequently missing from architecture documents but is one of the most valuable for operations teams and SREs.
+</div>
+
+## 4.2.5 Backup & Recovery
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -77,7 +99,7 @@ Has the application been designed to tolerate unexpected disruptions such as fai
 | Encryption | *[how backup data is encrypted]* |
 | Access control | *[who can access backups]* |
 
-## 4.2.5 Recovery Scenarios
+## 4.2.6 Recovery Scenarios
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 

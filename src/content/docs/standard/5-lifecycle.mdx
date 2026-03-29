@@ -55,7 +55,27 @@ Describe how any transition from a previous service or application to this one w
 | Rollback plan | *[how to revert if the transition fails]* |
 | Acceptance criteria | *[what must be true before cutover]* |
 
-## 5.3 Release Management
+## 5.3 Test Strategy
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Describe the testing approach that validates the architecture:
+
+| Test Type | Scope | Approach | Environment | Automated? |
+|-----------|-------|----------|-------------|-----------|
+| Integration testing | *[what is tested]* | *[approach]* | *[environment]* | Yes / No |
+| Contract testing | *[API contracts between services]* | *[approach]* | *[environment]* | Yes / No |
+| Performance testing | *[load, stress, soak]* | *[approach]* | *[environment]* | Yes / No |
+| Security testing | *[penetration, vulnerability]* | *[approach]* | *[environment]* | Yes / No |
+| DR testing | *[failover, recovery]* | *[approach and frequency]* | *[environment]* | Yes / No |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+This section covers architecturally significant testing — not unit tests or functional test cases (which belong in detailed design / low-level documentation). Focus on testing that validates the architecture itself: integration points, performance characteristics, security posture, and recovery capabilities.
+</div>
+
+## 5.4 Release Management
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -66,7 +86,7 @@ Describe how any transition from a previous service or application to this one w
 | Release validation | *[how releases are validated in production]* |
 | Feature flags / toggles | *[if used, how they are managed]* |
 
-## 5.4 Operations & Support
+## 5.5 Operations & Support
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -77,7 +97,7 @@ Describe how any transition from a previous service or application to this one w
 | SLAs | *[internal or external service level agreements]* |
 | Escalation paths | *[how issues are escalated]* |
 
-## 5.5 Service Start
+## 5.6 Service Start
 
 <span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
 
@@ -85,7 +105,7 @@ Describe how the application and its supporting services are started:
 
 *[What steps are needed to bring the solution into operation? Are there manual steps? What is the start-up sequence and dependency order?]*
 
-## 5.6 Maintainability
+## 5.7 Maintainability
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -98,7 +118,7 @@ Describe how the solution design enables ongoing maintenance:
 | Certificate management | *[renewal process]* |
 | Dependency management | *[how third-party dependencies are tracked and updated]* |
 
-## 5.7 End-of-Life & Decommissioning
+## 5.8 End-of-Life & Decommissioning
 
 <span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
 
@@ -110,7 +130,7 @@ Describe how the solution design enables ongoing maintenance:
 | Data disposal | *[how data will be securely erased]* |
 | Infrastructure disposal | *[how hardware/cloud resources will be decommissioned]* |
 
-## 5.8 Exit Planning
+## 5.9 Exit Planning
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
