@@ -36,9 +36,36 @@ These examples are fictional but realistic. They are designed to demonstrate the
   </Card>
 </CardGrid>
 
+## Summary Comparison
+
+| Example | Depth | Criticality | Hosting | Key Sections Demonstrated | Overall Score |
+|---------|-------|-------------|---------|--------------------------|:------------:|
+| **Employee Directory** | Recommended | Tier 4 (Low) | Azure PaaS | Basic views, simple quality attributes, straightforward governance | 3 |
+| **Customer API Platform** | Comprehensive | Tier 1 (Critical) | AWS EKS | Full security view, threat model, extensive integrations, compliance traceability | 5 |
+| **Cloud Migration** | Recommended | Tier 2 (High) | Azure PaaS | Current-state architecture, 6 R's migration, transition plan, resourcing | 3 |
+| **archstandard.org** | Minimum | Tier 5 (Minimal) | Cloudflare Pages | Minimal viable SAD, proving even simple projects benefit from structure | 3 |
+
 ## How to Use These Examples
 
 1. **Read one that matches your project type** — pick the example closest to your solution
 2. **Note the depth** — each example states its documentation depth (Minimum, Recommended, or Comprehensive)
 3. **Check the scoring** — each example includes a compliance scoring table showing how it was assessed
 4. **Copy the structure** — download a [blank template](/standard/templates/) and use the example as a reference while completing your own SAD
+
+## Validating Your SAD Against the Schema
+
+Once you've completed your SAD in JSON or YAML format, validate it against the ADS schema:
+
+```bash
+# Validate a JSON SAD against the hosted schema
+npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d my-sad.json
+
+# Validate a YAML SAD (convert to JSON first)
+npx js-yaml my-sad.yaml | npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d /dev/stdin
+
+# Using Python
+pip install jsonschema pyyaml
+python -m jsonschema -i my-sad.json https://archstandard.org/schema/v1.0.0/ads.schema.json
+```
+
+The schema validates structure, required fields, and enum values — ensuring your SAD conforms to the standard. See the [JSON Schema page](/standard/schema/) for full details.
