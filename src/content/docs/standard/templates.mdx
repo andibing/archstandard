@@ -32,20 +32,25 @@ Download a blank SAD template conforming to ADS v1.0.0 in your preferred format.
 ### Human-Readable Formats
 
 <CardGrid>
+  <Card title="Word / DOCX" icon="document">
+    Generate a Word document from the Markdown template using [Pandoc](https://pandoc.org/). Ideal for formal governance submissions and offline review.
+
+    See the Pandoc command below to generate.
+  </Card>
   <Card title="Confluence / Wiki" icon="open-book">
     Use the **Markdown template** above and import it directly into Confluence, Notion, or any wiki that supports Markdown. Most modern wikis provide a Markdown import function or paste-from-Markdown capability.
   </Card>
 </CardGrid>
 
-<Aside type="tip" title="Word / DOCX Generation">
-The Markdown template can be converted to Word format using standard tools:
+<Aside type="tip" title="Generating Word / DOCX">
+Convert the Markdown template to Word format using [Pandoc](https://pandoc.org/):
 
 ```bash
-# Using Pandoc (recommended)
-pandoc sad-template.md -o sad-template.docx --reference-doc=template.docx
+# Basic conversion
+pandoc sad-template.md -o sad-template.docx
 
-# Using a custom script with the JSON/YAML template
-# (See the schema documentation for programmatic generation)
+# With a custom reference document for branding/styling
+pandoc sad-template.md -o sad-template.docx --reference-doc=your-template.docx
 ```
 
 A dedicated Word template generator is planned for a future release of the standard.
