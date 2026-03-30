@@ -1,0 +1,104 @@
+---
+title: Why ADS-001?
+description: How ADS-001 compares to existing architecture documentation frameworks and templates.
+---
+
+import { Aside, Badge, Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## The Problem
+
+Architecture documentation is inconsistent across the industry. Teams use a patchwork of templates — some too abstract to guide real work, others too platform-specific to generalise. After analysing eight widely-used frameworks and real-world architecture documents, five gaps appear in **every single one**.
+
+## Landscape Analysis
+
+We reviewed publicly available architecture documentation frameworks, templates, and filled-in examples across open-source, enterprise, government, and EU research contexts.
+
+### Frameworks and Templates Reviewed
+
+| Framework / Template | Origin | Strengths | Key Gaps |
+|---|---|---|---|
+| **arc42** | Open-source (Europe) | Most complete open template; 35+ real examples; multi-level building block views; strong community | No Security View; no Data View; no cloud WAF-aligned quality attributes; no depth levels |
+| **bflorat template** | French government / enterprise | Role-based view separation; consistent Constraints → NFRs → Solution structure per view; dedicated Security View | No Integration View; no Scenarios View; no lifecycle; no risk governance; no ADRs |
+| **shekhargulati template** | GitHub (startups) | Back-of-envelope sizing calculations; lightweight and accessible | No Physical, Security, Data, or Process views; no quality attributes; no lifecycle |
+| **ServiceNow SAD** | Platform-specific (ITSM) | Strong data governance (classification, archival, anonymisation); current-to-future-state progression | Platform-specific; monolithic structure; no architectural views; no quality attributes |
+| **NHS England SAF** | UK Government (NHS) | Governance-focused; references cloud WAFs; RAID-based risk tracking | Meta-framework only — describes what to do but provides no concrete fill-in template |
+| **HELMET D3.1 HLD** | EU Horizon 2020 (transport) | Real 86-page filled-in HLD; multi-domain (rail, automotive, UAV); safety-integrity focus | Organised by domain segment not viewpoints; no Security View; no quality attributes |
+| **ALMBoK SAD** | Enterprise methodology | 13 viewpoints — broadest coverage found; full As-Is to To-Be lifecycle | 13 viewpoints with no guidance on which to skip; no depth levels; no schema; no atomic fields |
+| **nocomplexity Playbook** | Open-source | Uniquely addresses relations among views | Too abstract — doesn't prescribe which views to include; no quality attributes; skeletal |
+
+### The Five Universal Gaps
+
+Every framework analysed was missing at least five of these capabilities:
+
+<CardGrid>
+  <Card title="Documentation Depth Levels" icon="bars-2">
+    No existing template provides guidance on how much detail is needed for different project scales. ADS-001 defines three tiers (**Minimum**, **Recommended**, **Comprehensive**) with RFC 2119 keywords (SHALL / SHOULD / MAY) so teams right-size their effort.
+  </Card>
+  <Card title="Machine-Readable Schema" icon="seti:json">
+    Every template reviewed is prose-only. ADS-001 provides a JSON Schema with atomic, enumerated fields — enabling automated completeness checks, cross-SAD comparison, and multi-format generation (Markdown, Word, web).
+  </Card>
+  <Card title="Dedicated Security View" icon="warning">
+    6 of 8 frameworks have no dedicated Security View. Security is either buried in "cross-cutting concepts" or absent entirely. ADS-001 treats security as a first-class architectural view (Section 3.5).
+  </Card>
+  <Card title="Dedicated Data View" icon="open-book">
+    6 of 8 frameworks lack a structured Data View. Data architecture is scattered across other views or missing. ADS-001 provides a dedicated Data View (Section 3.4) covering data models, flows, classification, retention, and sovereignty.
+  </Card>
+  <Card title="Cloud WAF-Aligned Quality Attributes" icon="star">
+    7 of 8 frameworks have no quality attributes aligned to AWS, Azure, GCP, Oracle, or IBM Well-Architected Frameworks. ADS-001 maps five cross-cutting quality attributes (Section 4) to all five cloud providers.
+  </Card>
+</CardGrid>
+
+## Feature Comparison
+
+How ADS-001 compares feature-by-feature against the most widely-used frameworks:
+
+| Feature | ADS-001 | arc42 | bflorat | ALMBoK | NHS SAF |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **Architectural views (4+1 aligned)** | 6 views | 4 views | 5 views | 13 views | Guidance only |
+| **Dedicated Security View** | ✅ | ❌ | ✅ | ✅ | Guidance only |
+| **Dedicated Data View** | ✅ | ❌ | ❌ | ✅ | Guidance only |
+| **Integration & Data Flow View** | ✅ | Partial | ❌ | ✅ | Guidance only |
+| **Cloud WAF quality attributes** | ✅ 5 providers | ❌ | ❌ | ❌ | References only |
+| **Documentation depth levels** | ✅ 3 tiers | ❌ | ❌ | ❌ | Informal |
+| **RFC 2119 keywords** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **JSON Schema / validation** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Atomic enumerated fields** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Lifecycle management** | ✅ | ❌ | ❌ | ✅ | ❌ |
+| **Risk & governance** | ✅ | Partial | ❌ | ❌ | ✅ |
+| **Downloadable templates** | ✅ MD/YAML/JSON | ❌ | ✅ AsciiDoc | ❌ | ❌ |
+| **Multi-format generation** | ✅ | ❌ | ✅ | ❌ | ❌ |
+| **Platform-agnostic** | ✅ | ✅ | ✅ | ✅ | NHS-specific |
+| **Open-source / free** | ✅ | ✅ | ✅ | Partial | ✅ |
+
+## How ADS-001 Differs from ISO 42010
+
+ADS-001 is *aligned* with ISO/IEC/IEEE 42010:2022 but goes substantially beyond it:
+
+- **Quality Attributes** — ISO 42010 defines viewpoints and views but does not prescribe quality assessment. ADS-001 incorporates operational excellence, reliability, performance efficiency, cost optimisation, and sustainability as cross-cutting quality attributes mapped to AWS, Azure, GCP, Oracle, and IBM Well-Architected Frameworks.
+- **Documentation Depth Levels** — ISO 42010 does not address how much detail is needed. ADS-001 defines three tiers (Minimum / Recommended / Comprehensive) with RFC 2119 requirement keywords (SHALL / SHOULD / MAY).
+- **Security as a First-Class View** — ISO 42010 does not prescribe a security viewpoint. ADS-001 includes a dedicated Security View (Section 3.5) covering threat modelling, identity, network security, data protection, and compliance.
+- **Lifecycle Management** — ISO 42010 focuses on the architecture description itself, not the solution lifecycle. ADS-001 includes CI/CD pipeline design, operational runbooks, and exit/decommissioning planning.
+- **Risk & Governance** — ISO 42010 does not address risk registers, compliance traceability, or architecture decision records. ADS-001 includes all three.
+- **JSON Schema** — ISO 42010 is a prose standard. ADS-001 provides a machine-readable JSON Schema with atomic fields for automated validation and multi-format generation.
+- **Downloadable Templates** — ISO 42010 provides no templates. ADS-001 includes ready-to-use Markdown, YAML, and JSON templates.
+
+## Who Benefits
+
+<CardGrid>
+  <Card title="Solution Architects" icon="pencil">
+    A structured, fill-in template that removes the blank-page problem. Atomic fields mean less ambiguity. Depth levels mean you write only what's needed.
+  </Card>
+  <Card title="Architecture Governance" icon="approve-check-circle">
+    A consistent standard to review SADs against. Machine-readable schema enables automated completeness checks across a portfolio of architecture descriptions.
+  </Card>
+  <Card title="Delivery Teams" icon="rocket">
+    Clear, structured architecture documentation that's navigable by role — infrastructure engineers read the Physical View, security teams read the Security View.
+  </Card>
+  <Card title="Organisations" icon="setting">
+    Comparable architecture descriptions across projects. Portfolio-level analysis of quality attributes, risk posture, and compliance coverage.
+  </Card>
+</CardGrid>
+
+<Aside type="tip" title="Getting Started">
+  Download a [template](/standard/templates/) and start filling it in. The documentation depth levels tell you exactly which fields are required for your project's scale.
+</Aside>

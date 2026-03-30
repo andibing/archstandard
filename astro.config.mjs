@@ -16,6 +16,7 @@ export default defineConfig({
 						{ label: '2. Conformance and Usage', slug: 'standard/how-to-use' },
 						{ label: 'Design Principles', slug: 'standard/design-principles' },
 						{ label: 'Framework Alignment', slug: 'standard/framework-alignment' },
+						{ label: 'Why ADS-001?', slug: 'standard/why-ads-001' },
 					],
 				},
 				{
