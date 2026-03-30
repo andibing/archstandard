@@ -721,7 +721,7 @@
     },
     "riskGovernance": {
       "type": "object",
-      "description": "Section 6: Risk & Governance (CARDI framework)",
+      "description": "Section 6: Decision Making Decision Making & Governance (RAID log) Governance (RAID log)",
       "required": ["risks"],
       "properties": {
         "constraints": {

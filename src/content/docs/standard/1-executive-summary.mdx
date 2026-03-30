@@ -35,7 +35,41 @@ Consider:
 - Cost reduction or efficiency targets
 - Market or competitive pressures
 
-## 1.3 Scope
+## 1.3 Strategic Alignment
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Demonstrate how this solution aligns with organisational strategy and avoids duplication of existing capabilities.
+
+### Organisational Strategy Alignment
+
+| Question | Response |
+|----------|----------|
+| Which organisational strategy or initiative does this solution support? | *[e.g., digital transformation programme, cloud-first strategy]* |
+| Has this solution been reviewed against the organisation's capability model? | Yes / No / N/A |
+| Does this solution duplicate any existing capability? | Yes / No — *[if yes, provide justification]* |
+
+### Reuse of Shared Services & Platforms
+
+Document which existing organisational platforms, shared services, or common components are being reused — and which were considered but not selected (with justification).
+
+| Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
+|-----------|--------------------------|---------|------------------------------|
+| Identity & Access | *[e.g., Entra ID, Okta, CIS2]* | Yes / No | *[...]* |
+| Messaging / Notifications | *[e.g., GOV.Notify, SES, SendGrid]* | Yes / No | *[...]* |
+| API Management | *[e.g., Apigee, AWS API Gateway, Kong]* | Yes / No | *[...]* |
+| Monitoring & Logging | *[e.g., Splunk, Datadog, Grafana]* | Yes / No | *[...]* |
+| Data & Analytics | *[e.g., Snowflake, Databricks, FDP]* | Yes / No | *[...]* |
+| CI/CD | *[e.g., GitHub Actions, Jenkins, Azure DevOps]* | Yes / No | *[...]* |
+| Other | *[...]* | Yes / No | *[...]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Most organisations maintain a catalogue of approved platforms and shared services. Architects should demonstrate they have assessed these before proposing new technology. This reduces cost, complexity, and operational overhead. If a shared service is not reused, provide a clear justification (e.g., capability gap, performance requirement, contractual constraint).
+</div>
+
+## 1.4 Scope
 
 ### In Scope
 
@@ -55,7 +89,7 @@ Explicitly state what is excluded. Examples may include:
 - Infrastructure managed by other teams
 - Third-party systems outside the solution boundary
 
-## 1.4 Current State / As-Is Architecture
+## 1.5 Current State / As-Is Architecture
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -73,7 +107,7 @@ Where the solution replaces, modifies, or integrates with existing systems, desc
 This section is particularly valuable for migration and modernisation projects. For greenfield solutions with no existing landscape, this section SHOULD be omitted. Keep the description focused on what is directly relevant to the transition — do not reproduce extensive legacy documentation that exists elsewhere.
 </div>
 
-## 1.5 Key Decisions & Constraints
+## 1.6 Key Decisions & Constraints
 
 Summarise the most significant architectural decisions and any constraints that shaped the design:
 
@@ -92,7 +126,7 @@ Constraints may include:
 - **Time** - Delivery deadlines, phased rollouts
 </div>
 
-## 1.6 Project Details
+## 1.7 Project Details
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -107,7 +141,7 @@ If this HLD is produced as part of a specific project or change activity:
 | **Estimated Solution Cost (Opex)** | *[...]* |
 | **Target Go-Live Date** | *[...]* |
 
-## 1.7 Business Criticality
+## 1.8 Business Criticality
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 

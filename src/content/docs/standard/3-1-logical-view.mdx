@@ -70,11 +70,35 @@ Document the architectural and design patterns applied in this solution:
 |---------|--------------|-----------|
 | *[e.g., Microservices, Event-Driven, CQRS, Strangler Fig]* | *[which components]* | *[why this pattern was chosen]* |
 
+## 3.1.6 Technology & Vendor Lock-in Assessment
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Assess the degree of vendor or technology lock-in for key components:
+
+| Component / Service | Vendor / Technology | Lock-in Level | Mitigation | Portability Notes |
+|---|---|---|---|---|
+| *[component]* | *[vendor/technology]* | None / Low / Moderate / High / Critical | *[how lock-in is mitigated]* | *[how portable is this component?]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Consider lock-in across multiple dimensions:
+- **Proprietary APIs** — Does the solution use vendor-specific APIs with no open equivalent?
+- **Data formats** — Can data be exported in standard, open formats?
+- **Contractual** — Are there minimum commitment periods or exit penalties?
+- **Operational** — Does the team have skills to operate on an alternative platform?
+- **Migration effort** — How much re-engineering would be needed to move to an alternative?
+
+This assessment should inform the Exit Planning section (5.10) and the Cost Optimisation quality attribute (4.4).
+</div>
+
 <div class="quality-pillar-ref">
 
 **Quality Attribute Cross-References:**
 - **4.3 Performance Efficiency** - Component design affects performance characteristics
 - **4.2 Reliability** - Component decomposition influences fault isolation and resilience
+- **4.4 Cost Optimisation** - Vendor lock-in affects long-term cost flexibility
 - **4.5 Sustainability** - Component architecture affects resource utilisation
 
 </div>

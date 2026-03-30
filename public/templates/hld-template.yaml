@@ -47,6 +47,16 @@ executiveSummary:
       driverType: new-capability        # regulatory | cost-reduction | modernisation | new-capability | risk-mitigation | security | performance | scalability | end-of-life | merger-acquisition | other
       description: ""
       priority: high                    # critical | high | medium | low
+  strategicAlignment:
+    organisationStrategySupported: ""
+    reviewedAgainstCapabilityModel: "no"  # yes | no | not-applicable
+    duplicatesExistingCapability: "no"    # yes | no
+    duplicationJustification: ""
+    sharedServiceReuse:
+      - capability: identity-and-access   # identity-and-access | messaging | api-management | monitoring-logging | data-analytics | cicd | other
+        sharedService: ""
+        reused: true
+        justificationIfNotReused: ""
   inScope:
     - ""                                # List of in-scope items
   outOfScope:
@@ -384,10 +394,10 @@ lifecycleManagement:
   vendorLockInLevel: low                # none | low | moderate | high | critical
 
 # ─────────────────────────────────────────────
-# Section 6: Risk & Governance
+# Section 6: Decision Making & Governance
 # ─────────────────────────────────────────────
 riskGovernance:
-  # CARDI framework: Constraints, Assumptions, Risks, Dependencies, Issues
+  # RAID log (extended): Constraints, Assumptions, Risks, Dependencies, Issues
   constraints:
     - id: C-001
       constraint: ""

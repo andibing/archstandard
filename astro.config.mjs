@@ -67,9 +67,9 @@ export default defineConfig({
 					],
 				},
 				{
-					label: '6. Risk & Governance',
+					label: '6. Decision Making & Governance',
 					items: [
-						{ label: 'Risk & Governance', slug: 'standard/6-risk-governance' },
+						{ label: 'Decision Making & Governance', slug: 'standard/6-risk-governance' },
 					],
 				},
 				{

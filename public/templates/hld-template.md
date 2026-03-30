@@ -53,7 +53,27 @@
 |--------|------|-------------|----------|
 | | ☐ Regulatory ☐ Cost Reduction ☐ Modernisation ☐ New Capability ☐ Risk Mitigation ☐ Security ☐ Performance ☐ Scalability ☐ End-of-Life ☐ Other | | ☐ Critical ☐ High ☐ Medium ☐ Low |
 
-### 1.3 Scope
+### 1.3 Strategic Alignment
+
+| Question | Response |
+|----------|----------|
+| Organisational strategy supported | |
+| Reviewed against capability model? | ☐ Yes ☐ No ☐ N/A |
+| Duplicates existing capability? | ☐ Yes ☐ No — Justification: |
+
+#### Reuse of Shared Services
+
+| Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
+|-----------|--------------------------|---------|------------------------------|
+| Identity & Access | | ☐ Yes ☐ No | |
+| Messaging / Notifications | | ☐ Yes ☐ No | |
+| API Management | | ☐ Yes ☐ No | |
+| Monitoring & Logging | | ☐ Yes ☐ No | |
+| Data & Analytics | | ☐ Yes ☐ No | |
+| CI/CD | | ☐ Yes ☐ No | |
+| Other | | ☐ Yes ☐ No | |
+
+### 1.4 Scope
 
 **In Scope:**
 -
@@ -61,13 +81,13 @@
 **Out of Scope:**
 -
 
-### 1.4 Key Decisions & Constraints
+### 1.6 Key Decisions & Constraints
 
 | Decision | Constraint Type | Rationale | Reversibility |
 |----------|----------------|-----------|---------------|
 | | ☐ Technical ☐ Organisational ☐ Financial ☐ Regulatory ☐ Time ☐ Vendor ☐ Other | | ☐ Easily Reversible ☐ Reversible with Effort ☐ Difficult to Reverse ☐ Irreversible |
 
-### 1.5 Project Details
+### 1.7 Project Details
 
 | Field | Value |
 |-------|-------|
@@ -79,7 +99,7 @@
 | **Currency** | |
 | **Target Go-Live** | |
 
-### 1.6 Business Criticality
+### 1.8 Business Criticality
 
 ☐ Tier 1: Critical ☐ Tier 2: High ☐ Tier 3: Medium ☐ Tier 4: Low ☐ Tier 5: Minimal
 
@@ -496,7 +516,7 @@
 
 ---
 
-## 6. Risk & Governance (CARDI)
+## 6. Decision Making & Governance
 
 ### 6.1.1 Constraints
 
