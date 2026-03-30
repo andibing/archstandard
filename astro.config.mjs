@@ -5,7 +5,7 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'ArchStandard',
+			title: 'The Architecture Description Standard',
 			description: 'ADS: The Architecture Description Standard — defining the structure and content of Solution Architecture Documents.',
 			customCss: ['./src/styles/custom.css'],
 			sidebar: [
