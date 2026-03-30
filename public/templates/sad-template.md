@@ -1,8 +1,9 @@
 # Solution Architecture Document
 
 > **Standard:** ADS v1.0.0 (Architecture Description Standard)
-> **Template Version:** 1.0.0
+> **Author:** Andi Chandler
 > **Published by:** ArchStandard (archstandard.org)
+> **Licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
 > **Generated from:** schema/ads.schema.json
 
 ---
