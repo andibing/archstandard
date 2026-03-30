@@ -609,6 +609,15 @@ function main() {
   fs.writeFileSync(mdPath, mdTemplate, 'utf-8');
   console.log('  Generated:', mdPath);
 
+  // Copy schema to public directory for serving at /schema/v1.0.0/ads.schema.json
+  const publicSchemaDir = path.join(__dirname, '..', 'public', 'schema', 'v1.0.0');
+  if (!fs.existsSync(publicSchemaDir)) {
+    fs.mkdirSync(publicSchemaDir, { recursive: true });
+  }
+  const publicSchemaPath = path.join(publicSchemaDir, 'ads.schema.json');
+  fs.copyFileSync(SCHEMA_PATH, publicSchemaPath);
+  console.log('  Copied schema to:', publicSchemaPath);
+
   console.log('\nDone. All templates generated from schema.');
 }
 
