@@ -185,6 +185,28 @@
 
 **Serverless:** ☐ Yes ☐ No — Services:
 
+#### User & Administrator Access
+
+| Attribute | Selection |
+|-----------|----------|
+| **User access method** | ☐ Web (HTTPS) ☐ VDI ☐ RDP ☐ Citrix ☐ Mobile App ☐ API ☐ Other |
+| **User locations** | |
+| **Admin access method** | ☐ VDI ☐ RDP ☐ SSH ☐ HTTPS ☐ Bastion Host ☐ Other |
+| **VPN required?** | ☐ Yes ☐ No |
+| **Direct Connect / ExpressRoute?** | ☐ Yes ☐ No |
+
+#### Transport Protocols
+
+| Protocol | Used? | Purpose |
+|----------|-------|---------|
+| HTTPS (TLS 1.2+) | ☐ Yes ☐ No | |
+| SFTP | ☐ Yes ☐ No | |
+| ODBC / JDBC | ☐ Yes ☐ No | |
+| TCP (other) | ☐ Yes ☐ No | |
+| gRPC | ☐ Yes ☐ No | |
+| WebSocket | ☐ Yes ☐ No | |
+| Other | ☐ Yes ☐ No | |
+
 #### Networking
 
 | Question | Response |
@@ -380,6 +402,21 @@
 | Caching used? | ☐ Yes ☐ No |
 | CDN used? | ☐ Yes ☐ No |
 
+#### Capacity & Growth Projections
+
+| Metric | Current | 1 Year | 3 Years | 5 Years |
+|--------|---------|--------|---------|---------|
+| Users (total) | | | | |
+| Concurrent users (peak) | | | | |
+| Data volume | | | | |
+| Transaction volume (per day) | | | | |
+| Storage requirement | | | | |
+
+| Question | Response |
+|----------|----------|
+| Will current design scale to projected growth? | ☐ Yes ☐ No — Details: |
+| Seasonal / cyclical demand patterns? | ☐ Yes ☐ No — Details: |
+
 ### 4.4 Cost Optimisation
 
 | Attribute | Selection |
@@ -419,7 +456,6 @@
 | DAST | ☐ Yes ☐ No ☐ N/A |
 | SCA | ☐ Snyk ☐ BlackDuck ☐ Dependabot ☐ Renovate ☐ Other ☐ None |
 | Container scanning | ☐ Yes ☐ No ☐ N/A |
-| Migration strategy | ☐ Big Bang ☐ Blue-Green ☐ Canary ☐ Rolling ☐ Strangler Fig ☐ Parallel Run ☐ Phased ☐ N/A |
 | Release frequency | ☐ Continuous ☐ Daily ☐ Weekly ☐ Fortnightly ☐ Monthly ☐ Quarterly ☐ Ad Hoc |
 | Support model | ☐ Internal Team ☐ Vendor Managed ☐ Managed Service ☐ Community ☐ Hybrid |
 | Support hours | ☐ 24x7 ☐ Business Hours ☐ Extended Hours ☐ Follow-the-Sun |
@@ -427,15 +463,70 @@
 | Exit plan documented? | ☐ Yes ☐ No |
 | Vendor lock-in level | ☐ None ☐ Low ☐ Moderate ☐ High ☐ Critical |
 
+### Migration (if applicable)
+
+**Migration Classification (6 R's):**
+
+☐ Retain ☐ Retire ☐ Rehost ☐ Replatform ☐ Refactor ☐ Replace ☐ N/A (net-new)
+
+| Attribute | Selection |
+|-----------|----------|
+| Deployment strategy | ☐ Big Bang ☐ Blue-Green ☐ Canary ☐ Rolling ☐ Strangler Fig ☐ Parallel Run ☐ Phased |
+| Data migration mode | ☐ One-off ☐ Phased ☐ Continuous Sync ☐ N/A |
+| Data migration method | |
+| Data volume to migrate | |
+| End-user cutover | ☐ One-off ☐ Phased ☐ N/A |
+| External system cutover | ☐ One-off ☐ Phased ☐ N/A |
+| Max acceptable downtime | ☐ Zero ☐ Seconds ☐ Minutes ☐ Hours ☐ Days |
+| Rollback plan | |
+| Transient infrastructure needed? | ☐ Yes ☐ No |
+
+### Resourcing & Skills
+
+| Skill Area | Current Level | Action Required |
+|-----------|--------------|-----------------|
+| Cloud platform | ☐ High ☐ Medium ☐ Low ☐ N/A | |
+| Infrastructure as Code | ☐ High ☐ Medium ☐ Low ☐ N/A | |
+| CI/CD pipeline management | ☐ High ☐ Medium ☐ Low ☐ N/A | |
+| Application technology stack | ☐ High ☐ Medium ☐ Low ☐ N/A | |
+| Database administration | ☐ High ☐ Medium ☐ Low ☐ N/A | |
+| Security & compliance | ☐ High ☐ Medium ☐ Low ☐ N/A | |
+
+**Operational readiness:** ☐ A: Fully capable ☐ B: Partially capable ☐ C: Learning ☐ D: Not capable
+
 ---
 
-## 6. Risk & Governance
+## 6. Risk & Governance (CARDI)
 
-### 6.1 Design Risks
+### 6.1.1 Constraints
 
-| ID | Risk Event | Category | Likelihood | Impact | Mitigation | Residual Risk | Target Date | Owner | Status |
-|----|-----------|----------|-----------|--------|------------|--------------|-------------|-------|--------|
-| R-001 | | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial ☐ Compliance ☐ Other | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible | | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible | | | ☐ Open ☐ Mitigating ☐ Accepted ☐ Closed |
+| ID | Constraint | Category | Impact on Design | Last Assessed |
+|----|-----------|----------|-----------------|---------------|
+| C-001 | | ☐ Regulatory ☐ Technical ☐ Commercial ☐ Organisational ☐ Time | | |
+
+### 6.1.2 Assumptions
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | | | ☐ High ☐ Medium ☐ Low | ☐ Open ☐ Closed | | |
+
+### 6.1.3 Risks
+
+| ID | Risk Event | Category | Severity | Likelihood | Mitigation Strategy | Mitigation Plan | Residual Risk | Owner | Last Assessed |
+|----|-----------|----------|----------|-----------|-------------------|-----------------|--------------|-------|---------------|
+| R-001 | | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial ☐ Compliance | ☐ High ☐ Medium ☐ Low | ☐ High ☐ Medium ☐ Low | ☐ Accept ☐ Mitigate ☐ Transfer ☐ Avoid | | ☐ High ☐ Medium ☐ Low | | |
+
+### 6.1.4 Dependencies
+
+| ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
+|----|-----------|-----------|--------|-------|----------|---------------|
+| D-001 | | ☐ Inbound ☐ Outbound | ☐ Committed ☐ Not Committed ☐ Resolved | | | |
+
+### 6.1.5 Issues
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial | ☐ High ☐ Medium ☐ Low | | | ☐ Open ☐ In Progress ☐ Resolved | |
 
 ### 6.2 Guardrail Exceptions
 

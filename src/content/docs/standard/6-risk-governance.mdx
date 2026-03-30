@@ -10,27 +10,110 @@ description: Design risks, guardrail exceptions, architectural decisions, and co
 
 This section documents the risks inherent in the design, any exceptions to policies or standards, and the governance traceability that demonstrates the design has been reviewed and approved.
 
-## 6.1 Design Risks & Mitigations
+## 6.1 CARDI Log
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
-Document all identified design risks and their mitigation plans:
+The CARDI framework (Constraints, Assumptions, Risks, Dependencies, Issues) provides a structured approach to capturing and managing all factors that could affect the design. Each item should be tracked through to resolution with clear ownership and evidence.
 
-| Risk # | Risk Event / Issue | Mitigation / Remediation Plan | Residual Risk | Target Date | Owner |
-|--------|-------------------|------------------------------|--------------|-------------|-------|
-| R-001 | *[describe the risk]* | *[tactical and/or strategic plan]* | High / Medium / Low | *[date or acceptance]* | *[person]* |
+### 6.1.1 Constraints
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Constraints are fixed limitations that the design must work within. They are non-negotiable and shape the solution boundaries.
+
+| ID | Constraint | Category | Impact on Design | Last Assessed |
+|----|-----------|----------|-----------------|---------------|
+| C-001 | *[describe the constraint]* | Regulatory / Technical / Commercial / Organisational / Time | *[how this constrains the design]* | *[date]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Common constraints include:
+- **Regulatory** — Data residency, industry compliance (PCI-DSS, GDPR, FCA)
+- **Technical** — Must use existing platform, specific technology mandated, legacy integration
+- **Commercial** — Budget ceiling, existing licensing agreements, vendor contracts
+- **Organisational** — Team skills, organisational standards, governance processes
+- **Time** — Fixed delivery deadlines, regulatory compliance dates
+</div>
+
+### 6.1.2 Assumptions
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Assumptions are factors believed to be true but not yet verified. Each assumption should be validated and tracked to closure. An assumption that proves false may become a risk or issue.
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | *[describe the assumption]* | *[impact on design if wrong]* | High / Medium / Low | Open / Closed | *[person]* | *[reference]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Capture assumptions about:
+- **Technical** — API availability, system capacity, technology compatibility
+- **Organisational** — Resource availability, team skills, process readiness
+- **Third-party** — Vendor timelines, SLA commitments, service availability
+- **Data** — Data quality, volumes, formats, migration feasibility
+- **Timeline** — Dependent delivery dates, approval timelines
+
+Open assumptions should be tracked actively. The owner is responsible for validating the assumption and providing evidence of closure.
+</div>
+
+### 6.1.3 Risks
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Risks are potential events that could negatively affect the design or its delivery. Each risk should have a mitigation strategy and clear ownership.
+
+| ID | Risk Event | Category | Severity | Likelihood | Mitigation Strategy | Residual Risk | Owner | Last Assessed |
+|----|-----------|----------|----------|-----------|-------------------|--------------|-------|---------------|
+| R-001 | *[describe the risk]* | Technical / Security / Operational / Delivery / Commercial / Compliance | High / Medium / Low | High / Medium / Low | *[mitigation plan]* | High / Medium / Low | *[person]* | *[date]* |
 
 <div class="guidance-box">
 <h4>Guidance</h4>
 
 Consider risks related to:
-- **Technical** - Technology choices, complexity, integration, performance
-- **Security** - Vulnerabilities, access control gaps, data exposure
-- **Operational** - Supportability, monitoring gaps, skill availability
-- **Delivery** - Timeline, dependencies, resource availability
-- **Commercial** - Vendor risk, licensing, cost overruns
-- **Compliance** - Regulatory gaps, standards non-conformance
+- **Technical** — Technology choices, complexity, integration, performance
+- **Security** — Vulnerabilities, access control gaps, data exposure
+- **Operational** — Supportability, monitoring gaps, skill availability
+- **Delivery** — Timeline, dependencies, resource availability
+- **Commercial** — Vendor risk, licensing, cost overruns
+- **Compliance** — Regulatory gaps, standards non-conformance
+
+Mitigation strategies should be one of: **Accept** (business owner sign-off), **Mitigate** (reduce likelihood or impact), **Transfer** (insurance, contractual), or **Avoid** (change the design).
 </div>
+
+### 6.1.4 Dependencies
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Dependencies are external factors that the design relies upon or that rely upon this design. Track both inbound (this design depends on) and outbound (other designs depend on this).
+
+| ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
+|----|-----------|-----------|--------|-------|----------|---------------|
+| D-001 | *[describe the dependency]* | Inbound / Outbound | Committed / Not Committed / Resolved | *[person]* | *[reference]* | *[date]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Common dependencies include:
+- **Infrastructure** — Network connectivity, platform availability, shared services
+- **Application** — APIs, data feeds, upstream/downstream systems
+- **Team** — Other project deliverables, shared resources, specialist skills
+- **Vendor** — Third-party service readiness, contract completion
+- **Governance** — Approval gates, compliance sign-off, change advisory board
+</div>
+
+### 6.1.5 Issues
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Issues are problems that have already materialised and require resolution. Unlike risks (which are potential), issues are current and active.
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | *[describe the issue]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[person]* | *[resolution plan]* | Open / In Progress / Resolved | *[date]* |
 
 ## 6.2 Guardrail Exceptions
 

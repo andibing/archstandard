@@ -46,14 +46,33 @@ Does the application include any software developed internally?
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
-Describe how any transition from a previous service or application to this one will be performed:
+### Migration Classification (6 R's)
+
+If this solution replaces or migrates an existing system, classify the migration approach:
+
+| Classification | Selected? | Description |
+|---------------|-----------|-------------|
+| **Retain** | ☐ | Keep as-is, not suitable for migration at this time |
+| **Retire** | ☐ | Decommission; functionality no longer needed |
+| **Rehost** | ☐ | Lift-and-shift to new infrastructure with minimal changes |
+| **Replatform** | ☐ | Lift-and-shift with targeted optimisations (e.g., managed database) |
+| **Refactor** | ☐ | Re-architect components to take advantage of new platform capabilities |
+| **Replace** | ☐ | Replace entirely with a new solution (e.g., SaaS product) |
+
+### Transition Plan
 
 | Attribute | Detail |
 |-----------|--------|
-| Migration strategy | *[Big Bang / Blue-Green / Canary / Strangler Fig / Parallel Run]* |
-| Data migration approach | *[how data will be migrated, validated, and cutover]* |
+| Deployment strategy | Big Bang / Blue-Green / Canary / Strangler Fig / Rolling / Parallel Run |
+| Data migration mode | One-off / Phased / Continuous Sync / Not applicable |
+| Data migration method | *[e.g., Export/Import, ETL, CDC, DMS, manual]* |
+| Data volume to migrate | *[e.g., 500 GB]* |
+| End-user cutover approach | One-off / Phased / Not applicable |
+| External system cutover | One-off / Phased / Not applicable |
+| Maximum acceptable downtime | Zero / Seconds / Minutes / Hours / Days |
 | Rollback plan | *[how to revert if the transition fails]* |
 | Acceptance criteria | *[what must be true before cutover]* |
+| Transient infrastructure needed? | Yes / No — *[if yes, describe temporary infrastructure required during migration]* |
 
 ## 5.3 Test Strategy
 
@@ -97,7 +116,32 @@ This section covers architecturally significant testing — not unit tests or fu
 | SLAs | *[internal or external service level agreements]* |
 | Escalation paths | *[how issues are escalated]* |
 
-## 5.6 Service Start
+## 5.6 Resourcing & Skills
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Assess whether the team has the skills and resources to build, operate, and support the solution.
+
+### Team Capability Assessment
+
+| Skill Area | Current Level | Action Required |
+|-----------|--------------|-----------------|
+| Cloud platform (e.g., AWS, Azure, GCP) | High / Medium / Low / N/A | *[training, hiring, or contractor needed?]* |
+| Infrastructure as Code (e.g., Terraform, Pulumi) | High / Medium / Low / N/A | *[...]* |
+| CI/CD pipeline management | High / Medium / Low / N/A | *[...]* |
+| Application technology stack | High / Medium / Low / N/A | *[...]* |
+| Database administration | High / Medium / Low / N/A | *[...]* |
+| Security & compliance | High / Medium / Low / N/A | *[...]* |
+
+### Operational Readiness
+
+| Question | Response |
+|----------|----------|
+| Can the team fully operate and support this solution in production? | A: Fully capable / B: Partially capable / C: Not yet capable but willing to learn / D: Not capable and will not be in the foreseeable future |
+| If B, C, or D: what additional resources are required? | *[e.g., DBA, DevOps engineer, cloud architect, managed service]* |
+| Is a managed service being considered for ongoing operations? | Yes / No — *[details]* |
+
+## 5.7 Service Start
 
 <span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
 
@@ -105,7 +149,7 @@ Describe how the application and its supporting services are started:
 
 *[What steps are needed to bring the solution into operation? Are there manual steps? What is the start-up sequence and dependency order?]*
 
-## 5.7 Maintainability
+## 5.8 Maintainability
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -118,7 +162,7 @@ Describe how the solution design enables ongoing maintenance:
 | Certificate management | *[renewal process]* |
 | Dependency management | *[how third-party dependencies are tracked and updated]* |
 
-## 5.8 End-of-Life & Decommissioning
+## 5.9 End-of-Life & Decommissioning
 
 <span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
 
@@ -130,7 +174,7 @@ Describe how the solution design enables ongoing maintenance:
 | Data disposal | *[how data will be securely erased]* |
 | Infrastructure disposal | *[how hardware/cloud resources will be decommissioned]* |
 
-## 5.9 Exit Planning
+## 5.10 Exit Planning
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 

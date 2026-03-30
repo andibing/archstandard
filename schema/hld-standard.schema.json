@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://archstandard.org/schema/v1.0.0/ads-001.schema.json",
+  "$id": "https://archstandard.org/schema/v1.0.0/ads.schema.json",
   "title": "ADS: Solution Architecture Document",
   "description": "Schema for Solution Architecture Documents conforming to ADS: The Architecture Description Standard v1.0.0. Fields are designed to be atomic — using enums, booleans, and structured options to reduce ambiguity and enable machine processing.",
   "type": "object",
@@ -721,14 +721,47 @@
     },
     "riskGovernance": {
       "type": "object",
-      "description": "Section 6: Risk & Governance",
-      "required": ["designRisks"],
+      "description": "Section 6: Risk & Governance (CARDI framework)",
+      "required": ["risks"],
       "properties": {
-        "designRisks": {
+        "constraints": {
           "type": "array",
+          "description": "Fixed limitations the design must work within",
           "items": {
             "type": "object",
-            "required": ["id", "riskEvent", "likelihood", "impact", "residualRisk"],
+            "required": ["id", "constraint", "category"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^C-\\d+$" },
+              "constraint": { "type": "string" },
+              "category": { "type": "string", "enum": ["regulatory", "technical", "commercial", "organisational", "time"] },
+              "impactOnDesign": { "type": "string" },
+              "lastAssessed": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "description": "Factors believed to be true but not yet verified",
+          "items": {
+            "type": "object",
+            "required": ["id", "assumption", "status"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^A-\\d+$" },
+              "assumption": { "type": "string" },
+              "impactIfFalse": { "type": "string" },
+              "certainty": { "type": "string", "enum": ["high", "medium", "low"] },
+              "status": { "type": "string", "enum": ["open", "closed"] },
+              "owner": { "type": "string" },
+              "evidence": { "type": "string" }
+            }
+          }
+        },
+        "risks": {
+          "type": "array",
+          "description": "Potential events that could negatively affect the design",
+          "items": {
+            "type": "object",
+            "required": ["id", "riskEvent", "severity", "likelihood", "residualRisk"],
             "properties": {
               "id": { "type": "string", "pattern": "^R-\\d+$" },
               "riskEvent": { "type": "string" },
@@ -736,13 +769,48 @@
                 "type": "string",
                 "enum": ["technical", "security", "operational", "delivery", "commercial", "compliance", "other"]
               },
+              "severity": { "$ref": "#/$defs/riskLevel" },
               "likelihood": { "$ref": "#/$defs/riskLevel" },
-              "impact": { "$ref": "#/$defs/riskLevel" },
+              "mitigationStrategy": { "type": "string", "enum": ["accept", "mitigate", "transfer", "avoid"] },
               "mitigationPlan": { "type": "string" },
               "residualRisk": { "$ref": "#/$defs/riskLevel" },
-              "targetDate": { "type": "string", "format": "date" },
               "owner": { "type": "string" },
-              "status": { "type": "string", "enum": ["open", "mitigating", "accepted", "closed"] }
+              "lastAssessed": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "description": "External factors the design relies upon or that rely upon this design",
+          "items": {
+            "type": "object",
+            "required": ["id", "dependency", "direction", "status"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^D-\\d+$" },
+              "dependency": { "type": "string" },
+              "direction": { "type": "string", "enum": ["inbound", "outbound"] },
+              "status": { "type": "string", "enum": ["committed", "not-committed", "resolved"] },
+              "owner": { "type": "string" },
+              "evidence": { "type": "string" },
+              "lastAssessed": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "issues": {
+          "type": "array",
+          "description": "Known problems that have already materialised",
+          "items": {
+            "type": "object",
+            "required": ["id", "issue", "impact", "status"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^I-\\d+$" },
+              "issue": { "type": "string" },
+              "category": { "type": "string", "enum": ["technical", "security", "operational", "delivery", "commercial"] },
+              "impact": { "$ref": "#/$defs/riskLevel" },
+              "owner": { "type": "string" },
+              "resolutionPlan": { "type": "string" },
+              "status": { "type": "string", "enum": ["open", "in-progress", "resolved"] },
+              "lastAssessed": { "type": "string", "format": "date" }
             }
           }
         },

@@ -157,6 +157,16 @@ architecturalViews:
       serverless:
         used: false
         services: []
+    userAccess:
+      userAccessMethod: https              # https | vdi | rdp | citrix | mobile-app | api | other
+      userLocations: []
+      adminAccessMethod: ssh               # vdi | rdp | ssh | https | bastion-host | other
+      vpnRequired: false
+      directConnect: false
+    transportProtocols:
+      - protocol: https                    # https | sftp | odbc-jdbc | tcp | grpc | websocket | other
+        used: true
+        purpose: ""
     networking:
       internetFacing: false
       outboundInternet: false
@@ -306,6 +316,18 @@ qualityPillars:
     performanceTestingApproach: none    # load-testing | stress-testing | soak-testing | spike-testing | none
     cachingUsed: false
     cdnUsed: false
+    growthProjections:
+      currentUsers: 0
+      year1Users: 0
+      year3Users: 0
+      year5Users: 0
+      currentDataVolume: ""
+      year1DataVolume: ""
+      year3DataVolume: ""
+      year5DataVolume: ""
+      designScalesToProjectedGrowth: true
+      seasonalDemandPatterns: false
+      seasonalDetails: ""
   costOptimisation:
     costAnalysisPerformed: false
     designConstrainedByCost: false
@@ -335,7 +357,25 @@ lifecycleManagement:
   dast: "no"                            # yes | no | not-applicable
   sca: none                             # snyk | blackduck | dependabot | renovate | whitesource | other | none
   containerScanning: "no"              # yes | no | not-applicable
-  migrationStrategy: not-applicable     # big-bang | blue-green | canary | rolling | strangler-fig | parallel-run | phased | not-applicable
+  migration:
+    classification: not-applicable        # retain | retire | rehost | replatform | refactor | replace | not-applicable
+    deploymentStrategy: blue-green        # big-bang | blue-green | canary | rolling | strangler-fig | parallel-run | phased
+    dataMigrationMode: not-applicable     # one-off | phased | continuous-sync | not-applicable
+    dataMigrationMethod: ""
+    dataVolumeToMigrate: ""
+    endUserCutover: not-applicable        # one-off | phased | not-applicable
+    externalSystemCutover: not-applicable # one-off | phased | not-applicable
+    maxAcceptableDowntime: zero           # zero | seconds | minutes | hours | days
+    rollbackPlan: ""
+    transientInfrastructureNeeded: false
+  resourcing:
+    skills:
+      - area: cloud-platform              # cloud-platform | infrastructure-as-code | cicd | application-stack | database-admin | security-compliance
+        currentLevel: medium              # high | medium | low | not-applicable
+        actionRequired: ""
+    operationalReadiness: a-fully-capable # a-fully-capable | b-partially-capable | c-learning | d-not-capable
+    additionalResourcesRequired: ""
+    managedServiceConsidered: false
   releaseFrequency: ad-hoc             # continuous | daily | weekly | fortnightly | monthly | quarterly | ad-hoc
   supportModel: internal-team           # internal-team | vendor-managed | managed-service | community | hybrid
   supportHours: business-hours          # 24x7 | business-hours | extended-hours | follow-the-sun
@@ -347,17 +387,49 @@ lifecycleManagement:
 # Section 6: Risk & Governance
 # ─────────────────────────────────────────────
 riskGovernance:
-  designRisks:
+  # CARDI framework: Constraints, Assumptions, Risks, Dependencies, Issues
+  constraints:
+    - id: C-001
+      constraint: ""
+      category: technical               # regulatory | technical | commercial | organisational | time
+      impactOnDesign: ""
+      lastAssessed: ""                  # YYYY-MM-DD
+  assumptions:
+    - id: A-001
+      assumption: ""
+      impactIfFalse: ""
+      certainty: medium                 # high | medium | low
+      status: open                      # open | closed
+      owner: ""
+      evidence: ""
+  risks:
     - id: R-001
       riskEvent: ""
       riskCategory: technical           # technical | security | operational | delivery | commercial | compliance | other
-      likelihood: medium                # critical | high | medium | low | negligible
-      impact: medium                    # critical | high | medium | low | negligible
+      severity: medium                  # high | medium | low
+      likelihood: medium                # high | medium | low
+      mitigationStrategy: mitigate      # accept | mitigate | transfer | avoid
       mitigationPlan: ""
-      residualRisk: low                 # critical | high | medium | low | negligible
-      targetDate: ""
+      residualRisk: low                 # high | medium | low
       owner: ""
-      status: open                      # open | mitigating | accepted | closed
+      lastAssessed: ""                  # YYYY-MM-DD
+  dependencies:
+    - id: D-001
+      dependency: ""
+      direction: inbound                # inbound | outbound
+      status: committed                 # committed | not-committed | resolved
+      owner: ""
+      evidence: ""
+      lastAssessed: ""                  # YYYY-MM-DD
+  issues:
+    - id: I-001
+      issue: ""
+      category: technical               # technical | security | operational | delivery | commercial
+      impact: medium                    # high | medium | low
+      owner: ""
+      resolutionPlan: ""
+      status: open                      # open | in-progress | resolved
+      lastAssessed: ""                  # YYYY-MM-DD
   policyExceptions: "no"               # yes | no | not-applicable
   policyExceptionsAccepted: "not-applicable"  # yes | no | not-applicable
   processExceptions: "no"              # yes | no | not-applicable
