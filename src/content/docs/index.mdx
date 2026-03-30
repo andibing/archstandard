@@ -40,7 +40,7 @@ This standard defines the required and recommended structure for Solution Archit
 		Six views describing the solution from distinct stakeholder perspectives: Logical, Integration & Data Flow, Physical, Data, Security, and Scenarios. These form the core High Level Design.
 	</Card>
 	<Card title="Quality Attributes" icon="approve-check-circle">
-		Five cross-cutting evaluation lenses — Operational Excellence, Reliability, Performance, Cost, and Sustainability — applied across all views.
+		Cross-cutting evaluation lenses — Operational Excellence, Reliability, Performance, Cost, and Sustainability — applied across all views.
 	</Card>
 	<Card title="Lifecycle & Governance" icon="setting">
 		Development lifecycle, operational procedures, risk management, and compliance traceability for the full solution lifecycle.
@@ -50,17 +50,21 @@ This standard defines the required and recommended structure for Solution Archit
 	</Card>
 </CardGrid>
 
-## Beyond ISO/IEC 42010
+## Where ADS Fits
 
-ADS *conforms to* the ISO 42010 conceptual model while providing the concrete, actionable structure that ISO 42010 deliberately leaves to implementers. It goes well beyond ISO 42010 by incorporating:
+Existing architecture frameworks each address part of the problem — ISO 42010 defines concepts, 4+1 defines views, the cloud WAFs define quality criteria, TOGAF defines domains — but none provides a complete, fill-in template for a Solution Architecture Document. ADS synthesises the best of each into a single, actionable standard.
 
-- **Quality Attributes from AWS, Azure, and GCP Well-Architected Frameworks** — Operational Excellence, Reliability, Performance Efficiency, Cost Optimisation, and Sustainability as cross-cutting evaluation lenses applied across all architectural views
-- **Documentation Depths with RFC 2119 requirement keywords** — every section is tagged as SHALL (Minimum), SHOULD (Recommended), or MAY (Comprehensive), enabling progressive adoption from lightweight designs to full enterprise documentation
-- **Security as a dedicated Architectural View** — ISO 42010 does not prescribe specific viewpoints; ADS elevates Security to a first-class view covering IAM, encryption, threat modelling, and monitoring
-- **Lifecycle Management** — CI/CD pipelines, service transition, release management, operations, maintainability, and exit planning
-- **Decision Making & Governance with compliance traceability** — design risks, guardrail exceptions, architecture decision records, and a traceability matrix linking design elements to the standards they satisfy
-- **JSON Schema for multi-format generation** — a formal schema enabling validation and generation of Solution Architecture Documents in JSON, YAML, Markdown, or Word
-- **Downloadable templates** — ready-to-use blank templates in Markdown, YAML, and JSON formats
+A core design goal is that architecture documents produced with ADS are both **human-readable** (clear prose, structured tables, visual diagrams) and **machine-readable** (JSON Schema validation, atomic enumerated fields, multi-format generation). This enables both governance review by people and automated analysis by tooling.
+
+ADS incorporates:
+
+- **Quality Attributes from cloud Well-Architected Frameworks** — cross-cutting evaluation lenses applied across all architectural views
+- **Documentation Depths with RFC 2119 keywords** — every section is tagged as SHALL (Minimum), SHOULD (Recommended), or MAY (Comprehensive), enabling progressive adoption
+- **Security as a dedicated Architectural View** — elevated to a first-class view covering IAM, encryption, threat modelling, and monitoring
+- **Lifecycle Management** — CI/CD pipelines, service transition, release management, operations, and exit planning
+- **Decision Making & Governance** — constraints, risks, assumptions, dependencies, architecture decision records, and compliance traceability
+- **JSON Schema** — enabling validation and generation of SADs in JSON, YAML, Markdown, or Word
+- **Downloadable templates** — ready-to-use blank templates in multiple formats
 
 ### How ADS Compares
 
