@@ -1,11 +1,11 @@
 ---
-title: "2. Conformance and Usage"
+title: "Conformance and Usage"
 description: "How to adopt the ADS, maturity targets, and document lifecycle."
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
-## 2.1 Terminology
+## Terminology
 
 The key words "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "MAY", and "OPTIONAL" in this standard are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174).
 
@@ -25,7 +25,7 @@ These keywords map to the standard's documentation depths as follows:
 | <span class="maturity-indicator maturity-recommended">Recommended</span> | SHOULD | Production approval |
 | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | MAY | Enterprise review |
 
-## 2.2 Getting Started
+## Getting Started
 
 Use the workflow below to complete a Solution Architecture Document. Each step builds on the previous one.
 
@@ -60,7 +60,7 @@ You do not have to complete sections in strict numerical order. Many architects 
 - **Omit** sections below your target depth that are genuinely not relevant (e.g., IoT Devices for a cloud API).
 - **Only include** sections that add value to the reader.
 
-## 2.3 Document Lifecycle
+## Document Lifecycle
 
 A Solution Architecture Document produced to this standard is a **living artefact**:
 
@@ -74,7 +74,7 @@ A Solution Architecture Document produced to this standard is a **living artefac
 If a project seeks only to make incremental changes to a solution documented in an existing HLD, only the sections relevant to the change need to be updated. The remaining sections SHALL remain unchanged and continue to describe the current state.
 </Aside>
 
-## 2.4 Organisation Customisation
+## Organisation Customisation
 
 This standard is designed to be adopted without modification. However, organisations MAY extend it in the following ways:
 
@@ -85,7 +85,7 @@ This standard is designed to be adopted without modification. However, organisat
 
 Organisations SHALL NOT renumber core sections of the standard. Sections that are not applicable to the solution SHOULD be omitted entirely to keep documents focused and readable.
 
-## 2.5 Output Formats
+## Output Formats
 
 The standard's JSON Schema enables generation and validation in multiple formats:
 
@@ -98,7 +98,7 @@ The standard's JSON Schema enables generation and validation in multiple formats
 
 See [Templates](/standard/templates/) for downloadable blank templates in each format.
 
-## 2.6 Architecture Compliance Scoring
+## Architecture Compliance Scoring
 
 Each major section of a Solution Architecture Document MAY be assessed using a **0–5 compliance score**. This provides governance boards with a quick, quantitative view of architecture maturity and completeness — both for individual SADs and across a portfolio.
 
@@ -165,20 +165,6 @@ Each SAD SHOULD include a compliance summary in the appendices (Section 7) or do
 - Organisations MAY define minimum acceptable scores per section for different governance gates (e.g., "all sections must score ≥ 3 for production approval").
 </div>
 
-## 2.7 Normative References
+## Normative References
 
-This standard references the following specifications:
-
-| Reference | Title | Application |
-|-----------|-------|-------------|
-| [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) | Key words for use in RFCs to Indicate Requirement Levels | Terminology conventions (Section 2.1) |
-| [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) | Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words | Clarification that keywords are normative only when capitalised |
-| [ISO/IEC/IEEE 42010:2022](https://www.iso.org/standard/74393.html) | Software, systems and enterprise — Architecture description | Meta-model for viewpoints, views, and correspondences (Section 3) |
-| [ISO/IEC 25010:2023](https://www.iso.org/standard/35733.html) | Systems and software quality models | Quality attribute definitions informing Quality Attributes (Section 4) |
-| [NIST SP 800-53 Rev. 5](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final) | Security and Privacy Controls | Security control categories referenced in Section 3.5 |
-| [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/) | AWS Well-Architected Framework (6 Pillars) | Quality Attribute definitions (Section 4) |
-| [Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/well-architected/) | Azure Well-Architected Framework (5 Pillars) | Quality attribute definitions with tradeoff guidance (Section 4) |
-| [GCP Architecture Framework](https://cloud.google.com/architecture/framework) | Google Cloud Architecture Framework (6 Pillars) | Quality attribute definitions with cross-pillar perspectives (Section 4) |
-| [OCI Well-Architected Framework](https://docs.oracle.com/en/solutions/oci-best-practices/) | Oracle Cloud Well-Architected Framework (5 Pillars) | Quality attribute definitions including Distributed Cloud (Section 4) |
-| [IBM Well-Architected Framework](https://www.ibm.com/architectures/well-architected) | IBM Well-Architected Framework (6 Pillars) | Quality attribute definitions including Hybrid and Portable (Section 4) |
-| [TOGAF Standard, 10th Edition](https://www.opengroup.org/togaf) | The Open Group Architecture Framework | Architecture domain alignment |
+See the [full normative references table](/standard/framework-alignment/) on the Framework Alignment page.

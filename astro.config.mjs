@@ -12,8 +12,8 @@ export default defineConfig({
 				{
 					label: 'Introduction',
 					items: [
-						{ label: '1. Overview', slug: 'standard/overview' },
-						{ label: '2. Conformance and Usage', slug: 'standard/how-to-use' },
+						{ label: 'Overview', slug: 'standard/overview' },
+						{ label: 'Conformance and Usage', slug: 'standard/how-to-use' },
 						{ label: 'Design Principles', slug: 'standard/design-principles' },
 						{ label: 'Framework Alignment', slug: 'standard/framework-alignment' },
 						{ label: 'Why ADS?', slug: 'standard/why-ads' },

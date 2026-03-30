@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+  <!-- Background -->
+  <rect width="720" height="520" fill="none"/>
+
+  <!-- Context bar -->
+  <rect x="20" y="10" width="680" height="50" rx="8" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="360" y="40" text-anchor="middle" font-weight="600" fill="#2d3748">0. Document Control → 1. Executive Summary → 2. Stakeholders &amp; Concerns</text>
+
+  <!-- Tier 1: Architectural Views -->
+  <rect x="20" y="80" width="680" height="160" rx="8" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1.5"/>
+  <text x="40" y="104" font-weight="700" font-size="12" fill="#2b6cb0" text-transform="uppercase" letter-spacing="0.05em">TIER 1: ARCHITECTURAL VIEWS</text>
+
+  <!-- View boxes row 1 -->
+  <rect x="40" y="115" width="200" height="40" rx="6" fill="#fff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="140" y="140" text-anchor="middle" fill="#2d3748" font-weight="500">3.1 Logical View</text>
+
+  <rect x="260" y="115" width="200" height="40" rx="6" fill="#fff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="360" y="140" text-anchor="middle" fill="#2d3748" font-weight="500">3.2 Integration &amp; Data Flow</text>
+
+  <rect x="480" y="115" width="200" height="40" rx="6" fill="#fff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="580" y="140" text-anchor="middle" fill="#2d3748" font-weight="500">3.3 Physical View</text>
+
+  <!-- View boxes row 2 -->
+  <rect x="40" y="170" width="200" height="40" rx="6" fill="#fff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="140" y="195" text-anchor="middle" fill="#2d3748" font-weight="500">3.4 Data View</text>
+
+  <rect x="260" y="170" width="200" height="40" rx="6" fill="#fff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="360" y="195" text-anchor="middle" fill="#2d3748" font-weight="500">3.5 Security View</text>
+
+  <rect x="480" y="170" width="200" height="40" rx="6" fill="#fff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="580" y="195" text-anchor="middle" fill="#2d3748" font-weight="500">3.6 Scenarios</text>
+
+  <!-- Arrow: evaluated by -->
+  <line x1="360" y1="240" x2="360" y2="275" stroke="#718096" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="370" y="262" fill="#718096" font-size="11" font-style="italic">evaluated by</text>
+
+  <!-- Tier 2: Quality Attributes -->
+  <rect x="20" y="280" width="680" height="100" rx="8" fill="#fefcbf" stroke="#d69e2e" stroke-width="1.5"/>
+  <text x="40" y="304" font-weight="700" font-size="12" fill="#975a16" text-transform="uppercase" letter-spacing="0.05em">TIER 2: QUALITY ATTRIBUTES (CROSS-CUTTING)</text>
+
+  <rect x="40" y="315" width="125" height="36" rx="6" fill="#fff" stroke="#d69e2e" stroke-width="1"/>
+  <text x="102" y="337" text-anchor="middle" fill="#2d3748" font-size="11" font-weight="500">4.1 Ops Excellence</text>
+
+  <rect x="178" y="315" width="120" height="36" rx="6" fill="#fff" stroke="#d69e2e" stroke-width="1"/>
+  <text x="238" y="337" text-anchor="middle" fill="#2d3748" font-size="11" font-weight="500">4.2 Reliability</text>
+
+  <rect x="311" y="315" width="120" height="36" rx="6" fill="#fff" stroke="#d69e2e" stroke-width="1"/>
+  <text x="371" y="337" text-anchor="middle" fill="#2d3748" font-size="11" font-weight="500">4.3 Performance</text>
+
+  <rect x="444" y="315" width="120" height="36" rx="6" fill="#fff" stroke="#d69e2e" stroke-width="1"/>
+  <text x="504" y="337" text-anchor="middle" fill="#2d3748" font-size="11" font-weight="500">4.4 Cost</text>
+
+  <rect x="577" y="315" width="120" height="36" rx="6" fill="#fff" stroke="#d69e2e" stroke-width="1"/>
+  <text x="637" y="337" text-anchor="middle" fill="#2d3748" font-size="11" font-weight="500">4.5 Sustainability</text>
+
+  <!-- Arrow: supported by -->
+  <line x1="360" y1="380" x2="360" y2="415" stroke="#718096" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="370" y="402" fill="#718096" font-size="11" font-style="italic">supported by</text>
+
+  <!-- Tier 3: Lifecycle & Governance -->
+  <rect x="20" y="420" width="680" height="90" rx="8" fill="#f0fff4" stroke="#38a169" stroke-width="1.5"/>
+  <text x="40" y="444" font-weight="700" font-size="12" fill="#276749" text-transform="uppercase" letter-spacing="0.05em">TIER 3: LIFECYCLE &amp; GOVERNANCE</text>
+
+  <rect x="40" y="455" width="200" height="36" rx="6" fill="#fff" stroke="#38a169" stroke-width="1"/>
+  <text x="140" y="477" text-anchor="middle" fill="#2d3748" font-size="11" font-weight="500">5. Lifecycle Management</text>
+
+  <rect x="260" y="455" width="200" height="36" rx="6" fill="#fff" stroke="#38a169" stroke-width="1"/>
+  <text x="360" y="477" text-anchor="middle" fill="#2d3748" font-size="11" font-weight="500">6. Decision Making</text>
+
+  <rect x="480" y="455" width="200" height="36" rx="6" fill="#fff" stroke="#38a169" stroke-width="1"/>
+  <text x="580" y="477" text-anchor="middle" fill="#2d3748" font-size="11" font-weight="500">7. Appendices</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#718096"/>
+    </marker>
+  </defs>
+</svg>

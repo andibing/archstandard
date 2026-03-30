@@ -1,6 +1,6 @@
 ---
 title: "6. Decision Making & Governance"
-description: RAID log, architectural decisions, guardrail exceptions, and compliance traceability.
+description: Constraints, assumptions, risks, dependencies, issues, architectural decisions, and compliance traceability.
 ---
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
@@ -10,13 +10,7 @@ description: RAID log, architectural decisions, guardrail exceptions, and compli
 
 This section captures the decision-making context for the architecture: the constraints and assumptions that shaped it, the risks and dependencies that must be managed, the key decisions made (and why), any exceptions to organisational standards, and the compliance evidence that demonstrates the design has been reviewed and approved.
 
-## 6.1 RAID Log
-
-<span class="maturity-indicator maturity-minimum">Minimum</span>
-
-The RAID log (Constraints, Assumptions, Risks, Dependencies, Issues) provides a structured approach to capturing and managing all factors that could affect the design. Each item should be tracked through to resolution with clear ownership and evidence.
-
-### 6.1.1 Constraints
+## 6.1 Constraints
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
@@ -37,7 +31,7 @@ Common constraints include:
 - **Time** — Fixed delivery deadlines, regulatory compliance dates
 </div>
 
-### 6.1.2 Assumptions
+## 6.2 Assumptions
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
@@ -60,7 +54,7 @@ Capture assumptions about:
 Open assumptions should be tracked actively. The owner is responsible for validating the assumption and providing evidence of closure.
 </div>
 
-### 6.1.3 Risks
+## 6.3 Risks
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
@@ -92,7 +86,7 @@ Consider risks related to:
 Mitigation strategies should be one of: **Accept** (business owner sign-off), **Mitigate** (reduce likelihood or impact), **Transfer** (insurance, contractual), or **Avoid** (change the design).
 </div>
 
-### 6.1.4 Dependencies
+## 6.4 Dependencies
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
@@ -113,7 +107,7 @@ Common dependencies include:
 - **Governance** — Approval gates, compliance sign-off, change advisory board
 </div>
 
-### 6.1.5 Issues
+## 6.5 Issues
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -123,7 +117,7 @@ Issues are problems that have already materialised and require resolution. Unlik
 |----|-------|----------|--------|-------|----------------|--------|---------------|
 | I-001 | *[describe the issue]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[person]* | *[resolution plan]* | Open / In Progress / Resolved | *[date]* |
 
-## 6.2 Guardrail Exceptions
+## 6.6 Guardrail Exceptions
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -150,17 +144,17 @@ Document any exceptions to organisational policies, standards, or guardrails:
 | Does the design materially change the organisation's technology risk profile? | Yes / No |
 | If yes, has this been evaluated with Risk and Controls teams? | Yes / No / N/A |
 
-## 6.3 Architectural Decisions Log
+## 6.7 Architectural Decisions Log
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
-Provide a summary index of all Architecture Decision Records. Full ADR details are in Section 3.6.2.
+Provide a summary index of all Architecture Decision Records. Full ADR details are in [Section 3.6.2](/standard/3-6-scenarios/#362-architecture-decision-records-adrs).
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
 | ADR-001 | *[title]* | Accepted / Proposed / Superseded | *[date]* | *[brief impact summary]* |
 
-## 6.4 Compliance Traceability
+## 6.8 Compliance Traceability
 
 <span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
 

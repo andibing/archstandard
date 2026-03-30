@@ -113,7 +113,7 @@ architecturalViews:
       - pattern: microservices          # microservices | monolith | modular-monolith | event-driven | cqrs | saga | strangler-fig | sidecar | api-gateway | bff | circuit-breaker | pub-sub | request-response | batch-processing | stream-processing | data-lake | data-mesh | other
         whereApplied: ""
         rationale: ""
-    qualityPillarRefs: []               # operational-excellence | reliability | performance | cost-optimisation | sustainability
+    qualityAttributeRefs: []               # operational-excellence | reliability | performance | cost-optimisation | sustainability
 
   # 3.2 Process View
   processView:
@@ -143,7 +143,7 @@ architecturalViews:
         version: ""
         authenticated: true
         rateLimited: false
-    qualityPillarRefs: []
+    qualityAttributeRefs: []
 
   # 3.3 Physical View
   physicalView:
@@ -203,7 +203,7 @@ architecturalViews:
         venue: ""
         autoScaleDown: false
     securityAgents: []                  # anti-malware | edr | vulnerability-management | dlp | hids | fim | other
-    qualityPillarRefs: []
+    qualityAttributeRefs: []
 
   # 3.4 Data View
   dataView:
@@ -230,7 +230,7 @@ architecturalViews:
         classification: internal        # public | internal | restricted | highly-restricted
         transferMethod: api             # api | sftp | email | message-queue | database-replication | file-share | manual | other
         encrypted: true
-    qualityPillarRefs: []
+    qualityAttributeRefs: []
 
   # 3.5 Security View
   securityView:
@@ -273,7 +273,7 @@ architecturalViews:
       siemTool: ""
       securityEventLogging: false
       intrusionDetection: false
-    qualityPillarRefs: []
+    qualityAttributeRefs: []
 
   # 3.6 Scenarios
   scenarios:
@@ -293,12 +293,12 @@ architecturalViews:
         decision: ""
         alternatives: ""
         consequences: ""
-        affectedPillars: []             # operational-excellence | reliability | performance | cost-optimisation | sustainability
+        affectedAttributes: []             # operational-excellence | reliability | performance | cost-optimisation | sustainability
 
 # ─────────────────────────────────────────────
-# Section 4: Quality Pillars
+# Section 4: Quality Attributes
 # ─────────────────────────────────────────────
-qualityPillars:
+qualityAttributes:
   operationalExcellence:
     loggingCentralised: false
     loggingTool: ""

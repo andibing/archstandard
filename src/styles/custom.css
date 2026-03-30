@@ -106,8 +106,8 @@
 .maturity-recommended { background: #fefcbf; color: #975a16; border: 1px solid #f6e05e; }
 .maturity-comprehensive { background: #c6f6d5; color: #276749; border: 1px solid #68d391; }
 
-/* Quality pillar callouts */
-.quality-pillar-ref {
+/* Quality attribute callouts */
+.quality-attribute-ref {
 	background: var(--sl-color-gray-6);
 	border-left: 3px solid var(--sl-color-accent);
 	padding: 0.75rem 1rem;

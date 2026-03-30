@@ -1,15 +1,17 @@
 ---
-title: "1. Overview"
+title: "Overview"
 description: "Scope, purpose, audience, and structural overview of ADS."
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import sectionMap from '../../../assets/section-map.svg';
 
 <Aside type="note" title="Documentation Depth">
 <span class="maturity-indicator maturity-minimum">Minimum</span> — This section SHALL be completed for all Solution Architecture Documents.
 </Aside>
 
-## 1.1 Purpose
+## Purpose
 
 This standard defines the required structure and content for **Solution Architecture Documents (SADs)**. The architectural views and quality attributes within a SAD constitute the **High Level Design (HLD)** of the solution.
 
@@ -21,7 +23,7 @@ A Solution Architecture Document conforming to this standard serves the followin
 4. **Reference** — Acts as a living document that accurately describes the current-state architecture
 5. **Evidence** — Demonstrates that the solution is well-architected against industry-recognised frameworks
 
-## 1.2 Scope
+## Scope
 
 This standard applies to the documentation of any technology solution architecture, regardless of:
 
@@ -30,7 +32,7 @@ This standard applies to the documentation of any technology solution architectu
 - **Industry** — the standard is organisation-agnostic and sector-neutral
 - **Lifecycle stage** — new builds, migrations, modernisations, or incremental changes
 
-## 1.3 Audience
+## Audience
 
 This standard is intended for use by:
 
@@ -43,7 +45,7 @@ This standard is intended for use by:
 | **Development Leads** | Section 3.1 (Logical View), Section 5 (Lifecycle) |
 | **Architecture Governance** | All sections — as a review and governance framework (e.g., ARB, design authority) |
 
-## 1.4 Document Structure
+## Document Structure
 
 A Solution Architecture Document conforming to ADS is organised into three tiers:
 
@@ -84,50 +86,9 @@ Supporting sections address how the solution is developed, operated, governed, a
 
 The diagram below shows how the three tiers work together. Architectural views describe *what* the solution is. Quality attributes assess *how well* it performs. Lifecycle and governance cover *how* it is built, run, and governed.
 
-<div class="section-map">
+<Image src={sectionMap} alt="Diagram showing the three tiers of the ADS standard: Tier 1 (Architectural Views: Logical, Integration, Physical, Data, Security, Scenarios), evaluated by Tier 2 (Quality Attributes: Operational Excellence, Reliability, Performance, Cost, Sustainability), supported by Tier 3 (Lifecycle Management, Decision Making, Appendices)" />
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    0. Document Control                          │
-│                    1. Executive Summary                         │
-│                    2. Stakeholders & Concerns                   │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ┌─── TIER 1: Architectural Views ────────────────────────┐     │
-│  │                                                        │     │
-│  │  3.1 Logical ──── 3.2 Integration ──── 3.3 Physical   │     │
-│  │       │                  │                    │        │     │
-│  │  3.4 Data ─────── 3.5 Security ─────── 3.6 Scenarios  │     │
-│  │                                                        │     │
-│  └────────────────────────────────────────────────────────┘     │
-│                          │                                      │
-│                    evaluated by                                  │
-│                          ▼                                      │
-│  ┌─── TIER 2: Quality Attributes (cross-cutting) ────────┐     │
-│  │                                                        │     │
-│  │  4.1 Ops        4.2 Reliability    4.3 Performance     │     │
-│  │  Excellence                                            │     │
-│  │  4.4 Cost       4.5 Sustainability                     │     │
-│  │                                                        │     │
-│  └────────────────────────────────────────────────────────┘     │
-│                          │                                      │
-│                    supported by                                  │
-│                          ▼                                      │
-│  ┌─── TIER 3: Lifecycle & Governance ────────────────────┐     │
-│  │                                                        │     │
-│  │  5. Lifecycle ──── 6. Decision Making ──── 7. Appendix │     │
-│  │  Management        & Governance            (Glossary,  │     │
-│  │  (Build, Deploy,   (RAID, ADRs,            References, │     │
-│  │   Operate, Retire)  Compliance)             Scoring)   │     │
-│  │                                                        │     │
-│  └────────────────────────────────────────────────────────┘     │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-</div>
-
-## 1.5 Documentation Depths
+## Documentation Depths
 
 Each section in this standard is assigned a documentation depth that defines when it SHALL, SHOULD, or MAY be completed:
 
@@ -139,14 +100,14 @@ Each section in this standard is assigned a documentation depth that defines whe
 
 This enables progressive adoption: begin with Minimum sections for early-stage designs, and expand to Comprehensive for production-critical and regulated systems.
 
-## 1.6 Conformance
+## Conformance
 
 A Solution Architecture Document **conforms** to this standard when:
 
 1. All sections marked <span class="maturity-indicator maturity-minimum">Minimum</span> are completed
 2. The document structure follows the section numbering and hierarchy defined herein
 3. Architectural views address the stakeholder concerns identified in Section 2
-4. Quality pillars are evaluated as cross-cutting lenses across the architectural views
+4. Quality attributes are evaluated as cross-cutting lenses across the architectural views
 5. The document is validated against the JSON Schema (ADS Schema v1.0.0) if machine-readable output is required
 
 A document that additionally completes all <span class="maturity-indicator maturity-recommended">Recommended</span> sections achieves **full conformance**.

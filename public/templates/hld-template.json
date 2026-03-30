@@ -83,14 +83,14 @@
       "diagrams": [],
       "components": [],
       "designPatterns": [],
-      "qualityPillarRefs": []
+      "qualityAttributeRefs": []
     },
     "processView": {
       "diagrams": [],
       "internalConnectivity": [],
       "externalIntegrations": [],
       "apis": [],
-      "qualityPillarRefs": []
+      "qualityAttributeRefs": []
     },
     "physicalView": {
       "diagrams": [],
@@ -132,7 +132,7 @@
       },
       "environments": [],
       "securityAgents": [],
-      "qualityPillarRefs": []
+      "qualityAttributeRefs": []
     },
     "dataView": {
       "dataStores": [],
@@ -142,7 +142,7 @@
       "dataSovereigntyRequired": "no",
       "dataSovereigntyDetails": "",
       "dataTransfers": [],
-      "qualityPillarRefs": []
+      "qualityAttributeRefs": []
     },
     "securityView": {
       "thirdPartyHosted": "no",
@@ -187,14 +187,14 @@
         "securityEventLogging": false,
         "intrusionDetection": false
       },
-      "qualityPillarRefs": []
+      "qualityAttributeRefs": []
     },
     "scenarios": {
       "useCases": [],
       "adrs": []
     }
   },
-  "qualityPillars": {
+  "qualityAttributes": {
     "operationalExcellence": {
       "loggingCentralised": false,
       "loggingTool": "",

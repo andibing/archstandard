@@ -15,7 +15,7 @@
     "executiveSummary": { "$ref": "#/$defs/executiveSummary" },
     "stakeholders": { "$ref": "#/$defs/stakeholders" },
     "architecturalViews": { "$ref": "#/$defs/architecturalViews" },
-    "qualityPillars": { "$ref": "#/$defs/qualityPillars" },
+    "qualityAttributes": { "$ref": "#/$defs/qualityPillars" },
     "lifecycleManagement": { "$ref": "#/$defs/lifecycleManagement" },
     "riskGovernance": { "$ref": "#/$defs/riskGovernance" },
     "appendices": { "$ref": "#/$defs/appendices" },
@@ -44,7 +44,7 @@
       "type": "string",
       "enum": ["minimum", "recommended", "comprehensive"]
     },
-    "qualityPillarRef": {
+    "qualityAttributeRef": {
       "type": "string",
       "enum": ["operational-excellence", "reliability", "performance", "cost-optimisation", "sustainability"]
     },
@@ -272,7 +272,7 @@
                 }
               }
             },
-            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
           }
         },
         "processView": {
@@ -340,7 +340,7 @@
                 }
               }
             },
-            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
           }
         },
         "physicalView": {
@@ -452,7 +452,7 @@
               "type": "array",
               "items": { "type": "string", "enum": ["anti-malware", "edr", "vulnerability-management", "dlp", "hids", "fim", "other"] }
             },
-            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
           }
         },
         "dataView": {
@@ -515,7 +515,7 @@
                 }
               }
             },
-            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
           }
         },
         "securityView": {
@@ -592,7 +592,7 @@
                 "intrusionDetection": { "type": "boolean" }
               }
             },
-            "qualityPillarRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
           }
         },
         "scenarios": {
@@ -631,7 +631,7 @@
                   "decision": { "type": "string" },
                   "alternatives": { "type": "string" },
                   "consequences": { "type": "string" },
-                  "affectedPillars": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
+                  "affectedAttributes": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } }
                 }
               }
             }
@@ -639,9 +639,9 @@
         }
       }
     },
-    "qualityPillars": {
+    "qualityAttributes": {
       "type": "object",
-      "description": "Section 4: Quality Pillars",
+      "description": "Section 4: Quality Attributes",
       "properties": {
         "operationalExcellence": {
           "type": "object",
@@ -716,7 +716,7 @@
           "items": {
             "type": "object",
             "properties": {
-              "pillarsInvolved": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } },
+              "attributesInvolved": { "type": "array", "items": { "$ref": "#/$defs/qualityPillarRef" } },
               "description": { "type": "string" },
               "chosenPriority": { "$ref": "#/$defs/qualityPillarRef" },
               "rationale": { "type": "string" }

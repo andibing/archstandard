@@ -14,30 +14,30 @@ The ADS defines a formal **JSON Schema** (v1.0.0) that enables:
 
 ## Schema Location
 
-The schema file is located at [`/schema/ads-001.schema.json`](https://github.com/archstandard/ads-001/blob/main/schema/ads-001.schema.json) in the repository.
+The schema file is located at [`/schema/ads.schema.json`](https://github.com/archstandard/ads/blob/main/schema/ads.schema.json) in the repository.
 
-**Schema ID:** `https://archstandard.org/schema/v1.0.0/ads-001.schema.json`
+**Schema ID:** `https://archstandard.org/schema/v1.0.0/ads.schema.json`
 
 ## Schema Structure
 
 The schema maps directly to the standard's sections:
 
 ```
-ads-001.schema.json
+ads.schema.json
 ├── schemaVersion          "1.0.0"
 ├── documentControl        Section 0: metadata, history, contributors
 ├── executiveSummary       Section 1: overview, context, scope, decisions
 ├── stakeholders           Section 2: register, concerns, compliance
 ├── architecturalViews     Section 3
 │   ├── logicalView        3.1: components, services, patterns
-│   ├── processView        3.2: connectivity, integrations, APIs
+│   ├── integrationView     3.2: connectivity, integrations, APIs
 │   ├── physicalView       3.3: hosting, compute, networking, environments
 │   ├── dataView           3.4: data stores, classification, privacy
 │   ├── securityView       3.5: IAM, encryption, monitoring
 │   └── scenarios          3.6: use cases, ADRs
-├── qualityPillars         Section 4: quality attributes + tradeoffs
+├── qualityAttributes      Section 4: quality attributes + tradeoffs
 ├── lifecycleManagement    Section 5: SDLC, operations, exit planning
-├── riskGovernance         Section 6: risks, exceptions, compliance
+├── decisionMaking         Section 6: constraints, risks, decisions, compliance
 ├── appendices             Section 7: glossary, references, approvals
 ├── organisationProfile    Organisation-specific configuration
 └── customSections[]       Extension point for additional sections
@@ -59,7 +59,7 @@ Any section can reference applicable quality attributes:
 
 ```json
 {
-  "qualityPillarRefs": ["reliability", "performance", "cost-optimisation"]
+  "qualityAttributeRefs": ["reliability", "performance", "cost-optimisation"]
 }
 ```
 
@@ -120,7 +120,7 @@ The schema enforces only the **Minimum** documentation depth as required:
 | `documentControl.metadata` | 0. Document Control |
 | `executiveSummary.solutionOverview` | 1. Executive Summary |
 | `architecturalViews` | 3. Architectural Views |
-| `riskGovernance.designRisks` | 6. Decision Making & Governance |
+| `decisionMakingGovernance.risks` | 6. Decision Making & Governance |
 
 All other fields are optional, allowing progressive adoption from Minimum through Comprehensive documentation depths.
 
@@ -128,8 +128,8 @@ All other fields are optional, allowing progressive adoption from Minimum throug
 
 ```bash
 # Using ajv-cli
-npx ajv validate -s schema/ads-001.schema.json -d my-hld.json
+npx ajv validate -s schema/ads.schema.json -d my-hld.json
 
 # Using Python jsonschema
-python -m jsonschema -i my-hld.json schema/ads-001.schema.json
+python -m jsonschema -i my-hld.json schema/ads.schema.json
 ```

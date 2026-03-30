@@ -381,7 +381,7 @@
 
 ---
 
-## 4. Quality Pillars
+## 4. Quality Attributes
 
 ### 4.1 Operational Excellence
 
