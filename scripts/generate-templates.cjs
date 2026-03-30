@@ -68,9 +68,9 @@ const SCORING_SECTIONS = [
   '6. Decision Making',
 ];
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Schema Resolution
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 
 function loadSchema() {
   const raw = fs.readFileSync(SCHEMA_PATH, 'utf-8');
@@ -96,9 +96,9 @@ function resolveNode(schema, node) {
   return node;
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // JSON Template Generation
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 
 function generateDefaultValue(schema, node) {
   node = resolveNode(schema, node);
@@ -166,9 +166,9 @@ function generateJsonTemplate(schema) {
   return JSON.stringify(template, null, 2);
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // YAML Template Generation
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 
 function enumComment(node, schema) {
   node = resolveNode(schema, node);
@@ -265,9 +265,9 @@ function generateYamlTemplate(schema) {
     const section = SECTION_MAP[key];
     if (section) {
       lines.push('');
-      lines.push('# ' + '─'.repeat(45));
+      lines.push('# ' + '-'.repeat(45));
       lines.push(`# Section ${section.num}: ${section.title}`);
-      lines.push('# ' + '─'.repeat(45));
+      lines.push('# ' + '-'.repeat(45));
     }
 
     generateYamlLines(schema, prop, key, 0, lines);
@@ -275,11 +275,11 @@ function generateYamlTemplate(schema) {
 
   // Add compliance scoring
   lines.push('');
-  lines.push('# ' + '─'.repeat(45));
+  lines.push('# ' + '-'.repeat(45));
   lines.push('# Compliance Scoring (0-5 per section)');
   lines.push('# 0=Not Addressed, 1=Acknowledged, 2=Partial,');
   lines.push('# 3=Mostly Addressed, 4=Fully Addressed, 5=Exemplary');
-  lines.push('# ' + '─'.repeat(45));
+  lines.push('# ' + '-'.repeat(45));
   lines.push('complianceScoring:');
   lines.push('  assessments:');
   for (const section of SCORING_SECTIONS) {
@@ -296,9 +296,9 @@ function generateYamlTemplate(schema) {
 
   // Add commented-out organisation profile
   lines.push('');
-  lines.push('# ' + '─'.repeat(45));
+  lines.push('# ' + '-'.repeat(45));
   lines.push('# Organisation Profile (OPTIONAL)');
-  lines.push('# ' + '─'.repeat(45));
+  lines.push('# ' + '-'.repeat(45));
   lines.push('# organisationProfile:');
   lines.push('#   organisationName: ""');
   lines.push('#   tooling:');
@@ -311,9 +311,9 @@ function generateYamlTemplate(schema) {
   return lines.join('\n');
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Markdown Template Generation
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 
 function enumToCheckboxes(node, schema) {
   node = resolveNode(schema, node);
@@ -321,7 +321,7 @@ function enumToCheckboxes(node, schema) {
   return node.enum.map(v => {
     // Convert kebab-case to Title Case
     const label = v.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    return `☐ ${label}`;
+    return `[ ] ${label}`;
   }).join(' ');
 }
 
@@ -347,7 +347,7 @@ function generateMdTable(schema, objectNode, titlePrefix) {
       if (resolved && resolved.enum) {
         lines.push(`| **${label}** | ${enumToCheckboxes(prop, schema)} |`);
       } else if (resolved && resolved.type === 'boolean') {
-        lines.push(`| **${label}** | ☐ Yes ☐ No |`);
+        lines.push(`| **${label}** | [ ] Yes [ ] No |`);
       } else {
         lines.push(`| **${label}** | |`);
       }
@@ -422,9 +422,9 @@ function generateMarkdownTemplate(schema) {
   lines.push('');
   lines.push('| Role | Name | Date | Decision |');
   lines.push('|------|------|------|----------|');
-  lines.push('| Solution Architect | | | ☐ Approved ☐ Approved with Conditions ☐ Rejected ☐ Deferred |');
-  lines.push('| Security Architect | | | ☐ Approved ☐ Approved with Conditions ☐ Rejected ☐ Deferred |');
-  lines.push('| ARB / Design Authority | | | ☐ Approved ☐ Approved with Conditions ☐ Rejected ☐ Deferred |');
+  lines.push('| Solution Architect | | | [ ] Approved [ ] Approved with Conditions [ ] Rejected [ ] Deferred |');
+  lines.push('| Security Architect | | | [ ] Approved [ ] Approved with Conditions [ ] Rejected [ ] Deferred |');
+  lines.push('| ARB / Design Authority | | | [ ] Approved [ ] Approved with Conditions [ ] Rejected [ ] Deferred |');
   lines.push('');
 
   return lines.join('\n');
@@ -461,7 +461,7 @@ function generateMdSection(schema, node, lines, headingLevel, contextKey) {
           if (propResolved && propResolved.enum) {
             lines.push(`| **${propLabel}** | ${enumToCheckboxes(propVal, schema)} |`);
           } else if (propResolved && propResolved.type === 'boolean') {
-            lines.push(`| **${propLabel}** | ☐ Yes ☐ No |`);
+            lines.push(`| **${propLabel}** | [ ] Yes [ ] No |`);
           } else if (propResolved && propResolved.type === 'integer') {
             lines.push(`| **${propLabel}** | |`);
           } else {
@@ -486,7 +486,7 @@ function generateMdSection(schema, node, lines, headingLevel, contextKey) {
         const cells = cols.map(c => {
           const colNode = resolveNode(schema, itemNode.properties[c]);
           if (colNode && colNode.enum) return enumToCheckboxes(itemNode.properties[c], schema);
-          if (colNode && colNode.type === 'boolean') return '☐ Yes ☐ No';
+          if (colNode && colNode.type === 'boolean') return '[ ] Yes [ ] No';
           return '';
         });
         lines.push(`| ${cells.join(' | ')} |`);
@@ -578,9 +578,9 @@ function getDisplayName(key, context) {
     .trim();
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Main
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 
 function main() {
   console.log('Loading schema from', SCHEMA_PATH);

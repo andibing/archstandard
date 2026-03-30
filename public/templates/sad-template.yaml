@@ -8,9 +8,9 @@
 
 schemaVersion: 1.0.0
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Section 0: Document Control
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 documentControl:  # Section 0: Document Control
   metadata:
     title: ""
@@ -36,9 +36,9 @@ documentControl:  # Section 0: Document Control
   purpose: ""
   scope: ""
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Section 1: Executive Summary
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 executiveSummary:  # Section 1: Executive Summary
   solutionOverview: ""
   businessContext:
@@ -74,9 +74,9 @@ executiveSummary:  # Section 1: Executive Summary
     targetGoLive: ""  # YYYY-MM-DD
   businessCriticality: tier-1-critical  # tier-1-critical | tier-2-high | tier-3-medium | tier-4-low | tier-5-minimal
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Section 2: Stakeholders & Concerns
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 stakeholders:  # Section 2: Stakeholders & Concerns
   register:
     - stakeholder: ""
@@ -92,9 +92,9 @@ stakeholders:  # Section 2: Stakeholders & Concerns
         applicability: ""
         designImpact: ""
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Section 3: Architectural Views
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 architecturalViews:  # Section 3: Architectural Views
   logicalView:  # 3.1 Logical View
     diagrams: []
@@ -270,9 +270,9 @@ architecturalViews:  # Section 3: Architectural Views
         consequences: ""
         affectedAttributes: []
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Section 4: Quality Attributes
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 qualityAttributes:  # Section 4: Quality Attributes
   operationalExcellence:
     loggingCentralised: false
@@ -331,9 +331,9 @@ qualityAttributes:  # Section 4: Quality Attributes
       chosenPriority: operational-excellence  # operational-excellence | reliability | performance | cost-optimisation | sustainability
       rationale: ""
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Section 5: Lifecycle Management
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 lifecycleManagement:  # Section 5: Lifecycle Management
   internallyDeveloped: false
   sourceControl: github  # github | gitlab | bitbucket | azure-devops | svn | other | none
@@ -368,9 +368,9 @@ lifecycleManagement:  # Section 5: Lifecycle Management
   exitPlanDocumented: false
   vendorLockInLevel: none  # none | low | moderate | high | critical
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Section 6: Decision Making & Governance
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 riskGovernance:  # Section 6: Decision Making & Governance
   constraints:  # Fixed limitations the design must work within
     - id: ""  # pattern: ^C-\d+$
@@ -425,9 +425,9 @@ riskGovernance:  # Section 6: Decision Making & Governance
       evidenceSection: ""
       complianceStatus: compliant  # compliant | partially-compliant | non-compliant | not-applicable
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Section 7: Appendices
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 appendices:  # Section 7: Appendices
   glossary:
     - term: ""
@@ -443,11 +443,11 @@ appendices:  # Section 7: Appendices
       date: ""  # YYYY-MM-DD
       decision: approved  # approved | approved-with-conditions | rejected | deferred
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Compliance Scoring (0-5 per section)
 # 0=Not Addressed, 1=Acknowledged, 2=Partial,
 # 3=Mostly Addressed, 4=Fully Addressed, 5=Exemplary
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 complianceScoring:
   assessments:
     - section: "1. Executive Summary"
@@ -525,9 +525,9 @@ complianceScoring:
   overallDate: ""
   overallNotes: ""
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # Organisation Profile (OPTIONAL)
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # organisationProfile:
 #   organisationName: ""
 #   tooling:
