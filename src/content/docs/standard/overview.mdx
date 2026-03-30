@@ -80,6 +80,53 @@ Five cross-cutting quality attributes are evaluated **across** all architectural
 
 Supporting sections address how the solution is developed, operated, governed, and retired throughout its lifecycle.
 
+### How the Sections Relate
+
+The diagram below shows how the three tiers work together. Architectural views describe *what* the solution is. Quality attributes assess *how well* it performs. Lifecycle and governance cover *how* it is built, run, and governed.
+
+<div class="section-map">
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    0. Document Control                          │
+│                    1. Executive Summary                         │
+│                    2. Stakeholders & Concerns                   │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ┌─── TIER 1: Architectural Views ────────────────────────┐     │
+│  │                                                        │     │
+│  │  3.1 Logical ──── 3.2 Integration ──── 3.3 Physical   │     │
+│  │       │                  │                    │        │     │
+│  │  3.4 Data ─────── 3.5 Security ─────── 3.6 Scenarios  │     │
+│  │                                                        │     │
+│  └────────────────────────────────────────────────────────┘     │
+│                          │                                      │
+│                    evaluated by                                  │
+│                          ▼                                      │
+│  ┌─── TIER 2: Quality Attributes (cross-cutting) ────────┐     │
+│  │                                                        │     │
+│  │  4.1 Ops        4.2 Reliability    4.3 Performance     │     │
+│  │  Excellence                                            │     │
+│  │  4.4 Cost       4.5 Sustainability                     │     │
+│  │                                                        │     │
+│  └────────────────────────────────────────────────────────┘     │
+│                          │                                      │
+│                    supported by                                  │
+│                          ▼                                      │
+│  ┌─── TIER 3: Lifecycle & Governance ────────────────────┐     │
+│  │                                                        │     │
+│  │  5. Lifecycle ──── 6. Decision Making ──── 7. Appendix │     │
+│  │  Management        & Governance            (Glossary,  │     │
+│  │  (Build, Deploy,   (RAID, ADRs,            References, │     │
+│  │   Operate, Retire)  Compliance)             Scoring)   │     │
+│  │                                                        │     │
+│  └────────────────────────────────────────────────────────┘     │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+</div>
+
 ## 1.5 Documentation Depths
 
 Each section in this standard is assigned a documentation depth that defines when it SHALL, SHOULD, or MAY be completed:

@@ -65,6 +65,49 @@ ADS is designed to work equally well as:
 
 The JSON Schema is the single source of truth. All output formats are derived from it, ensuring consistency regardless of how the SAD is authored or consumed.
 
+## Accessibility & Cognitive Load
+
+ADS is designed to be usable by all architects, including those who are neurodivergent. The following principles reduce cognitive load and improve readability:
+
+### Structural Consistency
+
+Every section in the standard follows the same pattern:
+
+1. **Purpose** — a short statement explaining what this section covers and why
+2. **Tables / Fields** — structured, atomic fields to complete
+3. **Guidance** — contextual help in a clearly marked box
+
+This predictable structure means you always know what to expect when you open a new section.
+
+### Reducing Cognitive Load
+
+| Principle | How ADS Implements It |
+|-----------|----------------------|
+| **Atomic fields over blank pages** | Checkboxes, enums, and structured tables replace open-ended text fields. You select rather than compose. |
+| **Progressive disclosure** | Three documentation depths (Minimum → Recommended → Comprehensive) let you start simple and add detail only when needed. |
+| **One idea per row** | Tables present one field per row rather than combining multiple concepts. |
+| **Consistent terminology** | The [glossary](/standard/7-appendices/#71-glossary) defines all acronyms. Terms are used consistently throughout. |
+| **Visual markers** | Colour-coded depth indicators (<span class="maturity-indicator maturity-minimum">Minimum</span> <span class="maturity-indicator maturity-recommended">Recommended</span> <span class="maturity-indicator maturity-comprehensive">Comprehensive</span>) let you quickly see what's required. |
+| **Clear scoring** | The 0–5 compliance scale provides unambiguous, numeric feedback rather than subjective prose. |
+
+### Acronyms & Terminology
+
+All acronyms used in ADS are defined in the [glossary](/standard/7-appendices/#71-glossary). When completing a SAD:
+
+- Define all acronyms on first use within the document
+- Include a glossary (Section 7.1) in every SAD
+- Avoid jargon where a plain-language alternative exists
+
+### Readability Guidelines for SAD Authors
+
+When writing free-text content in a SAD:
+
+- Use short sentences. One idea per sentence.
+- Use bullet points rather than long paragraphs.
+- Use active voice ("The service sends data to...") not passive ("Data is sent by the service to...").
+- Use diagrams to complement text, not replace it.
+- Ensure diagrams have alt-text descriptions for screen readers.
+
 ## Extensibility Without Ambiguity
 
 When organisations add custom sections via the `customSections` extension point, they SHOULD follow the same atomic field principles:

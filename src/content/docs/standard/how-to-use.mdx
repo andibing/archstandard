@@ -25,34 +25,40 @@ These keywords map to the standard's documentation depths as follows:
 | <span class="maturity-indicator maturity-recommended">Recommended</span> | SHOULD | Production approval |
 | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | MAY | Enterprise review |
 
-## 2.2 Adopting the Standard
+## 2.2 Getting Started
 
-### Step 1: Determine Your Maturity Target
+Use the workflow below to complete a Solution Architecture Document. Each step builds on the previous one.
 
-Select the documentation depth appropriate for your project phase and governance requirements:
+<div class="workflow-steps">
 
-- **Minimum** — For early-stage designs, proofs of concept, or development/test architecture reviews. Complete all sections marked <span class="maturity-indicator maturity-minimum">Minimum</span>.
-- **Recommended** — For production-bound designs requiring formal governance approval. Complete all sections marked <span class="maturity-indicator maturity-minimum">Minimum</span> and <span class="maturity-indicator maturity-recommended">Recommended</span>.
-- **Comprehensive** — For critical, regulated, or enterprise-scale systems. Complete all sections.
+**Step 1 — Choose your depth.** Pick the documentation depth for your project:
+- <span class="maturity-indicator maturity-minimum">Minimum</span> — Early-stage designs, proofs of concept, dev/test reviews
+- <span class="maturity-indicator maturity-recommended">Recommended</span> — Production-bound designs requiring governance approval
+- <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> — Critical, regulated, or enterprise-scale systems
 
-### Step 2: Complete the Relevant Sections
+**Step 2 — Set the context** (Sections 0–2). Start with document control, the executive summary, and stakeholders. This frames everything that follows.
 
-Work through each section of the standard in order. Sections above your target documentation depth SHOULD be **omitted entirely** rather than included with empty or "Not Applicable" content. This keeps the document focused and avoids template bloat.
+**Step 3 — Describe the architecture** (Section 3). Work through each architectural view. Start with the Logical View (what the solution does), then Physical View (where it runs), then fill in the remaining views.
 
-Where a section at or below your target depth is genuinely not relevant to the solution (e.g., IoT Devices for a purely cloud-based API), it SHOULD also be omitted. Only include sections that add value to the reader.
+**Step 4 — Assess quality** (Section 4). Evaluate the design against each quality attribute. Document any tradeoffs between them.
 
-### Step 3: Evaluate Against Quality Attributes
+**Step 5 — Plan the lifecycle** (Section 5). Document how the solution is built, deployed, operated, and eventually retired.
 
-After completing the architectural views (Section 3), evaluate the design against each Quality Attribute (Section 4):
+**Step 6 — Capture decisions and risks** (Section 6). Complete the RAID log and record key architecture decisions.
 
-1. For each quality attribute, assess whether the design adequately addresses the concerns
-2. Document any tradeoffs between quality attributes and the rationale for the chosen balance
-3. Cross-reference specific quality attribute requirements from within the architectural views
+**Step 7 — Score and submit** (Sections 7 + 2.6). Complete the compliance scoring table, add glossary/references, and submit for governance review.
 
-### Step 4: Validate and Submit for Review
+</div>
 
-1. If using machine-readable output, validate the document against the JSON Schema (see [Schema](/standard/schema/))
-2. Submit for governance review at the appropriate gate for your documentation depth
+<Aside type="tip" title="Suggested completion order">
+You do not have to complete sections in strict numerical order. Many architects prefer to start with the Physical View (3.3) or Security View (3.5) first, then work backwards to the Logical View. The key is that all sections at your chosen depth are completed before submission.
+</Aside>
+
+### What to include and what to skip
+
+- **Omit** sections above your target depth entirely. Do not include them with empty or "N/A" content.
+- **Omit** sections below your target depth that are genuinely not relevant (e.g., IoT Devices for a cloud API).
+- **Only include** sections that add value to the reader.
 
 ## 2.3 Document Lifecycle
 
