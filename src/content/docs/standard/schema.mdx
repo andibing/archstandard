@@ -37,7 +37,7 @@ ads.schema.json
 │   └── scenarios          3.6: use cases, ADRs
 ├── qualityAttributes      Section 4: quality attributes + tradeoffs
 ├── lifecycleManagement    Section 5: SDLC, operations, exit planning
-├── decisionMaking         Section 6: constraints, risks, decisions, compliance
+├── riskGovernance         Section 6: constraints, risks, decisions, compliance
 ├── appendices             Section 7: glossary, references, approvals
 ├── organisationProfile    Organisation-specific configuration
 └── customSections[]       Extension point for additional sections
@@ -47,7 +47,7 @@ ads.schema.json
 
 ### Documentation Depths
 
-Sections use a `maturityLevel` enum with three values:
+Sections use a `maturityLevel` enum (the schema field name for what the standard calls "Documentation Depth") with three values:
 
 ```json
 { "type": "string", "enum": ["minimum", "recommended", "comprehensive"] }
@@ -120,7 +120,7 @@ The schema enforces only the **Minimum** documentation depth as required:
 | `documentControl.metadata` | 0. Document Control |
 | `executiveSummary.solutionOverview` | 1. Executive Summary |
 | `architecturalViews` | 3. Architectural Views |
-| `decisionMakingGovernance.risks` | 6. Decision Making & Governance |
+| `riskGovernance.risks` | 6. Decision Making & Governance |
 
 All other fields are optional, allowing progressive adoption from Minimum through Comprehensive documentation depths.
 

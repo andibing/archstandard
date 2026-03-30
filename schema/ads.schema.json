@@ -132,7 +132,7 @@
     "executiveSummary": {
       "type": "object",
       "description": "Section 1: Executive Summary",
-      "required": ["solutionOverview", "businessCriticality"],
+      "required": ["solutionOverview"],
       "properties": {
         "solutionOverview": { "type": "string" },
         "businessContext": {
@@ -202,7 +202,7 @@
               "concerns": { "type": "array", "items": { "type": "string" } },
               "relevantViews": {
                 "type": "array",
-                "items": { "type": "string", "enum": ["logical", "process", "physical", "data", "security", "scenarios"] }
+                "items": { "type": "string", "enum": ["logical", "integration", "physical", "data", "security", "scenarios"] }
               }
             }
           }
@@ -275,9 +275,9 @@
             "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityAttributeRef" } }
           }
         },
-        "processView": {
+        "integrationView": {
           "type": "object",
-          "description": "3.2 Process View",
+          "description": "3.2 Integration & Data Flow View",
           "properties": {
             "diagrams": { "type": "array", "items": { "type": "string" } },
             "internalConnectivity": {
@@ -612,7 +612,7 @@
                   "mainFlow": { "type": "string" },
                   "viewsInvolved": {
                     "type": "array",
-                    "items": { "type": "string", "enum": ["logical", "process", "physical", "data", "security"] }
+                    "items": { "type": "string", "enum": ["logical", "integration", "physical", "data", "security"] }
                   }
                 }
               }
@@ -753,7 +753,7 @@
     },
     "riskGovernance": {
       "type": "object",
-      "description": "Section 6: Decision Making Decision Making & Governance (RAID log) Governance (RAID log)",
+      "description": "Section 6: Decision Making & Governance",
       "required": ["risks"],
       "properties": {
         "constraints": {

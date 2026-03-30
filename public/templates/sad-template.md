@@ -21,7 +21,7 @@
 | **Status** | ☐ Draft ☐ In Review ☐ Approved ☐ Superseded |
 | **Created Date** | |
 | **Last Updated** | |
-| **Classification** | ☐ Public ☐ Internal ☐ Confidential ☐ Restricted |
+| **Classification** | ☐ Public ☐ Internal ☐ Restricted ☐ Highly Restricted |
 
 ### 0.2 Change History
 
@@ -81,6 +81,10 @@
 **Out of Scope:**
 -
 
+### 1.5 Current State / As-Is Architecture
+
+*[Describe current-state architecture if replacing/modifying existing systems. Omit for greenfield.]*
+
 ### 1.6 Key Decisions & Constraints
 
 | Decision | Constraint Type | Rationale | Reversibility |
@@ -111,7 +115,7 @@
 
 | Stakeholder | Role Type | Key Concerns | Relevant Views |
 |-------------|-----------|--------------|----------------|
-| | ☐ Business Owner ☐ Solution Architect ☐ Enterprise Architect ☐ Security Architect ☐ Data Architect ☐ Infrastructure Engineer ☐ Developer ☐ Operations/SRE ☐ Compliance ☐ End User ☐ External Customer ☐ Other | | ☐ Logical ☐ Process ☐ Physical ☐ Data ☐ Security ☐ Scenarios |
+| | ☐ Business Owner ☐ Solution Architect ☐ Enterprise Architect ☐ Security Architect ☐ Data Architect ☐ Infrastructure Engineer ☐ Developer ☐ Operations/SRE ☐ Compliance ☐ End User ☐ External Customer ☐ Other | | ☐ Logical ☐ Integration & Data Flow ☐ Physical ☐ Data ☐ Security ☐ Scenarios |
 
 ### 2.2 Compliance & Regulatory Context
 
@@ -145,7 +149,7 @@
 
 ---
 
-### 3.2 Process View
+### 3.2 Integration & Data Flow View
 
 #### Data Flow Diagrams
 
@@ -363,7 +367,7 @@
 | **Actors** | |
 | **Trigger** | |
 | **Main Flow** | |
-| **Views Involved** | ☐ Logical ☐ Process ☐ Physical ☐ Data ☐ Security |
+| **Views Involved** | ☐ Logical ☐ Integration & Data Flow ☐ Physical ☐ Data ☐ Security |
 
 #### Architecture Decision Records
 
@@ -377,7 +381,7 @@
 | **Decision** | |
 | **Alternatives** | |
 | **Consequences** | |
-| **Affected Pillars** | ☐ Ops Excellence ☐ Reliability ☐ Performance ☐ Cost ☐ Sustainability |
+| **Affected Quality Attributes** | ☐ Ops Excellence ☐ Reliability ☐ Performance ☐ Cost ☐ Sustainability |
 
 ---
 
@@ -457,9 +461,9 @@
 | Workload pattern | ☐ Constant ☐ Variable (Predictable) ☐ Variable (Unpredictable) |
 | Continuous availability required? | ☐ Yes ☐ No |
 
-### Pillar Tradeoffs
+### Quality Attribute Tradeoffs
 
-| Pillars Involved | Description | Chosen Priority | Rationale |
+| Quality Attributes Involved | Description | Chosen Priority | Rationale |
 |-----------------|-------------|----------------|-----------|
 | | | | |
 
@@ -518,37 +522,37 @@
 
 ## 6. Decision Making & Governance
 
-### 6.1.1 Constraints
+### 6.1 Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
 | C-001 | | ☐ Regulatory ☐ Technical ☐ Commercial ☐ Organisational ☐ Time | | |
 
-### 6.1.2 Assumptions
+### 6.2 Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
 | A-001 | | | ☐ High ☐ Medium ☐ Low | ☐ Open ☐ Closed | | |
 
-### 6.1.3 Risks
+### 6.3 Risks
 
 | ID | Risk Event | Category | Severity | Likelihood | Mitigation Strategy | Mitigation Plan | Residual Risk | Owner | Last Assessed |
 |----|-----------|----------|----------|-----------|-------------------|-----------------|--------------|-------|---------------|
 | R-001 | | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial ☐ Compliance | ☐ High ☐ Medium ☐ Low | ☐ High ☐ Medium ☐ Low | ☐ Accept ☐ Mitigate ☐ Transfer ☐ Avoid | | ☐ High ☐ Medium ☐ Low | | |
 
-### 6.1.4 Dependencies
+### 6.4 Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
 | D-001 | | ☐ Inbound ☐ Outbound | ☐ Committed ☐ Not Committed ☐ Resolved | | | |
 
-### 6.1.5 Issues
+### 6.5 Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
 | I-001 | | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial | ☐ High ☐ Medium ☐ Low | | | ☐ Open ☐ In Progress ☐ Resolved | |
 
-### 6.2 Guardrail Exceptions
+### 6.6 Guardrail Exceptions
 
 | Question | Response |
 |----------|----------|
@@ -557,7 +561,7 @@
 | Process exceptions? | ☐ Yes ☐ No ☐ N/A |
 | Risk profile impact? | ☐ Yes ☐ No ☐ N/A |
 
-### 6.3 Compliance Traceability
+### 6.7 Compliance Traceability
 
 | Standard | Requirement | How Satisfied | Evidence Section | Status |
 |----------|-------------|--------------|-----------------|--------|

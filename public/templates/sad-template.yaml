@@ -84,7 +84,7 @@ stakeholders:
     - stakeholder: ""
       roleType: solution-architect      # business-owner | solution-architect | enterprise-architect | security-architect | data-architect | infrastructure-engineer | developer | operations-sre | compliance | project-manager | vendor | end-user | external-customer | other
       concerns: []
-      relevantViews: []                 # logical | process | physical | data | security | scenarios
+      relevantViews: []                 # logical | integration | physical | data | security | scenarios
   compliance:
     supportsRegulatedActivities: "no"   # yes | no | not-applicable
     regulatedActivityDetails: ""
@@ -115,8 +115,8 @@ architecturalViews:
         rationale: ""
     qualityAttributeRefs: []               # operational-excellence | reliability | performance | cost-optimisation | sustainability
 
-  # 3.2 Process View
-  processView:
+  # 3.2 Integration & Data Flow View
+  integrationView:
     diagrams: []
     internalConnectivity:
       - source: ""
@@ -283,7 +283,7 @@ architecturalViews:
         actors: []
         trigger: ""
         mainFlow: ""
-        viewsInvolved: []               # logical | process | physical | data | security
+        viewsInvolved: []               # logical | integration | physical | data | security
     adrs:
       - id: ADR-001
         title: ""

@@ -85,7 +85,7 @@
       "designPatterns": [],
       "qualityAttributeRefs": []
     },
-    "processView": {
+    "integrationView": {
       "diagrams": [],
       "internalConnectivity": [],
       "externalIntegrations": [],
