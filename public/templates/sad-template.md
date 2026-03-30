@@ -21,7 +21,7 @@
 | **Status** | ☐ Draft ☐ In Review ☐ Approved ☐ Superseded |
 | **Created Date** | |
 | **Last Updated** | |
-| **Classification** | ☐ Public ☐ Internal ☐ Restricted ☐ Highly Restricted |
+| **Classification** | ☐ Public ☐ Internal ☐ Confidential ☐ Restricted |
 
 ### 0.2 Change History
 

@@ -61,6 +61,7 @@ executiveSummary:
     - ""                                # List of in-scope items
   outOfScope:
     - ""                                # List of out-of-scope items
+  currentState: ""                      # Describe current-state architecture if replacing/modifying existing systems. Omit for greenfield.
   keyDecisions:
     - decision: ""
       constraintType: technical         # technical | organisational | financial | regulatory | time | vendor | other

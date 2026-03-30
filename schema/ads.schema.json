@@ -150,8 +150,31 @@
             }
           }
         },
+        "strategicAlignment": {
+          "type": "object",
+          "description": "Section 1.3: Strategic alignment and reuse of shared services",
+          "properties": {
+            "organisationStrategySupported": { "type": "string" },
+            "reviewedAgainstCapabilityModel": { "$ref": "#/$defs/yesNoNa" },
+            "duplicatesExistingCapability": { "$ref": "#/$defs/yesNoNa" },
+            "duplicatesJustification": { "type": "string" },
+            "sharedServiceReuse": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "capability": { "type": "string" },
+                  "sharedService": { "type": "string" },
+                  "reused": { "type": "boolean" },
+                  "justification": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
         "inScope": { "type": "array", "items": { "type": "string" } },
         "outOfScope": { "type": "array", "items": { "type": "string" } },
+        "currentState": { "type": "string", "description": "Section 1.5: Current-state / As-Is architecture. Omit for greenfield solutions." },
         "keyDecisions": {
           "type": "array",
           "items": {
@@ -688,7 +711,24 @@
               "enum": ["load-testing", "stress-testing", "soak-testing", "spike-testing", "none"]
             },
             "cachingUsed": { "type": "boolean" },
-            "cdnUsed": { "type": "boolean" }
+            "cdnUsed": { "type": "boolean" },
+            "growthProjections": {
+              "type": "object",
+              "description": "Capacity and growth projections over 1, 3, and 5 years",
+              "properties": {
+                "currentUsers": { "type": "integer" },
+                "year1Users": { "type": "integer" },
+                "year3Users": { "type": "integer" },
+                "year5Users": { "type": "integer" },
+                "currentDataVolume": { "type": "string" },
+                "year1DataVolume": { "type": "string" },
+                "year3DataVolume": { "type": "string" },
+                "year5DataVolume": { "type": "string" },
+                "designScalesToProjectedGrowth": { "type": "boolean" },
+                "seasonalDemandPatterns": { "type": "boolean" },
+                "seasonalDetails": { "type": "string" }
+              }
+            }
           }
         },
         "costOptimisation": {
@@ -736,9 +776,34 @@
         "dast": { "$ref": "#/$defs/yesNoNa" },
         "sca": { "type": "string", "enum": ["snyk", "blackduck", "dependabot", "renovate", "whitesource", "other", "none"] },
         "containerScanning": { "$ref": "#/$defs/yesNoNa" },
-        "migrationStrategy": {
-          "type": "string",
-          "enum": ["big-bang", "blue-green", "canary", "rolling", "strangler-fig", "parallel-run", "phased", "not-applicable"]
+        "migration": {
+          "type": "object",
+          "description": "Service transition and migration details",
+          "properties": {
+            "classification": { "type": "string", "enum": ["retain", "retire", "rehost", "replatform", "refactor", "replace", "not-applicable"], "description": "6 R's migration classification" },
+            "deploymentStrategy": { "type": "string", "enum": ["big-bang", "blue-green", "canary", "rolling", "strangler-fig", "parallel-run", "phased"] },
+            "dataMigrationMode": { "type": "string", "enum": ["one-off", "phased", "continuous-sync", "not-applicable"] },
+            "dataMigrationMethod": { "type": "string" },
+            "dataVolume": { "type": "string" },
+            "endUserCutover": { "type": "string", "enum": ["one-off", "phased", "not-applicable"] },
+            "externalSystemCutover": { "type": "string", "enum": ["one-off", "phased", "not-applicable"] },
+            "maxAcceptableDowntime": { "type": "string", "enum": ["zero", "seconds", "minutes", "hours", "days"] },
+            "rollbackPlan": { "type": "string" },
+            "transientInfrastructureNeeded": { "type": "boolean" }
+          }
+        },
+        "resourcing": {
+          "type": "object",
+          "description": "Team capability and operational readiness assessment",
+          "properties": {
+            "cloudPlatform": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "infrastructureAsCode": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "cicdManagement": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "applicationStack": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "databaseAdministration": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "securityCompliance": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "operationalReadiness": { "type": "string", "enum": ["a-fully-capable", "b-partially-capable", "c-learning", "d-not-capable"] }
+          }
         },
         "releaseFrequency": {
           "type": "string",
