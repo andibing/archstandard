@@ -92,7 +92,7 @@ export default defineConfig({
 					label: '6. Decision Making & Governance',
 					translations: { fr: '6. Prise de décision et gouvernance', de: '6. Entscheidungsfindung und Governance' },
 					items: [
-						{ label: 'Decision Making & Governance', slug: 'standard/6-risk-governance', translations: { fr: 'Prise de décision et gouvernance', de: 'Entscheidungsfindung und Governance' } },
+						{ label: 'Decision Making & Governance', slug: 'standard/6-decision-making', translations: { fr: 'Prise de décision et gouvernance', de: 'Entscheidungsfindung und Governance' } },
 					],
 				},
 				{

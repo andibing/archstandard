@@ -163,7 +163,7 @@ PayrollPro was originally developed in 2014 as an ASP.NET Web Forms application 
 | Integration | Method | Direction | Schedule |
 |------------|--------|-----------|----------|
 | BACS payment gateway | SFTP file upload (Standard 18 format) | Outbound | Monthly (payroll run day) |
-| Pension provider (Aviva) | REST API | Outbound | Monthly (day after payroll run) |
+| Pension provider (Crestfield) | REST API | Outbound | Monthly (day after payroll run) |
 | HMRC PAYE RTI | REST API (Government Gateway) | Outbound | Monthly (FPS) and annual (P60) |
 | Corporate AD | Windows Integrated Authentication | Inbound | Real-time (user logon) |
 | Finance system (SAP) | CSV export to shared folder | Outbound | Nightly batch |
@@ -283,7 +283,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 | BACS Payment File Generator | Application Module | Generates Standard 18 format payment files for BACS submission | Component within PayrollPro (replaces legacy SSIS package) | Payroll Development Team |
 | Payroll Batch Processor | Application Module | Executes monthly payroll calculations, tax deductions, and NI contributions | Component within PayrollPro (scheduled via Azure WebJobs) | Payroll Development Team |
 | HMRC RTI Submission Module | Application Module | Submits Full Payment Submission (FPS) and Employer Payment Summary (EPS) to HMRC | Component within PayrollPro using HMRC Government Gateway API | Payroll Development Team |
-| Pension Contribution Module | Application Module | Calculates and submits pension contributions to Aviva | Component within PayrollPro using Aviva REST API | Payroll Development Team |
+| Pension Contribution Module | Application Module | Calculates and submits pension contributions to Crestfield | Component within PayrollPro using Crestfield REST API | Payroll Development Team |
 | Finance Export Job | Scheduled Job | Nightly CSV export of payroll journal entries to SAP finance shared folder | Azure Data Factory pipeline (replaces legacy SQL Agent job) | DBA Team |
 
 #### 3.1.3 Service & Capability Mapping
@@ -319,7 +319,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 
 #### 3.2.1 Data Flow Diagrams
 
-*[Diagram would show the monthly payroll data flow: Employee data entry -> PayrollPro -> Payroll calculation engine -> Payment file (BACS), Pension submission (Aviva API), HMRC RTI submission (HMRC API), Payslip PDFs (Blob Storage), Finance journal (ADF -> SAP)]*
+*[Diagram would show the monthly payroll data flow: Employee data entry -> PayrollPro -> Payroll calculation engine -> Payment file (BACS), Pension submission (Crestfield API), HMRC RTI submission (HMRC API), Payslip PDFs (Blob Storage), Finance journal (ADF -> SAP)]*
 
 #### 3.2.2 Internal Component Connectivity
 
@@ -336,7 +336,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 | Source Application | Destination Application | Protocol / Encryption | Authentication | Security Proxy | Purpose |
 |-------------------|------------------------|----------------------|---------------|---------------|---------|
 | PayrollPro | BACS Payment Gateway | SFTP / SSH | Certificate-based authentication | N/A (direct SFTP) | Monthly salary payment file submission |
-| PayrollPro | Aviva Pension API | HTTPS / TLS 1.2 | OAuth 2.0 client credentials | N/A | Monthly pension contribution submission |
+| PayrollPro | Crestfield Pension API | HTTPS / TLS 1.2 | OAuth 2.0 client credentials | N/A | Monthly pension contribution submission |
 | PayrollPro | HMRC Government Gateway | HTTPS / TLS 1.2 | OAuth 2.0 (HMRC MTD) | N/A | PAYE RTI submission (FPS, EPS, P60) |
 | PayrollPro | On-premises AD (via VPN) | LDAPS / TLS 1.2 | Service account | Azure VPN Gateway | Transitional — user directory lookup during Entra ID sync period |
 | Azure Data Factory | SAP Finance (on-prem) | HTTPS / TLS 1.2 via VPN | Service account | Self-hosted Integration Runtime | Nightly finance journal CSV delivery |
@@ -412,7 +412,7 @@ Not applicable — PaaS deployment; no IaaS virtual machines.
 | Question | Response |
 |----------|----------|
 | Is this an Internet-facing application? | No — accessed via Citrix (Phase 1). App Service has VNet integration with no public endpoint. |
-| Outbound Internet connectivity required? | Yes — for BACS SFTP, Aviva API, HMRC API |
+| Outbound Internet connectivity required? | Yes — for BACS SFTP, Crestfield API, HMRC API |
 | Cloud-to-on-premises connectivity required? | Yes — VPN Gateway for Citrix connectivity and SAP finance export (transitional) |
 | Wireless networking required? | No |
 | Third-party / co-location connectivity required? | No — third-party integrations use Internet-facing APIs |
@@ -539,7 +539,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | Destination | Data Type | Classification | Transfer Method | Protection |
 |------------|-----------|---------------|----------------|------------|
 | BACS (Vocalink) | Payment instructions (employee names, sort codes, account numbers, amounts) | Restricted | SFTP with SSH key authentication | Data encrypted in transit; BACS contractual DPA in place |
-| Aviva (pension provider) | Employee names, NI numbers, pension contribution amounts | Restricted | REST API over HTTPS / TLS 1.2 | OAuth 2.0 authentication; Aviva DPA in place |
+| Crestfield (pension provider) | Employee names, NI numbers, pension contribution amounts | Restricted | REST API over HTTPS / TLS 1.2 | OAuth 2.0 authentication; Crestfield DPA in place |
 | HMRC | Employee names, NI numbers, tax codes, pay amounts, tax deducted | Restricted | REST API over HTTPS / TLS 1.2 | HMRC Government Gateway OAuth 2.0; statutory data sharing basis |
 
 ##### Data Sovereignty
@@ -616,7 +616,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 |---------|---------------|
 | Network segmentation | App Service deployed with VNet Integration into dedicated subnet; Azure SQL and Blob Storage accessible only via Private Endpoints; NSGs restrict traffic to required flows only |
 | Ingress filtering | App Service access restrictions: allow only from Meridian hub VNet (Citrix subnet and VPN). No public access. |
-| Egress filtering | App Service subnet uses UDR to route Internet-bound traffic through Azure Firewall in hub VNet; allowed destinations: BACS SFTP endpoint, Aviva API, HMRC API |
+| Egress filtering | App Service subnet uses UDR to route Internet-bound traffic through Azure Firewall in hub VNet; allowed destinations: BACS SFTP endpoint, Crestfield API, HMRC API |
 | Encryption in transit | TLS 1.2 minimum enforced on all endpoints; App Service configured with minimum TLS 1.2; Azure SQL enforces encrypted connections |
 
 #### 3.5.4 Data Protection
@@ -639,7 +639,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | Secret store | Azure Key Vault (per-workload vault: kv-payrollpro-prod) |
 | Secret distribution | Retrieved on-demand by application via Managed Identity |
 | Secret protection on host | Memory only — secrets not written to disk or environment variables |
-| Secret rotation | BACS SFTP certificate: annual renewal; Aviva/HMRC OAuth client secrets: annual rotation via Key Vault |
+| Secret rotation | BACS SFTP certificate: annual renewal; Crestfield/HMRC OAuth client secrets: annual rotation via Key Vault |
 
 #### 3.5.5 Security Monitoring & Threat Detection
 
@@ -661,7 +661,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | **Actor(s)** | Payroll Operator (Karen Wells or team member) |
 | **Trigger** | Scheduled monthly payroll processing date (typically day 22 of each month) |
 | **Pre-conditions** | All employee data changes for the month have been entered and approved; tax code updates from HMRC have been imported |
-| **Main Flow** | 1. Payroll Operator logs in via Citrix, authenticated by Entra ID (MFA). 2. Operator initiates payroll run via PayrollPro UI. 3. Payroll Batch Processor (Azure WebJob) executes on App Service, reading employee and configuration data from Azure SQL. 4. Batch calculates gross pay, tax deductions (PAYE), NI contributions, pension deductions, student loan repayments for all 2,400 employees. 5. Payslip PDFs are generated and stored in Azure Blob Storage. 6. BACS Standard 18 payment file is generated. 7. Operator reviews summary report and approves. 8. BACS file is submitted via SFTP. 9. HMRC FPS is submitted via Government Gateway API. 10. Pension contributions are submitted to Aviva via REST API. |
+| **Main Flow** | 1. Payroll Operator logs in via Citrix, authenticated by Entra ID (MFA). 2. Operator initiates payroll run via PayrollPro UI. 3. Payroll Batch Processor (Azure WebJob) executes on App Service, reading employee and configuration data from Azure SQL. 4. Batch calculates gross pay, tax deductions (PAYE), NI contributions, pension deductions, student loan repayments for all 2,400 employees. 5. Payslip PDFs are generated and stored in Azure Blob Storage. 6. BACS Standard 18 payment file is generated. 7. Operator reviews summary report and approves. 8. BACS file is submitted via SFTP. 9. HMRC FPS is submitted via Government Gateway API. 10. Pension contributions are submitted to Crestfield via REST API. |
 | **Post-conditions** | All employees paid; HMRC notified; pension contributions submitted; payslips available in self-service portal; audit trail recorded |
 | **Views Involved** | Logical, Integration & Data Flow, Physical, Data, Security |
 
@@ -776,13 +776,13 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | Attribute | Response |
 |-----------|----------|
 | **Dependencies adequately sized?** | Yes (confirmed) |
-| **Dependency details** | BACS SFTP gateway and HMRC API are externally managed services with documented rate limits (BACS: no limit for Standard 18 files; HMRC: 1,000 requests/hour). Aviva API has a 500 requests/hour limit, sufficient for monthly batch of ~2,400 records. |
+| **Dependency details** | BACS SFTP gateway and HMRC API are externally managed services with documented rate limits (BACS: no limit for Standard 18 files; HMRC: 1,000 requests/hour). Crestfield API has a 500 requests/hour limit, sufficient for monthly batch of ~2,400 records. |
 
 #### 4.2.3 Fault Tolerance
 
 - [x] **Yes**
   - **Component failures**: App Service runs on minimum 2 instances; if one instance fails, traffic is routed to the healthy instance. Azure SQL Business Critical tier includes built-in local HA (3 replicas).
-  - **Graceful degradation**: If Blob Storage is temporarily unavailable, payslip viewing returns an informative error but payroll processing continues. If a third-party API (BACS, HMRC, Aviva) is unavailable, the submission is queued and retried with exponential backoff (3 retries, 5/15/60 minute intervals).
+  - **Graceful degradation**: If Blob Storage is temporarily unavailable, payslip viewing returns an informative error but payroll processing continues. If a third-party API (BACS, HMRC, Crestfield) is unavailable, the submission is queued and retried with exponential backoff (3 retries, 5/15/60 minute intervals).
   - **Health checks**: App Service health check endpoint (/health) validates database connectivity and Key Vault access. Unhealthy instances are automatically removed from the load balancer.
 
 #### 4.2.4 Failure Modes & Recovery Behaviour
@@ -967,7 +967,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | Data migration method | Azure Database Migration Service (DMS) for online migration with continuous sync. Initial full backup restore, then continuous replication of transaction log changes until cutover. Payslip files migrated via AzCopy from on-premises file share to Azure Blob Storage. |
 | Data volume to migrate | Database: ~100 GB. Blob (payslips): ~180 GB. |
 | End-user cutover approach | One-off. All users switch to the Azure-hosted application simultaneously via Citrix published app update. |
-| External system cutover | One-off. BACS SFTP endpoint, HMRC API credentials, and Aviva API credentials updated to originate from Azure. |
+| External system cutover | One-off. BACS SFTP endpoint, HMRC API credentials, and Crestfield API credentials updated to originate from Azure. |
 | Maximum acceptable downtime | 4 hours (scheduled weekend maintenance window) |
 | Rollback plan | On-premises servers retained for 30 days post-cutover. If critical issues found within rollback window: (1) Stop DMS continuous sync. (2) Revert Citrix published app to on-premises endpoint. (3) Apply any transactions from Azure SQL back to on-premises SQL Server via DMS reverse sync. Rollback tested during rehearsal. |
 | Acceptance criteria | (1) All payroll data verified via reconciliation checksums. (2) Test payroll run completes successfully on Azure. (3) BACS test file submitted to sandbox. (4) HMRC test submission accepted. (5) Performance test confirms batch completes in < 2 hours. (6) DR failover test completed. (7) Payroll Team Lead sign-off. |
@@ -992,7 +992,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
-| Integration testing | All external integrations (BACS, HMRC, Aviva, SAP finance export) | End-to-end test against sandbox/test APIs | Staging | Partially (triggered manually, execution automated) |
+| Integration testing | All external integrations (BACS, HMRC, Crestfield, SAP finance export) | End-to-end test against sandbox/test APIs | Staging | Partially (triggered manually, execution automated) |
 | Performance testing | Payroll batch for 2,400 employees; 150 concurrent users | Azure Load Testing (JMeter); batch execution timed | Staging | Yes (Azure DevOps pipeline) |
 | Security testing | OWASP Top 10; penetration test of App Service and Azure SQL | OWASP ZAP (automated DAST); annual third-party pen test | Staging | Partially |
 | DR testing | Region failover from UK South to UK West | Simulated regional failure; App Service deployment to UK West; SQL failover; end-to-end payroll validation | Production (scheduled maintenance window) | No (manual, tested annually) |
@@ -1077,7 +1077,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | A-002 | Citrix XenApp can connect to Azure App Service via site-to-site VPN with acceptable latency (< 50ms round trip) | Users would experience unacceptable performance; alternative access method needed | High | Closed | James Okoro | VPN latency tested at 18ms round trip (test report TR-2026-003) |
 | A-003 | Existing .NET Framework 4.8 code can be upgraded to .NET 6 within 8 weeks | Timeline overrun; potential delay to cutover window | Medium | Closed | David Thornton | .NET Upgrade Assistant analysis completed; 14 breaking changes identified, all resolvable (DEV-2026-017) |
 | A-004 | Azure SQL Database supports all T-SQL features used by PayrollPro stored procedures | Stored procedures would need rework, potentially delaying migration | Medium | Closed | David Thornton | Compatibility assessment completed; 3 procedures require rework (linked user queries, cross-database joins); estimated 2 weeks effort |
-| A-005 | BACS, HMRC, and Aviva integrations will function from Azure without changes to their end | Integration reconfiguration needed; potential re-certification with providers | High | Open | Sarah Chen | HMRC and Aviva confirmed no IP allowlisting required. BACS gateway requires new SSH key registration (in progress). |
+| A-005 | BACS, HMRC, and Crestfield integrations will function from Azure without changes to their end | Integration reconfiguration needed; potential re-certification with providers | High | Open | Sarah Chen | HMRC and Crestfield confirmed no IP allowlisting required. BACS gateway requires new SSH key registration (in progress). |
 
 ### 6.3 Risks
 
