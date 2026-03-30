@@ -92,7 +92,74 @@ The standard's JSON Schema enables generation and validation in multiple formats
 
 See [Templates](/standard/templates/) for downloadable blank templates in each format.
 
-## 2.6 Normative References
+## 2.6 Architecture Compliance Scoring
+
+Each major section of a Solution Architecture Document MAY be assessed using a **0–5 compliance score**. This provides governance boards with a quick, quantitative view of architecture maturity and completeness — both for individual SADs and across a portfolio.
+
+### Scoring Scale
+
+| Score | Level | Description |
+|:-----:|-------|-------------|
+| **0** | Not Addressed | No evidence or content provided for this area |
+| **1** | Acknowledged | The concern is recognised but no design or evidence exists |
+| **2** | Partial | Some requirements addressed; significant gaps remain |
+| **3** | Mostly Addressed | Most requirements met; minor gaps or risks requiring mitigation |
+| **4** | Fully Addressed | All requirements met with supporting evidence |
+| **5** | Exemplary | Best-practice implementation; could serve as a reference example |
+
+### Where Scoring Applies
+
+Scoring is applied at the **section level**, not at individual field level. The following sections are scored:
+
+| Section | Scoring Area | What 4/5 Looks Like |
+|---------|-------------|---------------------|
+| **1. Executive Summary** | Completeness & clarity | Clear business context, strategic alignment demonstrated, scope well-defined |
+| **3.1 Logical View** | Design quality | Components well-decomposed, patterns justified, vendor lock-in assessed |
+| **3.2 Integration & Data Flow** | Integration maturity | All interfaces documented, protocols specified, authentication defined |
+| **3.3 Physical View** | Infrastructure rigour | Deployment architecture complete, environments specified, connectivity documented |
+| **3.4 Data View** | Data governance | Data stores classified, retention defined, sovereignty addressed, encryption specified |
+| **3.5 Security View** | Security posture | Threat model complete, all controls documented, monitoring in place |
+| **3.6 Scenarios** | Design validation | Key use cases documented, ADRs capture significant decisions with rationale |
+| **4.1 Operational Excellence** | Operational readiness | Centralised logging, monitoring, alerting, and runbooks all in place |
+| **4.2 Reliability** | Resilience maturity | DR strategy defined, RTO/RPO met, backup tested, fault tolerance designed |
+| **4.3 Performance** | Performance assurance | Targets defined, growth projected, testing approach documented |
+| **4.4 Cost Optimisation** | Cost awareness | Cost analysis performed, monitoring enabled, right-sizing evidenced |
+| **4.5 Sustainability** | Environmental consideration | Carbon-aware hosting, auto-shutdown, right-sizing |
+| **5. Lifecycle** | Operational maturity | CI/CD documented, migration planned, skills assessed, exit plan in place |
+| **6. Decision Making** | Governance rigour | RAID log complete, ADRs captured, compliance traceability demonstrated |
+
+### Compliance Summary Table
+
+Each SAD SHOULD include a compliance summary in the appendices (Section 7) or document control (Section 0):
+
+| Section | Score (0–5) | Assessor | Date | Notes |
+|---------|:-----------:|----------|------|-------|
+| 1. Executive Summary | | | | |
+| 3.1 Logical View | | | | |
+| 3.2 Integration & Data Flow | | | | |
+| 3.3 Physical View | | | | |
+| 3.4 Data View | | | | |
+| 3.5 Security View | | | | |
+| 3.6 Scenarios | | | | |
+| 4.1 Operational Excellence | | | | |
+| 4.2 Reliability | | | | |
+| 4.3 Performance | | | | |
+| 4.4 Cost Optimisation | | | | |
+| 4.5 Sustainability | | | | |
+| 5. Lifecycle | | | | |
+| 6. Decision Making | | | | |
+| **Overall** | | | | |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+- The **overall score** is typically the lowest individual section score (weakest-link principle), not an average. A solution with a 5 in performance but a 1 in security is not a "3" — it has a critical security gap.
+- Scoring is **collaborative**, not adversarial. It should be performed jointly between the solution architect and the reviewing authority (e.g., ARB or design authority).
+- Scores below **3** on any section SHOULD trigger a remediation plan with clear ownership and timelines.
+- Organisations MAY define minimum acceptable scores per section for different governance gates (e.g., "all sections must score ≥ 3 for production approval").
+</div>
+
+## 2.7 Normative References
 
 This standard references the following specifications:
 

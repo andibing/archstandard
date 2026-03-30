@@ -20,6 +20,20 @@
     "riskGovernance": { "$ref": "#/$defs/riskGovernance" },
     "appendices": { "$ref": "#/$defs/appendices" },
     "organisationProfile": { "$ref": "#/$defs/organisationProfile" },
+    "complianceScoring": {
+      "type": "object",
+      "description": "Architecture compliance scoring summary (0-5 per section)",
+      "properties": {
+        "assessments": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/complianceAssessment" }
+        },
+        "overallScore": { "$ref": "#/$defs/complianceScore" },
+        "overallAssessor": { "type": "string" },
+        "overallDate": { "type": "string", "format": "date" },
+        "overallNotes": { "type": "string" }
+      }
+    },
     "customSections": {
       "type": "array",
       "items": { "$ref": "#/$defs/customSection" }
@@ -42,6 +56,24 @@
       "type": "string",
       "enum": ["yes", "no", "not-applicable"],
       "description": "Atomic tri-state for yes/no questions with an N/A option"
+    },
+    "complianceScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "Architecture compliance score: 0=Not Addressed, 1=Acknowledged, 2=Partial, 3=Mostly Addressed, 4=Fully Addressed, 5=Exemplary"
+    },
+    "complianceAssessment": {
+      "type": "object",
+      "description": "Per-section compliance scoring for governance review",
+      "properties": {
+        "section": { "type": "string" },
+        "score": { "$ref": "#/$defs/complianceScore" },
+        "assessor": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "notes": { "type": "string" }
+      },
+      "required": ["section", "score"]
     },
     "documentControl": {
       "type": "object",

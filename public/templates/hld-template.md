@@ -579,7 +579,29 @@
 |-------|---------|-----|-------------|
 | | | | |
 
-### 7.3 Approval Sign-Off
+### 7.3 Compliance Scoring
+
+| Section | Score (0–5) | Assessor | Date | Notes |
+|---------|:-----------:|----------|------|-------|
+| 1. Executive Summary | | | | |
+| 3.1 Logical View | | | | |
+| 3.2 Integration & Data Flow | | | | |
+| 3.3 Physical View | | | | |
+| 3.4 Data View | | | | |
+| 3.5 Security View | | | | |
+| 3.6 Scenarios | | | | |
+| 4.1 Operational Excellence | | | | |
+| 4.2 Reliability | | | | |
+| 4.3 Performance | | | | |
+| 4.4 Cost Optimisation | | | | |
+| 4.5 Sustainability | | | | |
+| 5. Lifecycle | | | | |
+| 6. Decision Making | | | | |
+| **Overall** | | | | |
+
+*Scoring: 0=Not Addressed, 1=Acknowledged, 2=Partial, 3=Mostly Addressed, 4=Fully Addressed, 5=Exemplary. Overall = lowest individual score.*
+
+### 7.4 Approval Sign-Off
 
 | Role | Name | Date | Decision |
 |------|------|------|----------|

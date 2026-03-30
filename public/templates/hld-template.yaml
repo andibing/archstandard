@@ -470,6 +470,88 @@ appendices:
       decision: approved                # approved | approved-with-conditions | rejected | deferred
 
 # ─────────────────────────────────────────────
+# Compliance Scoring (OPTIONAL)
+# 0=Not Addressed, 1=Acknowledged, 2=Partial,
+# 3=Mostly Addressed, 4=Fully Addressed, 5=Exemplary
+# ─────────────────────────────────────────────
+complianceScoring:
+  assessments:
+    - section: "1. Executive Summary"
+      score: 0                              # 0-5
+      assessor: ""
+      date: ""                              # YYYY-MM-DD
+      notes: ""
+    - section: "3.1 Logical View"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "3.2 Integration & Data Flow"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "3.3 Physical View"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "3.4 Data View"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "3.5 Security View"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "3.6 Scenarios"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "4.1 Operational Excellence"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "4.2 Reliability"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "4.3 Performance"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "4.4 Cost Optimisation"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "4.5 Sustainability"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "5. Lifecycle"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+    - section: "6. Decision Making"
+      score: 0
+      assessor: ""
+      date: ""
+      notes: ""
+  overallScore: 0                           # 0-5 (lowest individual score, not average)
+  overallAssessor: ""
+  overallDate: ""
+  overallNotes: ""
+
+# ─────────────────────────────────────────────
 # Organisation Profile (OPTIONAL)
 # ─────────────────────────────────────────────
 # organisationProfile:
