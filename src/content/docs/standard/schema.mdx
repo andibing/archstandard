@@ -126,10 +126,18 @@ All other fields are optional, allowing progressive adoption from Minimum throug
 
 ## Validation Example
 
+Validate a SAD against the schema using local or remote references:
+
 ```bash
-# Using ajv-cli
+# Using ajv-cli (local schema)
 npx ajv validate -s schema/ads.schema.json -d my-sad.json
 
+# Using ajv-cli (remote schema)
+npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d my-sad.json
+
 # Using Python jsonschema
+pip install jsonschema
 python -m jsonschema -i my-sad.json schema/ads.schema.json
 ```
+
+The schema is hosted at: [`https://archstandard.org/schema/v1.0.0/ads.schema.json`](https://archstandard.org/schema/v1.0.0/ads.schema.json)
