@@ -1,6 +1,6 @@
 # Solution Architecture Document
 
-> **Standard:** ADS-001 v1.0.0 (The Architecture Description Standard)
+> **Standard:** ADS v1.0.0 (The Architecture Description Standard)
 > **Template Version:** 1.0.0
 > **Published by:** ArchStandard (archstandard.org)
 

@@ -1,13 +1,13 @@
 ---
 title: "Design Principles"
-description: "Core design principles underpinning ADS-001, including atomic field design and multi-format compatibility."
+description: "Core design principles underpinning ADS, including atomic field design and multi-format compatibility."
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
 ## Atomic Field Design
 
-ADS-001 is designed with **atomic fields** — structured, discrete values rather than free-text wherever possible. This is a core principle of the standard.
+ADS is designed with **atomic fields** — structured, discrete values rather than free-text wherever possible. This is a core principle of the standard.
 
 ### Why Atomic Fields?
 
@@ -39,7 +39,7 @@ The same atomic field renders differently depending on the output format, but ca
 Free-text fields are still used where structured options are not practical (e.g., `solutionOverview`, `mitigationPlan`, `rationale`). However, even these are scoped — they have a specific purpose described in the schema, not open-ended "notes" fields.
 </Aside>
 
-### Atomic Field Categories in ADS-001
+### Atomic Field Categories in ADS
 
 The schema uses the following atomic patterns:
 
@@ -57,7 +57,7 @@ The schema uses the following atomic patterns:
 
 ## Multi-Format Compatibility
 
-ADS-001 is designed to work equally well as:
+ADS is designed to work equally well as:
 
 - **A human-authored document** (Word, Confluence, wiki) — where atomic fields become checkboxes, dropdown menus, and radio buttons
 - **A machine-readable file** (JSON, YAML, Markdown) — where atomic fields are enums, booleans, and typed values

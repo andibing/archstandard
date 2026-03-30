@@ -1,15 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://archstandard.org/schema/v1.0.0/ads-001.schema.json",
-  "title": "ADS-001: Solution Architecture Document",
-  "description": "Schema for Solution Architecture Documents conforming to ADS-001: The Architecture Description Standard v1.0.0. Fields are designed to be atomic — using enums, booleans, and structured options to reduce ambiguity and enable machine processing.",
+  "title": "ADS: Solution Architecture Document",
+  "description": "Schema for Solution Architecture Documents conforming to ADS: The Architecture Description Standard v1.0.0. Fields are designed to be atomic — using enums, booleans, and structured options to reduce ambiguity and enable machine processing.",
   "type": "object",
   "required": ["schemaVersion", "documentControl", "executiveSummary", "architecturalViews", "riskGovernance"],
   "properties": {
     "schemaVersion": {
       "type": "string",
       "const": "1.0.0",
-      "description": "Version of the ADS-001 schema this document conforms to"
+      "description": "Version of the ADS schema this document conforms to"
     },
     "documentControl": { "$ref": "#/$defs/documentControl" },
     "executiveSummary": { "$ref": "#/$defs/executiveSummary" },

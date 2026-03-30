@@ -1,6 +1,6 @@
 ---
-title: Why ADS-001?
-description: How ADS-001 compares to existing architecture documentation frameworks and templates.
+title: Why ADS?
+description: How ADS compares to existing architecture documentation frameworks and templates.
 ---
 
 import { Aside, Badge, Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
@@ -32,27 +32,27 @@ Every framework analysed was missing at least five of these capabilities:
 
 <CardGrid>
   <Card title="Documentation Depth Levels" icon="bars-2">
-    No existing template provides guidance on how much detail is needed for different project scales. ADS-001 defines three tiers (**Minimum**, **Recommended**, **Comprehensive**) with RFC 2119 keywords (SHALL / SHOULD / MAY) so teams right-size their effort.
+    No existing template provides guidance on how much detail is needed for different project scales. ADS defines three tiers (**Minimum**, **Recommended**, **Comprehensive**) with RFC 2119 keywords (SHALL / SHOULD / MAY) so teams right-size their effort.
   </Card>
   <Card title="Machine-Readable Schema" icon="seti:json">
-    Every template reviewed is prose-only. ADS-001 provides a JSON Schema with atomic, enumerated fields — enabling automated completeness checks, cross-SAD comparison, and multi-format generation (Markdown, Word, web).
+    Every template reviewed is prose-only. ADS provides a JSON Schema with atomic, enumerated fields — enabling automated completeness checks, cross-SAD comparison, and multi-format generation (Markdown, Word, web).
   </Card>
   <Card title="Dedicated Security View" icon="warning">
-    6 of 8 frameworks have no dedicated Security View. Security is either buried in "cross-cutting concepts" or absent entirely. ADS-001 treats security as a first-class architectural view (Section 3.5).
+    6 of 8 frameworks have no dedicated Security View. Security is either buried in "cross-cutting concepts" or absent entirely. ADS treats security as a first-class architectural view (Section 3.5).
   </Card>
   <Card title="Dedicated Data View" icon="open-book">
-    6 of 8 frameworks lack a structured Data View. Data architecture is scattered across other views or missing. ADS-001 provides a dedicated Data View (Section 3.4) covering data models, flows, classification, retention, and sovereignty.
+    6 of 8 frameworks lack a structured Data View. Data architecture is scattered across other views or missing. ADS provides a dedicated Data View (Section 3.4) covering data models, flows, classification, retention, and sovereignty.
   </Card>
   <Card title="Cloud WAF-Aligned Quality Attributes" icon="star">
-    7 of 8 frameworks have no quality attributes aligned to AWS, Azure, GCP, Oracle, or IBM Well-Architected Frameworks. ADS-001 maps five cross-cutting quality attributes (Section 4) to all five cloud providers.
+    7 of 8 frameworks have no quality attributes aligned to AWS, Azure, GCP, Oracle, or IBM Well-Architected Frameworks. ADS maps five cross-cutting quality attributes (Section 4) to all five cloud providers.
   </Card>
 </CardGrid>
 
 ## Feature Comparison
 
-How ADS-001 compares feature-by-feature against the most widely-used frameworks:
+How ADS compares feature-by-feature against the most widely-used frameworks:
 
-| Feature | ADS-001 | arc42 | bflorat | ALMBoK | NHS SAF |
+| Feature | ADS | arc42 | bflorat | ALMBoK | NHS SAF |
 |---|:---:|:---:|:---:|:---:|:---:|
 | **Architectural views (4+1 aligned)** | 6 views | 4 views | 5 views | 13 views | Guidance only |
 | **Dedicated Security View** | ✅ | ❌ | ✅ | ✅ | Guidance only |
@@ -70,17 +70,17 @@ How ADS-001 compares feature-by-feature against the most widely-used frameworks:
 | **Platform-agnostic** | ✅ | ✅ | ✅ | ✅ | NHS-specific |
 | **Open-source / free** | ✅ | ✅ | ✅ | Partial | ✅ |
 
-## How ADS-001 Differs from ISO 42010
+## How ADS Differs from ISO 42010
 
-ADS-001 is *aligned* with ISO/IEC/IEEE 42010:2022 but goes substantially beyond it:
+ADS is *aligned* with ISO/IEC/IEEE 42010:2022 but goes substantially beyond it:
 
-- **Quality Attributes** — ISO 42010 defines viewpoints and views but does not prescribe quality assessment. ADS-001 incorporates operational excellence, reliability, performance efficiency, cost optimisation, and sustainability as cross-cutting quality attributes mapped to AWS, Azure, GCP, Oracle, and IBM Well-Architected Frameworks.
-- **Documentation Depth Levels** — ISO 42010 does not address how much detail is needed. ADS-001 defines three tiers (Minimum / Recommended / Comprehensive) with RFC 2119 requirement keywords (SHALL / SHOULD / MAY).
-- **Security as a First-Class View** — ISO 42010 does not prescribe a security viewpoint. ADS-001 includes a dedicated Security View (Section 3.5) covering threat modelling, identity, network security, data protection, and compliance.
-- **Lifecycle Management** — ISO 42010 focuses on the architecture description itself, not the solution lifecycle. ADS-001 includes CI/CD pipeline design, operational runbooks, and exit/decommissioning planning.
-- **Risk & Governance** — ISO 42010 does not address risk registers, compliance traceability, or architecture decision records. ADS-001 includes all three.
-- **JSON Schema** — ISO 42010 is a prose standard. ADS-001 provides a machine-readable JSON Schema with atomic fields for automated validation and multi-format generation.
-- **Downloadable Templates** — ISO 42010 provides no templates. ADS-001 includes ready-to-use Markdown, YAML, and JSON templates.
+- **Quality Attributes** — ISO 42010 defines viewpoints and views but does not prescribe quality assessment. ADS incorporates operational excellence, reliability, performance efficiency, cost optimisation, and sustainability as cross-cutting quality attributes mapped to AWS, Azure, GCP, Oracle, and IBM Well-Architected Frameworks.
+- **Documentation Depth Levels** — ISO 42010 does not address how much detail is needed. ADS defines three tiers (Minimum / Recommended / Comprehensive) with RFC 2119 requirement keywords (SHALL / SHOULD / MAY).
+- **Security as a First-Class View** — ISO 42010 does not prescribe a security viewpoint. ADS includes a dedicated Security View (Section 3.5) covering threat modelling, identity, network security, data protection, and compliance.
+- **Lifecycle Management** — ISO 42010 focuses on the architecture description itself, not the solution lifecycle. ADS includes CI/CD pipeline design, operational runbooks, and exit/decommissioning planning.
+- **Risk & Governance** — ISO 42010 does not address risk registers, compliance traceability, or architecture decision records. ADS includes all three.
+- **JSON Schema** — ISO 42010 is a prose standard. ADS provides a machine-readable JSON Schema with atomic fields for automated validation and multi-format generation.
+- **Downloadable Templates** — ISO 42010 provides no templates. ADS includes ready-to-use Markdown, YAML, and JSON templates.
 
 ## Who Benefits
 

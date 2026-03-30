@@ -1,5 +1,5 @@
 ---
-title: "ADS-001: The Architecture Description Standard"
+title: "ADS: The Architecture Description Standard"
 description: A prescriptive standard defining the structure, content, and quality requirements for Solution Architecture Documents.
 template: splash
 hero:
@@ -17,20 +17,20 @@ hero:
 import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
 
 <Aside type="note" title="Standard Identifier">
-**ADS-001 v1.0.0** | Status: **Published** | Effective Date: **2026-03-27** | Published by: **ArchStandard**
+**ADS v1.0.0** | Status: **Published** | Effective Date: **2026-03-27** | Published by: **ArchStandard**
 </Aside>
 
-## What is ADS-001?
+## What is ADS?
 
-ADS-001 is a **prescriptive, template-level standard** that defines exactly what sections, content, and quality criteria a Solution Architecture Document (SAD) shall contain.
+ADS is a **prescriptive, template-level standard** that defines exactly what sections, content, and quality criteria a Solution Architecture Document (SAD) shall contain.
 
-It is built upon — but is not a replica of — ISO/IEC/IEEE 42010, which defines an abstract conceptual model for architecture descriptions. Where ISO 42010 says *"an architecture description shall identify stakeholders and their concerns"*, ADS-001 says *"Section 2.1 shall contain a stakeholder register table with columns for stakeholder, role, key concerns, and relevant architectural views."*
+It is built upon — but is not a replica of — ISO/IEC/IEEE 42010, which defines an abstract conceptual model for architecture descriptions. Where ISO 42010 says *"an architecture description shall identify stakeholders and their concerns"*, ADS says *"Section 2.1 shall contain a stakeholder register table with columns for stakeholder, role, key concerns, and relevant architectural views."*
 
 ### The Naming Model
 
 | Term | What It Means | In This Standard |
 |------|--------------|-----------------|
-| **Architecture Description** | The ISO 42010 formal term for the work product | The standard itself (ADS-001) aligns to this concept |
+| **Architecture Description** | The ISO 42010 formal term for the work product | The standard itself (ADS) aligns to this concept |
 | **Solution Architecture Document (SAD)** | The enterprise-practice name for the document. The acronym SAD originates from the Rational Unified Process (RUP) where it stood for "Software Architecture Document". This standard uses "Solution" to reflect its broader scope beyond software — encompassing infrastructure, data, security, and operations. | The document you produce using this standard |
 | **High Level Design (HLD)** | The conceptual-level design content | Sections 3–4 (Architectural Views + Quality Attributes) within the SAD |
 
@@ -62,11 +62,11 @@ This standard defines the required and recommended structure for Solution Archit
 
 ## Beyond ISO/IEC 42010
 
-ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concrete, actionable structure that ISO 42010 deliberately leaves to implementers. It goes well beyond ISO 42010 by incorporating:
+ADS *conforms to* the ISO 42010 conceptual model while providing the concrete, actionable structure that ISO 42010 deliberately leaves to implementers. It goes well beyond ISO 42010 by incorporating:
 
 - **Quality Attributes from AWS, Azure, and GCP Well-Architected Frameworks** — Operational Excellence, Reliability, Performance Efficiency, Cost Optimisation, and Sustainability as cross-cutting evaluation lenses applied across all architectural views
 - **Documentation Depths with RFC 2119 requirement keywords** — every section is tagged as SHALL (Minimum), SHOULD (Recommended), or MAY (Comprehensive), enabling progressive adoption from lightweight designs to full enterprise documentation
-- **Security as a dedicated Architectural View** — ISO 42010 does not prescribe specific viewpoints; ADS-001 elevates Security to a first-class view covering IAM, encryption, threat modelling, and monitoring
+- **Security as a dedicated Architectural View** — ISO 42010 does not prescribe specific viewpoints; ADS elevates Security to a first-class view covering IAM, encryption, threat modelling, and monitoring
 - **Lifecycle Management** — CI/CD pipelines, service transition, release management, operations, maintainability, and exit planning
 - **Risk & Governance with compliance traceability** — design risks, guardrail exceptions, architecture decision records, and a traceability matrix linking design elements to the standards they satisfy
 - **JSON Schema for multi-format generation** — a formal schema enabling validation and generation of Solution Architecture Documents in JSON, YAML, Markdown, or Word
@@ -74,7 +74,7 @@ ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concret
 
 ### Comparison with ISO/IEC 42010
 
-| Aspect | ISO/IEC/IEEE 42010:2022 | ADS-001 (This Standard) |
+| Aspect | ISO/IEC/IEEE 42010:2022 | ADS (This Standard) |
 |--------|------------------------|------------------------|
 | **Type** | Meta-standard (conceptual model) | Prescriptive standard (template-level) |
 | **Prescribes sections?** | No — defines concepts only | Yes — defines exact sections, tables, and content |
@@ -87,7 +87,7 @@ ADS-001 *conforms to* the ISO 42010 conceptual model while providing the concret
 
 ## Normative References
 
-| Reference | Title | Usage in ADS-001 |
+| Reference | Title | Usage in ADS |
 |-----------|-------|-----------------|
 | ISO/IEC/IEEE 42010:2022 | Architecture Description | Conceptual model: stakeholders, concerns, viewpoints, views |
 | Kruchten 4+1 | Architectural View Model | Six-view structure (extended with Data and Security views) |
