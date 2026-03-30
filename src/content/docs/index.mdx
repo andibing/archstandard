@@ -24,14 +24,6 @@ import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
 
 ADS is a **free, open-source, prescriptive standard** that defines exactly what sections, content, and quality criteria a Solution Architecture Document (SAD) shall contain. It is built upon — but is not a replica of — ISO/IEC/IEEE 42010, which defines an abstract conceptual model for architecture descriptions. It is published under the [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) licence — anyone can use, adapt, and redistribute it, including for commercial purposes.
 
-### The Naming Model
-
-| Term | What It Means | In This Standard |
-|------|--------------|-----------------|
-| **Architecture Description** | The ISO 42010 formal term for the work product | The standard itself (ADS) aligns to this concept |
-| **Solution Architecture Document (SAD)** | The enterprise-practice name for the document. The acronym SAD originates from the Rational Unified Process (RUP) where it stood for "Software Architecture Document". This standard uses "Solution" to reflect its broader scope beyond software — encompassing infrastructure, data, security, and operations. | The document you produce using this standard |
-| **High Level Design (HLD)** | The conceptual-level design content | Sections 3–4 (Architectural Views + Quality Attributes) within the SAD |
-
 ## Scope
 
 This standard defines the required and recommended structure for Solution Architecture Documents that are:
@@ -70,32 +62,39 @@ ADS *conforms to* the ISO 42010 conceptual model while providing the concrete, a
 - **JSON Schema for multi-format generation** — a formal schema enabling validation and generation of Solution Architecture Documents in JSON, YAML, Markdown, or Word
 - **Downloadable templates** — ready-to-use blank templates in Markdown, YAML, and JSON formats
 
-### Comparison with ISO/IEC 42010
+### How ADS Compares
 
-| Aspect | ISO/IEC/IEEE 42010:2022 | ADS (This Standard) |
-|--------|------------------------|------------------------|
-| **Type** | Meta-standard (conceptual model) | Prescriptive standard (template-level) |
-| **Prescribes sections?** | No — defines concepts only | Yes — defines exact sections, tables, and content |
-| **Prescribes quality criteria?** | No | Yes — quality attributes from AWS/Azure WAF |
-| **Provides templates?** | No | Yes — Markdown, YAML, JSON templates |
-| **Defines documentation depths?** | No | Yes — Minimum, Recommended, Comprehensive |
-| **Includes security view?** | Not specifically | Yes — full dedicated Security View |
-| **Includes lifecycle?** | No | Yes — CI/CD, operations, exit planning |
-| **JSON Schema?** | No | Yes — machine-readable validation |
+| Aspect | ISO 42010 | 4+1 Model | AWS/Azure WAF | TOGAF | arc42 | ADS |
+|--------|-----------|-----------|---------------|-------|-------|-----|
+| **Type** | Meta-standard | View model | Quality framework | EA framework | Doc template | Prescriptive standard |
+| **Prescribes sections?** | No | No | No | No | Yes (12) | Yes (8 + sub-sections) |
+| **Architectural views?** | Conceptual | 5 views | No | 4 domains | 4 views | 6 views |
+| **Quality attributes?** | No | No | Yes | No | Partial | Yes (5, cross-cutting) |
+| **Security view?** | No | No | Yes (as pillar) | No | No | Yes (dedicated view) |
+| **Data view?** | No | No | No | Yes (domain) | No | Yes (dedicated view) |
+| **Documentation depths?** | No | No | No | No | No | Yes (3 tiers + RFC 2119) |
+| **Templates?** | No | No | No | No | Yes (prose) | Yes (MD, YAML, JSON) |
+| **JSON Schema?** | No | No | No | No | No | Yes |
+| **Compliance scoring?** | No | No | Review tool | No | No | Yes (0–5 scale) |
+| **Lifecycle management?** | No | Partial | Ops Excellence | ADM phases | Partial | Yes |
+| **Decision governance?** | No | No | No | Architecture Board | Partial | Yes (RAID + ADRs) |
+| **Free / open?** | Paid | Yes | Yes | Paid | Yes | Yes (CC BY 4.0) |
+
+For a detailed analysis, see [Why ADS?](/standard/why-ads/)
 
 ## Normative References
 
-| Reference | Title | Usage in ADS |
-|-----------|-------|-----------------|
-| ISO/IEC/IEEE 42010:2022 | Architecture Description | Conceptual model: stakeholders, concerns, viewpoints, views |
-| Kruchten 4+1 | Architectural View Model | Six-view structure (extended with Data and Security views) |
-| AWS Well-Architected | Well-Architected Framework | Quality attribute definitions and evaluation criteria |
-| Azure Well-Architected | Well-Architected Framework | Quality attribute definitions with tradeoff documentation |
-| GCP Architecture | Well-Architected Framework | Quality attribute definitions with cross-cutting perspectives |
-| Oracle Cloud | Well-Architected Framework | Quality attribute definitions including Distributed Cloud |
-| IBM Cloud | Well-Architected Framework | Quality attribute definitions including Hybrid and Portable |
-| TOGAF 10th Edition | The Open Group Architecture Framework | Architecture domain alignment |
-| RFC 2119 / RFC 8174 | Requirement Level Key Words | SHALL / SHOULD / MAY terminology |
+| Reference | Usage in ADS |
+|-----------|-----------------|
+| [ISO/IEC/IEEE 42010:2022](https://www.iso.org/standard/74393.html) | Conceptual model: stakeholders, concerns, viewpoints, views |
+| [Kruchten 4+1 View Model](https://en.wikipedia.org/wiki/4%2B1_architectural_view_model) | Six-view structure (extended with Data and Security views) |
+| [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/) | Quality attribute definitions and evaluation criteria |
+| [Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/well-architected/) | Quality attribute definitions with tradeoff documentation |
+| [GCP Architecture Framework](https://cloud.google.com/architecture/framework) | Quality attribute definitions with cross-cutting perspectives |
+| [Oracle Cloud Well-Architected Framework](https://docs.oracle.com/en/solutions/oci-best-practices/) | Quality attribute definitions including Distributed Cloud |
+| [IBM Well-Architected Framework](https://www.ibm.com/architectures/well-architected) | Quality attribute definitions including Hybrid and Portable |
+| [TOGAF 10th Edition](https://www.opengroup.org/togaf) | Architecture domain alignment |
+| [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) / [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) | SHALL / SHOULD / MAY terminology |
 
 ## Terms and Definitions
 
