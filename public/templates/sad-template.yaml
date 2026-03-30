@@ -1,183 +1,167 @@
 # ADS v1.0.0 — Solution Architecture Document Template
-# This file conforms to the ADS JSON Schema v1.0.0
+# Generated from: schema/ads.schema.json
 # Published by: ArchStandard (archstandard.org)
-# See: https://archstandard.org/standard/schema/
 #
 # DESIGN PRINCIPLE: Fields are atomic — use enums, booleans,
 # and structured options to reduce ambiguity and enable
-# machine processing. See Design Principles page for details.
+# machine processing.
 
-schemaVersion: "1.0.0"
+schemaVersion: 1.0.0
 
 # ─────────────────────────────────────────────
 # Section 0: Document Control
 # ─────────────────────────────────────────────
-documentControl:
+documentControl:  # Section 0: Document Control
   metadata:
     title: ""
     solutionName: ""
     applicationId: ""
     authors: []
     owner: ""
-    version: "0.1"
-    status: draft                       # draft | in-review | approved | superseded
-    createdDate: ""                     # YYYY-MM-DD
-    lastUpdated: ""                     # YYYY-MM-DD
-    classification: internal            # public | internal | confidential | restricted
+    version: ""  # pattern: ^\d+\.\d+(\.\d+)?$
+    status: draft  # draft | in-review | approved | superseded
+    createdDate: ""  # YYYY-MM-DD
+    lastUpdated: ""  # YYYY-MM-DD
+    classification: public  # public | internal | confidential | restricted
   changeHistory:
-    - version: "0.1"
-      date: ""
+    - version: ""
+      date: ""  # YYYY-MM-DD
       author: ""
-      changeType: initial-draft         # initial-draft | minor-update | major-update | review-revision | approval
-      description: "Initial draft"
+      changeType: initial-draft  # initial-draft | minor-update | major-update | review-revision | approval
+      description: ""
   contributors:
     - name: ""
       role: ""
-      contributionType: author          # author | reviewer | approver
+      contributionType: author  # author | reviewer | approver
   purpose: ""
   scope: ""
 
 # ─────────────────────────────────────────────
 # Section 1: Executive Summary
 # ─────────────────────────────────────────────
-executiveSummary:
+executiveSummary:  # Section 1: Executive Summary
   solutionOverview: ""
   businessContext:
     - driver: ""
-      driverType: new-capability        # regulatory | cost-reduction | modernisation | new-capability | risk-mitigation | security | performance | scalability | end-of-life | merger-acquisition | other
+      driverType: regulatory  # regulatory | cost-reduction | modernisation | new-capability | risk-mitigation | security | performance | scalability | end-of-life | merger-acquisition | other
       description: ""
-      priority: high                    # critical | high | medium | low
-  strategicAlignment:
+      priority: critical  # critical | high | medium | low
+  strategicAlignment:  # Section 1.3: Strategic alignment and reuse of shared services
     organisationStrategySupported: ""
-    reviewedAgainstCapabilityModel: "no"  # yes | no | not-applicable
-    duplicatesExistingCapability: "no"    # yes | no
-    duplicationJustification: ""
+    reviewedAgainstCapabilityModel: yes  # yes | no | not-applicable
+    duplicatesExistingCapability: yes  # yes | no | not-applicable
+    duplicatesJustification: ""
     sharedServiceReuse:
-      - capability: identity-and-access   # identity-and-access | messaging | api-management | monitoring-logging | data-analytics | cicd | other
+      - capability: ""
         sharedService: ""
-        reused: true
-        justificationIfNotReused: ""
-  inScope:
-    - ""                                # List of in-scope items
-  outOfScope:
-    - ""                                # List of out-of-scope items
-  currentState: ""                      # Describe current-state architecture if replacing/modifying existing systems. Omit for greenfield.
+        reused: false
+        justification: ""
+  inScope: []
+  outOfScope: []
+  currentState: ""
   keyDecisions:
     - decision: ""
-      constraintType: technical         # technical | organisational | financial | regulatory | time | vendor | other
+      constraintType: technical  # technical | organisational | financial | regulatory | time | vendor | other
       rationale: ""
-      reversibility: reversible-with-effort  # easily-reversible | reversible-with-effort | difficult-to-reverse | irreversible
+      reversibility: easily-reversible  # easily-reversible | reversible-with-effort | difficult-to-reverse | irreversible
   projectDetails:
     projectName: ""
     projectCode: ""
     projectManager: ""
-    estimatedCapex: 0                   # Numeric value in base currency
-    estimatedOpex: 0                    # Annual operational cost
-    currency: GBP                       # ISO 4217 currency code
-    targetGoLive: ""                    # YYYY-MM-DD
-  businessCriticality: tier-3-medium    # tier-1-critical | tier-2-high | tier-3-medium | tier-4-low | tier-5-minimal
+    estimatedCapex: 0
+    estimatedOpex: 0
+    currency: ""  # pattern: ^[A-Z]{3}$
+    targetGoLive: ""  # YYYY-MM-DD
+  businessCriticality: tier-1-critical  # tier-1-critical | tier-2-high | tier-3-medium | tier-4-low | tier-5-minimal
 
 # ─────────────────────────────────────────────
 # Section 2: Stakeholders & Concerns
 # ─────────────────────────────────────────────
-stakeholders:
+stakeholders:  # Section 2: Stakeholders & Concerns
   register:
     - stakeholder: ""
-      roleType: solution-architect      # business-owner | solution-architect | enterprise-architect | security-architect | data-architect | infrastructure-engineer | developer | operations-sre | compliance | project-manager | vendor | end-user | external-customer | other
+      roleType: business-owner  # business-owner | solution-architect | enterprise-architect | security-architect | data-architect | infrastructure-engineer | developer | operations-sre | compliance | project-manager | vendor | end-user | external-customer | other
       concerns: []
-      relevantViews: []                 # logical | integration | physical | data | security | scenarios
+      relevantViews: []
   compliance:
-    supportsRegulatedActivities: "no"   # yes | no | not-applicable
+    supportsRegulatedActivities: yes  # yes | no | not-applicable
     regulatedActivityDetails: ""
     regulatoryRequirements:
       - regulation: ""
-        regulationType: data-protection # data-protection | financial-services | healthcare | security | industry-specific | internal-policy | other
+        regulationType: data-protection  # data-protection | financial-services | healthcare | security | industry-specific | internal-policy | other
         applicability: ""
         designImpact: ""
 
 # ─────────────────────────────────────────────
 # Section 3: Architectural Views
 # ─────────────────────────────────────────────
-architecturalViews:
-
-  # 3.1 Logical View
-  logicalView:
+architecturalViews:  # Section 3: Architectural Views
+  logicalView:  # 3.1 Logical View
     diagrams: []
     components:
       - name: ""
-        componentType: api-service      # web-application | api-service | backend-service | batch-job | message-broker | database | cache | file-storage | search-engine | cdn | gateway | load-balancer | queue | stream | ml-model | other
+        componentType: web-application  # web-application | api-service | backend-service | batch-job | message-broker | database | cache | file-storage | search-engine | cdn | gateway | load-balancer | queue | stream | ml-model | other
         description: ""
         technology: ""
         owner: ""
-        status: new                     # new | existing-unchanged | existing-modified | to-be-decommissioned
+        status: new  # new | existing-unchanged | existing-modified | to-be-decommissioned
     designPatterns:
-      - pattern: microservices          # microservices | monolith | modular-monolith | event-driven | cqrs | saga | strangler-fig | sidecar | api-gateway | bff | circuit-breaker | pub-sub | request-response | batch-processing | stream-processing | data-lake | data-mesh | other
+      - pattern: microservices  # microservices | monolith | modular-monolith | event-driven | cqrs | saga | strangler-fig | sidecar | api-gateway | bff | circuit-breaker | pub-sub | request-response | batch-processing | stream-processing | data-lake | data-mesh | other
         whereApplied: ""
         rationale: ""
-    qualityAttributeRefs: []               # operational-excellence | reliability | performance | cost-optimisation | sustainability
-
-  # 3.2 Integration & Data Flow View
-  integrationView:
+    qualityAttributeRefs: []
+  integrationView:  # 3.2 Integration & Data Flow View
     diagrams: []
     internalConnectivity:
       - source: ""
         destination: ""
-        protocol: https                 # https | http | grpc | grpc-tls | tcp | tcp-tls | amqp | amqps | mqtt | mqtts | kafka | websocket | wss | jdbc | odbc | sftp | ftps | smtp | smtps | ldaps | ssh | other
-        encrypted: true
-        authenticationMethod: oauth2    # mtls | oauth2 | api-key | jwt | saml | oidc | basic-auth | certificate | iam-role | kerberos | none | other
-        direction: unidirectional       # unidirectional | bidirectional
-        synchronicity: synchronous      # synchronous | asynchronous | event-driven
+        protocol: https  # https | http | grpc | grpc-tls | tcp | tcp-tls | amqp | amqps | mqtt | mqtts | kafka | websocket | wss | jdbc | odbc | sftp | ftps | smtp | smtps | ldaps | ssh | other
+        encrypted: false
+        authenticationMethod: mtls  # mtls | oauth2 | api-key | jwt | saml | oidc | basic-auth | certificate | iam-role | kerberos | none | other
+        direction: unidirectional  # unidirectional | bidirectional
+        synchronicity: synchronous  # synchronous | asynchronous | event-driven
         purpose: ""
     externalIntegrations:
       - sourceApp: ""
         destinationApp: ""
-        integrationType: internal-app   # internal-app | external-service | saas | partner | customer-facing
-        protocol: https                 # (same options as above)
-        encrypted: true
-        authenticationMethod: oauth2    # (same options as above)
+        integrationType: internal-app  # internal-app | external-service | saas | partner | customer-facing
+        protocol: https  # https | http | grpc | grpc-tls | tcp | tcp-tls | amqp | amqps | mqtt | kafka | sftp | ftps | smtp | smtps | other
+        encrypted: false
+        authenticationMethod: mtls  # mtls | oauth2 | api-key | jwt | saml | oidc | basic-auth | certificate | iam-role | none | other
         purpose: ""
     apis:
       - name: ""
-        apiType: rest                   # rest | graphql | grpc | soap | websocket | event-stream | file-transfer | other
-        direction: exposed              # exposed | consumed
-        dataFormat: json                # json | xml | protobuf | avro | csv | parquet | binary | other
+        apiType: rest  # rest | graphql | grpc | soap | websocket | event-stream | file-transfer | other
+        direction: exposed  # exposed | consumed
+        dataFormat: json  # json | xml | protobuf | avro | csv | parquet | binary | other
         version: ""
-        authenticated: true
+        authenticated: false
         rateLimited: false
     qualityAttributeRefs: []
-
-  # 3.3 Physical View
-  physicalView:
+  physicalView:  # 3.3 Physical View
     diagrams: []
     hosting:
-      venueTypes:                       # public-cloud | private-cloud | on-premises | saas | hybrid | co-location | edge
-        - public-cloud
-      regions: []                       # ISO 3166-1 codes or cloud region identifiers
-      serviceModels:                    # iaas | paas | saas | faas | caas | dbaas | other
-        - paas
-      cloudProviders:                   # aws | azure | gcp | oracle-cloud | ibm-cloud | alibaba-cloud | other | none
-        - aws
+      venueTypes: []
+      regions: []  # ISO 3166-1 country codes or cloud region identifiers
+      serviceModels: []
+      cloudProviders: []
     compute:
-      computeTypes:                     # physical-server | virtual-machine | container | serverless-function | edge-compute | hpc | gpu | none
-        - container
-      servers: []
+      computeTypes: []
+      servers:
+        - name: ""
+          instanceType: ""
+          vCpu: 0
+          memoryGb: 0
+          storageTb: 0
+          quantity: 0
+          os: rhel  # rhel | amazon-linux | ubuntu | debian | centos | windows-server | suse | other
       containers:
-        platform: eks                   # eks | aks | gke | openshift | docker-swarm | ecs | fargate | cloud-run | other | none
+        platform: eks  # eks | aks | gke | openshift | docker-swarm | ecs | fargate | cloud-run | other | none
         baseImages: []
-        clusterSize: 1-10-nodes         # 1-10-nodes | 11-50-nodes | 51-100-nodes | 100-plus-nodes
+        clusterSize: 1-10-nodes  # 1-10-nodes | 11-50-nodes | 51-100-nodes | 100-plus-nodes
       serverless:
-        used: false
         services: []
-    userAccess:
-      userAccessMethod: https              # https | vdi | rdp | citrix | mobile-app | api | other
-      userLocations: []
-      adminAccessMethod: ssh               # vdi | rdp | ssh | https | bastion-host | other
-      vpnRequired: false
-      directConnect: false
-    transportProtocols:
-      - protocol: https                    # https | sftp | odbc-jdbc | tcp | grpc | websocket | other
-        used: true
-        purpose: ""
+        used: false
     networking:
       internetFacing: false
       outboundInternet: false
@@ -187,67 +171,59 @@ architecturalViews:
       wirelessRequired: false
       peakEgressMbps: 0
       peakIngressMbps: 0
-      trafficPattern: constant          # constant | periodic | burst | seasonal | unpredictable
-      latencyRequirement: standard-sub-1s  # ultra-low-sub-1ms | low-sub-10ms | moderate-sub-100ms | standard-sub-1s | tolerant-above-1s | not-applicable
-      ddosProtection: "no"              # yes | no | not-applicable
-      ddosProvider: none                # aws-shield | azure-ddos | cloudflare | akamai | gcp-cloud-armor | arbor | other | none
-      wafEnabled: "no"                  # yes | no | not-applicable
-      wafProvider: none                 # aws-waf | azure-waf | cloudflare-waf | gcp-cloud-armor | f5 | imperva | other | none
+      trafficPattern: constant  # constant | periodic | burst | seasonal | unpredictable
+      latencyRequirement: ultra-low-sub-1ms  # ultra-low-sub-1ms | low-sub-10ms | moderate-sub-100ms | standard-sub-1s | tolerant-above-1s | not-applicable
+      ddosProtection: yes  # yes | no | not-applicable
+      ddosProvider: aws-shield  # aws-shield | azure-ddos | cloudflare | akamai | gcp-cloud-armor | arbor | other | none
+      wafEnabled: yes  # yes | no | not-applicable
+      wafProvider: aws-waf  # aws-waf | azure-waf | cloudflare-waf | gcp-cloud-armor | f5 | imperva | other | none
       rateLimiting: false
     environments:
-      - environmentType: development    # development | test | qa | integration-test | staging | pre-production | production | dr | sandbox | demo | performance-test
-        count: 1
-        venue: ""
-        autoScaleDown: true
-      - environmentType: production
-        count: 1
+      - environmentType: development  # development | test | qa | integration-test | staging | pre-production | production | dr | sandbox | demo | performance-test
+        count: 0
         venue: ""
         autoScaleDown: false
-    securityAgents: []                  # anti-malware | edr | vulnerability-management | dlp | hids | fim | other
+    securityAgents: []
     qualityAttributeRefs: []
-
-  # 3.4 Data View
-  dataView:
+  dataView:  # 3.4 Data View
     dataStores:
       - name: ""
-        storeType: relational-db        # relational-db | nosql-document | nosql-key-value | nosql-graph | nosql-columnar | object-storage | block-storage | file-storage | data-warehouse | data-lake | cache | message-queue | search-index | time-series-db | in-memory | other
+        storeType: relational-db  # relational-db | nosql-document | nosql-key-value | nosql-graph | nosql-columnar | object-storage | block-storage | file-storage | data-warehouse | data-lake | cache | message-queue | search-index | time-series-db | in-memory | other
         technology: ""
         authoritative: false
-        retentionPeriod: 1-year         # transient | hours | days | weeks | months | 1-year | 2-5-years | 5-10-years | 10-plus-years | indefinite
-        dataSizeCategory: 1-100gb       # under-1gb | 1-100gb | 100gb-1tb | 1-10tb | 10-100tb | 100tb-1pb | over-1pb
-        classification: internal        # public | internal | restricted | highly-restricted
+        retentionPeriod: transient  # transient | hours | days | weeks | months | 1-year | 2-5-years | 5-10-years | 10-plus-years | indefinite
+        dataSizeCategory: under-1gb  # under-1gb | 1-100gb | 100gb-1tb | 1-10tb | 10-100tb | 100tb-1pb | over-1pb
+        classification: public  # public | internal | restricted | highly-restricted
         containsPersonalData: false
         containsSensitivePersonalData: false
-        encryptionLevel: storage-level  # none | storage-level | logical-container | application-level | field-level
-        keyManagement: provider-managed # provider-managed | customer-managed-kms | hsm | byok | custom | none
+        encryptionLevel: none  # none | storage-level | logical-container | application-level | field-level
+        keyManagement: provider-managed  # provider-managed | customer-managed-kms | hsm | byok | custom | none
     productionDataForTesting: not-used  # not-used | public-only | sensitive-deleted | masked | used-with-justification
-    dataIntegrityControls: "no"         # yes | no | not-applicable
-    dataOnEndUserDevices: "no"          # yes | no | not-applicable
-    dataSovereigntyRequired: "no"       # yes | no | not-applicable
+    dataIntegrityControls: yes  # yes | no | not-applicable
+    dataOnEndUserDevices: yes  # yes | no | not-applicable
+    dataSovereigntyRequired: yes  # yes | no | not-applicable
     dataSovereigntyDetails: ""
     dataTransfers:
       - destination: ""
-        destinationType: internal       # internal | third-party | regulator | customer | partner
-        classification: internal        # public | internal | restricted | highly-restricted
-        transferMethod: api             # api | sftp | email | message-queue | database-replication | file-share | manual | other
-        encrypted: true
+        destinationType: internal  # internal | third-party | regulator | customer | partner
+        classification: public  # public | internal | restricted | highly-restricted
+        transferMethod: api  # api | sftp | email | message-queue | database-replication | file-share | manual | other
+        encrypted: false
     qualityAttributeRefs: []
-
-  # 3.5 Security View
-  securityView:
-    thirdPartyHosted: "no"              # yes | no | not-applicable
-    thirdPartyRiskAssessed: "not-applicable"  # yes | no | not-applicable
+  securityView:  # 3.5 Security View
+    thirdPartyHosted: yes  # yes | no | not-applicable
+    thirdPartyRiskAssessed: yes  # yes | no | not-applicable
     businessImpact:
-      confidentiality: medium           # critical | high | medium | low | negligible
-      integrity: medium
-      availability: medium
-      nonRepudiation: low
+      confidentiality: critical  # critical | high | medium | low | negligible
+      integrity: critical  # critical | high | medium | low | negligible
+      availability: critical  # critical | high | medium | low | negligible
+      nonRepudiation: critical  # critical | high | medium | low | negligible
     authentication:
-      - accessType: end-user-internal   # end-user-internal | end-user-external | it-operations | service-account | api-consumer
-        method: sso-oidc                # sso-saml | sso-oidc | mfa | certificate | api-key | oauth2 | basic-auth | kerberos | passwordless | custom
-        usesGroupWideAuth: true
+      - accessType: end-user-internal  # end-user-internal | end-user-external | it-operations | service-account | api-consumer
+        method: sso-saml  # sso-saml | sso-oidc | mfa | certificate | api-key | oauth2 | basic-auth | kerberos | passwordless | custom
+        usesGroupWideAuth: false
     authorisation:
-      model: rbac                       # rbac | abac | pbac | acl | custom
+      model: rbac  # rbac | abac | pbac | acl | custom
       entitlementStore: ""
       provisioningProcess: automated-idm  # automated-idm | manual-request | self-service | api-driven | other
       recertificationEnabled: false
@@ -258,48 +234,46 @@ architecturalViews:
       sessionRecording: false
       breakGlassProcess: false
     encryptionAtRest:
-      implemented: true
-      level: storage-level              # storage-level | logical-container | application-level | field-level
-      keyType: symmetric                # symmetric | asymmetric
+      implemented: false
+      level: storage-level  # storage-level | logical-container | application-level | field-level
+      keyType: symmetric  # symmetric | asymmetric
       algorithm: ""
-      keyGeneration: kms                # hsm-fips140-l3 | hsm-fips140-l2 | kms | software | other
-      keyStorage: kms                   # hsm | kms | software-keystore | other
-      keyRotationDays: 365
+      keyGeneration: hsm-fips140-l3  # hsm-fips140-l3 | hsm-fips140-l2 | kms | software | other
+      keyStorage: hsm  # hsm | kms | software-keystore | other
+      keyRotationDays: 0
     secretManagement:
-      secretStore: aws-secrets-manager  # hashicorp-vault | aws-secrets-manager | azure-key-vault | gcp-secret-manager | cyberark | custom | none
-      distribution: runtime-retrieval   # runtime-retrieval | deployment-time | environment-variable | mounted-volume | other
-      rotation: automatic               # automatic | manual-scheduled | manual-ad-hoc | not-rotated
+      secretStore: hashicorp-vault  # hashicorp-vault | aws-secrets-manager | azure-key-vault | gcp-secret-manager | cyberark | custom | none
+      distribution: runtime-retrieval  # runtime-retrieval | deployment-time | environment-variable | mounted-volume | other
+      rotation: automatic  # automatic | manual-scheduled | manual-ad-hoc | not-rotated
     securityMonitoring:
       siemIntegration: false
       siemTool: ""
       securityEventLogging: false
       intrusionDetection: false
     qualityAttributeRefs: []
-
-  # 3.6 Scenarios
-  scenarios:
+  scenarios:  # 3.6 Scenarios
     useCases:
-      - id: UC-01
+      - id: ""  # pattern: ^UC-\d+$
         name: ""
         actors: []
         trigger: ""
         mainFlow: ""
-        viewsInvolved: []               # logical | integration | physical | data | security
+        viewsInvolved: []
     adrs:
-      - id: ADR-001
+      - id: ""  # pattern: ^ADR-\d+$
         title: ""
-        status: proposed                # proposed | accepted | superseded | deprecated
-        date: ""
+        status: proposed  # proposed | accepted | superseded | deprecated
+        date: ""  # YYYY-MM-DD
         context: ""
         decision: ""
         alternatives: ""
         consequences: ""
-        affectedAttributes: []             # operational-excellence | reliability | performance | cost-optimisation | sustainability
+        affectedAttributes: []
 
 # ─────────────────────────────────────────────
 # Section 4: Quality Attributes
 # ─────────────────────────────────────────────
-qualityAttributes:
+qualityAttributes:  # Section 4: Quality Attributes
   operationalExcellence:
     loggingCentralised: false
     loggingTool: ""
@@ -308,26 +282,26 @@ qualityAttributes:
     alertingConfigured: false
     runbooksDocumented: false
   reliability:
-    drStrategy: none                    # active-active | active-passive | pilot-light | warm-standby | backup-restore | none
+    drStrategy: active-active  # active-active | active-passive | pilot-light | warm-standby | backup-restore | none
     multiVenueDeployment: false
-    rtoTarget: ""                       # ISO 8601 duration, e.g. PT4H
-    rpoTarget: ""                       # ISO 8601 duration, e.g. PT1H
-    scalability: no-dynamic-scaling     # no-dynamic-scaling | manual-scaling | partial-auto-scaling | full-auto-scaling
+    rtoTarget: ""
+    rpoTarget: ""
+    scalability: no-dynamic-scaling  # no-dynamic-scaling | manual-scaling | partial-auto-scaling | full-auto-scaling
     faultToleranceDesigned: false
     chaosTestingPractised: false
     backupEnabled: false
-    backupType: full                    # full | incremental | differential | continuous | snapshot
-    backupFrequency: daily              # real-time | hourly | daily | weekly | monthly
+    backupType: full  # full | incremental | differential | continuous | snapshot
+    backupFrequency: real-time  # real-time | hourly | daily | weekly | monthly
     backupImmutable: false
     backupEncrypted: false
   performance:
     p95ResponseTimeMs: 0
     targetThroughputRps: 0
     targetConcurrentUsers: 0
-    performanceTestingApproach: none    # load-testing | stress-testing | soak-testing | spike-testing | none
+    performanceTestingApproach: load-testing  # load-testing | stress-testing | soak-testing | spike-testing | none
     cachingUsed: false
     cdnUsed: false
-    growthProjections:
+    growthProjections:  # Capacity and growth projections over 1, 3, and 5 years
       currentUsers: 0
       year1Users: 0
       year3Users: 0
@@ -336,7 +310,7 @@ qualityAttributes:
       year1DataVolume: ""
       year3DataVolume: ""
       year5DataVolume: ""
-      designScalesToProjectedGrowth: true
+      designScalesToProjectedGrowth: false
       seasonalDemandPatterns: false
       seasonalDetails: ""
   costOptimisation:
@@ -349,113 +323,112 @@ qualityAttributes:
     hostingLocationOptimisedForCarbon: false
     nonProdAutoShutdown: false
     resourcesRightsized: false
-    workloadPattern: constant           # constant | variable-predictable | variable-unpredictable
+    workloadPattern: constant  # constant | variable-predictable | variable-unpredictable
     continuousAvailabilityRequired: false
   tradeoffs:
-    - attributesInvolved: []               # operational-excellence | reliability | performance | cost-optimisation | sustainability
+    - attributesInvolved: 
       description: ""
-      chosenPriority: reliability       # (same attribute options)
+      chosenPriority: operational-excellence  # operational-excellence | reliability | performance | cost-optimisation | sustainability
       rationale: ""
 
 # ─────────────────────────────────────────────
 # Section 5: Lifecycle Management
 # ─────────────────────────────────────────────
-lifecycleManagement:
+lifecycleManagement:  # Section 5: Lifecycle Management
   internallyDeveloped: false
-  sourceControl: github                 # github | gitlab | bitbucket | azure-devops | svn | other | none
-  cicdPlatform: github-actions          # github-actions | gitlab-ci | jenkins | azure-pipelines | circleci | argo | tekton | other | none
-  sast: none                            # semgrep | sonarqube | coverity | checkmarx | veracode | snyk-code | other | none
-  dast: "no"                            # yes | no | not-applicable
-  sca: none                             # snyk | blackduck | dependabot | renovate | whitesource | other | none
-  containerScanning: "no"              # yes | no | not-applicable
-  migration:
-    classification: not-applicable        # retain | retire | rehost | replatform | refactor | replace | not-applicable
-    deploymentStrategy: blue-green        # big-bang | blue-green | canary | rolling | strangler-fig | parallel-run | phased
-    dataMigrationMode: not-applicable     # one-off | phased | continuous-sync | not-applicable
+  sourceControl: github  # github | gitlab | bitbucket | azure-devops | svn | other | none
+  cicdPlatform: github-actions  # github-actions | gitlab-ci | jenkins | azure-pipelines | circleci | argo | tekton | other | none
+  sast: semgrep  # semgrep | sonarqube | coverity | checkmarx | veracode | snyk-code | other | none
+  dast: yes  # yes | no | not-applicable
+  sca: snyk  # snyk | blackduck | dependabot | renovate | whitesource | other | none
+  containerScanning: yes  # yes | no | not-applicable
+  migration:  # Service transition and migration details
+    classification: retain  # retain | retire | rehost | replatform | refactor | replace | not-applicable
+    deploymentStrategy: big-bang  # big-bang | blue-green | canary | rolling | strangler-fig | parallel-run | phased
+    dataMigrationMode: one-off  # one-off | phased | continuous-sync | not-applicable
     dataMigrationMethod: ""
-    dataVolumeToMigrate: ""
-    endUserCutover: not-applicable        # one-off | phased | not-applicable
-    externalSystemCutover: not-applicable # one-off | phased | not-applicable
-    maxAcceptableDowntime: zero           # zero | seconds | minutes | hours | days
+    dataVolume: ""
+    endUserCutover: one-off  # one-off | phased | not-applicable
+    externalSystemCutover: one-off  # one-off | phased | not-applicable
+    maxAcceptableDowntime: zero  # zero | seconds | minutes | hours | days
     rollbackPlan: ""
     transientInfrastructureNeeded: false
-  resourcing:
-    skills:
-      - area: cloud-platform              # cloud-platform | infrastructure-as-code | cicd | application-stack | database-admin | security-compliance
-        currentLevel: medium              # high | medium | low | not-applicable
-        actionRequired: ""
-    operationalReadiness: a-fully-capable # a-fully-capable | b-partially-capable | c-learning | d-not-capable
-    additionalResourcesRequired: ""
-    managedServiceConsidered: false
-  releaseFrequency: ad-hoc             # continuous | daily | weekly | fortnightly | monthly | quarterly | ad-hoc
-  supportModel: internal-team           # internal-team | vendor-managed | managed-service | community | hybrid
-  supportHours: business-hours          # 24x7 | business-hours | extended-hours | follow-the-sun
-  intendedLifespan: 3-5-years           # under-1-year | 1-3-years | 3-5-years | 5-10-years | 10-plus-years | indefinite
+  resourcing:  # Team capability and operational readiness assessment
+    cloudPlatform: high  # high | medium | low | not-applicable
+    infrastructureAsCode: high  # high | medium | low | not-applicable
+    cicdManagement: high  # high | medium | low | not-applicable
+    applicationStack: high  # high | medium | low | not-applicable
+    databaseAdministration: high  # high | medium | low | not-applicable
+    securityCompliance: high  # high | medium | low | not-applicable
+    operationalReadiness: a-fully-capable  # a-fully-capable | b-partially-capable | c-learning | d-not-capable
+  releaseFrequency: continuous  # continuous | daily | weekly | fortnightly | monthly | quarterly | ad-hoc
+  supportModel: internal-team  # internal-team | vendor-managed | managed-service | community | hybrid
+  supportHours: 24x7  # 24x7 | business-hours | extended-hours | follow-the-sun
+  intendedLifespan: under-1-year  # under-1-year | 1-3-years | 3-5-years | 5-10-years | 10-plus-years | indefinite
   exitPlanDocumented: false
-  vendorLockInLevel: low                # none | low | moderate | high | critical
+  vendorLockInLevel: none  # none | low | moderate | high | critical
 
 # ─────────────────────────────────────────────
 # Section 6: Decision Making & Governance
 # ─────────────────────────────────────────────
-riskGovernance:
-  # RAID log (extended): Constraints, Assumptions, Risks, Dependencies, Issues
-  constraints:
-    - id: C-001
+riskGovernance:  # Section 6: Decision Making & Governance
+  constraints:  # Fixed limitations the design must work within
+    - id: ""  # pattern: ^C-\d+$
       constraint: ""
-      category: technical               # regulatory | technical | commercial | organisational | time
+      category: regulatory  # regulatory | technical | commercial | organisational | time
       impactOnDesign: ""
-      lastAssessed: ""                  # YYYY-MM-DD
-  assumptions:
-    - id: A-001
+      lastAssessed: ""  # YYYY-MM-DD
+  assumptions:  # Factors believed to be true but not yet verified
+    - id: ""  # pattern: ^A-\d+$
       assumption: ""
       impactIfFalse: ""
-      certainty: medium                 # high | medium | low
-      status: open                      # open | closed
+      certainty: high  # high | medium | low
+      status: open  # open | closed
       owner: ""
       evidence: ""
-  risks:
-    - id: R-001
+  risks:  # Potential events that could negatively affect the design
+    - id: ""  # pattern: ^R-\d+$
       riskEvent: ""
-      riskCategory: technical           # technical | security | operational | delivery | commercial | compliance | other
-      severity: medium                  # high | medium | low
-      likelihood: medium                # high | medium | low
-      mitigationStrategy: mitigate      # accept | mitigate | transfer | avoid
+      riskCategory: technical  # technical | security | operational | delivery | commercial | compliance | other
+      severity: critical  # critical | high | medium | low | negligible
+      likelihood: critical  # critical | high | medium | low | negligible
+      mitigationStrategy: accept  # accept | mitigate | transfer | avoid
       mitigationPlan: ""
-      residualRisk: low                 # high | medium | low
+      residualRisk: critical  # critical | high | medium | low | negligible
       owner: ""
-      lastAssessed: ""                  # YYYY-MM-DD
-  dependencies:
-    - id: D-001
+      lastAssessed: ""  # YYYY-MM-DD
+  dependencies:  # External factors the design relies upon or that rely upon this design
+    - id: ""  # pattern: ^D-\d+$
       dependency: ""
-      direction: inbound                # inbound | outbound
-      status: committed                 # committed | not-committed | resolved
+      direction: inbound  # inbound | outbound
+      status: committed  # committed | not-committed | resolved
       owner: ""
       evidence: ""
-      lastAssessed: ""                  # YYYY-MM-DD
-  issues:
-    - id: I-001
+      lastAssessed: ""  # YYYY-MM-DD
+  issues:  # Known problems that have already materialised
+    - id: ""  # pattern: ^I-\d+$
       issue: ""
-      category: technical               # technical | security | operational | delivery | commercial
-      impact: medium                    # high | medium | low
+      category: technical  # technical | security | operational | delivery | commercial
+      impact: critical  # critical | high | medium | low | negligible
       owner: ""
       resolutionPlan: ""
-      status: open                      # open | in-progress | resolved
-      lastAssessed: ""                  # YYYY-MM-DD
-  policyExceptions: "no"               # yes | no | not-applicable
-  policyExceptionsAccepted: "not-applicable"  # yes | no | not-applicable
-  processExceptions: "no"              # yes | no | not-applicable
-  riskProfileImpact: "no"              # yes | no | not-applicable
+      status: open  # open | in-progress | resolved
+      lastAssessed: ""  # YYYY-MM-DD
+  policyExceptions: yes  # yes | no | not-applicable
+  policyExceptionsAccepted: yes  # yes | no | not-applicable
+  processExceptions: yes  # yes | no | not-applicable
+  riskProfileImpact: yes  # yes | no | not-applicable
   complianceTraceability:
     - standard: ""
       requirement: ""
       howSatisfied: ""
       evidenceSection: ""
-      complianceStatus: compliant       # compliant | partially-compliant | non-compliant | not-applicable
+      complianceStatus: compliant  # compliant | partially-compliant | non-compliant | not-applicable
 
 # ─────────────────────────────────────────────
 # Section 7: Appendices
 # ─────────────────────────────────────────────
-appendices:
+appendices:  # Section 7: Appendices
   glossary:
     - term: ""
       definition: ""
@@ -467,20 +440,20 @@ appendices:
   approvals:
     - role: ""
       name: ""
-      date: ""
-      decision: approved                # approved | approved-with-conditions | rejected | deferred
+      date: ""  # YYYY-MM-DD
+      decision: approved  # approved | approved-with-conditions | rejected | deferred
 
 # ─────────────────────────────────────────────
-# Compliance Scoring (OPTIONAL)
+# Compliance Scoring (0-5 per section)
 # 0=Not Addressed, 1=Acknowledged, 2=Partial,
 # 3=Mostly Addressed, 4=Fully Addressed, 5=Exemplary
 # ─────────────────────────────────────────────
 complianceScoring:
   assessments:
     - section: "1. Executive Summary"
-      score: 0                              # 0-5
+      score: 0
       assessor: ""
-      date: ""                              # YYYY-MM-DD
+      date: ""
       notes: ""
     - section: "3.1 Logical View"
       score: 0
@@ -547,7 +520,7 @@ complianceScoring:
       assessor: ""
       date: ""
       notes: ""
-  overallScore: 0                           # 0-5 (lowest individual score, not average)
+  overallScore: 0
   overallAssessor: ""
   overallDate: ""
   overallNotes: ""
@@ -562,7 +535,3 @@ complianceScoring:
 #     secretStore: ""
 #     monitoring: ""
 #     siem: ""
-#   governanceGates:
-#     - gateName: ""
-#       requiredMaturityLevel: minimum  # minimum | recommended | comprehensive
-#       requiredSections: []

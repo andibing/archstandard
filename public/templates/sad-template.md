@@ -1,129 +1,93 @@
 # Solution Architecture Document
 
-> **Standard:** ADS v1.0.0 (The Architecture Description Standard)
+> **Standard:** ADS v1.0.0 (Architecture Description Standard)
 > **Template Version:** 1.0.0
 > **Published by:** ArchStandard (archstandard.org)
+> **Generated from:** schema/ads.schema.json
 
 ---
 
+> **Note:** This template was auto-generated from the ADS JSON Schema.
+> For guidance on completing each section, see [archstandard.org](https://archstandard.org).
+
 ## 0. Document Control
 
-### 0.1 Document Metadata
+### Document Metadata
 
-| Field | Value |
-|-------|-------|
-| **Document Title** | |
-| **Solution Name** | |
-| **Application ID** | |
-| **Author(s)** | |
-| **Owner** | |
-| **Version** | 0.1 |
-| **Status** | ☐ Draft ☐ In Review ☐ Approved ☐ Superseded |
-| **Created Date** | |
-| **Last Updated** | |
-| **Classification** | ☐ Public ☐ Internal ☐ Confidential ☐ Restricted |
+**Authors:**
+- 
 
-### 0.2 Change History
+### Change History
 
 | Version | Date | Author | Change Type | Description |
-|---------|------|--------|-------------|-------------|
-| 0.1 | | | ☐ Initial Draft ☐ Minor Update ☐ Major Update ☐ Review Revision | |
+|------|------|------|------|------|
+|  |  |  | ☐ Initial Draft ☐ Minor Update ☐ Major Update ☐ Review Revision ☐ Approval |  |
 
-### 0.3 Contributors & Approvals
+### Contributors & Approvals
 
-| Name | Role | Type |
+| Name | Role | Contribution Type |
 |------|------|------|
-| | | ☐ Author ☐ Reviewer ☐ Approver |
-
-### 0.4 Purpose & Scope
-
-**Purpose:**
-
-**Scope:**
+|  |  | ☐ Author ☐ Reviewer ☐ Approver |
 
 ---
 
 ## 1. Executive Summary
 
-### 1.1 Solution Overview
+### Business Context & Drivers
 
-### 1.2 Business Context & Drivers
+| Driver | Driver Type | Description | Priority |
+|------|------|------|------|
+|  | ☐ Regulatory ☐ Cost Reduction ☐ Modernisation ☐ New Capability ☐ Risk Mitigation ☐ Security ☐ Performance ☐ Scalability ☐ End Of Life ☐ Merger Acquisition ☐ Other |  | ☐ Critical ☐ High ☐ Medium ☐ Low |
 
-| Driver | Type | Description | Priority |
-|--------|------|-------------|----------|
-| | ☐ Regulatory ☐ Cost Reduction ☐ Modernisation ☐ New Capability ☐ Risk Mitigation ☐ Security ☐ Performance ☐ Scalability ☐ End-of-Life ☐ Other | | ☐ Critical ☐ High ☐ Medium ☐ Low |
+### Strategic Alignment
 
-### 1.3 Strategic Alignment
+#### Shared Service Reuse
 
-| Question | Response |
-|----------|----------|
-| Organisational strategy supported | |
-| Reviewed against capability model? | ☐ Yes ☐ No ☐ N/A |
-| Duplicates existing capability? | ☐ Yes ☐ No — Justification: |
-
-#### Reuse of Shared Services
-
-| Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
-|-----------|--------------------------|---------|------------------------------|
-| Identity & Access | | ☐ Yes ☐ No | |
-| Messaging / Notifications | | ☐ Yes ☐ No | |
-| API Management | | ☐ Yes ☐ No | |
-| Monitoring & Logging | | ☐ Yes ☐ No | |
-| Data & Analytics | | ☐ Yes ☐ No | |
-| CI/CD | | ☐ Yes ☐ No | |
-| Other | | ☐ Yes ☐ No | |
-
-### 1.4 Scope
+| Capability | Shared Service | Reused | Justification |
+|------|------|------|------|
+|  |  | ☐ Yes ☐ No |  |
 
 **In Scope:**
--
+- 
 
-**Out of Scope:**
--
+**Out Of Scope:**
+- 
 
-### 1.5 Current State / As-Is Architecture
-
-*[Describe current-state architecture if replacing/modifying existing systems. Omit for greenfield.]*
-
-### 1.6 Key Decisions & Constraints
+### Key Decisions & Constraints
 
 | Decision | Constraint Type | Rationale | Reversibility |
-|----------|----------------|-----------|---------------|
-| | ☐ Technical ☐ Organisational ☐ Financial ☐ Regulatory ☐ Time ☐ Vendor ☐ Other | | ☐ Easily Reversible ☐ Reversible with Effort ☐ Difficult to Reverse ☐ Irreversible |
+|------|------|------|------|
+|  | ☐ Technical ☐ Organisational ☐ Financial ☐ Regulatory ☐ Time ☐ Vendor ☐ Other |  | ☐ Easily Reversible ☐ Reversible With Effort ☐ Difficult To Reverse ☐ Irreversible |
 
-### 1.7 Project Details
+### Project Details
 
 | Field | Value |
 |-------|-------|
 | **Project Name** | |
 | **Project Code** | |
 | **Project Manager** | |
-| **Est. Capex** | |
-| **Est. Opex (annual)** | |
+| **Estimated Capex** | |
+| **Estimated Opex** | |
 | **Currency** | |
-| **Target Go-Live** | |
-
-### 1.8 Business Criticality
-
-☐ Tier 1: Critical ☐ Tier 2: High ☐ Tier 3: Medium ☐ Tier 4: Low ☐ Tier 5: Minimal
+| **Target Go Live** | |
 
 ---
 
 ## 2. Stakeholders & Concerns
 
-### 2.1 Stakeholder Register
+### Stakeholder Register
 
-| Stakeholder | Role Type | Key Concerns | Relevant Views |
-|-------------|-----------|--------------|----------------|
-| | ☐ Business Owner ☐ Solution Architect ☐ Enterprise Architect ☐ Security Architect ☐ Data Architect ☐ Infrastructure Engineer ☐ Developer ☐ Operations/SRE ☐ Compliance ☐ End User ☐ External Customer ☐ Other | | ☐ Logical ☐ Integration & Data Flow ☐ Physical ☐ Data ☐ Security ☐ Scenarios |
+| Stakeholder | Role Type | Concerns | Relevant Views |
+|------|------|------|------|
+|  | ☐ Business Owner ☐ Solution Architect ☐ Enterprise Architect ☐ Security Architect ☐ Data Architect ☐ Infrastructure Engineer ☐ Developer ☐ Operations Sre ☐ Compliance ☐ Project Manager ☐ Vendor ☐ End User ☐ External Customer ☐ Other |  |  |
 
-### 2.2 Compliance & Regulatory Context
+### Compliance & Regulatory Context
 
-**Supports regulated activities?** ☐ Yes ☐ No ☐ N/A
+#### Regulatory Requirements
 
-| Regulation | Type | Applicability | Design Impact |
-|-----------|------|--------------|--------------|
-| | ☐ Data Protection ☐ Financial Services ☐ Healthcare ☐ Security ☐ Industry-Specific ☐ Internal Policy ☐ Other | | |
+| Regulation | Regulation Type | Applicability | Design Impact |
+|------|------|------|------|
+|  | ☐ Data Protection ☐ Financial Services ☐ Healthcare ☐ Security ☐ Industry Specific ☐ Internal Policy ☐ Other |  |  |
 
 ---
 
@@ -131,257 +95,220 @@
 
 ### 3.1 Logical View
 
-#### Application Architecture Diagram
+**Diagrams:**
+- 
 
-*[Insert diagram]*
+#### Components
 
-#### Component Decomposition
-
-| Component | Type | Description | Technology | Owner | Status |
-|-----------|------|-------------|------------|-------|--------|
-| | ☐ Web App ☐ API Service ☐ Backend Service ☐ Batch Job ☐ Message Broker ☐ Database ☐ Cache ☐ File Storage ☐ Search Engine ☐ CDN ☐ Gateway ☐ Load Balancer ☐ Queue ☐ Stream ☐ ML Model ☐ Other | | | | ☐ New ☐ Existing Unchanged ☐ Existing Modified ☐ To Be Decommissioned |
+| Name | Component Type | Description | Technology | Owner | Status |
+|------|------|------|------|------|------|
+|  | ☐ Web Application ☐ Api Service ☐ Backend Service ☐ Batch Job ☐ Message Broker ☐ Database ☐ Cache ☐ File Storage ☐ Search Engine ☐ Cdn ☐ Gateway ☐ Load Balancer ☐ Queue ☐ Stream ☐ Ml Model ☐ Other |  |  |  | ☐ New ☐ Existing Unchanged ☐ Existing Modified ☐ To Be Decommissioned |
 
 #### Design Patterns
 
 | Pattern | Where Applied | Rationale |
-|---------|--------------|-----------|
-| ☐ Microservices ☐ Monolith ☐ Modular Monolith ☐ Event-Driven ☐ CQRS ☐ Saga ☐ Strangler Fig ☐ API Gateway ☐ BFF ☐ Circuit Breaker ☐ Pub/Sub ☐ Batch Processing ☐ Stream Processing ☐ Data Lake ☐ Data Mesh ☐ Other | | |
+|------|------|------|
+| ☐ Microservices ☐ Monolith ☐ Modular Monolith ☐ Event Driven ☐ Cqrs ☐ Saga ☐ Strangler Fig ☐ Sidecar ☐ Api Gateway ☐ Bff ☐ Circuit Breaker ☐ Pub Sub ☐ Request Response ☐ Batch Processing ☐ Stream Processing ☐ Data Lake ☐ Data Mesh ☐ Other |  |  |
 
----
+**Quality Attribute Refs:**
+- 
 
 ### 3.2 Integration & Data Flow View
 
-#### Data Flow Diagrams
-
-*[Insert diagram(s)]*
+**Diagrams:**
+- 
 
 #### Internal Component Connectivity
 
-| Source | Destination | Protocol | Encrypted? | Auth Method | Direction | Sync | Purpose |
-|--------|-------------|----------|-----------|-------------|-----------|------|---------|
-| | | ☐ HTTPS ☐ gRPC-TLS ☐ AMQPS ☐ Kafka ☐ WSS ☐ JDBC ☐ SFTP ☐ SSH ☐ Other | ☐ Yes ☐ No | ☐ mTLS ☐ OAuth2 ☐ API Key ☐ JWT ☐ OIDC ☐ Certificate ☐ IAM Role ☐ None ☐ Other | ☐ Uni ☐ Bi | ☐ Sync ☐ Async ☐ Event | |
+| Source | Destination | Protocol | Encrypted | Authentication Method | Direction | Synchronicity | Purpose |
+|------|------|------|------|------|------|------|------|
+|  |  | ☐ Https ☐ Http ☐ Grpc ☐ Grpc Tls ☐ Tcp ☐ Tcp Tls ☐ Amqp ☐ Amqps ☐ Mqtt ☐ Mqtts ☐ Kafka ☐ Websocket ☐ Wss ☐ Jdbc ☐ Odbc ☐ Sftp ☐ Ftps ☐ Smtp ☐ Smtps ☐ Ldaps ☐ Ssh ☐ Other | ☐ Yes ☐ No | ☐ Mtls ☐ Oauth2 ☐ Api Key ☐ Jwt ☐ Saml ☐ Oidc ☐ Basic Auth ☐ Certificate ☐ Iam Role ☐ Kerberos ☐ None ☐ Other | ☐ Unidirectional ☐ Bidirectional | ☐ Synchronous ☐ Asynchronous ☐ Event Driven |  |
 
 #### External Integrations
 
-| Source App | Dest App | Type | Protocol | Encrypted? | Auth | Purpose |
-|-----------|---------|------|----------|-----------|------|---------|
-| | | ☐ Internal App ☐ External Service ☐ SaaS ☐ Partner ☐ Customer-Facing | | ☐ Yes ☐ No | | |
+| Source App | Destination App | Integration Type | Protocol | Encrypted | Authentication Method | Purpose |
+|------|------|------|------|------|------|------|
+|  |  | ☐ Internal App ☐ External Service ☐ Saas ☐ Partner ☐ Customer Facing | ☐ Https ☐ Http ☐ Grpc ☐ Grpc Tls ☐ Tcp ☐ Tcp Tls ☐ Amqp ☐ Amqps ☐ Mqtt ☐ Kafka ☐ Sftp ☐ Ftps ☐ Smtp ☐ Smtps ☐ Other | ☐ Yes ☐ No | ☐ Mtls ☐ Oauth2 ☐ Api Key ☐ Jwt ☐ Saml ☐ Oidc ☐ Basic Auth ☐ Certificate ☐ Iam Role ☐ None ☐ Other |  |
 
 #### APIs & Interfaces
 
-| Name | Type | Direction | Format | Authenticated? | Rate Limited? |
-|------|------|-----------|--------|---------------|--------------|
-| | ☐ REST ☐ GraphQL ☐ gRPC ☐ SOAP ☐ WebSocket ☐ Event Stream ☐ File Transfer ☐ Other | ☐ Exposed ☐ Consumed | ☐ JSON ☐ XML ☐ Protobuf ☐ Avro ☐ CSV ☐ Other | ☐ Yes ☐ No | ☐ Yes ☐ No |
+| Name | Api Type | Direction | Data Format | Version | Authenticated | Rate Limited |
+|------|------|------|------|------|------|------|
+|  | ☐ Rest ☐ Graphql ☐ Grpc ☐ Soap ☐ Websocket ☐ Event Stream ☐ File Transfer ☐ Other | ☐ Exposed ☐ Consumed | ☐ Json ☐ Xml ☐ Protobuf ☐ Avro ☐ Csv ☐ Parquet ☐ Binary ☐ Other |  | ☐ Yes ☐ No | ☐ Yes ☐ No |
 
----
+**Quality Attribute Refs:**
+- 
 
 ### 3.3 Physical View
 
-#### Deployment Architecture Diagram
+**Diagrams:**
+- 
 
-*[Insert diagram]*
+#### Hosting & Infrastructure
 
-#### Hosting
+**Venue Types:**
+- 
 
-| Attribute | Selection |
-|-----------|----------|
-| **Venue Type(s)** | ☐ Public Cloud ☐ Private Cloud ☐ On-Premises ☐ SaaS ☐ Hybrid ☐ Co-location ☐ Edge |
-| **Region(s)** | |
-| **Service Model(s)** | ☐ IaaS ☐ PaaS ☐ SaaS ☐ FaaS ☐ CaaS ☐ DBaaS ☐ Other |
-| **Cloud Provider(s)** | ☐ AWS ☐ Azure ☐ GCP ☐ Oracle Cloud ☐ IBM Cloud ☐ Other ☐ None |
+**Regions:**
+- 
+
+**Service Models:**
+- 
+
+**Cloud Providers:**
+- 
 
 #### Compute
 
-**Compute Types:** ☐ Physical Server ☐ Virtual Machine ☐ Container ☐ Serverless Function ☐ Edge Compute ☐ HPC ☐ GPU ☐ None
+**Compute Types:**
+- 
 
-**Servers:**
+##### Servers
 
-| Name | Instance Type | vCPU | Memory (GB) | Storage (TB) | Qty | OS |
-|------|-------------|------|-------------|-------------|-----|-----|
-| | | | | | | ☐ RHEL ☐ Amazon Linux ☐ Ubuntu ☐ Debian ☐ Windows Server ☐ Other |
+| Name | Instance Type | V Cpu | Memory Gb | Storage Tb | Quantity | Os |
+|------|------|------|------|------|------|------|
+|  |  |  |  |  |  | ☐ Rhel ☐ Amazon Linux ☐ Ubuntu ☐ Debian ☐ Centos ☐ Windows Server ☐ Suse ☐ Other |
 
-**Containers:**
+##### Containers
 
-| Attribute | Selection |
-|-----------|----------|
-| **Platform** | ☐ EKS ☐ AKS ☐ GKE ☐ OpenShift ☐ ECS ☐ Fargate ☐ Cloud Run ☐ Other ☐ None |
-| **Cluster Size** | ☐ 1–10 nodes ☐ 11–50 nodes ☐ 51–100 nodes ☐ 100+ nodes |
+**Base Images:**
+- 
 
-**Serverless:** ☐ Yes ☐ No — Services:
+##### Serverless
 
-#### User & Administrator Access
+**Services:**
+- 
 
-| Attribute | Selection |
-|-----------|----------|
-| **User access method** | ☐ Web (HTTPS) ☐ VDI ☐ RDP ☐ Citrix ☐ Mobile App ☐ API ☐ Other |
-| **User locations** | |
-| **Admin access method** | ☐ VDI ☐ RDP ☐ SSH ☐ HTTPS ☐ Bastion Host ☐ Other |
-| **VPN required?** | ☐ Yes ☐ No |
-| **Direct Connect / ExpressRoute?** | ☐ Yes ☐ No |
+#### Network Connectivity
 
-#### Transport Protocols
-
-| Protocol | Used? | Purpose |
-|----------|-------|---------|
-| HTTPS (TLS 1.2+) | ☐ Yes ☐ No | |
-| SFTP | ☐ Yes ☐ No | |
-| ODBC / JDBC | ☐ Yes ☐ No | |
-| TCP (other) | ☐ Yes ☐ No | |
-| gRPC | ☐ Yes ☐ No | |
-| WebSocket | ☐ Yes ☐ No | |
-| Other | ☐ Yes ☐ No | |
-
-#### Networking
-
-| Question | Response |
-|----------|----------|
-| Internet-facing? | ☐ Yes ☐ No |
-| Outbound internet? | ☐ Yes ☐ No |
-| Cloud-to-on-prem? | ☐ Yes ☐ No |
-| Third-party connectivity? | ☐ Yes ☐ No |
-| Cloud peering? | ☐ Yes ☐ No |
-| Traffic pattern | ☐ Constant ☐ Periodic ☐ Burst ☐ Seasonal ☐ Unpredictable |
-| Latency requirement | ☐ Ultra-low (<1ms) ☐ Low (<10ms) ☐ Moderate (<100ms) ☐ Standard (<1s) ☐ Tolerant (>1s) ☐ N/A |
-| DDoS protection | ☐ Yes ☐ No — Provider: ☐ AWS Shield ☐ Azure DDoS ☐ Cloudflare ☐ Other |
-| WAF enabled | ☐ Yes ☐ No — Provider: ☐ AWS WAF ☐ Azure WAF ☐ Cloudflare ☐ Other |
-| Rate limiting | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Internet Facing** | ☐ Yes ☐ No |
+| **Outbound Internet** | ☐ Yes ☐ No |
+| **Cloud To On Prem** | ☐ Yes ☐ No |
+| **Third Party Connectivity** | ☐ Yes ☐ No |
+| **Cloud Peering** | ☐ Yes ☐ No |
+| **Wireless Required** | ☐ Yes ☐ No |
+| **Peak Egress Mbps** | |
+| **Peak Ingress Mbps** | |
+| **Traffic Pattern** | ☐ Constant ☐ Periodic ☐ Burst ☐ Seasonal ☐ Unpredictable |
+| **Latency Requirement** | ☐ Ultra Low Sub 1ms ☐ Low Sub 10ms ☐ Moderate Sub 100ms ☐ Standard Sub 1s ☐ Tolerant Above 1s ☐ Not Applicable |
+| **Ddos Protection** | ☐ Yes ☐ No ☐ Not Applicable |
+| **Ddos Provider** | ☐ Aws Shield ☐ Azure Ddos ☐ Cloudflare ☐ Akamai ☐ Gcp Cloud Armor ☐ Arbor ☐ Other ☐ None |
+| **Waf Enabled** | ☐ Yes ☐ No ☐ Not Applicable |
+| **Waf Provider** | ☐ Aws Waf ☐ Azure Waf ☐ Cloudflare Waf ☐ Gcp Cloud Armor ☐ F5 ☐ Imperva ☐ Other ☐ None |
+| **Rate Limiting** | ☐ Yes ☐ No |
 
 #### Environments
 
-| Type | Count | Venue | Auto Scale Down? |
-|------|-------|-------|-----------------|
-| ☐ Development | | | ☐ Yes ☐ No |
-| ☐ Test / QA | | | ☐ Yes ☐ No |
-| ☐ Staging | | | ☐ Yes ☐ No |
-| ☐ Production | | | ☐ Yes ☐ No |
-| ☐ DR | | | ☐ Yes ☐ No |
+| Environment Type | Count | Venue | Auto Scale Down |
+|------|------|------|------|
+| ☐ Development ☐ Test ☐ Qa ☐ Integration Test ☐ Staging ☐ Pre Production ☐ Production ☐ Dr ☐ Sandbox ☐ Demo ☐ Performance Test |  |  | ☐ Yes ☐ No |
 
-**Security Agents:** ☐ Anti-Malware ☐ EDR ☐ Vulnerability Management ☐ DLP ☐ HIDS ☐ FIM ☐ Other
+**Security Agents:**
+- 
 
----
+**Quality Attribute Refs:**
+- 
 
 ### 3.4 Data View
 
 #### Data Stores
 
-| Name | Store Type | Technology | Auth? | Retention | Size | Classification | PII? | SPI? | Encryption | Key Mgmt |
-|------|-----------|-----------|-------|-----------|------|---------------|------|------|-----------|----------|
-| | ☐ Relational DB ☐ NoSQL Document ☐ NoSQL Key-Value ☐ Object Storage ☐ Data Warehouse ☐ Data Lake ☐ Cache ☐ Queue ☐ Search Index ☐ Other | | ☐ Y ☐ N | ☐ Transient ☐ Hours ☐ Days ☐ Weeks ☐ Months ☐ 1yr ☐ 2–5yr ☐ 5–10yr ☐ 10+yr ☐ Indef | ☐ <1GB ☐ 1–100GB ☐ 100GB–1TB ☐ 1–10TB ☐ 10–100TB ☐ 100TB–1PB ☐ >1PB | ☐ Public ☐ Internal ☐ Restricted ☐ Highly Restricted | ☐ Y ☐ N | ☐ Y ☐ N | ☐ None ☐ Storage ☐ Container ☐ Application ☐ Field | ☐ Provider ☐ CMK/KMS ☐ HSM ☐ BYOK ☐ None |
-
-**Production data for testing:** ☐ Not used ☐ Public only ☐ Sensitive deleted ☐ Masked ☐ Used with justification
-
-**Data integrity controls?** ☐ Yes ☐ No ☐ N/A
-
-**Data on end user devices?** ☐ Yes ☐ No ☐ N/A
-
-**Data sovereignty required?** ☐ Yes ☐ No ☐ N/A — Details:
+| Name | Store Type | Technology | Authoritative | Retention Period | Data Size Category | Classification | Contains Personal Data | Contains Sensitive Personal Data | Encryption Level | Key Management |
+|------|------|------|------|------|------|------|------|------|------|------|
+|  | ☐ Relational Db ☐ Nosql Document ☐ Nosql Key Value ☐ Nosql Graph ☐ Nosql Columnar ☐ Object Storage ☐ Block Storage ☐ File Storage ☐ Data Warehouse ☐ Data Lake ☐ Cache ☐ Message Queue ☐ Search Index ☐ Time Series Db ☐ In Memory ☐ Other |  | ☐ Yes ☐ No | ☐ Transient ☐ Hours ☐ Days ☐ Weeks ☐ Months ☐ 1 Year ☐ 2 5 Years ☐ 5 10 Years ☐ 10 Plus Years ☐ Indefinite | ☐ Under 1gb ☐ 1 100gb ☐ 100gb 1tb ☐ 1 10tb ☐ 10 100tb ☐ 100tb 1pb ☐ Over 1pb | ☐ Public ☐ Internal ☐ Restricted ☐ Highly Restricted | ☐ Yes ☐ No | ☐ Yes ☐ No | ☐ None ☐ Storage Level ☐ Logical Container ☐ Application Level ☐ Field Level | ☐ Provider Managed ☐ Customer Managed Kms ☐ Hsm ☐ Byok ☐ Custom ☐ None |
 
 #### Data Transfers
 
-| Destination | Type | Classification | Transfer Method | Encrypted? |
-|------------|------|---------------|----------------|-----------|
-| | ☐ Internal ☐ Third Party ☐ Regulator ☐ Customer ☐ Partner | ☐ Public ☐ Internal ☐ Restricted ☐ Highly Restricted | ☐ API ☐ SFTP ☐ Email ☐ Queue ☐ DB Replication ☐ File Share ☐ Manual ☐ Other | ☐ Yes ☐ No |
+| Destination | Destination Type | Classification | Transfer Method | Encrypted |
+|------|------|------|------|------|
+|  | ☐ Internal ☐ Third Party ☐ Regulator ☐ Customer ☐ Partner | ☐ Public ☐ Internal ☐ Restricted ☐ Highly Restricted | ☐ Api ☐ Sftp ☐ Email ☐ Message Queue ☐ Database Replication ☐ File Share ☐ Manual ☐ Other | ☐ Yes ☐ No |
 
----
+**Quality Attribute Refs:**
+- 
 
 ### 3.5 Security View
 
-**Third-party hosted?** ☐ Yes ☐ No ☐ N/A
-
-**Third-party risk assessed?** ☐ Yes ☐ No ☐ N/A
-
 #### Business Impact Assessment
 
-| Category | Impact Level |
-|----------|-------------|
+| Field | Value |
+|-------|-------|
 | **Confidentiality** | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible |
 | **Integrity** | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible |
 | **Availability** | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible |
-| **Non-Repudiation** | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible |
+| **Non Repudiation** | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible |
 
 #### Authentication
 
-| Access Type | Method | Uses Group-Wide Auth? |
-|------------|--------|----------------------|
-| ☐ End User (Internal) | ☐ SSO-SAML ☐ SSO-OIDC ☐ MFA ☐ Certificate ☐ API Key ☐ OAuth2 ☐ Kerberos ☐ Passwordless ☐ Custom | ☐ Yes ☐ No |
-| ☐ End User (External) | ☐ SSO-SAML ☐ SSO-OIDC ☐ MFA ☐ Certificate ☐ API Key ☐ OAuth2 ☐ Custom | ☐ Yes ☐ No |
-| ☐ IT Operations | | ☐ Yes ☐ No |
-| ☐ Service Account | | ☐ Yes ☐ No |
-| ☐ API Consumer | | ☐ Yes ☐ No |
+| Access Type | Method | Uses Group Wide Auth |
+|------|------|------|
+| ☐ End User Internal ☐ End User External ☐ It Operations ☐ Service Account ☐ Api Consumer | ☐ Sso Saml ☐ Sso Oidc ☐ Mfa ☐ Certificate ☐ Api Key ☐ Oauth2 ☐ Basic Auth ☐ Kerberos ☐ Passwordless ☐ Custom | ☐ Yes ☐ No |
 
 #### Authorisation
 
-| Attribute | Selection |
-|-----------|----------|
-| **Model** | ☐ RBAC ☐ ABAC ☐ PBAC ☐ ACL ☐ Custom |
-| **Provisioning** | ☐ Automated IDM ☐ Manual Request ☐ Self-Service ☐ API-Driven ☐ Other |
-| **Recertification enabled?** | ☐ Yes ☐ No |
-| **SoD enforced?** | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Model** | ☐ Rbac ☐ Abac ☐ Pbac ☐ Acl ☐ Custom |
+| **Entitlement Store** | |
+| **Provisioning Process** | ☐ Automated Idm ☐ Manual Request ☐ Self Service ☐ Api Driven ☐ Other |
+| **Recertification Enabled** | ☐ Yes ☐ No |
+| **Segregation Of Duties Enforced** | ☐ Yes ☐ No |
 
 #### Privileged Access
 
-| Attribute | Selection |
-|-----------|----------|
-| **PAM solution** | |
-| **Just-in-time access?** | ☐ Yes ☐ No |
-| **Session recording?** | ☐ Yes ☐ No |
-| **Break-glass process?** | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Pam Solution** | |
+| **Just In Time Access** | ☐ Yes ☐ No |
+| **Session Recording** | ☐ Yes ☐ No |
+| **Break Glass Process** | ☐ Yes ☐ No |
 
 #### Encryption at Rest
 
-| Attribute | Selection |
-|-----------|----------|
-| **Implemented?** | ☐ Yes ☐ No |
-| **Level** | ☐ Storage ☐ Logical Container ☐ Application ☐ Field |
-| **Key type** | ☐ Symmetric ☐ Asymmetric |
-| **Key generation** | ☐ HSM (FIPS 140 L3) ☐ HSM (FIPS 140 L2) ☐ KMS ☐ Software ☐ Other |
-| **Key storage** | ☐ HSM ☐ KMS ☐ Software Keystore ☐ Other |
-| **Key rotation (days)** | |
+| Field | Value |
+|-------|-------|
+| **Implemented** | ☐ Yes ☐ No |
+| **Level** | ☐ Storage Level ☐ Logical Container ☐ Application Level ☐ Field Level |
+| **Key Type** | ☐ Symmetric ☐ Asymmetric |
+| **Algorithm** | |
+| **Key Generation** | ☐ Hsm Fips140 L3 ☐ Hsm Fips140 L2 ☐ Kms ☐ Software ☐ Other |
+| **Key Storage** | ☐ Hsm ☐ Kms ☐ Software Keystore ☐ Other |
+| **Key Rotation Days** | |
 
 #### Secret Management
 
-| Attribute | Selection |
-|-----------|----------|
-| **Secret store** | ☐ HashiCorp Vault ☐ AWS Secrets Manager ☐ Azure Key Vault ☐ GCP Secret Manager ☐ CyberArk ☐ Custom ☐ None |
+| Field | Value |
+|-------|-------|
+| **Secret Store** | ☐ Hashicorp Vault ☐ Aws Secrets Manager ☐ Azure Key Vault ☐ Gcp Secret Manager ☐ Cyberark ☐ Custom ☐ None |
 | **Distribution** | ☐ Runtime Retrieval ☐ Deployment Time ☐ Environment Variable ☐ Mounted Volume ☐ Other |
-| **Rotation** | ☐ Automatic ☐ Manual (Scheduled) ☐ Manual (Ad Hoc) ☐ Not Rotated |
+| **Rotation** | ☐ Automatic ☐ Manual Scheduled ☐ Manual Ad Hoc ☐ Not Rotated |
 
 #### Security Monitoring
 
-| Attribute | Selection |
-|-----------|----------|
-| **SIEM integration?** | ☐ Yes ☐ No |
-| **Security event logging?** | ☐ Yes ☐ No |
-| **Intrusion detection?** | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Siem Integration** | ☐ Yes ☐ No |
+| **Siem Tool** | |
+| **Security Event Logging** | ☐ Yes ☐ No |
+| **Intrusion Detection** | ☐ Yes ☐ No |
 
----
+**Quality Attribute Refs:**
+- 
 
 ### 3.6 Scenarios
 
 #### Key Use Cases
 
-**UC-01:**
-
-| Attribute | Detail |
-|-----------|--------|
-| **Actors** | |
-| **Trigger** | |
-| **Main Flow** | |
-| **Views Involved** | ☐ Logical ☐ Integration & Data Flow ☐ Physical ☐ Data ☐ Security |
+| Id | Name | Actors | Trigger | Main Flow | Views Involved |
+|------|------|------|------|------|------|
+|  |  |  |  |  |  |
 
 #### Architecture Decision Records
 
-**ADR-001:**
-
-| Field | Content |
-|-------|---------|
-| **Status** | ☐ Proposed ☐ Accepted ☐ Superseded ☐ Deprecated |
-| **Date** | |
-| **Context** | |
-| **Decision** | |
-| **Alternatives** | |
-| **Consequences** | |
-| **Affected Quality Attributes** | ☐ Ops Excellence ☐ Reliability ☐ Performance ☐ Cost ☐ Sustainability |
+| Id | Title | Status | Date | Context | Decision | Alternatives | Consequences | Affected Attributes |
+|------|------|------|------|------|------|------|------|------|
+|  |  | ☐ Proposed ☐ Accepted ☐ Superseded ☐ Deprecated |  |  |  |  |  |  |
 
 ---
 
@@ -389,134 +316,106 @@
 
 ### 4.1 Operational Excellence
 
-| Attribute | Selection |
-|-----------|----------|
-| Centralised logging? | ☐ Yes ☐ No |
-| Logging tool | |
-| Monitoring tool | |
-| Distributed tracing? | ☐ Yes ☐ No |
-| Alerting configured? | ☐ Yes ☐ No |
-| Runbooks documented? | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Logging Centralised** | ☐ Yes ☐ No |
+| **Logging Tool** | |
+| **Monitoring Tool** | |
+| **Tracing Enabled** | ☐ Yes ☐ No |
+| **Alerting Configured** | ☐ Yes ☐ No |
+| **Runbooks Documented** | ☐ Yes ☐ No |
 
 ### 4.2 Reliability & Resilience
 
-| Attribute | Selection |
-|-----------|----------|
-| DR strategy | ☐ Active-Active ☐ Active-Passive ☐ Pilot Light ☐ Warm Standby ☐ Backup & Restore ☐ None |
-| Multi-venue deployment? | ☐ Yes ☐ No |
-| RTO target | |
-| RPO target | |
-| Scalability | ☐ No Dynamic Scaling ☐ Manual Scaling ☐ Partial Auto-Scaling ☐ Full Auto-Scaling |
-| Fault tolerance designed? | ☐ Yes ☐ No |
-| Chaos testing practised? | ☐ Yes ☐ No |
-| Backup enabled? | ☐ Yes ☐ No |
-| Backup type | ☐ Full ☐ Incremental ☐ Differential ☐ Continuous ☐ Snapshot |
-| Backup frequency | ☐ Real-Time ☐ Hourly ☐ Daily ☐ Weekly ☐ Monthly |
-| Backup immutable? | ☐ Yes ☐ No |
-| Backup encrypted? | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Dr Strategy** | ☐ Active Active ☐ Active Passive ☐ Pilot Light ☐ Warm Standby ☐ Backup Restore ☐ None |
+| **Multi Venue Deployment** | ☐ Yes ☐ No |
+| **Rto Target** | |
+| **Rpo Target** | |
+| **Scalability** | ☐ No Dynamic Scaling ☐ Manual Scaling ☐ Partial Auto Scaling ☐ Full Auto Scaling |
+| **Fault Tolerance Designed** | ☐ Yes ☐ No |
+| **Chaos Testing Practised** | ☐ Yes ☐ No |
+| **Backup Enabled** | ☐ Yes ☐ No |
+| **Backup Type** | ☐ Full ☐ Incremental ☐ Differential ☐ Continuous ☐ Snapshot |
+| **Backup Frequency** | ☐ Real Time ☐ Hourly ☐ Daily ☐ Weekly ☐ Monthly |
+| **Backup Immutable** | ☐ Yes ☐ No |
+| **Backup Encrypted** | ☐ Yes ☐ No |
 
 ### 4.3 Performance Efficiency
 
-| Attribute | Value |
-|-----------|-------|
-| P95 response time (ms) | |
-| Target throughput (req/s) | |
-| Target concurrent users | |
-| Performance testing | ☐ Load Testing ☐ Stress Testing ☐ Soak Testing ☐ Spike Testing ☐ None |
-| Caching used? | ☐ Yes ☐ No |
-| CDN used? | ☐ Yes ☐ No |
-
 #### Capacity & Growth Projections
 
-| Metric | Current | 1 Year | 3 Years | 5 Years |
-|--------|---------|--------|---------|---------|
-| Users (total) | | | | |
-| Concurrent users (peak) | | | | |
-| Data volume | | | | |
-| Transaction volume (per day) | | | | |
-| Storage requirement | | | | |
-
-| Question | Response |
-|----------|----------|
-| Will current design scale to projected growth? | ☐ Yes ☐ No — Details: |
-| Seasonal / cyclical demand patterns? | ☐ Yes ☐ No — Details: |
+| Field | Value |
+|-------|-------|
+| **Current Users** | |
+| **Year1 Users** | |
+| **Year3 Users** | |
+| **Year5 Users** | |
+| **Current Data Volume** | |
+| **Year1 Data Volume** | |
+| **Year3 Data Volume** | |
+| **Year5 Data Volume** | |
+| **Design Scales To Projected Growth** | ☐ Yes ☐ No |
+| **Seasonal Demand Patterns** | ☐ Yes ☐ No |
+| **Seasonal Details** | |
 
 ### 4.4 Cost Optimisation
 
-| Attribute | Selection |
-|-----------|----------|
-| Cost analysis performed? | ☐ Yes ☐ No |
-| Design constrained by cost? | ☐ Yes ☐ No |
-| Reserved capacity? | ☐ Yes ☐ No |
-| Cost monitoring enabled? | ☐ Yes ☐ No |
-| Tagging strategy? | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Cost Analysis Performed** | ☐ Yes ☐ No |
+| **Design Constrained By Cost** | ☐ Yes ☐ No |
+| **Reserved Capacity** | ☐ Yes ☐ No |
+| **Cost Monitoring Enabled** | ☐ Yes ☐ No |
+| **Tagging Strategy** | ☐ Yes ☐ No |
 
 ### 4.5 Sustainability
 
-| Attribute | Selection |
-|-----------|----------|
-| Hosting location optimised for carbon? | ☐ Yes ☐ No |
-| Non-prod auto-shutdown? | ☐ Yes ☐ No |
-| Resources rightsized? | ☐ Yes ☐ No |
-| Workload pattern | ☐ Constant ☐ Variable (Predictable) ☐ Variable (Unpredictable) |
-| Continuous availability required? | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Hosting Location Optimised For Carbon** | ☐ Yes ☐ No |
+| **Non Prod Auto Shutdown** | ☐ Yes ☐ No |
+| **Resources Rightsized** | ☐ Yes ☐ No |
+| **Workload Pattern** | ☐ Constant ☐ Variable Predictable ☐ Variable Unpredictable |
+| **Continuous Availability Required** | ☐ Yes ☐ No |
 
 ### Quality Attribute Tradeoffs
 
-| Quality Attributes Involved | Description | Chosen Priority | Rationale |
-|-----------------|-------------|----------------|-----------|
-| | | | |
+| Attributes Involved | Description | Chosen Priority | Rationale |
+|------|------|------|------|
+|  |  | ☐ Operational Excellence ☐ Reliability ☐ Performance ☐ Cost Optimisation ☐ Sustainability |  |
 
 ---
 
 ## 5. Lifecycle Management
 
-| Attribute | Selection |
-|-----------|----------|
-| Internally developed? | ☐ Yes ☐ No |
-| Source control | ☐ GitHub ☐ GitLab ☐ Bitbucket ☐ Azure DevOps ☐ Other ☐ None |
-| CI/CD platform | ☐ GitHub Actions ☐ GitLab CI ☐ Jenkins ☐ Azure Pipelines ☐ CircleCI ☐ Argo ☐ Other ☐ None |
-| SAST | ☐ Semgrep ☐ SonarQube ☐ Coverity ☐ Checkmarx ☐ Veracode ☐ Snyk Code ☐ Other ☐ None |
-| DAST | ☐ Yes ☐ No ☐ N/A |
-| SCA | ☐ Snyk ☐ BlackDuck ☐ Dependabot ☐ Renovate ☐ Other ☐ None |
-| Container scanning | ☐ Yes ☐ No ☐ N/A |
-| Release frequency | ☐ Continuous ☐ Daily ☐ Weekly ☐ Fortnightly ☐ Monthly ☐ Quarterly ☐ Ad Hoc |
-| Support model | ☐ Internal Team ☐ Vendor Managed ☐ Managed Service ☐ Community ☐ Hybrid |
-| Support hours | ☐ 24x7 ☐ Business Hours ☐ Extended Hours ☐ Follow-the-Sun |
-| Intended lifespan | ☐ <1 Year ☐ 1–3 Years ☐ 3–5 Years ☐ 5–10 Years ☐ 10+ Years ☐ Indefinite |
-| Exit plan documented? | ☐ Yes ☐ No |
-| Vendor lock-in level | ☐ None ☐ Low ☐ Moderate ☐ High ☐ Critical |
+### Migration
 
-### Migration (if applicable)
-
-**Migration Classification (6 R's):**
-
-☐ Retain ☐ Retire ☐ Rehost ☐ Replatform ☐ Refactor ☐ Replace ☐ N/A (net-new)
-
-| Attribute | Selection |
-|-----------|----------|
-| Deployment strategy | ☐ Big Bang ☐ Blue-Green ☐ Canary ☐ Rolling ☐ Strangler Fig ☐ Parallel Run ☐ Phased |
-| Data migration mode | ☐ One-off ☐ Phased ☐ Continuous Sync ☐ N/A |
-| Data migration method | |
-| Data volume to migrate | |
-| End-user cutover | ☐ One-off ☐ Phased ☐ N/A |
-| External system cutover | ☐ One-off ☐ Phased ☐ N/A |
-| Max acceptable downtime | ☐ Zero ☐ Seconds ☐ Minutes ☐ Hours ☐ Days |
-| Rollback plan | |
-| Transient infrastructure needed? | ☐ Yes ☐ No |
+| Field | Value |
+|-------|-------|
+| **Classification** | ☐ Retain ☐ Retire ☐ Rehost ☐ Replatform ☐ Refactor ☐ Replace ☐ Not Applicable |
+| **Deployment Strategy** | ☐ Big Bang ☐ Blue Green ☐ Canary ☐ Rolling ☐ Strangler Fig ☐ Parallel Run ☐ Phased |
+| **Data Migration Mode** | ☐ One Off ☐ Phased ☐ Continuous Sync ☐ Not Applicable |
+| **Data Migration Method** | |
+| **Data Volume** | |
+| **End User Cutover** | ☐ One Off ☐ Phased ☐ Not Applicable |
+| **External System Cutover** | ☐ One Off ☐ Phased ☐ Not Applicable |
+| **Max Acceptable Downtime** | ☐ Zero ☐ Seconds ☐ Minutes ☐ Hours ☐ Days |
+| **Rollback Plan** | |
+| **Transient Infrastructure Needed** | ☐ Yes ☐ No |
 
 ### Resourcing & Skills
 
-| Skill Area | Current Level | Action Required |
-|-----------|--------------|-----------------|
-| Cloud platform | ☐ High ☐ Medium ☐ Low ☐ N/A | |
-| Infrastructure as Code | ☐ High ☐ Medium ☐ Low ☐ N/A | |
-| CI/CD pipeline management | ☐ High ☐ Medium ☐ Low ☐ N/A | |
-| Application technology stack | ☐ High ☐ Medium ☐ Low ☐ N/A | |
-| Database administration | ☐ High ☐ Medium ☐ Low ☐ N/A | |
-| Security & compliance | ☐ High ☐ Medium ☐ Low ☐ N/A | |
-
-**Operational readiness:** ☐ A: Fully capable ☐ B: Partially capable ☐ C: Learning ☐ D: Not capable
+| Field | Value |
+|-------|-------|
+| **Cloud Platform** | ☐ High ☐ Medium ☐ Low ☐ Not Applicable |
+| **Infrastructure As Code** | ☐ High ☐ Medium ☐ Low ☐ Not Applicable |
+| **Cicd Management** | ☐ High ☐ Medium ☐ Low ☐ Not Applicable |
+| **Application Stack** | ☐ High ☐ Medium ☐ Low ☐ Not Applicable |
+| **Database Administration** | ☐ High ☐ Medium ☐ Low ☐ Not Applicable |
+| **Security Compliance** | ☐ High ☐ Medium ☐ Low ☐ Not Applicable |
+| **Operational Readiness** | ☐ A Fully Capable ☐ B Partially Capable ☐ C Learning ☐ D Not Capable |
 
 ---
 
@@ -524,66 +423,65 @@
 
 ### 6.1 Constraints
 
-| ID | Constraint | Category | Impact on Design | Last Assessed |
-|----|-----------|----------|-----------------|---------------|
-| C-001 | | ☐ Regulatory ☐ Technical ☐ Commercial ☐ Organisational ☐ Time | | |
+| Id | Constraint | Category | Impact On Design | Last Assessed |
+|------|------|------|------|------|
+|  |  | ☐ Regulatory ☐ Technical ☐ Commercial ☐ Organisational ☐ Time |  |  |
 
 ### 6.2 Assumptions
 
-| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
-|----|-----------|----------------|-----------|--------|-------|----------|
-| A-001 | | | ☐ High ☐ Medium ☐ Low | ☐ Open ☐ Closed | | |
+| Id | Assumption | Impact If False | Certainty | Status | Owner | Evidence |
+|------|------|------|------|------|------|------|
+|  |  |  | ☐ High ☐ Medium ☐ Low | ☐ Open ☐ Closed |  |  |
 
 ### 6.3 Risks
 
-| ID | Risk Event | Category | Severity | Likelihood | Mitigation Strategy | Mitigation Plan | Residual Risk | Owner | Last Assessed |
-|----|-----------|----------|----------|-----------|-------------------|-----------------|--------------|-------|---------------|
-| R-001 | | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial ☐ Compliance | ☐ High ☐ Medium ☐ Low | ☐ High ☐ Medium ☐ Low | ☐ Accept ☐ Mitigate ☐ Transfer ☐ Avoid | | ☐ High ☐ Medium ☐ Low | | |
+| Id | Risk Event | Risk Category | Severity | Likelihood | Mitigation Strategy | Mitigation Plan | Residual Risk | Owner | Last Assessed |
+|------|------|------|------|------|------|------|------|------|------|
+|  |  | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial ☐ Compliance ☐ Other | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible | ☐ Accept ☐ Mitigate ☐ Transfer ☐ Avoid |  | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible |  |  |
 
 ### 6.4 Dependencies
 
-| ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
-|----|-----------|-----------|--------|-------|----------|---------------|
-| D-001 | | ☐ Inbound ☐ Outbound | ☐ Committed ☐ Not Committed ☐ Resolved | | | |
+| Id | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
+|------|------|------|------|------|------|------|
+|  |  | ☐ Inbound ☐ Outbound | ☐ Committed ☐ Not Committed ☐ Resolved |  |  |  |
 
 ### 6.5 Issues
 
-| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
-|----|-------|----------|--------|-------|----------------|--------|---------------|
-| I-001 | | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial | ☐ High ☐ Medium ☐ Low | | | ☐ Open ☐ In Progress ☐ Resolved | |
+| Id | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|------|------|------|------|------|------|------|------|
+|  |  | ☐ Technical ☐ Security ☐ Operational ☐ Delivery ☐ Commercial | ☐ Critical ☐ High ☐ Medium ☐ Low ☐ Negligible |  |  | ☐ Open ☐ In Progress ☐ Resolved |  |
 
-### 6.6 Guardrail Exceptions
+### 6.8 Compliance Traceability
 
-| Question | Response |
-|----------|----------|
-| Policy exceptions? | ☐ Yes ☐ No ☐ N/A |
-| Exceptions accepted? | ☐ Yes ☐ No ☐ N/A |
-| Process exceptions? | ☐ Yes ☐ No ☐ N/A |
-| Risk profile impact? | ☐ Yes ☐ No ☐ N/A |
-
-### 6.7 Compliance Traceability
-
-| Standard | Requirement | How Satisfied | Evidence Section | Status |
-|----------|-------------|--------------|-----------------|--------|
-| | | | | ☐ Compliant ☐ Partially Compliant ☐ Non-Compliant ☐ N/A |
+| Standard | Requirement | How Satisfied | Evidence Section | Compliance Status |
+|------|------|------|------|------|
+|  |  |  |  | ☐ Compliant ☐ Partially Compliant ☐ Non Compliant ☐ Not Applicable |
 
 ---
 
 ## 7. Appendices
 
-### 7.1 Glossary
+### Glossary
 
 | Term | Definition |
-|------|-----------|
-| | |
+|------|------|
+|  |  |
 
-### 7.2 References
+### References
 
-| Title | Version | URL | Description |
-|-------|---------|-----|-------------|
-| | | | |
+| Title | Version | Url | Description |
+|------|------|------|------|
+|  |  |  |  |
 
-### 7.3 Compliance Scoring
+### Approvals
+
+| Role | Name | Date | Decision |
+|------|------|------|------|
+|  |  |  | ☐ Approved ☐ Approved With Conditions ☐ Rejected ☐ Deferred |
+
+---
+
+## 7.3 Compliance Scoring
 
 | Section | Score (0–5) | Assessor | Date | Notes |
 |---------|:-----------:|----------|------|-------|
@@ -605,7 +503,9 @@
 
 *Scoring: 0=Not Addressed, 1=Acknowledged, 2=Partial, 3=Mostly Addressed, 4=Fully Addressed, 5=Exemplary. Overall = lowest individual score.*
 
-### 7.4 Approval Sign-Off
+---
+
+## 7.4 Approval Sign-Off
 
 | Role | Name | Date | Decision |
 |------|------|------|----------|

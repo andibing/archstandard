@@ -7,7 +7,10 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate:templates": "node scripts/generate-templates.cjs",
+    "generate:diagrams": "bash scripts/generate-diagrams.sh",
+    "generate": "npm run generate:templates"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.38.2",

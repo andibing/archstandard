@@ -114,6 +114,49 @@ After DNS propagation (usually minutes, up to 48 hours):
 | `npm run dev` | Start dev server at `localhost:4321` |
 | `npm run build` | Build production site to `./dist/` |
 | `npm run preview` | Preview production build locally |
+| `npm run generate:templates` | Regenerate all SAD templates from JSON Schema |
+| `npm run generate:diagrams` | Regenerate SVG diagrams from Mermaid sources |
+| `npm run generate` | Run all generators |
+
+## Maintaining the Standard
+
+### Single Source of Truth
+
+The **JSON Schema** (`schema/ads.schema.json`) is the master definition. All templates are generated from it:
+
+```
+schema/ads.schema.json          <-- edit this
+        |
+        v
+npm run generate:templates
+        |
+        ├── public/templates/sad-template.json
+        ├── public/templates/sad-template.yaml
+        └── public/templates/sad-template.md
+```
+
+### Making Changes
+
+1. **Edit the schema** (`schema/ads.schema.json`) — add fields, change enums, update descriptions
+2. **Regenerate templates** — run `npm run generate:templates`
+3. **Review the output** — check the generated templates look correct
+4. **Update the standard pages** — if you added a new section, update the corresponding `.mdx` page in `src/content/docs/standard/`
+5. **Commit and push** — Cloudflare auto-deploys on push to `main`
+
+### Regenerating Diagrams
+
+SVG diagrams are generated from Mermaid source files:
+
+```
+src/assets/diagrams/*.mmd       <-- edit these
+        |
+        v
+npm run generate:diagrams       (requires @mermaid-js/mermaid-cli)
+        |
+        └── src/assets/*.svg
+```
+
+Install the Mermaid CLI first: `npm install -g @mermaid-js/mermaid-cli`
 
 ## Licence
 
