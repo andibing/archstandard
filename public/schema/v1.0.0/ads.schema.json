@@ -1,0 +1,1027 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archstandard.org/schema/v1.0.0/ads.schema.json",
+  "title": "ADS: Solution Architecture Document",
+  "description": "Schema for Solution Architecture Documents conforming to ADS: The Architecture Description Standard v1.0.0. Fields are designed to be atomic — using enums, booleans, and structured options to reduce ambiguity and enable machine processing.",
+  "type": "object",
+  "required": ["schemaVersion", "documentControl", "executiveSummary", "architecturalViews", "riskGovernance"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Version of the ADS schema this document conforms to"
+    },
+    "documentControl": { "$ref": "#/$defs/documentControl" },
+    "executiveSummary": { "$ref": "#/$defs/executiveSummary" },
+    "stakeholders": { "$ref": "#/$defs/stakeholders" },
+    "architecturalViews": { "$ref": "#/$defs/architecturalViews" },
+    "qualityAttributes": { "$ref": "#/$defs/qualityAttributes" },
+    "lifecycleManagement": { "$ref": "#/$defs/lifecycleManagement" },
+    "riskGovernance": { "$ref": "#/$defs/riskGovernance" },
+    "appendices": { "$ref": "#/$defs/appendices" },
+    "organisationProfile": { "$ref": "#/$defs/organisationProfile" },
+    "complianceScoring": {
+      "type": "object",
+      "description": "Architecture compliance scoring summary (0-5 per section)",
+      "properties": {
+        "assessments": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/complianceAssessment" }
+        },
+        "overallScore": { "$ref": "#/$defs/complianceScore" },
+        "overallAssessor": { "type": "string" },
+        "overallDate": { "type": "string", "format": "date" },
+        "overallNotes": { "type": "string" }
+      }
+    },
+    "customSections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/customSection" }
+    }
+  },
+  "$defs": {
+    "maturityLevel": {
+      "type": "string",
+      "enum": ["minimum", "recommended", "comprehensive"]
+    },
+    "qualityAttributeRef": {
+      "type": "string",
+      "enum": ["operational-excellence", "reliability", "performance", "cost-optimisation", "sustainability"]
+    },
+    "riskLevel": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "negligible"]
+    },
+    "yesNoNa": {
+      "type": "string",
+      "enum": ["yes", "no", "not-applicable"],
+      "description": "Atomic tri-state for yes/no questions with an N/A option"
+    },
+    "complianceScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "Architecture compliance score: 0=Not Addressed, 1=Acknowledged, 2=Partial, 3=Mostly Addressed, 4=Fully Addressed, 5=Exemplary"
+    },
+    "complianceAssessment": {
+      "type": "object",
+      "description": "Per-section compliance scoring for governance review",
+      "properties": {
+        "section": { "type": "string" },
+        "score": { "$ref": "#/$defs/complianceScore" },
+        "assessor": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "notes": { "type": "string" }
+      },
+      "required": ["section", "score"]
+    },
+    "documentControl": {
+      "type": "object",
+      "description": "Section 0: Document Control",
+      "required": ["metadata"],
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "required": ["title", "solutionName", "version", "status"],
+          "properties": {
+            "title": { "type": "string" },
+            "solutionName": { "type": "string" },
+            "applicationId": { "type": "string" },
+            "authors": { "type": "array", "items": { "type": "string" } },
+            "owner": { "type": "string" },
+            "version": { "type": "string", "pattern": "^\\d+\\.\\d+(\\.\\d+)?$" },
+            "status": { "type": "string", "enum": ["draft", "in-review", "approved", "superseded"] },
+            "createdDate": { "type": "string", "format": "date" },
+            "lastUpdated": { "type": "string", "format": "date" },
+            "classification": {
+              "type": "string",
+              "enum": ["public", "internal", "confidential", "restricted"]
+            }
+          }
+        },
+        "changeHistory": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["version", "date", "description"],
+            "properties": {
+              "version": { "type": "string" },
+              "date": { "type": "string", "format": "date" },
+              "author": { "type": "string" },
+              "changeType": { "type": "string", "enum": ["initial-draft", "minor-update", "major-update", "review-revision", "approval"] },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "contributors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "role", "contributionType"],
+            "properties": {
+              "name": { "type": "string" },
+              "role": { "type": "string" },
+              "contributionType": { "type": "string", "enum": ["author", "reviewer", "approver"] }
+            }
+          }
+        },
+        "purpose": { "type": "string" },
+        "scope": { "type": "string" }
+      }
+    },
+    "executiveSummary": {
+      "type": "object",
+      "description": "Section 1: Executive Summary",
+      "required": ["solutionOverview"],
+      "properties": {
+        "solutionOverview": { "type": "string" },
+        "businessContext": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "driver": { "type": "string" },
+              "driverType": {
+                "type": "string",
+                "enum": ["regulatory", "cost-reduction", "modernisation", "new-capability", "risk-mitigation", "security", "performance", "scalability", "end-of-life", "merger-acquisition", "other"]
+              },
+              "description": { "type": "string" },
+              "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"] }
+            }
+          }
+        },
+        "strategicAlignment": {
+          "type": "object",
+          "description": "Section 1.3: Strategic alignment and reuse of shared services",
+          "properties": {
+            "organisationStrategySupported": { "type": "string" },
+            "reviewedAgainstCapabilityModel": { "$ref": "#/$defs/yesNoNa" },
+            "duplicatesExistingCapability": { "$ref": "#/$defs/yesNoNa" },
+            "duplicatesJustification": { "type": "string" },
+            "sharedServiceReuse": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "capability": { "type": "string" },
+                  "sharedService": { "type": "string" },
+                  "reused": { "type": "boolean" },
+                  "justification": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "inScope": { "type": "array", "items": { "type": "string" } },
+        "outOfScope": { "type": "array", "items": { "type": "string" } },
+        "currentState": { "type": "string", "description": "Section 1.5: Current-state / As-Is architecture. Omit for greenfield solutions." },
+        "keyDecisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "decision": { "type": "string" },
+              "constraintType": {
+                "type": "string",
+                "enum": ["technical", "organisational", "financial", "regulatory", "time", "vendor", "other"]
+              },
+              "rationale": { "type": "string" },
+              "reversibility": { "type": "string", "enum": ["easily-reversible", "reversible-with-effort", "difficult-to-reverse", "irreversible"] }
+            }
+          }
+        },
+        "projectDetails": {
+          "type": "object",
+          "properties": {
+            "projectName": { "type": "string" },
+            "projectCode": { "type": "string" },
+            "projectManager": { "type": "string" },
+            "estimatedCapex": { "type": "number", "description": "Estimated capital expenditure in base currency" },
+            "estimatedOpex": { "type": "number", "description": "Estimated annual operational expenditure in base currency" },
+            "currency": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "ISO 4217 currency code" },
+            "targetGoLive": { "type": "string", "format": "date" }
+          }
+        },
+        "businessCriticality": {
+          "type": "string",
+          "enum": ["tier-1-critical", "tier-2-high", "tier-3-medium", "tier-4-low", "tier-5-minimal"]
+        }
+      }
+    },
+    "stakeholders": {
+      "type": "object",
+      "description": "Section 2: Stakeholders & Concerns",
+      "properties": {
+        "register": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stakeholder": { "type": "string" },
+              "roleType": {
+                "type": "string",
+                "enum": ["business-owner", "solution-architect", "enterprise-architect", "security-architect", "data-architect", "infrastructure-engineer", "developer", "operations-sre", "compliance", "project-manager", "vendor", "end-user", "external-customer", "other"]
+              },
+              "concerns": { "type": "array", "items": { "type": "string" } },
+              "relevantViews": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["logical", "integration", "physical", "data", "security", "scenarios"] }
+              }
+            }
+          }
+        },
+        "compliance": {
+          "type": "object",
+          "properties": {
+            "supportsRegulatedActivities": { "$ref": "#/$defs/yesNoNa" },
+            "regulatedActivityDetails": { "type": "string" },
+            "regulatoryRequirements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "regulation": { "type": "string" },
+                  "regulationType": {
+                    "type": "string",
+                    "enum": ["data-protection", "financial-services", "healthcare", "security", "industry-specific", "internal-policy", "other"]
+                  },
+                  "applicability": { "type": "string" },
+                  "designImpact": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "architecturalViews": {
+      "type": "object",
+      "description": "Section 3: Architectural Views",
+      "properties": {
+        "logicalView": {
+          "type": "object",
+          "description": "3.1 Logical View",
+          "properties": {
+            "diagrams": { "type": "array", "items": { "type": "string" } },
+            "components": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name", "componentType"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "componentType": {
+                    "type": "string",
+                    "enum": ["web-application", "api-service", "backend-service", "batch-job", "message-broker", "database", "cache", "file-storage", "search-engine", "cdn", "gateway", "load-balancer", "queue", "stream", "ml-model", "other"]
+                  },
+                  "description": { "type": "string" },
+                  "technology": { "type": "string" },
+                  "owner": { "type": "string" },
+                  "status": { "type": "string", "enum": ["new", "existing-unchanged", "existing-modified", "to-be-decommissioned"] }
+                }
+              }
+            },
+            "designPatterns": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "pattern": {
+                    "type": "string",
+                    "enum": ["microservices", "monolith", "modular-monolith", "event-driven", "cqrs", "saga", "strangler-fig", "sidecar", "api-gateway", "bff", "circuit-breaker", "pub-sub", "request-response", "batch-processing", "stream-processing", "data-lake", "data-mesh", "other"]
+                  },
+                  "whereApplied": { "type": "string" },
+                  "rationale": { "type": "string" }
+                }
+              }
+            },
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityAttributeRef" } }
+          }
+        },
+        "integrationView": {
+          "type": "object",
+          "description": "3.2 Integration & Data Flow View",
+          "properties": {
+            "diagrams": { "type": "array", "items": { "type": "string" } },
+            "internalConnectivity": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["source", "destination", "protocol", "encrypted"],
+                "properties": {
+                  "source": { "type": "string" },
+                  "destination": { "type": "string" },
+                  "protocol": {
+                    "type": "string",
+                    "enum": ["https", "http", "grpc", "grpc-tls", "tcp", "tcp-tls", "amqp", "amqps", "mqtt", "mqtts", "kafka", "websocket", "wss", "jdbc", "odbc", "sftp", "ftps", "smtp", "smtps", "ldaps", "ssh", "other"]
+                  },
+                  "encrypted": { "type": "boolean" },
+                  "authenticationMethod": {
+                    "type": "string",
+                    "enum": ["mtls", "oauth2", "api-key", "jwt", "saml", "oidc", "basic-auth", "certificate", "iam-role", "kerberos", "none", "other"]
+                  },
+                  "direction": { "type": "string", "enum": ["unidirectional", "bidirectional"] },
+                  "synchronicity": { "type": "string", "enum": ["synchronous", "asynchronous", "event-driven"] },
+                  "purpose": { "type": "string" }
+                }
+              }
+            },
+            "externalIntegrations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["sourceApp", "destinationApp", "protocol", "encrypted"],
+                "properties": {
+                  "sourceApp": { "type": "string" },
+                  "destinationApp": { "type": "string" },
+                  "integrationType": { "type": "string", "enum": ["internal-app", "external-service", "saas", "partner", "customer-facing"] },
+                  "protocol": {
+                    "type": "string",
+                    "enum": ["https", "http", "grpc", "grpc-tls", "tcp", "tcp-tls", "amqp", "amqps", "mqtt", "kafka", "sftp", "ftps", "smtp", "smtps", "other"]
+                  },
+                  "encrypted": { "type": "boolean" },
+                  "authenticationMethod": {
+                    "type": "string",
+                    "enum": ["mtls", "oauth2", "api-key", "jwt", "saml", "oidc", "basic-auth", "certificate", "iam-role", "none", "other"]
+                  },
+                  "purpose": { "type": "string" }
+                }
+              }
+            },
+            "apis": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "apiType": { "type": "string", "enum": ["rest", "graphql", "grpc", "soap", "websocket", "event-stream", "file-transfer", "other"] },
+                  "direction": { "type": "string", "enum": ["exposed", "consumed"] },
+                  "dataFormat": { "type": "string", "enum": ["json", "xml", "protobuf", "avro", "csv", "parquet", "binary", "other"] },
+                  "version": { "type": "string" },
+                  "authenticated": { "type": "boolean" },
+                  "rateLimited": { "type": "boolean" }
+                }
+              }
+            },
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityAttributeRef" } }
+          }
+        },
+        "physicalView": {
+          "type": "object",
+          "description": "3.3 Physical View",
+          "properties": {
+            "diagrams": { "type": "array", "items": { "type": "string" } },
+            "hosting": {
+              "type": "object",
+              "properties": {
+                "venueTypes": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["public-cloud", "private-cloud", "on-premises", "saas", "hybrid", "co-location", "edge"] }
+                },
+                "regions": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "ISO 3166-1 country codes or cloud region identifiers"
+                },
+                "serviceModels": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["iaas", "paas", "saas", "faas", "caas", "dbaas", "other"] }
+                },
+                "cloudProviders": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["aws", "azure", "gcp", "oracle-cloud", "ibm-cloud", "alibaba-cloud", "other", "none"] }
+                }
+              }
+            },
+            "compute": {
+              "type": "object",
+              "properties": {
+                "computeTypes": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["physical-server", "virtual-machine", "container", "serverless-function", "edge-compute", "hpc", "gpu", "none"] }
+                },
+                "servers": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "instanceType": { "type": "string" },
+                      "vCpu": { "type": "integer" },
+                      "memoryGb": { "type": "number" },
+                      "storageTb": { "type": "number" },
+                      "quantity": { "type": "integer" },
+                      "os": {
+                        "type": "string",
+                        "enum": ["rhel", "amazon-linux", "ubuntu", "debian", "centos", "windows-server", "suse", "other"]
+                      }
+                    }
+                  }
+                },
+                "containers": {
+                  "type": "object",
+                  "properties": {
+                    "platform": { "type": "string", "enum": ["eks", "aks", "gke", "openshift", "docker-swarm", "ecs", "fargate", "cloud-run", "other", "none"] },
+                    "baseImages": { "type": "array", "items": { "type": "string" } },
+                    "clusterSize": { "type": "string", "enum": ["1-10-nodes", "11-50-nodes", "51-100-nodes", "100-plus-nodes"] }
+                  }
+                },
+                "serverless": {
+                  "type": "object",
+                  "properties": {
+                    "services": { "type": "array", "items": { "type": "string" } },
+                    "used": { "type": "boolean" }
+                  }
+                }
+              }
+            },
+            "networking": {
+              "type": "object",
+              "properties": {
+                "internetFacing": { "type": "boolean" },
+                "outboundInternet": { "type": "boolean" },
+                "cloudToOnPrem": { "type": "boolean" },
+                "thirdPartyConnectivity": { "type": "boolean" },
+                "cloudPeering": { "type": "boolean" },
+                "wirelessRequired": { "type": "boolean" },
+                "peakEgressMbps": { "type": "number" },
+                "peakIngressMbps": { "type": "number" },
+                "trafficPattern": { "type": "string", "enum": ["constant", "periodic", "burst", "seasonal", "unpredictable"] },
+                "latencyRequirement": { "type": "string", "enum": ["ultra-low-sub-1ms", "low-sub-10ms", "moderate-sub-100ms", "standard-sub-1s", "tolerant-above-1s", "not-applicable"] },
+                "ddosProtection": { "$ref": "#/$defs/yesNoNa" },
+                "ddosProvider": { "type": "string", "enum": ["aws-shield", "azure-ddos", "cloudflare", "akamai", "gcp-cloud-armor", "arbor", "other", "none"] },
+                "wafEnabled": { "$ref": "#/$defs/yesNoNa" },
+                "wafProvider": { "type": "string", "enum": ["aws-waf", "azure-waf", "cloudflare-waf", "gcp-cloud-armor", "f5", "imperva", "other", "none"] },
+                "rateLimiting": { "type": "boolean" }
+              }
+            },
+            "environments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["environmentType"],
+                "properties": {
+                  "environmentType": {
+                    "type": "string",
+                    "enum": ["development", "test", "qa", "integration-test", "staging", "pre-production", "production", "dr", "sandbox", "demo", "performance-test"]
+                  },
+                  "count": { "type": "integer" },
+                  "venue": { "type": "string" },
+                  "autoScaleDown": { "type": "boolean", "description": "Does this environment scale down or shut off when not in use?" }
+                }
+              }
+            },
+            "securityAgents": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["anti-malware", "edr", "vulnerability-management", "dlp", "hids", "fim", "other"] }
+            },
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityAttributeRef" } }
+          }
+        },
+        "dataView": {
+          "type": "object",
+          "description": "3.4 Data View",
+          "properties": {
+            "dataStores": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name", "storeType", "classification"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "storeType": {
+                    "type": "string",
+                    "enum": ["relational-db", "nosql-document", "nosql-key-value", "nosql-graph", "nosql-columnar", "object-storage", "block-storage", "file-storage", "data-warehouse", "data-lake", "cache", "message-queue", "search-index", "time-series-db", "in-memory", "other"]
+                  },
+                  "technology": { "type": "string" },
+                  "authoritative": { "type": "boolean" },
+                  "retentionPeriod": {
+                    "type": "string",
+                    "enum": ["transient", "hours", "days", "weeks", "months", "1-year", "2-5-years", "5-10-years", "10-plus-years", "indefinite"]
+                  },
+                  "dataSizeCategory": {
+                    "type": "string",
+                    "enum": ["under-1gb", "1-100gb", "100gb-1tb", "1-10tb", "10-100tb", "100tb-1pb", "over-1pb"]
+                  },
+                  "classification": { "type": "string", "enum": ["public", "internal", "restricted", "highly-restricted"] },
+                  "containsPersonalData": { "type": "boolean" },
+                  "containsSensitivePersonalData": { "type": "boolean" },
+                  "encryptionLevel": {
+                    "type": "string",
+                    "enum": ["none", "storage-level", "logical-container", "application-level", "field-level"]
+                  },
+                  "keyManagement": {
+                    "type": "string",
+                    "enum": ["provider-managed", "customer-managed-kms", "hsm", "byok", "custom", "none"]
+                  }
+                }
+              }
+            },
+            "productionDataForTesting": {
+              "type": "string",
+              "enum": ["not-used", "public-only", "sensitive-deleted", "masked", "used-with-justification"]
+            },
+            "dataIntegrityControls": { "$ref": "#/$defs/yesNoNa" },
+            "dataOnEndUserDevices": { "$ref": "#/$defs/yesNoNa" },
+            "dataSovereigntyRequired": { "$ref": "#/$defs/yesNoNa" },
+            "dataSovereigntyDetails": { "type": "string" },
+            "dataTransfers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "destination": { "type": "string" },
+                  "destinationType": { "type": "string", "enum": ["internal", "third-party", "regulator", "customer", "partner"] },
+                  "classification": { "type": "string", "enum": ["public", "internal", "restricted", "highly-restricted"] },
+                  "transferMethod": { "type": "string", "enum": ["api", "sftp", "email", "message-queue", "database-replication", "file-share", "manual", "other"] },
+                  "encrypted": { "type": "boolean" }
+                }
+              }
+            },
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityAttributeRef" } }
+          }
+        },
+        "securityView": {
+          "type": "object",
+          "description": "3.5 Security View",
+          "properties": {
+            "thirdPartyHosted": { "$ref": "#/$defs/yesNoNa" },
+            "thirdPartyRiskAssessed": { "$ref": "#/$defs/yesNoNa" },
+            "businessImpact": {
+              "type": "object",
+              "properties": {
+                "confidentiality": { "$ref": "#/$defs/riskLevel" },
+                "integrity": { "$ref": "#/$defs/riskLevel" },
+                "availability": { "$ref": "#/$defs/riskLevel" },
+                "nonRepudiation": { "$ref": "#/$defs/riskLevel" }
+              }
+            },
+            "authentication": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "accessType": { "type": "string", "enum": ["end-user-internal", "end-user-external", "it-operations", "service-account", "api-consumer"] },
+                  "method": { "type": "string", "enum": ["sso-saml", "sso-oidc", "mfa", "certificate", "api-key", "oauth2", "basic-auth", "kerberos", "passwordless", "custom"] },
+                  "usesGroupWideAuth": { "type": "boolean" }
+                }
+              }
+            },
+            "authorisation": {
+              "type": "object",
+              "properties": {
+                "model": { "type": "string", "enum": ["rbac", "abac", "pbac", "acl", "custom"] },
+                "entitlementStore": { "type": "string" },
+                "provisioningProcess": { "type": "string", "enum": ["automated-idm", "manual-request", "self-service", "api-driven", "other"] },
+                "recertificationEnabled": { "type": "boolean" },
+                "segregationOfDutiesEnforced": { "type": "boolean" }
+              }
+            },
+            "privilegedAccess": {
+              "type": "object",
+              "properties": {
+                "pamSolution": { "type": "string" },
+                "justInTimeAccess": { "type": "boolean" },
+                "sessionRecording": { "type": "boolean" },
+                "breakGlassProcess": { "type": "boolean" }
+              }
+            },
+            "encryptionAtRest": {
+              "type": "object",
+              "properties": {
+                "implemented": { "type": "boolean" },
+                "level": { "type": "string", "enum": ["storage-level", "logical-container", "application-level", "field-level"] },
+                "keyType": { "type": "string", "enum": ["symmetric", "asymmetric"] },
+                "algorithm": { "type": "string" },
+                "keyGeneration": { "type": "string", "enum": ["hsm-fips140-l3", "hsm-fips140-l2", "kms", "software", "other"] },
+                "keyStorage": { "type": "string", "enum": ["hsm", "kms", "software-keystore", "other"] },
+                "keyRotationDays": { "type": "integer" }
+              }
+            },
+            "secretManagement": {
+              "type": "object",
+              "properties": {
+                "secretStore": { "type": "string", "enum": ["hashicorp-vault", "aws-secrets-manager", "azure-key-vault", "gcp-secret-manager", "cyberark", "custom", "none"] },
+                "distribution": { "type": "string", "enum": ["runtime-retrieval", "deployment-time", "environment-variable", "mounted-volume", "other"] },
+                "rotation": { "type": "string", "enum": ["automatic", "manual-scheduled", "manual-ad-hoc", "not-rotated"] }
+              }
+            },
+            "securityMonitoring": {
+              "type": "object",
+              "properties": {
+                "siemIntegration": { "type": "boolean" },
+                "siemTool": { "type": "string" },
+                "securityEventLogging": { "type": "boolean" },
+                "intrusionDetection": { "type": "boolean" }
+              }
+            },
+            "qualityAttributeRefs": { "type": "array", "items": { "$ref": "#/$defs/qualityAttributeRef" } }
+          }
+        },
+        "scenarios": {
+          "type": "object",
+          "description": "3.6 Scenarios",
+          "properties": {
+            "useCases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "name"],
+                "properties": {
+                  "id": { "type": "string", "pattern": "^UC-\\d+$" },
+                  "name": { "type": "string" },
+                  "actors": { "type": "array", "items": { "type": "string" } },
+                  "trigger": { "type": "string" },
+                  "mainFlow": { "type": "string" },
+                  "viewsInvolved": {
+                    "type": "array",
+                    "items": { "type": "string", "enum": ["logical", "integration", "physical", "data", "security"] }
+                  }
+                }
+              }
+            },
+            "adrs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "title", "status", "context", "decision"],
+                "properties": {
+                  "id": { "type": "string", "pattern": "^ADR-\\d+$" },
+                  "title": { "type": "string" },
+                  "status": { "type": "string", "enum": ["proposed", "accepted", "superseded", "deprecated"] },
+                  "date": { "type": "string", "format": "date" },
+                  "context": { "type": "string" },
+                  "decision": { "type": "string" },
+                  "alternatives": { "type": "string" },
+                  "consequences": { "type": "string" },
+                  "affectedAttributes": { "type": "array", "items": { "$ref": "#/$defs/qualityAttributeRef" } }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "qualityAttributes": {
+      "type": "object",
+      "description": "Section 4: Quality Attributes",
+      "properties": {
+        "operationalExcellence": {
+          "type": "object",
+          "properties": {
+            "loggingCentralised": { "type": "boolean" },
+            "loggingTool": { "type": "string" },
+            "monitoringTool": { "type": "string" },
+            "tracingEnabled": { "type": "boolean" },
+            "alertingConfigured": { "type": "boolean" },
+            "runbooksDocumented": { "type": "boolean" }
+          }
+        },
+        "reliability": {
+          "type": "object",
+          "properties": {
+            "drStrategy": {
+              "type": "string",
+              "enum": ["active-active", "active-passive", "pilot-light", "warm-standby", "backup-restore", "none"]
+            },
+            "multiVenueDeployment": { "type": "boolean" },
+            "rtoTarget": { "type": "string", "description": "ISO 8601 duration e.g. PT4H for 4 hours" },
+            "rpoTarget": { "type": "string", "description": "ISO 8601 duration e.g. PT1H for 1 hour" },
+            "scalability": {
+              "type": "string",
+              "enum": ["no-dynamic-scaling", "manual-scaling", "partial-auto-scaling", "full-auto-scaling"]
+            },
+            "faultToleranceDesigned": { "type": "boolean" },
+            "chaosTestingPractised": { "type": "boolean" },
+            "backupEnabled": { "type": "boolean" },
+            "backupType": { "type": "string", "enum": ["full", "incremental", "differential", "continuous", "snapshot"] },
+            "backupFrequency": { "type": "string", "enum": ["real-time", "hourly", "daily", "weekly", "monthly"] },
+            "backupImmutable": { "type": "boolean" },
+            "backupEncrypted": { "type": "boolean" }
+          }
+        },
+        "performance": {
+          "type": "object",
+          "properties": {
+            "p95ResponseTimeMs": { "type": "integer" },
+            "targetThroughputRps": { "type": "integer" },
+            "targetConcurrentUsers": { "type": "integer" },
+            "performanceTestingApproach": {
+              "type": "string",
+              "enum": ["load-testing", "stress-testing", "soak-testing", "spike-testing", "none"]
+            },
+            "cachingUsed": { "type": "boolean" },
+            "cdnUsed": { "type": "boolean" },
+            "growthProjections": {
+              "type": "object",
+              "description": "Capacity and growth projections over 1, 3, and 5 years",
+              "properties": {
+                "currentUsers": { "type": "integer" },
+                "year1Users": { "type": "integer" },
+                "year3Users": { "type": "integer" },
+                "year5Users": { "type": "integer" },
+                "currentDataVolume": { "type": "string" },
+                "year1DataVolume": { "type": "string" },
+                "year3DataVolume": { "type": "string" },
+                "year5DataVolume": { "type": "string" },
+                "designScalesToProjectedGrowth": { "type": "boolean" },
+                "seasonalDemandPatterns": { "type": "boolean" },
+                "seasonalDetails": { "type": "string" }
+              }
+            }
+          }
+        },
+        "costOptimisation": {
+          "type": "object",
+          "properties": {
+            "costAnalysisPerformed": { "type": "boolean" },
+            "designConstrainedByCost": { "type": "boolean" },
+            "reservedCapacity": { "type": "boolean" },
+            "costMonitoringEnabled": { "type": "boolean" },
+            "taggingStrategy": { "type": "boolean" }
+          }
+        },
+        "sustainability": {
+          "type": "object",
+          "properties": {
+            "hostingLocationOptimisedForCarbon": { "type": "boolean" },
+            "nonProdAutoShutdown": { "type": "boolean" },
+            "resourcesRightsized": { "type": "boolean" },
+            "workloadPattern": { "type": "string", "enum": ["constant", "variable-predictable", "variable-unpredictable"] },
+            "continuousAvailabilityRequired": { "type": "boolean" }
+          }
+        },
+        "tradeoffs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "attributesInvolved": { "type": "array", "items": { "$ref": "#/$defs/qualityAttributeRef" } },
+              "description": { "type": "string" },
+              "chosenPriority": { "$ref": "#/$defs/qualityAttributeRef" },
+              "rationale": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "lifecycleManagement": {
+      "type": "object",
+      "description": "Section 5: Lifecycle Management",
+      "properties": {
+        "internallyDeveloped": { "type": "boolean" },
+        "sourceControl": { "type": "string", "enum": ["github", "gitlab", "bitbucket", "azure-devops", "svn", "other", "none"] },
+        "cicdPlatform": { "type": "string", "enum": ["github-actions", "gitlab-ci", "jenkins", "azure-pipelines", "circleci", "argo", "tekton", "other", "none"] },
+        "sast": { "type": "string", "enum": ["semgrep", "sonarqube", "coverity", "checkmarx", "veracode", "snyk-code", "other", "none"] },
+        "dast": { "$ref": "#/$defs/yesNoNa" },
+        "sca": { "type": "string", "enum": ["snyk", "blackduck", "dependabot", "renovate", "whitesource", "other", "none"] },
+        "containerScanning": { "$ref": "#/$defs/yesNoNa" },
+        "migration": {
+          "type": "object",
+          "description": "Service transition and migration details",
+          "properties": {
+            "classification": { "type": "string", "enum": ["retain", "retire", "rehost", "replatform", "refactor", "replace", "not-applicable"], "description": "6 R's migration classification" },
+            "deploymentStrategy": { "type": "string", "enum": ["big-bang", "blue-green", "canary", "rolling", "strangler-fig", "parallel-run", "phased"] },
+            "dataMigrationMode": { "type": "string", "enum": ["one-off", "phased", "continuous-sync", "not-applicable"] },
+            "dataMigrationMethod": { "type": "string" },
+            "dataVolume": { "type": "string" },
+            "endUserCutover": { "type": "string", "enum": ["one-off", "phased", "not-applicable"] },
+            "externalSystemCutover": { "type": "string", "enum": ["one-off", "phased", "not-applicable"] },
+            "maxAcceptableDowntime": { "type": "string", "enum": ["zero", "seconds", "minutes", "hours", "days"] },
+            "rollbackPlan": { "type": "string" },
+            "transientInfrastructureNeeded": { "type": "boolean" }
+          }
+        },
+        "resourcing": {
+          "type": "object",
+          "description": "Team capability and operational readiness assessment",
+          "properties": {
+            "cloudPlatform": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "infrastructureAsCode": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "cicdManagement": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "applicationStack": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "databaseAdministration": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "securityCompliance": { "type": "string", "enum": ["high", "medium", "low", "not-applicable"] },
+            "operationalReadiness": { "type": "string", "enum": ["a-fully-capable", "b-partially-capable", "c-learning", "d-not-capable"] }
+          }
+        },
+        "releaseFrequency": {
+          "type": "string",
+          "enum": ["continuous", "daily", "weekly", "fortnightly", "monthly", "quarterly", "ad-hoc"]
+        },
+        "supportModel": { "type": "string", "enum": ["internal-team", "vendor-managed", "managed-service", "community", "hybrid"] },
+        "supportHours": { "type": "string", "enum": ["24x7", "business-hours", "extended-hours", "follow-the-sun"] },
+        "intendedLifespan": { "type": "string", "enum": ["under-1-year", "1-3-years", "3-5-years", "5-10-years", "10-plus-years", "indefinite"] },
+        "exitPlanDocumented": { "type": "boolean" },
+        "vendorLockInLevel": { "type": "string", "enum": ["none", "low", "moderate", "high", "critical"] }
+      }
+    },
+    "riskGovernance": {
+      "type": "object",
+      "description": "Section 6: Decision Making & Governance",
+      "required": ["risks"],
+      "properties": {
+        "constraints": {
+          "type": "array",
+          "description": "Fixed limitations the design must work within",
+          "items": {
+            "type": "object",
+            "required": ["id", "constraint", "category"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^C-\\d+$" },
+              "constraint": { "type": "string" },
+              "category": { "type": "string", "enum": ["regulatory", "technical", "commercial", "organisational", "time"] },
+              "impactOnDesign": { "type": "string" },
+              "lastAssessed": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "description": "Factors believed to be true but not yet verified",
+          "items": {
+            "type": "object",
+            "required": ["id", "assumption", "status"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^A-\\d+$" },
+              "assumption": { "type": "string" },
+              "impactIfFalse": { "type": "string" },
+              "certainty": { "type": "string", "enum": ["high", "medium", "low"] },
+              "status": { "type": "string", "enum": ["open", "closed"] },
+              "owner": { "type": "string" },
+              "evidence": { "type": "string" }
+            }
+          }
+        },
+        "risks": {
+          "type": "array",
+          "description": "Potential events that could negatively affect the design",
+          "items": {
+            "type": "object",
+            "required": ["id", "riskEvent", "severity", "likelihood", "residualRisk"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^R-\\d+$" },
+              "riskEvent": { "type": "string" },
+              "riskCategory": {
+                "type": "string",
+                "enum": ["technical", "security", "operational", "delivery", "commercial", "compliance", "other"]
+              },
+              "severity": { "$ref": "#/$defs/riskLevel" },
+              "likelihood": { "$ref": "#/$defs/riskLevel" },
+              "mitigationStrategy": { "type": "string", "enum": ["accept", "mitigate", "transfer", "avoid"] },
+              "mitigationPlan": { "type": "string" },
+              "residualRisk": { "$ref": "#/$defs/riskLevel" },
+              "owner": { "type": "string" },
+              "lastAssessed": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "description": "External factors the design relies upon or that rely upon this design",
+          "items": {
+            "type": "object",
+            "required": ["id", "dependency", "direction", "status"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^D-\\d+$" },
+              "dependency": { "type": "string" },
+              "direction": { "type": "string", "enum": ["inbound", "outbound"] },
+              "status": { "type": "string", "enum": ["committed", "not-committed", "resolved"] },
+              "owner": { "type": "string" },
+              "evidence": { "type": "string" },
+              "lastAssessed": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "issues": {
+          "type": "array",
+          "description": "Known problems that have already materialised",
+          "items": {
+            "type": "object",
+            "required": ["id", "issue", "impact", "status"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^I-\\d+$" },
+              "issue": { "type": "string" },
+              "category": { "type": "string", "enum": ["technical", "security", "operational", "delivery", "commercial"] },
+              "impact": { "$ref": "#/$defs/riskLevel" },
+              "owner": { "type": "string" },
+              "resolutionPlan": { "type": "string" },
+              "status": { "type": "string", "enum": ["open", "in-progress", "resolved"] },
+              "lastAssessed": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "policyExceptions": { "$ref": "#/$defs/yesNoNa" },
+        "policyExceptionsAccepted": { "$ref": "#/$defs/yesNoNa" },
+        "processExceptions": { "$ref": "#/$defs/yesNoNa" },
+        "riskProfileImpact": { "$ref": "#/$defs/yesNoNa" },
+        "complianceTraceability": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "standard": { "type": "string" },
+              "requirement": { "type": "string" },
+              "howSatisfied": { "type": "string" },
+              "evidenceSection": { "type": "string" },
+              "complianceStatus": { "type": "string", "enum": ["compliant", "partially-compliant", "non-compliant", "not-applicable"] }
+            }
+          }
+        }
+      }
+    },
+    "appendices": {
+      "type": "object",
+      "description": "Section 7: Appendices",
+      "properties": {
+        "glossary": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "term": { "type": "string" },
+              "definition": { "type": "string" }
+            }
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "version": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "approvals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": { "type": "string" },
+              "name": { "type": "string" },
+              "date": { "type": "string", "format": "date" },
+              "decision": { "type": "string", "enum": ["approved", "approved-with-conditions", "rejected", "deferred"] }
+            }
+          }
+        }
+      }
+    },
+    "organisationProfile": {
+      "type": "object",
+      "description": "Organisation-specific configuration mapping generic sections to specific tools, standards, and processes",
+      "properties": {
+        "organisationName": { "type": "string" },
+        "internalStandards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "version": { "type": "string" },
+              "mappedSections": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "governanceGates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gateName": { "type": "string" },
+              "requiredMaturityLevel": { "$ref": "#/$defs/maturityLevel" },
+              "requiredSections": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "tooling": {
+          "type": "object",
+          "properties": {
+            "cmdb": { "type": "string" },
+            "portfolioManagement": { "type": "string" },
+            "secretStore": { "type": "string" },
+            "cicd": { "type": "string" },
+            "monitoring": { "type": "string" },
+            "siem": { "type": "string" }
+          }
+        }
+      }
+    },
+    "customSection": {
+      "type": "object",
+      "required": ["id", "title", "content"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "content": { "type": "string" },
+        "maturityLevel": { "$ref": "#/$defs/maturityLevel" },
+        "parentSection": { "type": "string" }
+      }
+    }
+  }
+}
