@@ -1,0 +1,216 @@
+---
+title: "3.3 Physische Ansicht (Infrastruktur & Bereitstellung)"
+description: Bereitstellungsarchitektur, Hosting, Compute, Netzwerk und Umgebungen — abdeckend physische, virtuelle und Cloud-Infrastruktur.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-4plus1">4+1 Physical</span>
+<span class="framework-badge badge-togaf">TOGAF Technology</span>
+
+## Zweck
+
+Die Physische Ansicht beschreibt **die gesamte Infrastruktur**, die die Losung hostet und unterstutzt — ob physische Hardware, virtuelle Maschinen, Container, Serverless-Funktionen oder Cloud-verwaltete Dienste. Sie adressiert die Anliegen von Infrastruktur-Ingenieuren, DevOps-Teams, Plattform-Ingenieuren und Cloud-Architekten.
+
+<Aside type="note" title="Warum 'Physische Ansicht'?">
+Der Name "Physische Ansicht" wird zur Ausrichtung am 4+1 Architectural View Model von Kruchten beibehalten, wo er ursprunglich die Abbildung von Software auf Hardware beschrieb. In der modernen Praxis umfasst diese Ansicht **die gesamte Bereitstellungsinfrastruktur** unabhangig von der Abstraktionsebene — von Bare-Metal-Servern bis hin zu vollstandig verwalteten Cloud-Diensten. Sie entspricht der **Technology Architecture** Domane in TOGAF und der **Deployment View** in einigen anderen Frameworks.
+</Aside>
+
+## 3.3.1 Bereitstellungsarchitektur-Diagramm
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Stellen Sie ein Diagramm bereit, das die Infrastruktur zeigt, die die Losung antreibt.
+
+*[Bereitstellungsarchitektur-Diagramm einfugen]*
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Zeigen Sie: physische/virtuelle Server, Container, Cloud-Dienste, Speicher, Netzwerke, Firewalls, Load Balancer, Internet-Gateways, SaaS-Plattformen und alle anderen Infrastrukturkomponenten. Schliessen Sie Cloud-Regionen, Verfugbarkeitszonen und VPCs ein, wo zutreffend.
+</div>
+
+## 3.3.2 Hosting & Infrastruktur
+
+### Hosting-Standorte
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+| Attribut | Auswahl |
+|----------|---------|
+| **Hosting-Standorttyp** | Cloud / SaaS / On-Premises / Hybrid / Ausgelagert |
+| **Hosting-Region(en)** | *[z.B. DE, EU, US, Asien, Sonstige]* |
+| **Servicemodell** | IaaS / PaaS / SaaS / FaaS / Sonstige |
+| **Cloud-Anbieter** | AWS / Azure / GCP / Sonstige / N/A |
+| **Konto- / Abonnementtyp** | *[organisationsspezifischer Kontotyp]* |
+
+### Compute
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+#### Server (physisch / virtuell)
+
+| Instanzname | Instanztyp | vCPU | Speicher (GB) | Storage | Anzahl | OS |
+|-------------|-----------|------|---------------|---------|--------|-----|
+| *[Name]* | *[Typ/Grosse]* | *[n]* | *[n]* | *[n TB]* | *[n]* | *[OS-Version]* |
+
+#### Container
+
+| Attribut | Detail |
+|----------|--------|
+| **Container-Plattform** | EKS / AKS / GKE / Docker / Kubernetes / Sonstige |
+| **Basis-Image(s)** | *[z.B. Alpine, Node, NGINX]* |
+| **Clustergrosse** | *[Anzahl der Knoten]* |
+
+#### Serverless
+
+| Attribut | Detail |
+|----------|--------|
+| **Serverless-Dienste** | *[z.B. AWS Lambda, Azure Functions]* |
+| **Funktionsdetails** | *[Beschreibung der Serverless-Komponenten]* |
+
+#### High Performance Computing
+
+| Attribut | Detail |
+|----------|--------|
+| **HPC-Anforderungen** | *[z.B. GPU, FPGA, spezialisiertes Compute]* |
+
+#### Kunstliche Intelligenz / Machine Learning
+
+| Attribut | Detail |
+|----------|--------|
+| **AI/ML-Komponenten** | *[Trainings- und Inferenz-Infrastruktur]* |
+
+### Sicherheitsagenten
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Dokumentieren Sie auf Compute-Ressourcen bereitgestellte Sicherheitsagenten:
+
+- [ ] Anti-Malware
+- [ ] Endpoint Detection and Response (EDR)
+- [ ] Schwachstellenmanagement
+- [ ] Sonstige: *[...]*
+
+## 3.3.3 Netzwerktopologie & Konnektivitat
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+### Konnektivitatsubersicht
+
+| Frage | Antwort |
+|-------|---------|
+| Ist dies eine internetfahige Anwendung? | Ja / Nein — *[Details]* |
+| Ist ausgehende Internetkonnektivitat erforderlich? | Ja / Nein — *[Details]* |
+| Ist Cloud-zu-On-Premises-Konnektivitat erforderlich? | Ja / Nein — *[Details]* |
+| Ist drahtlose Vernetzung erforderlich? | Ja / Nein — *[Details]* |
+| Ist Drittanbieter-/Co-Location-Konnektivitat erforderlich? | Ja / Nein — *[Details]* |
+| Ist Cloud-Netzwerk-Peering erforderlich? | Ja / Nein — *[Details]* |
+
+### Benutzer- & Administratorzugriff
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Attribut | Auswahl |
+|----------|---------|
+| **Benutzerzugriffsmethode** | Web (HTTPS) / VDI / RDP / Citrix / Mobile App / API / Sonstige |
+| **Benutzerstandorte** | *[z.B. Buros in DE, Remote (VPN), Global, Endkunden (Internet)]* |
+| **Administratorzugriffsmethode** | VDI / RDP / SSH / HTTPS / Bastion Host / Sonstige |
+| **VPN erforderlich** | Ja / Nein |
+| **Direct Connect / ExpressRoute** | Ja / Nein |
+
+### Transportprotokolle
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Protokoll | Verwendet? | Zweck |
+|-----------|-----------|-------|
+| HTTPS (TLS 1.2+) | Ja / Nein | *[...]* |
+| SFTP | Ja / Nein | *[...]* |
+| ODBC / JDBC | Ja / Nein | *[...]* |
+| TCP (sonstige) | Ja / Nein | *[...]* |
+| gRPC | Ja / Nein | *[...]* |
+| WebSocket | Ja / Nein | *[...]* |
+| Sonstige | Ja / Nein | *[...]* |
+
+### Netzwerkbandbreite
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Metrik | Wert |
+|--------|------|
+| Spitzen-Egress-Bandbreite ins Internet | *[Mb/s]* |
+| Spitzen-Ingress-Bandbreite aus dem Internet | *[Mb/s]* |
+| Spitzenbandbreite zwischen On-Prem und Cloud | *[Mb/s]* |
+| Verkehrscharakteristik | *[konstant / Spitzen / periodisch]* |
+| QoS-Anforderungen | *[Details]* |
+| Netzwerk-Leistungserwartungen | *[Latenz, Jitter usw.]* |
+
+### Internetperimeter-Schutz
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Kontrolle | Implementiert | Detail |
+|-----------|-------------|--------|
+| DDoS-Schutz | Ja / Nein | *[verwendeter Dienst]* |
+| Rate Limiting | Ja / Nein | *[Details]* |
+| Quell-IP-Beschrankungen | Ja / Nein | *[IP-Positivliste, Geo-Blocking]* |
+| Web Application Firewall (WAF) | Ja / Nein | *[Produkt]* |
+| Client-Verifizierungskontrollen | Ja / Nein | *[Details]* |
+| Datei-Upload-Schutz | Ja / Nein | *[Malware-Scanning-Ansatz]* |
+
+## 3.3.4 Umgebungen
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Umgebung | Beschreibung | Anzahl & Standort | Compute-Losung |
+|----------|-------------|-------------------|----------------|
+| Entwicklung | Nur Softwareentwicklung | *[...]* | *[...]* |
+| Test / QA | Komponenten- und Integrationstests | *[...]* | *[...]* |
+| Staging / Pre-Production | Produktionsahnliche Umgebung zur Validierung | *[...]* | *[...]* |
+| Produktion | Live-Betriebsumgebung | *[...]* | *[...]* |
+| DR | Disaster-Recovery-Umgebung | *[...]* | *[...]* |
+
+### Konnektivitat zwischen Umgebungen
+
+Benotigt die Losung Konnektivitat zwischen Umgebungsstufen (z.B. Produktion zu Nicht-Produktion)?
+
+- [ ] Ja — *[beschreiben Sie welche Komponenten und Datenflusse]*
+- [ ] Nein
+
+## 3.3.5 Endbenutzer-Computing & IoT
+
+<span class="maturity-indicator maturity-comprehensive">Umfassend</span>
+
+### Endbenutzer-Computing
+
+Dokumentieren Sie Endgerate-Anforderungen (VDI, BYOD, Mobilgerate, Desktop-Software):
+
+*[...]*
+
+### IoT-Gerate
+
+Dokumentieren Sie IoT-Gerate (Drucker, Scanner, Kameras, Sensoren usw.):
+
+*[...]*
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | Hosting-Standort identifiziert, aber Infrastruktur nicht spezifiziert |
+| **3** | Bereitstellungsdiagramm vollstandig, Compute dimensioniert, Netzwerk dokumentiert, Umgebungen aufgelistet |
+| **5** | Alles oben Genannte plus Konnektivitatsprotokolle spezifiziert, Benutzer-/Administratorzugriffsmethoden dokumentiert, Sicherheitsagenten aufgelistet, Bandbreiten- und Latenzanforderungen quantifiziert |
+</div>
+
+<div class="quality-attribute-ref">
+
+**Qualitatsattribut-Querverweise:**
+- **4.2 Zuverlassigkeit** — Infrastrukturdesign bestimmt direkt Verfugbarkeit und Wiederherstellungsfahigkeit
+- **4.3 Leistung** — Compute-Dimensionierung und Netzwerkdesign beeinflussen die Leistung
+- **4.4 Kosten** — Infrastrukturentscheidungen sind der primare Kostentreiber
+- **4.5 Nachhaltigkeit** — Hosting-Standort und Compute-Effizienz beeinflussen die Umweltauswirkung
+
+</div>

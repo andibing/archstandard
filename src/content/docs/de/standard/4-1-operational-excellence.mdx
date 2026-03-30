@@ -1,0 +1,90 @@
+---
+title: "4.1 Betriebliche Exzellenz"
+description: Beobachtbarkeit, Logging, Uberwachung, Alarmierung und Betriebsverfahren.
+---
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+<span class="framework-badge badge-aws-waf">AWS Ops Excellence</span>
+<span class="framework-badge badge-azure-waf">Azure Ops Excellence</span>
+
+## Zweck
+
+Betriebliche Exzellenz konzentriert sich darauf, wie die Losung uberwacht, betrieben und im Laufe der Zeit verbessert wird. Sie umfasst Beobachtbarkeit (Logging, Metriken, Tracing), Alarmierung, Kapazitatsmanagement und Betriebsverfahren.
+
+## 4.1.1 Beobachtbarkeit — Logging
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+### Log-Architektur
+
+| Log-Typ | Protokollierte Ereignisse | Lokaler Speicher | Aufbewahrungsfrist | Remote-Dienste |
+|---------|--------------------------|-----------------|--------------------|--------------------|
+| Anwendungslogs | *[was protokolliert wird]* | *[Dateisystem, Datenbank]* | *[Zeitraum]* | *[z.B. Datadog, CloudWatch]* |
+| Datenspeicher-Logs | *[was protokolliert wird]* | *[Speicherort]* | *[Zeitraum]* | *[Remote-Dienst]* |
+| Infrastruktur-Logs | *[was protokolliert wird]* | *[Speicherort]* | *[Zeitraum]* | *[Remote-Dienst]* |
+| Sicherheitsereignis-Logs | *[was protokolliert wird]* | *[Speicherort]* | *[Zeitraum]* | *[SIEM-Dienst]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Dokumentieren Sie fur jeden Log-Typ:
+- Welche Ereignisse erfasst werden (Anwendungsfehler, Zugriffslogs, Audit-Ereignisse usw.)
+- Wo Logs lokal innerhalb der Anwendung gespeichert werden
+- Wie lange Logs vor Rotation oder Loschung aufbewahrt werden
+- Ob Logs an zentralisierte Logging- oder SIEM-Dienste weitergeleitet werden
+</div>
+
+## 4.1.2 Beobachtbarkeit — Uberwachung & Alarmierung
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+### Betriebliche Alarme
+
+Beschreiben Sie, wie betriebliche Alarme implementiert werden:
+
+| Alarmkategorie | Auslosebedingung | Benachrichtigungsmethode | Empfanger |
+|---------------|-----------------|-------------------------|-----------|
+| *[z.B. Anwendungsfehlerrate]* | *[Schwellenwert]* | *[E-Mail, PagerDuty, Slack]* | *[Team/Rolle]* |
+
+### Uberwachungswerkzeuge
+
+| Fahigkeit | Werkzeug | Abdeckung |
+|-----------|---------|-----------|
+| Application Performance Monitoring | *[z.B. Datadog, New Relic]* | *[welche Komponenten]* |
+| Infrastrukturuberwachung | *[z.B. CloudWatch, Prometheus]* | *[welche Ressourcen]* |
+| Log-Aggregation | *[z.B. ELK, Splunk, Datadog Logs]* | *[welche Log-Quellen]* |
+| Distributed Tracing | *[z.B. Jaeger, X-Ray, Datadog APM]* | *[welche Dienste]* |
+
+## 4.1.3 Kapazitatsmonitoring
+
+<span class="maturity-indicator maturity-comprehensive">Umfassend</span>
+
+| Frage | Antwort |
+|-------|---------|
+| Welche Metriken werden fur das Kapazitatsmonitoring erfasst? | *[CPU, Speicher, Storage, Netzwerk, Queue-Tiefe]* |
+| Wie werden Kapazitatstrends analysiert? | *[Werkzeuge, Dashboards, Berichte]* |
+| Sind Kapazitatsschwellenwerte und Alarme konfiguriert? | *[Schwellenwertdetails]* |
+| Gibt es einen Kapazitatsplanungsprozess? | *[Prozessbeschreibung]* |
+
+## 4.1.4 Betriebsverfahren
+
+<span class="maturity-indicator maturity-comprehensive">Umfassend</span>
+
+Dokumentieren Sie wesentliche Betriebsverfahren und Runbooks:
+
+| Verfahren | Beschreibung | Verantwortlich | Dokumentation |
+|-----------|-------------|---------------|--------------|
+| Vorfallreaktion | *[wie Vorfalle erkannt und gelost werden]* | *[Team]* | *[Link]* |
+| Anderungsmanagement | *[wie Anderungen genehmigt und bereitgestellt werden]* | *[Team]* | *[Link]* |
+| Eskalationspfade | *[Eskalationsverfahren]* | *[Team]* | *[Link]* |
+| Rufbereitschaftsrotation | *[Rufbereitschaftsstruktur]* | *[Team]* | *[Link]* |
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | Uberwachungswerkzeug identifiziert, aber nicht konfiguriert |
+| **3** | Zentralisiertes Logging, Uberwachung und Alarmierung vorhanden; Runbooks dokumentiert |
+| **5** | Alles oben Genannte plus Distributed Tracing aktiviert, Dashboards definiert, Vorfallreaktionsverfahren getestet |
+</div>

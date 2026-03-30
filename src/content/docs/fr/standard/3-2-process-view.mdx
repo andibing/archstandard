@@ -1,0 +1,104 @@
+---
+title: "3.2 Vue intégration et flux de données"
+description: Flux de données, architecture d'intégration, connectivité et contrats API/interfaces.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-4plus1">4+1 Process (adapted)</span>
+
+## Objectif
+
+La vue intégration et flux de données décrit comment les données circulent dans la solution, comment les composants communiquent et comment la solution s'intègre aux systèmes internes et externes. Elle répond aux préoccupations des intégrateurs, des équipes d'exploitation et des architectes.
+
+<Aside type="note" title="Nommage">
+Cette vue est adaptée de la **vue Process** de Kruchten, qui se concentrait à l'origine sur la concurrence et la décomposition des processus à l'exécution. Dans l'architecture de solution moderne, les préoccupations principales à ce niveau sont les flux de données, les patterns d'intégration et les contrats d'interface. Le nom a été mis à jour pour refléter cet usage contemporain.
+</Aside>
+
+## 3.2.1 Diagrammes de flux de données
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Illustrez comment les données circulent dans la solution de l'entrée à la sortie, en montrant les transformations et les étapes de traitement.
+
+*[Insérer le(s) diagramme(s) de flux de données]*
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Envisagez de montrer :
+- L'ingestion et l'approvisionnement des données
+- Les étapes de traitement et de transformation
+- Les sorties et destinations des données
+- Les flux asynchrones vs synchrones
+- Les patterns événementiels et les files de messages
+</div>
+
+## 3.2.2 Connectivité des composants internes
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Documentez la connectivité entre les composants internes de la solution :
+
+| Composant source | Composant destination | Protocole / Chiffrement | Méthode d'authentification | Objectif |
+|-----------------|----------------------|----------------------|----------------------|---------|
+| *[composant]* | *[composant]* | *[par ex., HTTPS/TLS 1.3]* | *[par ex., mTLS, API Key]* | *[objectif]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Listez toutes les connexions entre les composants internes de la solution. Pour chaque connexion, documentez :
+- L'initiateur de la connexion (source) et le récepteur (destination)
+- Le protocole et le standard de chiffrement utilisé
+- La méthode d'authentification et d'autorisation
+- Si la connexion est synchrone ou asynchrone
+</div>
+
+## 3.2.3 Architecture d'intégration externe
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Documentez comment la solution s'interface avec les systèmes externes, les services tiers et les autres applications internes :
+
+| Application source | Application destination | Protocole / Chiffrement | Authentification | Proxy de sécurité | Objectif |
+|-------------------|------------------------|----------------------|---------------|---------------|---------|
+| *[nom / ID de l'app]* | *[nom / ID de l'app]* | *[protocole]* | *[méthode]* | *[si applicable]* | *[objectif]* |
+
+### Accès des utilisateurs finaux
+
+Documentez comment les utilisateurs finaux accèdent à la solution :
+
+| Type d'utilisateur | Méthode d'accès | Authentification | Protocole |
+|-----------|-------------|---------------|----------|
+| *[par ex., Employés internes]* | *[par ex., Navigateur web via SSO]* | *[par ex., SAML/OIDC]* | *[HTTPS]* |
+| *[par ex., Clients externes]* | *[par ex., API]* | *[par ex., OAuth 2.0]* | *[HTTPS]* |
+
+## 3.2.4 Contrats API et interfaces
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+Documentez les principales API et interfaces exposées ou consommées par la solution :
+
+| API / Interface | Type | Direction | Format | Version | Documentation |
+|----------------|------|-----------|--------|---------|--------------|
+| *[nom]* | REST / GraphQL / gRPC / SOAP / Event | Exposed / Consumed | JSON / XML / Protobuf | *[version]* | *[lien]* |
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | Un diagramme de flux de données existe mais les interfaces ne sont pas détaillées |
+| **3** | Toutes les intégrations internes et externes documentées avec protocoles, authentification et direction |
+| **5** | Tout ce qui précède plus les contrats API versionnés, les SLA/SLO définis par interface, les patterns d'accès utilisateur documentés |
+</div>
+
+<div class="quality-attribute-ref">
+
+**Références croisées aux attributs de qualité :**
+- **4.1 Excellence opérationnelle** — Les défaillances d'intégration sont une source majeure d'incidents
+- **4.2 Fiabilité** — Les dépendances externes affectent la posture de fiabilité
+- **4.3 Performance** — La latence réseau et le débit dans les chemins d'intégration
+
+</div>

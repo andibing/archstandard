@@ -1,0 +1,77 @@
+---
+title: "4.4 Optimisation des coûts"
+description: Influence des coûts, analyse, implications et pratiques FinOps.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+<span class="framework-badge badge-aws-waf">AWS Cost</span>
+<span class="framework-badge badge-azure-waf">Azure Cost</span>
+
+## Objectif
+
+L'optimisation des coûts se concentre sur la livraison de la solution au coût le plus raisonnable tout en respectant toutes les autres exigences de qualité. Elle couvre les décisions de conception tenant compte des coûts, l'analyse des coûts et les pratiques de gestion continue des coûts.
+
+## 4.4.1 Influence des coûts et analyse
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+### Décisions de conception liées aux coûts
+
+Comment les décisions de conception en matière d'hébergement, de calcul, de réseau, de stockage de données et de résilience démontrent-elles la rentabilité ?
+
+| Posture | Sélectionné | Détail |
+|---------|----------|--------|
+| Décisions de conception choisies pour des raisons spécifiques autres que le coût | [ ] | *[décrire pourquoi]* |
+| Les options les plus rentables n'ont intentionnellement pas été sélectionnées | [ ] | *[décrire pourquoi et les compromis]* |
+| Les options les plus rentables ont été sélectionnées | [ ] | *[décrire l'analyse]* |
+
+### Analyse des coûts
+
+Une analyse ou modélisation des coûts a-t-elle été réalisée pour éclairer les décisions de conception ?
+
+- [ ] **Non** — Une analyse des coûts n'a pas été réalisée
+- [ ] **Oui** — *[décrire l'approche d'analyse, les outils utilisés (par ex., calculateurs de prix cloud, modèles TCO) et les conclusions clés]*
+
+## 4.4.2 Implications des coûts
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+La conception a-t-elle été contrainte de manière à ne pas répondre pleinement aux exigences en raison des coûts ?
+
+- [ ] **Non** — La conception répond pleinement aux exigences ; le coût n'a pas impacté la conception
+- [ ] **Oui** — *[décrire comment et pourquoi le coût a contraint la conception, et l'impact]*
+
+## 4.4.3 Pratiques FinOps
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+Documentez les pratiques de gestion continue des coûts :
+
+| Pratique | Implémentation |
+|----------|---------------|
+| Surveillance des coûts | *[tableaux de bord, alertes, outils]* |
+| Allocation des coûts | *[stratégie de tagging, centres de coûts]* |
+| Capacité réservée | *[instances réservées, plans d'économies, engagement d'utilisation]* |
+| Revues de dimensionnement | *[processus et fréquence de revue de l'utilisation des ressources]* |
+| Élimination du gaspillage | *[processus d'identification et de suppression des ressources inutilisées]* |
+| Gouvernance budgétaire | *[alertes budgétaires, seuils d'approbation]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Envisagez de documenter :
+- La ventilation attendue des coûts mensuels/annuels de fonctionnement par composant
+- La comparaison des coûts des alternatives considérées
+- Les opportunités d'optimisation des coûts identifiées mais reportées
+- Les déclencheurs qui nécessiteraient une réévaluation des coûts (par ex., événements de mise à l'échelle, renouvellements de contrats)
+</div>
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | Le coût est reconnu comme une préoccupation mais aucune analyse n'a été réalisée |
+| **3** | Analyse des coûts complétée, surveillance activée, stratégie de tagging en place |
+| **5** | Tout ce qui précède plus la capacité réservée évaluée, le dimensionnement optimisé démontré, le modèle de coûts relié au calculateur cloud, les pratiques FinOps documentées |
+</div>

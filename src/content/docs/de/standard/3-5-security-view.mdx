@@ -1,0 +1,189 @@
+---
+title: "3.5 Sicherheitsansicht"
+description: Sicherheitsuberblick, IAM, Netzwerksicherheit, Datenschutz und Uberwachung.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-aws-waf">AWS Security</span>
+<span class="framework-badge badge-azure-waf">Azure Security</span>
+
+## Zweck
+
+Die Sicherheitsansicht beschreibt, wie die Losung vor Bedrohungen schutzt, Identitat und Zugriff verwaltet und Daten sichert. Sie adressiert die Anliegen von Security Architects, dem CISO-Buro, Compliance-Teams und Prufern.
+
+## 3.5.1 Sicherheitsuberblick & Bedrohungsmodell
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+### Sicherheitskontext
+
+| Frage | Antwort |
+|-------|---------|
+| Unterstutzt die Losung regulierte Aktivitaten? | Ja / Nein — *[Details]* |
+| Ist die Losung SaaS oder drittgehostet? | Ja / Nein — *[Details]* |
+| Wurde eine Drittanbieter-Risikobewertung durchgefuhrt? | Ja / Nein — *[Referenz]* |
+
+### Bewertung der Geschaftsauswirkung
+
+| Auswirkungskategorie | Geschaftsauswirkung bei Kompromittierung |
+|---------------------|----------------------------------------|
+| **Vertraulichkeit** | *[Auswirkung eines unbefugten Datenzugriffs]* |
+| **Integritat** | *[Auswirkung einer unbefugten Datenanderung]* |
+| **Verfugbarkeit** | *[Auswirkung einer Dienstverfugungsstorung]* |
+| **Nichtabstreitbarkeit** | *[Auswirkung, wenn Aktionen bestritten werden konnen]* |
+
+### Bedrohungsmodell
+
+<span class="maturity-indicator maturity-comprehensive">Umfassend</span>
+
+Dokumentieren Sie die wesentlichen Bedrohungen und wie das Design sie adressiert:
+
+| Bedrohung | Angriffsvektor | Wahrscheinlichkeit | Auswirkung | Minderung |
+|-----------|---------------|---------------------|-----------|-----------|
+| *[Bedrohung]* | *[Wie]* | H / M / L | H / M / L | *[Designkontrollen]* |
+
+## 3.5.2 Identity & Access Management
+
+### Authentifizierungsmodell
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+#### Interne Benutzer
+
+| Zugriffstyp | Rolle(n) | Ziel(e) | Authentifizierungsmethode | Anmeldeschutz |
+|------------|----------|---------|--------------------------|---------------|
+| Endbenutzer | *[Rollen]* | *[Server/Apps]* | *[SSO/SAML/OIDC/etc.]* | *[Methode]* |
+| IT-Betrieb | *[Rollen]* | *[Server/Apps]* | *[Methode]* | *[Methode]* |
+| Dienstkonten | *[Umfang]* | *[Server/Apps]* | *[Methode]* | *[Methode]* |
+
+#### Externe Benutzer (falls zutreffend)
+
+| Zugriffstyp | Rolle(n) | Ziel(e) | Authentifizierungsmethode | Anmeldeschutz |
+|------------|----------|---------|--------------------------|---------------|
+| Externe Benutzer | *[Rollen]* | *[Server/Apps]* | *[Methode]* | *[Methode]* |
+| Externe Anwendungen | *[Umfang]* | *[Server/Apps]* | *[Methode]* | *[Methode]* |
+
+### Authentifizierungsdetails
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Kontrolle | Antwort |
+|-----------|---------|
+| Verwendet die Anwendung SSO oder gruppenweite Authentifizierung? | *[...]* |
+| Was ist der eindeutige Bezeichner fur Benutzerkonten? | *[...]* |
+| Wie sieht der Authentifizierungsfluss aus? | *[beschreiben oder diagrammatisch darstellen]* |
+| Wie werden Anmeldeinformationen an Benutzer ausgegeben? | *[...]* |
+| Welche Komplexitatsregeln gelten fur Anmeldeinformationen? | *[...]* |
+| Welche Rotationsregeln gelten fur Anmeldeinformationen? | *[...]* |
+| Welche Kontosperrungsregeln gelten? | *[...]* |
+| Wie konnen Benutzer vergessene Anmeldeinformationen zurucksetzen? | *[...]* |
+
+### Sitzungsverwaltung
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Kontrolle | Antwort |
+|-----------|---------|
+| Wie werden Sitzungen nach der Authentifizierung aufgebaut? | *[Token, Cookies usw.]* |
+| Wie werden Sitzungs-Token gegen Missbrauch geschutzt? | *[Signierung, Verschlusselung usw.]* |
+| Welche Sitzungs-Timeout- und Nebenlaufigkeitslimits gelten? | *[...]* |
+
+### Autorisierungsmodell
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+| Zugriffstyp | Rolle / Umfang | Berechtigungsspeicher | Bereitstellungsprozess |
+|------------|----------------|----------------------|----------------------|
+| Geschaftsbenutzer | *[Rollen und Umfang]* | *[wo Berechtigungen gespeichert]* | *[wie bereitgestellt]* |
+| Technische Benutzer | *[Rollen und Umfang]* | *[wo Berechtigungen gespeichert]* | *[wie bereitgestellt]* |
+| Dienstkonten | *[Rollen und Umfang]* | *[wo Berechtigungen gespeichert]* | *[wie bereitgestellt]* |
+
+### Autorisierungsdetails
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Kontrolle | Antwort |
+|-----------|---------|
+| Konto-Rezertifizierungsprozess | *[...]* |
+| Kontrollen zur Funktionstrennung | *[...]* |
+| Delegierte Autorisierungsfahigkeiten | *[...]* |
+
+### Privilegierter Zugriff
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Kontotyp | Verwaltungsansatz |
+|----------|------------------|
+| OS-privilegierte Konten (root/admin) | *[wie verwaltet, rotiert, auditiert]* |
+| Infrastruktur-/Plattform-Administration | *[wie verwaltet]* |
+| Anwendungsadministration | *[wie verwaltet]* |
+
+## 3.5.3 Netzwerksicherheit & Perimeterschutz
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Beschreiben Sie Netzwerksegmentierung, Firewalls und Perimeterkontrollen. Querverweis auf Abschnitt 3.3.3 (Netzwerktopologie) fur die zugrunde liegende Infrastruktur.
+
+| Kontrolle | Implementierung |
+|-----------|----------------|
+| Netzwerksegmentierung | *[Firewalls, Security Groups, NSGs]* |
+| Eingangsfilterung | *[WAF, DDoS, Rate Limiting]* |
+| Ausgangsfilterung | *[Proxy, Gateway, Positivlisten]* |
+| Verschlusselung bei Ubertragung | *[TLS-Versionen, Zertifikatsverwaltung]* |
+
+## 3.5.4 Datenschutz
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Querverweis auf Abschnitt 3.4 (Datenansicht) fur die vollstandige Datenarchitektur. Dieser Abschnitt konzentriert sich auf die angewandten Sicherheitskontrollen.
+
+### Verschlusselung im Ruhezustand
+
+| Attribut | Detail |
+|----------|--------|
+| Verschlusselungsbereitstellungsebene | Storage / Logical Container / Application |
+| Schlusseltyp | Symmetrisch / Asymmetrisch |
+| Algorithmus / Chiffre / Schlussellange | *[...]* |
+| Schlusselerzeugungsmethode | *[HSM / Software / Sonstige]* |
+| Schlusselspeicherung | *[HSM / KMS / Sonstige]* |
+| Schlusselrotationsplan | *[...]* |
+
+### Geheimnis- & Passwortschutz
+
+| Attribut | Detail |
+|----------|--------|
+| Geheimnisspeicher | *[z.B. HashiCorp Vault, AWS Secrets Manager, Azure Key Vault]* |
+| Geheimnisverteilung | Bei Bereitstellung verteilt / Auf Abruf abgerufen |
+| Geheimnisschutz auf dem Host | Lokaler Vault / Dateisystem / Nur Arbeitsspeicher / Nicht gespeichert |
+| Geheimnisrotation | Automatisch / Manuell / Nicht rotiert |
+
+## 3.5.5 Sicherheitsuberwachung & Bedrohungserkennung
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Fahigkeit | Implementierung |
+|-----------|----------------|
+| Sicherheitsereignis-Logging | *[welche Ereignisse, wo gespeichert]* |
+| SIEM-Integration | *[Tool und Integrationsmethode]* |
+| Infrastruktur-Ereigniserkennung | *[wie uberwacht]* |
+| Sicherheitsalarmierung | *[wie Alarme generiert und weitergeleitet werden]* |
+
+*[Sicherheitsuberwachungs-Architekturdiagramm einfugen, falls zutreffend]*
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | Authentifizierungsmethode identifiziert, aber Kontrollen nicht detailliert |
+| **3** | Geschaftsauswirkung bewertet, Authentifizierung und Autorisierung dokumentiert, Verschlusselung im Ruhezustand und bei Ubertragung spezifiziert |
+| **5** | Alles oben Genannte plus Bedrohungsmodell vollstandig, Geheimnisverwaltung dokumentiert, Sicherheitsuberwachung mit SIEM integriert, privilegierter Zugriff mit JIT kontrolliert |
+</div>
+
+<div class="quality-attribute-ref">
+
+**Qualitatsattribut-Querverweise:**
+- **4.1 Betriebliche Exzellenz** — Sicherheitsuberwachung ist Teil der betrieblichen Beobachtbarkeit
+- **4.2 Zuverlassigkeit** — Sicherheitsvorfalle beeintrachtigen die Verfugbarkeit
+
+</div>

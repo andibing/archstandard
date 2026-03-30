@@ -1,0 +1,198 @@
+---
+title: "5. Gestion du cycle de vie"
+description: Développement logiciel, CI/CD, transition de service, opérations et fin de vie.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+<span class="framework-badge badge-4plus1">4+1 Development</span>
+<span class="framework-badge badge-aws-waf">AWS Ops Excellence</span>
+
+## Objectif
+
+La gestion du cycle de vie décrit comment la solution est développée, déployée, opérée et finalement retirée. Elle correspond à la vue Development dans le modèle 4+1 et aux aspects opérationnels des frameworks Well-Architected AWS/Azure.
+
+## 5.1 Développement logiciel et CI/CD
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+### Pratiques de développement
+
+L'application inclut-elle du logiciel développé en interne ?
+
+- [ ] Oui — *[compléter les sections ci-dessous]*
+- [ ] Non — *[solution commerciale/fournisseur uniquement]*
+
+| Attribut | Détail |
+|-----------|--------|
+| Plateforme de contrôle de version | *[par ex., GitHub, GitLab, Bitbucket]* |
+| Plateforme CI/CD | *[par ex., Jenkins, GitHub Actions, Azure DevOps]* |
+| Automatisation des builds | *[comment les builds sont déclenchés et gérés]* |
+| Automatisation du déploiement | *[comment les déploiements sont automatisés]* |
+| Automatisation des tests | *[quels tests sont automatisés dans le pipeline]* |
+
+### Sécurité applicative dans le développement
+
+| Contrôle | Implémentation |
+|---------|---------------|
+| Identification des exigences de sécurité | *[comment les exigences de sécurité sont capturées]* |
+| Static Application Security Testing (SAST) | *[outil utilisé]* |
+| Dynamic Application Security Testing (DAST) | Yes / No — *[outil]* |
+| Software Composition Analysis (SCA) | *[outil utilisé]* |
+| Analyse des images de conteneurs | *[si applicable, outil utilisé]* |
+| Pratiques de codage sécurisé | *[standards, formation, revue de code]* |
+| Gestion des correctifs | *[comment les correctifs de sécurité sont appliqués et les SLA]* |
+
+## 5.2 Transition de service et migration
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+### Classification de la migration (6 R)
+
+Si cette solution remplace ou migre un système existant, classifiez l'approche de migration :
+
+| Classification | Sélectionné ? | Description |
+|---------------|-----------|-------------|
+| **Retain** | ☐ | Conserver en l'état, pas adapté pour la migration à ce stade |
+| **Retire** | ☐ | Décommissionner ; la fonctionnalité n'est plus nécessaire |
+| **Rehost** | ☐ | Lift-and-shift vers une nouvelle infrastructure avec des changements minimaux |
+| **Replatform** | ☐ | Lift-and-shift avec des optimisations ciblées (par ex., base de données gérée) |
+| **Refactor** | ☐ | Re-architecturer les composants pour tirer parti des capacités de la nouvelle plateforme |
+| **Replace** | ☐ | Remplacer entièrement par une nouvelle solution (par ex., produit SaaS) |
+
+### Plan de transition
+
+| Attribut | Détail |
+|-----------|--------|
+| Stratégie de déploiement | Big Bang / Blue-Green / Canary / Strangler Fig / Rolling / Parallel Run |
+| Mode de migration des données | One-off / Phased / Continuous Sync / Not applicable |
+| Méthode de migration des données | *[par ex., Export/Import, ETL, CDC, DMS, manuelle]* |
+| Volume de données à migrer | *[par ex., 500 Go]* |
+| Approche de basculement des utilisateurs finaux | One-off / Phased / Not applicable |
+| Basculement des systèmes externes | One-off / Phased / Not applicable |
+| Temps d'arrêt maximum acceptable | Zero / Seconds / Minutes / Hours / Days |
+| Plan de retour arrière | *[comment revenir en arrière si la transition échoue]* |
+| Critères d'acceptation | *[ce qui doit être vrai avant le basculement]* |
+| Infrastructure transitoire nécessaire ? | Yes / No — *[si oui, décrire l'infrastructure temporaire requise pendant la migration]* |
+
+## 5.3 Stratégie de test
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Décrivez l'approche de test qui valide l'architecture :
+
+| Type de test | Périmètre | Approche | Environnement | Automatisé ? |
+|-----------|-------|----------|-------------|-----------|
+| Tests d'intégration | *[ce qui est testé]* | *[approche]* | *[environnement]* | Yes / No |
+| Tests de contrat | *[contrats API entre services]* | *[approche]* | *[environnement]* | Yes / No |
+| Tests de performance | *[charge, stress, endurance]* | *[approche]* | *[environnement]* | Yes / No |
+| Tests de sécurité | *[pénétration, vulnérabilité]* | *[approche]* | *[environnement]* | Yes / No |
+| Tests DR | *[basculement, restauration]* | *[approche et fréquence]* | *[environnement]* | Yes / No |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Cette section couvre les tests architecturalement significatifs — pas les tests unitaires ou les cas de tests fonctionnels (qui appartiennent à la conception détaillée / documentation de bas niveau). Concentrez-vous sur les tests qui valident l'architecture elle-même : les points d'intégration, les caractéristiques de performance, la posture de sécurité et les capacités de restauration.
+</div>
+
+## 5.4 Gestion des versions
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+| Attribut | Détail |
+|-----------|--------|
+| Fréquence des versions | *[par ex., continue, hebdomadaire, mensuelle, trimestrielle]* |
+| Processus de version | *[comment les versions sont planifiées, approuvées et déployées]* |
+| Validation des versions | *[comment les versions sont validées en production]* |
+| Feature flags / toggles | *[si utilisés, comment ils sont gérés]* |
+
+## 5.5 Opérations et support
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+| Attribut | Détail |
+|-----------|--------|
+| Modèle de support | *[quelles équipes ou fournisseurs supportent l'application]* |
+| Horaires de support | *[par ex., 24/7, heures ouvrables, follow-the-sun]* |
+| SLA | *[accords de niveau de service internes ou externes]* |
+| Chemins d'escalade | *[comment les problèmes sont escaladés]* |
+
+## 5.6 Ressources et compétences
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Évaluez si l'équipe possède les compétences et les ressources pour construire, opérer et supporter la solution.
+
+### Évaluation des capacités de l'équipe
+
+| Domaine de compétence | Niveau actuel | Action requise |
+|-----------|--------------|-----------------|
+| Plateforme cloud (par ex., AWS, Azure, GCP) | High / Medium / Low / N/A | *[formation, recrutement ou prestataire nécessaire ?]* |
+| Infrastructure as Code (par ex., Terraform, Pulumi) | High / Medium / Low / N/A | *[...]* |
+| Gestion de pipeline CI/CD | High / Medium / Low / N/A | *[...]* |
+| Stack technologique applicatif | High / Medium / Low / N/A | *[...]* |
+| Administration de base de données | High / Medium / Low / N/A | *[...]* |
+| Sécurité et conformité | High / Medium / Low / N/A | *[...]* |
+
+### Préparation opérationnelle
+
+| Question | Réponse |
+|----------|----------|
+| L'équipe peut-elle pleinement opérer et supporter cette solution en production ? | A : Pleinement capable / B : Partiellement capable / C : Pas encore capable mais volontaire pour apprendre / D : Pas capable et ne le sera pas dans un avenir prévisible |
+| Si B, C ou D : quelles ressources supplémentaires sont nécessaires ? | *[par ex., DBA, ingénieur DevOps, architecte cloud, service géré]* |
+| Un service géré est-il envisagé pour les opérations courantes ? | Yes / No — *[détails]* |
+
+## 5.7 Démarrage du service
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+Décrivez comment l'application et ses services de support sont démarrés :
+
+*[Quelles étapes sont nécessaires pour mettre la solution en service ? Y a-t-il des étapes manuelles ? Quelle est la séquence de démarrage et l'ordre des dépendances ?]*
+
+## 5.8 Maintenabilité
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Décrivez comment la conception de la solution permet la maintenance continue :
+
+| Préoccupation | Approche |
+|---------|----------|
+| Maintenir les versions logicielles à jour et supportées | *[stratégie de correctifs]* |
+| Gestion du cycle de vie matériel | *[cadence de renouvellement]* |
+| Gestion des certificats | *[processus de renouvellement]* |
+| Gestion des dépendances | *[comment les dépendances tierces sont suivies et mises à jour]* |
+
+## 5.9 Fin de vie et décommissionnement
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+| Attribut | Détail |
+|-----------|--------|
+| Durée de vie prévue | *[durée de vie attendue ou planifiée de la solution]* |
+| Déclencheurs de fin de vie | *[ce qui déclencherait le décommissionnement]* |
+| Blocages au décommissionnement | *[dépendances ou contraintes sur le retrait]* |
+| Élimination des données | *[comment les données seront effacées de manière sécurisée]* |
+| Élimination de l'infrastructure | *[comment le matériel/les ressources cloud seront décommissionnés]* |
+
+## 5.10 Planification de sortie
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Si hébergé dans un cloud public ou chez un fournisseur tiers :
+
+| Attribut | Détail |
+|-----------|--------|
+| Stratégie de sortie | *[comment migrer hors du fournisseur actuel]* |
+| Portabilité des données | *[comment les données peuvent être extraites et migrées]* |
+| Évaluation de la dépendance fournisseur | *[degré de dépendance et atténuation]* |
+| Estimation du délai de sortie | *[combien de temps prendrait une sortie]* |
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | Outil CI/CD identifié mais pipeline non documenté |
+| **3** | Pratiques de développement, stratégie de déploiement, modèle de support et fréquence des versions documentés ; plan de migration en place si applicable |
+| **5** | Tout ce qui précède plus l'analyse de sécurité intégrée dans le pipeline, les compétences de l'équipe évaluées avec un plan d'action, la stratégie de sortie documentée avec l'évaluation de la dépendance fournisseur |
+</div>

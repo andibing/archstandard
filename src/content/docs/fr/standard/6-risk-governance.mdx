@@ -1,0 +1,183 @@
+---
+title: "6. Prise de décision et gouvernance"
+description: Contraintes, hypothèses, risques, dépendances, problèmes, décisions architecturales et traçabilité de la conformité.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Objectif
+
+Cette section capture le contexte de prise de décision pour l'architecture : les contraintes et hypothèses qui l'ont façonnée, les risques et dépendances qui doivent être gérés, les décisions clés prises (et pourquoi), les exceptions aux standards organisationnels et les preuves de conformité qui démontrent que la conception a été revue et approuvée.
+
+## 6.1 Contraintes
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Les contraintes sont des limitations fixes dans lesquelles la conception doit opérer. Elles sont non négociables et délimitent les frontières de la solution.
+
+| ID | Contrainte | Catégorie | Impact sur la conception | Dernière évaluation |
+|----|-----------|----------|-----------------|---------------|
+| C-001 | *[décrire la contrainte]* | Regulatory / Technical / Commercial / Organisational / Time | *[comment cela contraint la conception]* | *[date]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Les contraintes courantes incluent :
+- **Réglementaires** — Résidence des données, conformité sectorielle (PCI-DSS, RGPD, FCA)
+- **Techniques** — Obligation d'utiliser la plateforme existante, technologie spécifique imposée, intégration avec le legacy
+- **Commerciales** — Plafond budgétaire, accords de licence existants, contrats fournisseurs
+- **Organisationnelles** — Compétences de l'équipe, standards organisationnels, processus de gouvernance
+- **Temporelles** — Délais de livraison fixes, dates de conformité réglementaire
+</div>
+
+## 6.2 Hypothèses
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Les hypothèses sont des facteurs considérés comme vrais mais non encore vérifiés. Chaque hypothèse devrait être validée et suivie jusqu'à sa clôture. Une hypothèse qui s'avère fausse peut devenir un risque ou un problème.
+
+| ID | Hypothèse | Impact si faux | Certitude | Statut | Propriétaire | Preuve |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | *[décrire l'hypothèse]* | *[impact sur la conception si erronée]* | High / Medium / Low | Open / Closed | *[personne]* | *[référence]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Capturez les hypothèses concernant :
+- **Technique** — Disponibilité des API, capacité système, compatibilité technologique
+- **Organisationnel** — Disponibilité des ressources, compétences de l'équipe, préparation des processus
+- **Tiers** — Délais fournisseurs, engagements SLA, disponibilité du service
+- **Données** — Qualité des données, volumes, formats, faisabilité de la migration
+- **Calendrier** — Dates de livraison dépendantes, délais d'approbation
+
+Les hypothèses ouvertes devraient être activement suivies. Le propriétaire est responsable de la validation de l'hypothèse et de la fourniture de preuves de clôture.
+</div>
+
+## 6.3 Risques
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Les risques sont des événements potentiels qui pourraient affecter négativement la conception ou sa livraison. Chaque risque devrait avoir une stratégie d'atténuation et une propriété claire.
+
+**Identification des risques :**
+
+| ID | Événement de risque | Catégorie | Sévérité | Probabilité | Propriétaire |
+|----|-----------|----------|----------|-----------|-------|
+| R-001 | *[décrire le risque]* | Technical / Security / Operational / Delivery / Commercial / Compliance | High / Medium / Low | High / Medium / Low | *[personne]* |
+
+**Réponse aux risques :**
+
+| ID | Stratégie d'atténuation | Plan d'atténuation | Risque résiduel | Dernière évaluation |
+|----|-------------------|-----------------|--------------|---------------|
+| R-001 | Accept / Mitigate / Transfer / Avoid | *[détails du plan d'atténuation]* | High / Medium / Low | *[date]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Considérez les risques liés à :
+- **Technique** — Choix technologiques, complexité, intégration, performance
+- **Sécurité** — Vulnérabilités, lacunes de contrôle d'accès, exposition des données
+- **Opérationnel** — Supportabilité, lacunes de surveillance, disponibilité des compétences
+- **Livraison** — Calendrier, dépendances, disponibilité des ressources
+- **Commercial** — Risque fournisseur, licences, dépassements de coûts
+- **Conformité** — Lacunes réglementaires, non-conformité aux standards
+
+Les stratégies d'atténuation devraient être l'une des suivantes : **Accept** (signature du responsable métier), **Mitigate** (réduire la probabilité ou l'impact), **Transfer** (assurance, contractuel), ou **Avoid** (changer la conception).
+</div>
+
+## 6.4 Dépendances
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Les dépendances sont des facteurs externes sur lesquels la conception s'appuie ou qui s'appuient sur cette conception. Suivez à la fois les entrantes (cette conception dépend de) et les sortantes (d'autres conceptions dépendent de celle-ci).
+
+| ID | Dépendance | Direction | Statut | Propriétaire | Preuve | Dernière évaluation |
+|----|-----------|-----------|--------|-------|----------|---------------|
+| D-001 | *[décrire la dépendance]* | Inbound / Outbound | Committed / Not Committed / Resolved | *[personne]* | *[référence]* | *[date]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Les dépendances courantes incluent :
+- **Infrastructure** — Connectivité réseau, disponibilité de la plateforme, services partagés
+- **Application** — API, flux de données, systèmes en amont/aval
+- **Équipe** — Livrables d'autres projets, ressources partagées, compétences spécialisées
+- **Fournisseur** — Préparation du service tiers, finalisation des contrats
+- **Gouvernance** — Portes d'approbation, signature de conformité, comité consultatif des changements
+</div>
+
+## 6.5 Problèmes
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Les problèmes sont des difficultés qui se sont déjà matérialisées et nécessitent une résolution. Contrairement aux risques (qui sont potentiels), les problèmes sont actuels et actifs.
+
+| ID | Problème | Catégorie | Impact | Propriétaire | Plan de résolution | Statut | Dernière évaluation |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | *[décrire le problème]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[personne]* | *[plan de résolution]* | Open / In Progress / Resolved | *[date]* |
+
+## 6.6 Exceptions aux garde-fous
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Documentez toute exception aux politiques, standards ou garde-fous organisationnels :
+
+### Exceptions aux politiques
+
+| Question | Réponse |
+|----------|----------|
+| Cette conception crée-t-elle une exception aux politiques et standards actuels ? | Yes / No |
+| Si oui, les exceptions ont-elles été enregistrées et acceptées via le processus d'exceptions ? | Yes / No / N/A |
+
+### Exceptions aux processus
+
+| Question | Réponse |
+|----------|----------|
+| Cette conception crée-t-elle un problème par rapport à la bibliothèque de processus ? | Yes / No |
+| Si oui, cela a-t-il été reconnu par le propriétaire du processus ? | Yes / No / N/A |
+
+### Impact sur le profil de risque
+
+| Question | Réponse |
+|----------|----------|
+| La conception modifie-t-elle matériellement le profil de risque technologique de l'organisation ? | Yes / No |
+| Si oui, cela a-t-il été évalué avec les équipes Risques et Contrôles ? | Yes / No / N/A |
+
+## 6.7 Journal des décisions architecturales
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Fournissez un index récapitulatif de tous les enregistrements de décisions architecturales. Les détails complets des ADR se trouvent dans la [Section 3.6.2](/fr/standard/3-6-scenarios/#362-enregistrements-de-décisions-architecturales-adr).
+
+| ADR # | Titre | Statut | Date | Impact |
+|-------|-------|--------|------|--------|
+| ADR-001 | *[titre]* | Accepted / Proposed / Superseded | *[date]* | *[bref résumé de l'impact]* |
+
+## 6.8 Traçabilité de la conformité
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+Associez les éléments de conception aux standards et principes qu'ils satisfont :
+
+| Standard / Principe | Exigence | Comment la conception la satisfait | Section de preuve |
+|---------------------|-------------|---------------------------|-----------------|
+| *[ID du standard]* | *[texte de l'exigence]* | *[approche de conception]* | *[référence de section]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Ce tableau fournit la traçabilité entre les standards/principes externes et le contenu du SAD qui démontre la conformité. Il permet aux réviseurs et aux auditeurs de vérifier que toutes les exigences applicables sont traitées dans la conception.
+
+Les organisations peuvent utiliser cette section pour se rapporter à leurs principes de conception internes, aux standards de l'industrie (par ex., PCI-DSS, ISO 27001) ou aux exigences réglementaires.
+</div>
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | Quelques risques listés mais pas de plans d'atténuation ni de propriété |
+| **3** | Contraintes, hypothèses, risques et dépendances documentés avec propriété ; ADR clés capturés ; exceptions aux garde-fous enregistrées |
+| **5** | Tout ce qui précède plus tous les éléments ont des preuves et des dates, la traçabilité de la conformité est complète, les problèmes sont suivis jusqu'à leur résolution |
+</div>

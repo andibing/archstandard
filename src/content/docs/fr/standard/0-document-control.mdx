@@ -1,0 +1,70 @@
+---
+title: "0. Contrôle du document"
+description: Métadonnées, historique des modifications, contributeurs et objectif du document.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Objectif
+
+Cette section capture les métadonnées administratives du document d'architecture de solution, garantissant qu'il est versionné, traçable et gouverné de manière appropriée.
+
+## 0.1 Métadonnées du document
+
+| Champ | Description |
+|-------|-------------|
+| **Titre du document** | Le titre formel de ce document d'architecture de solution |
+| **Nom de l'application / solution** | Le nom du système documenté |
+| **Identifiant de l'application** | Identifiant unique (par ex., depuis une CMDB ou un outil de portefeuille) |
+| **Auteur(s)** | Auteur(s) principal(aux) du document |
+| **Propriétaire** | L'architecte responsable de ce document |
+| **Version** | Version actuelle du document (utilisez le versionnement sémantique) |
+| **Statut** | Draft / In Review / Approved / Superseded |
+| **Date de création** | Date à laquelle le document a été créé pour la première fois |
+| **Dernière mise à jour** | Date de la mise à jour la plus récente |
+| **Classification** | Classification de sécurité du document |
+
+## 0.2 Historique des modifications
+
+Suivez toutes les modifications significatives du document :
+
+| Version | Date | Auteur / Éditeur | Description de la modification |
+|---------|------|-----------------|----------------------|
+| 0.1 | *[date]* | *[nom]* | Brouillon initial |
+| ... | ... | ... | ... |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+- Utilisez le versionnement sémantique : `MAJOR.MINOR` (par ex., 1.0 pour la première version approuvée, 1.1 pour les mises à jour mineures, 2.0 pour une refonte significative)
+- Enregistrez qui a effectué chaque modification et pourquoi
+- Il s'agit d'un document vivant — il doit être mis à jour chaque fois que des modifications architecturalement significatives sont apportées à la solution
+</div>
+
+## 0.3 Contributeurs et approbations
+
+| Nom | Rôle | Type de contribution |
+|------|------|------------------|
+| *[nom]* | *[rôle]* | Auteur / Réviseur / Approbateur |
+
+## 0.4 Objectif et périmètre du document
+
+Décrivez l'objectif de ce document d'architecture de solution spécifique :
+
+- Quelle solution ou application décrit-il ?
+- Quel est le périmètre de ce document ?
+- Qu'est-ce qui est explicitement hors périmètre ?
+- Quels autres documents sont liés (par ex., conceptions détaillées, runbooks opérationnels) ?
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Le document d'architecture de solution sert de :
+- **Document de référence** décrivant l'architecture actuelle de la solution
+- **Preuve** que la solution est bien architecturée
+- **Entrée** pour les processus de gouvernance et de revue architecturale
+- **Artefact vivant** qui doit être mis à jour lorsque des modifications architecturalement significatives sont effectuées
+
+Il devrait contenir des détails de conception relativement **statiques**. Les informations dynamiques ou fréquemment modifiées appartiennent à la documentation opérationnelle.
+</div>

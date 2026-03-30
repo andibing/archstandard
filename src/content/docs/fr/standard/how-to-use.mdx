@@ -1,0 +1,170 @@
+---
+title: "Conformité et utilisation"
+description: "Comment adopter ADS, objectifs de maturité et cycle de vie du document."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Terminologie
+
+Les mots-clés « SHALL », « SHALL NOT », « SHOULD », « SHOULD NOT », « MAY » et « OPTIONAL » dans ce standard doivent être interprétés comme décrit dans [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) et [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174).
+
+| Mot-clé | Signification |
+|---------|---------|
+| **SHALL** | Une exigence absolue du standard |
+| **SHALL NOT** | Une interdiction absolue |
+| **SHOULD** | Recommandé ; il peut exister des raisons valables de déroger mais les implications doivent être comprises |
+| **SHOULD NOT** | Non recommandé ; il peut exister des raisons valables d'inclure mais les implications doivent être comprises |
+| **MAY** / **OPTIONAL** | Véritablement optionnel ; à inclure à la discrétion de l'auteur |
+
+Ces mots-clés correspondent aux niveaux de documentation du standard comme suit :
+
+| Niveau de documentation | Mot-clé | Porte de gouvernance |
+|---------------|---------|-----------------|
+| <span class="maturity-indicator maturity-minimum">Minimum</span> | SHALL | Revue développement / test |
+| <span class="maturity-indicator maturity-recommended">Recommandé</span> | SHOULD | Approbation pour la production |
+| <span class="maturity-indicator maturity-comprehensive">Complet</span> | MAY | Revue d'entreprise |
+
+## Pour commencer
+
+Utilisez le flux de travail ci-dessous pour compléter un document d'architecture de solution. Chaque étape s'appuie sur la précédente.
+
+<div class="workflow-steps">
+
+**Étape 1 — Choisissez votre niveau.** Sélectionnez le niveau de documentation pour votre projet :
+- <span class="maturity-indicator maturity-minimum">Minimum</span> — Conceptions en phase initiale, preuves de concept, revues dev/test
+- <span class="maturity-indicator maturity-recommended">Recommandé</span> — Conceptions destinées à la production nécessitant une approbation de gouvernance
+- <span class="maturity-indicator maturity-comprehensive">Complet</span> — Systèmes critiques, réglementés ou à l'échelle de l'entreprise
+
+**Étape 2 — Établissez le contexte** (Sections 0–2). Commencez par le contrôle du document, le résumé exécutif et les parties prenantes. Cela cadre tout ce qui suit.
+
+**Étape 3 — Décrivez l'architecture** (Section 3). Parcourez chaque vue architecturale. Un ordre de démarrage courant est la vue logique (ce que fait la solution), puis la vue physique (où elle s'exécute), puis les vues restantes.
+
+**Étape 4 — Évaluez la qualité** (Section 4). Évaluez la conception par rapport à chaque attribut de qualité. Documentez les compromis entre eux.
+
+**Étape 5 — Planifiez le cycle de vie** (Section 5). Documentez comment la solution est construite, déployée, opérée et finalement retirée.
+
+**Étape 6 — Capturez les décisions et les risques** (Section 6). Documentez les contraintes, hypothèses, risques, dépendances et problèmes. Enregistrez les décisions architecturales clés.
+
+**Étape 7 — Notez et soumettez** (Section 7). Complétez le tableau de scoring de conformité, ajoutez le glossaire/les références et soumettez pour revue de gouvernance.
+
+</div>
+
+<Aside type="tip" title="Ordre de complétion suggéré">
+Vous n'êtes pas obligé de compléter les sections dans un ordre strictement numérique. De nombreux architectes préfèrent commencer par la vue physique (3.3) ou la vue sécurité (3.5), puis revenir à la vue logique. L'essentiel est que toutes les sections au niveau choisi soient complétées avant soumission.
+</Aside>
+
+### Que inclure et que ignorer
+
+- **Omettez** les sections au-dessus de votre niveau cible. Ne les incluez pas avec un contenu vide ou « N/A ».
+- **Omettez** les sections en dessous de votre niveau cible qui ne sont véritablement pas pertinentes (par ex., appareils IoT pour une API cloud).
+- **N'incluez que** les sections qui apportent de la valeur au lecteur.
+
+## Cycle de vie du document
+
+Un document d'architecture de solution produit selon ce standard est un **artefact vivant** :
+
+- Il SHALL décrire l'**état actuel** de l'architecture de la solution
+- Il SHALL être mis à jour lorsque des changements significatifs sur le plan architectural sont effectués
+- Il MAY être mis à jour par plusieurs équipes ou activités de changement, séquentiellement ou en parallèle
+- Il SHALL NOT être détenu par une seule équipe projet ; la propriété revient à l'architecte responsable de la solution
+- Les changements de conception SHOULD être approuvés par le processus de gouvernance architecturale de l'organisation
+
+<Aside type="tip" title="Mises à jour incrémentales">
+Si un projet ne cherche qu'à apporter des changements incrémentaux à une solution documentée dans un SAD existant, seules les sections relatives au changement doivent être mises à jour. Les sections restantes SHALL rester inchangées et continuer à décrire l'état actuel.
+</Aside>
+
+## Personnalisation par l'organisation
+
+Ce standard est conçu pour être adopté sans modification. Cependant, les organisations MAY l'étendre de la manière suivante :
+
+1. **Profil d'organisation** — Associez les sections génériques à des outils internes spécifiques, des standards et des processus de gouvernance en utilisant le champ `organisationProfile` dans le JSON Schema
+2. **Sections personnalisées** — Ajoutez des sections spécifiques à l'organisation en utilisant le point d'extension `customSections` sans modifier la structure de base du standard
+3. **Traçabilité des standards** — Référencez les principes de conception internes, les patterns et les standards dans la section de traçabilité de la conformité (Section 6.4)
+4. **Correspondance des portes de gouvernance** — Associez les trois niveaux de documentation aux étapes de gouvernance architecturale de votre organisation (par ex., ARB, autorité de conception)
+
+Les organisations SHALL NOT renuméroter les sections de base du standard. Les sections qui ne sont pas applicables à la solution SHOULD être entièrement omises pour garder les documents ciblés et lisibles.
+
+## Formats de sortie
+
+Le JSON Schema du standard permet la génération et la validation dans plusieurs formats :
+
+| Format | Cas d'utilisation |
+|--------|----------|
+| **Web** | Site de documentation interactif (ce site) |
+| **Markdown** | Inclusion dans des dépôts git aux côtés du code |
+| **Word / DOCX** | Soumissions formelles de gouvernance et revue hors ligne |
+| **JSON** | Lisible par machine pour l'intégration d'outils et la validation |
+
+Voir [Modèles](/fr/standard/templates/) pour les modèles vierges téléchargeables dans chaque format.
+
+## Scoring de conformité architecturale
+
+Chaque section majeure d'un document d'architecture de solution MAY être évaluée à l'aide d'un **score de conformité de 0 à 5**. Cela fournit aux comités de gouvernance une vue rapide et quantitative de la maturité et de la complétude architecturale — tant pour les SAD individuels qu'à travers un portefeuille.
+
+### Échelle de scoring
+
+| Score | Niveau | Description |
+|:-----:|-------|-------------|
+| **0** | Non traité | Aucune preuve ou contenu fourni pour ce domaine |
+| **1** | Reconnu | La préoccupation est identifiée mais aucune conception ou preuve n'existe |
+| **2** | Partiel | Certaines exigences sont traitées ; des lacunes significatives subsistent |
+| **3** | Majoritairement traité | La plupart des exigences sont satisfaites ; des lacunes ou risques mineurs nécessitent une atténuation |
+| **4** | Entièrement traité | Toutes les exigences sont satisfaites avec des preuves à l'appui |
+| **5** | Exemplaire | Mise en œuvre conforme aux meilleures pratiques ; pourrait servir d'exemple de référence |
+
+### Où le scoring s'applique
+
+Le scoring est appliqué au **niveau de la section**, et non au niveau des champs individuels. Les sections suivantes sont notées :
+
+| Section | Domaine de scoring | À quoi ressemble un 4/5 |
+|---------|-------------|---------------------|
+| **1. Résumé exécutif** | Complétude et clarté | Contexte métier clair, alignement stratégique démontré, périmètre bien défini |
+| **3.1 Vue logique** | Qualité de conception | Composants bien décomposés, patterns justifiés, dépendance fournisseur évaluée |
+| **3.2 Intégration et flux de données** | Maturité d'intégration | Toutes les interfaces documentées, protocoles spécifiés, authentification définie |
+| **3.3 Vue physique** | Rigueur infrastructure | Architecture de déploiement complète, environnements spécifiés, connectivité documentée |
+| **3.4 Vue données** | Gouvernance des données | Stockages de données classifiés, rétention définie, souveraineté traitée, chiffrement spécifié |
+| **3.5 Vue sécurité** | Posture sécurité | Modélisation des menaces complète, tous les contrôles documentés, surveillance en place |
+| **3.6 Scénarios** | Validation de la conception | Cas d'utilisation clés documentés, ADR capturant les décisions significatives avec justification |
+| **4.1 Excellence opérationnelle** | Préparation opérationnelle | Journalisation centralisée, surveillance, alertes et runbooks tous en place |
+| **4.2 Fiabilité** | Maturité de la résilience | Stratégie DR définie, RTO/RPO atteints, sauvegarde testée, tolérance aux pannes conçue |
+| **4.3 Performance** | Assurance performance | Objectifs définis, croissance projetée, approche de test documentée |
+| **4.4 Optimisation des coûts** | Sensibilisation aux coûts | Analyse des coûts effectuée, surveillance activée, dimensionnement optimisé démontré |
+| **4.5 Durabilité** | Considération environnementale | Hébergement conscient du carbone, arrêt automatique, dimensionnement optimisé |
+| **5. Cycle de vie** | Maturité opérationnelle | CI/CD documenté, migration planifiée, compétences évaluées, plan de sortie en place |
+| **6. Prise de décision** | Rigueur de gouvernance | Registre RAID complet, ADR capturés, traçabilité de la conformité démontrée |
+
+### Tableau récapitulatif de conformité
+
+Chaque SAD SHOULD inclure un récapitulatif de conformité dans les annexes (Section 7) ou le contrôle du document (Section 0) :
+
+| Section | Score (0–5) | Évaluateur | Date | Notes |
+|---------|:-----------:|----------|------|-------|
+| 1. Résumé exécutif | | | | |
+| 3.1 Vue logique | | | | |
+| 3.2 Intégration et flux de données | | | | |
+| 3.3 Vue physique | | | | |
+| 3.4 Vue données | | | | |
+| 3.5 Vue sécurité | | | | |
+| 3.6 Scénarios | | | | |
+| 4.1 Excellence opérationnelle | | | | |
+| 4.2 Fiabilité | | | | |
+| 4.3 Performance | | | | |
+| 4.4 Optimisation des coûts | | | | |
+| 4.5 Durabilité | | | | |
+| 5. Cycle de vie | | | | |
+| 6. Prise de décision | | | | |
+| **Global** | | | | |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+- Le **score global** est généralement le score individuel de section le plus bas (principe du maillon faible), et non une moyenne. Une solution avec un 5 en performance mais un 1 en sécurité n'est pas un « 3 » — elle a une faille de sécurité critique.
+- Le scoring est **collaboratif**, pas contradictoire. Il devrait être réalisé conjointement entre l'architecte de solution et l'autorité de revue (par ex., ARB ou autorité de conception).
+- Les scores inférieurs à **3** sur toute section SHOULD déclencher un plan de remédiation avec une responsabilité et des échéances clairement définies.
+- Les organisations MAY définir des scores minimaux acceptables par section pour différentes portes de gouvernance (par ex., « toutes les sections doivent avoir un score ≥ 3 pour l'approbation en production »).
+</div>
+
+## Références normatives
+
+Voir le [tableau complet des références normatives](/fr/standard/framework-alignment/) sur la page Alignement des cadres.

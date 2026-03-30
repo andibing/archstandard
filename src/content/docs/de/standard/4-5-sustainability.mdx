@@ -1,0 +1,82 @@
+---
+title: "4.5 Nachhaltigkeit"
+description: Hosting-Effizienz, Code-Effizienz und Daten-Effizienz.
+---
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+<span class="framework-badge badge-aws-waf">AWS Sustainability</span>
+
+## Zweck
+
+Nachhaltigkeit konzentriert sich auf die Minimierung der Umweltauswirkungen der Losung durch Optimierung der Nutzung von Compute-, Speicher- und Netzwerkressourcen. Dieses Qualitatsattribut wurde vom AWS Well-Architected Framework eingefuhrt und adressiert Energieverbrauch, CO2-Emissionen und Ressourceneffizienz.
+
+## 4.5.1 Hosting-Effizienz
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+### Hosting-Standort
+
+| Frage | Antwort |
+|-------|---------|
+| Wurde der Hosting-Standort gewahlt, um die Umweltauswirkung zu reduzieren? | Ja / Nein — *[beschreiben Sie Kriterien: CO2-Intensitat, erneuerbare Energie, Wasserverbrauch]* |
+| Welches Auslastungsmuster der Arbeitslast wird erwartet? | Variabel / Konstant — *[beschreiben Sie Spitzen und Muster]* |
+
+### On-Demand-Verfugbarkeit
+
+| Frage | Antwort |
+|-------|---------|
+| Muss die Anwendung ununterbrochen verfugbar sein? | Ja / Nein |
+| Kann die Losung ausserhalb der Spitzenzeiten heruntergefahren oder skaliert werden? | Ja / Nein — *[beschreiben Sie Zeitplan]* |
+| Sind Nicht-Produktionsumgebungen konfiguriert, bei Nichtverwendung herunterzuskalieren oder abzuschalten? | Ja / Nein — *[Details]* |
+
+### Ressourceneffizienz
+
+| Frage | Antwort |
+|-------|---------|
+| Sind Ressourcen angemessen dimensioniert, um Uberprovisionierung zu vermeiden? | *[beschreiben Sie Ansatz]* |
+| Wird die vCPU-Auslastung uberwacht? | *[Zielauslastung %]* |
+| Werden die leistungsstarksten Hardware-Optionen pro Watt verwendet? | *[Details]* |
+
+## 4.5.2 Code-Effizienz
+
+<span class="maturity-indicator maturity-comprehensive">Umfassend</span>
+
+| Frage | Antwort |
+|-------|---------|
+| Wie tragen die Sprach- und Framework-Entscheidungen zur Effizienz bei? | *[beschreiben]* |
+| Wurde der Code fur die Zielplattform und Arbeitslast optimiert? | *[beschreiben]* |
+| Werden effiziente Algorithmen und Datenstrukturen verwendet? | *[beschreiben]* |
+| Wird die Anzahl der vCPU-Stunden pro Job/Anfrage minimiert? | *[beschreiben]* |
+
+## 4.5.3 Daten-Effizienz
+
+<span class="maturity-indicator maturity-comprehensive">Umfassend</span>
+
+| Frage | Antwort |
+|-------|---------|
+| Werden Daten nahe am Compute gehalten, um Netzwerktransfer zu reduzieren? | *[Details]* |
+| Werden Datenreplikate minimiert? | *[Details]* |
+| Werden alte oder ungenutzte Daten entfernt, um Speicher zu reduzieren? | *[Details]* |
+| Werden effiziente Datenformate und Kompression verwendet? | *[Details]* |
+| Werden Jobs priorisiert und verteilt, um die Ressourcennutzung zu optimieren? | *[Details]* |
+| Werden effiziente Netzwerkmuster verwendet (reduzierte Entfernung, Datentransfervolumen)? | *[Details]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Berucksichtigen Sie die Umweltauswirkung von:
+- **DR-Umgebungen** — Optimale Muster fur Standby-Compute (z.B. Pilot Light vs. Warm Standby)
+- **Nicht-Produktionsumgebungen** — Automatische Abschaltplane, angemessen dimensionierte Umgebungen
+- **Datenlebenszyklus** — Gestufter Speicher, Datenverfall, Archivstrategien
+- **Netzwerkdesign** — Minimierung von regiosubergreifendem Datenverkehr, Edge Computing
+</div>
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | Nachhaltigkeit anerkannt, aber keine spezifischen Massnahmen ergriffen |
+| **3** | Hosting-Standort unter CO2-Gesichtspunkten gewahlt, automatisches Abschalten von Nicht-Produktionsumgebungen aktiviert, Ressourcen angemessen dimensioniert |
+| **5** | Alles oben Genannte plus Arbeitslastmuster optimiert, kontinuierliche Verfugbarkeit begrundet wo erforderlich, CO2-Metriken als Ausgangsbasis erfasst |
+</div>

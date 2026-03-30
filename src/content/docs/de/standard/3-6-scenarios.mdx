@@ -1,0 +1,100 @@
+---
+title: "3.6 Szenarien"
+description: Wesentliche Anwendungsfalle und Architecture Decision Records zur Validierung des Designs.
+---
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+<span class="framework-badge badge-4plus1">4+1 Scenarios</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Zweck
+
+Szenarien sind das "+1" im 4+1 View Model. Sie dienen als verbindendes Gewebe zwischen allen anderen Ansichten und validieren, dass die Architektur fur wesentliche Anwendungsfalle durchgangig funktioniert. In ISO 42010-Begriffen dokumentieren sie **Korrespondenzen** zwischen Ansichten.
+
+Dieser Abschnitt erfasst auch Architecture Decision Records (ADRs) — die wesentlichen Entscheidungen, die das Design gepragt haben, und die Begrundung dahinter.
+
+## 3.6.1 Wesentliche Anwendungsfalle
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Dokumentieren Sie die architektonisch bedeutsamsten Anwendungsfalle. Jeder Anwendungsfall sollte durch mehrere Ansichten nachverfolgt werden, um das Design zu validieren:
+
+### Anwendungsfallvorlage
+
+**UC-[nn]: [Name des Anwendungsfalls]**
+
+| Attribut | Detail |
+|----------|--------|
+| **Akteur(e)** | *[wer diesen Anwendungsfall auslost]* |
+| **Ausloser** | *[was den Ablauf startet]* |
+| **Vorbedingungen** | *[erforderlicher Zustand vor der Ausfuhrung]* |
+| **Hauptablauf** | *[schrittweise Beschreibung]* |
+| **Nachbedingungen** | *[Zustand nach erfolgreicher Ausfuhrung]* |
+| **Beteiligte Ansichten** | Logisch / Integration & Datenfluss / Physisch / Daten / Sicherheit |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Wahlen Sie 3-5 Anwendungsfalle, die architektonisch am bedeutsamsten sind:
+- Die primare Happy-Path-Benutzerreise
+- Ein hochfrequenter oder leistungskritischer Ablauf
+- Ein Ausfall-/Wiederherstellungsszenario
+- Ein sicherheitsrelevantes Szenario (z.B. Authentifizierung, Datenzugriff)
+- Ein integrationslastiges Szenario
+
+Jeder Anwendungsfall sollte zeigen, wie Komponenten aus der Logischen Ansicht kommunizieren (Integrations- & Datenflussansicht), bereitgestellt werden (Physische Ansicht), Daten verarbeiten (Datenansicht) und gesichert sind (Sicherheitsansicht).
+</div>
+
+## 3.6.2 Architecture Decision Records (ADRs)
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Dokumentieren Sie die wesentlichen Architekturentscheidungen im ADR-Format:
+
+### ADR-Vorlage
+
+**ADR-[nnn]: [Entscheidungstitel]**
+
+| Feld | Inhalt |
+|------|--------|
+| **Status** | Proposed / Accepted / Superseded / Deprecated |
+| **Datum** | *[Entscheidungsdatum]* |
+| **Kontext** | *[was ist das Problem oder die Frage]* |
+| **Entscheidung** | *[was wurde entschieden]* |
+| **Betrachtete Alternativen** | *[welche anderen Optionen wurden bewertet]* |
+| **Konsequenzen** | *[positive und negative Auswirkungen]* |
+| **Qualitatsattribut-Abwagungen** | *[welche Qualitatsattribute sind betroffen und wie]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Dokumentieren Sie Entscheidungen, die:
+- Schwer oder teuer ruckgangig zu machen sind
+- Wesentliche Abwagungen zwischen Qualitatsattributen beinhalten
+- Von Standardmustern oder -richtlinien abweichen
+- Diskutiert wurden oder bei denen mehrere gultige Ansatze existierten
+- Mehrere Ansichten oder Stakeholder betreffen
+
+ADRs sollten nach der Annahme unveranderlich sein. Wenn eine Entscheidung revidiert wird, erstellen Sie ein neues ADR, das das Original ersetzt, anstatt es zu bearbeiten.
+</div>
+
+### Beispiel-ADRs zur Betrachtung
+
+| Kategorie | Beispielentscheidung |
+|-----------|---------------------|
+| Plattform | Wahl des Cloud-Anbieters, Hosting-Standort, Servicemodell |
+| Architektur | Monolith vs. Microservices, Event-Driven vs. Request-Response |
+| Daten | Wahl der Datenbanktechnologie, Caching-Strategie |
+| Sicherheit | Authentifizierungsansatz, Verschlusselungsstandards |
+| Integration | Synchron vs. asynchron, API-Stil |
+| Resilienz | Active-Active vs. Active-Passive, DR-Strategie |
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | Ein oder zwei Anwendungsfalle skizziert; keine ADRs |
+| **3** | Wesentliche Anwendungsfalle mit Akteuren und Ablaufen dokumentiert; bedeutsame Entscheidungen als ADRs mit Begrundung erfasst |
+| **5** | Alles oben Genannte plus Anwendungsfalle verweisen auf alle relevanten Ansichten; ADRs enthalten betrachtete Alternativen und Qualitatsattribut-Auswirkungen |
+</div>

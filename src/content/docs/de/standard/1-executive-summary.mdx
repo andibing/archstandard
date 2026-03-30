@@ -1,0 +1,170 @@
+---
+title: "1. Zusammenfassung"
+description: Losungsuberblick, Geschaftskontext, Geltungsbereich und wesentliche Entscheidungen.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-togaf">TOGAF</span>
+
+## Zweck
+
+Die Zusammenfassung bietet einen kompakten Uberblick uber die Losung fur alle Stakeholder, einschliesslich nichttechnischer Entscheidungstrager. Sie stellt den Geschaftskontext her und rahmt die nachfolgenden Architekturentscheidungen ein.
+
+## 1.1 Losungsuberblick
+
+Geben Sie eine kurze (1-2 Absatze) Zusammenfassung der Losung:
+
+- Was macht die Losung?
+- Welches Geschaftsproblem lost sie?
+- Was ist der grundlegende Ansatz?
+
+*[...]*
+
+## 1.2 Geschaftskontext & Treiber
+
+Beschreiben Sie die Geschaftstreiber, die zu dieser Losung gefuhrt haben:
+
+| Treiber | Beschreibung | Prioritat |
+|---------|-------------|----------|
+| *[Geschaftstreiber]* | *[Beschreibung]* | Hoch / Mittel / Niedrig |
+
+Berucksichtigen Sie:
+- Geschaftsanforderungen und -ziele
+- Regulatorische oder Compliance-Treiber
+- Ziele der Technologiemodernisierung
+- Kostensenkung oder Effizienzsteigerung
+- Markt- oder Wettbewerbsdruck
+
+## 1.3 Strategische Ausrichtung
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Zeigen Sie auf, wie diese Losung mit der Organisationsstrategie ubereinstimmt und eine Duplizierung bestehender Fahigkeiten vermeidet.
+
+### Ausrichtung an der Organisationsstrategie
+
+| Frage | Antwort |
+|-------|---------|
+| Welche Organisationsstrategie oder Initiative unterstutzt diese Losung? | *[z.B. Programm zur digitalen Transformation, Cloud-First-Strategie]* |
+| Wurde diese Losung gegen das Fahigkeitsmodell der Organisation gepruft? | Ja / Nein / N/A |
+| Dupliziert diese Losung eine bestehende Fahigkeit? | Ja / Nein — *[falls ja, Begrundung angeben]* |
+
+### Wiederverwendung gemeinsamer Dienste & Plattformen
+
+Dokumentieren Sie, welche bestehenden organisatorischen Plattformen, gemeinsamen Dienste oder Standardkomponenten wiederverwendet werden — und welche gepruft, aber nicht ausgewahlt wurden (mit Begrundung).
+
+| Fahigkeit | Gemeinsamer Dienst / Plattform | Wiederverwendet? | Begrundung (falls nicht wiederverwendet) |
+|-----------|-------------------------------|------------------|----------------------------------------|
+| Identity & Access | *[z.B. Entra ID, Okta, CIS2]* | Ja / Nein | *[...]* |
+| Messaging / Benachrichtigungen | *[z.B. GOV.Notify, SES, SendGrid]* | Ja / Nein | *[...]* |
+| API Management | *[z.B. Apigee, AWS API Gateway, Kong]* | Ja / Nein | *[...]* |
+| Monitoring & Logging | *[z.B. Splunk, Datadog, Grafana]* | Ja / Nein | *[...]* |
+| Daten & Analytik | *[z.B. Snowflake, Databricks, FDP]* | Ja / Nein | *[...]* |
+| CI/CD | *[z.B. GitHub Actions, Jenkins, Azure DevOps]* | Ja / Nein | *[...]* |
+| Sonstige | *[...]* | Ja / Nein | *[...]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Die meisten Organisationen pflegen einen Katalog genehmigter Plattformen und gemeinsamer Dienste. Architekten sollten nachweisen, dass sie diese gepruft haben, bevor sie neue Technologie vorschlagen. Dies reduziert Kosten, Komplexitat und Betriebsaufwand. Wenn ein gemeinsamer Dienst nicht wiederverwendet wird, geben Sie eine klare Begrundung an (z.B. Fahigkeitslucke, Leistungsanforderung, vertragliche Einschrankung).
+</div>
+
+## 1.4 Geltungsbereich
+
+### Im Geltungsbereich
+
+Definieren Sie, was dieses SAD abdeckt:
+
+- Welche Anwendungen, Dienste oder Komponenten?
+- Welche Umgebungen (Produktion, DR, Test)?
+- Welche Benutzergruppen oder Geschaftsfunktionen?
+
+### Ausserhalb des Geltungsbereichs
+
+Geben Sie explizit an, was ausgeschlossen ist. Beispiele konnen umfassen:
+
+- Verwandte Systeme, die anderswo dokumentiert sind
+- Zukunftige Phasen, die in diesem Design nicht abgedeckt sind
+- Detaildesigns (in separaten Dokumenten behandelt)
+- Infrastruktur, die von anderen Teams verwaltet wird
+- Drittsysteme ausserhalb der Losungsgrenze
+
+## 1.5 Ist-Zustand / As-Is-Architektur
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Wenn die Losung bestehende Systeme ersetzt, andert oder mit ihnen integriert, beschreiben Sie die aktuelle Architektur, die fur die Anderung relevant ist:
+
+- Welche bestehenden Systeme oder Komponenten sind betroffen?
+- Was sind die wesentlichen Einschrankungen oder Schwachstellen des Ist-Zustands?
+- Was wird beibehalten, ersetzt oder geandert?
+
+*[Ist-Zustand-Architekturdiagramm einfugen, falls zutreffend]*
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Dieser Abschnitt ist besonders wertvoll fur Migrations- und Modernisierungsprojekte. Fur Greenfield-Losungen ohne bestehende Landschaft SOLLTE (SHOULD) dieser Abschnitt weggelassen werden. Halten Sie die Beschreibung auf das direkt fur den Ubergang Relevante fokussiert — reproduzieren Sie nicht umfangreiche Legacy-Dokumentation, die anderswo existiert.
+</div>
+
+## 1.6 Wesentliche Entscheidungen & Einschrankungen
+
+Fassen Sie die bedeutendsten Architekturentscheidungen und alle Einschrankungen zusammen, die das Design gepragt haben:
+
+| Entscheidung / Einschrankung | Begrundung | Auswirkung |
+|-----------------------------|-----------|-----------|
+| *[Entscheidung]* | *[Warum]* | *[Auswirkung auf das Design]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Einschrankungen konnen umfassen:
+- **Technisch** — Bestehende Technologie-Landschaft, Plattform-Vorgaben
+- **Organisatorisch** — Teamfahigkeiten, Lieferantenbeziehungen
+- **Finanziell** — Budgetgrenzen, Kostenziele
+- **Regulatorisch** — Compliance-Anforderungen, Datenresidenz
+- **Zeitlich** — Lieferfristen, phasenweise Einfuhrungen
+</div>
+
+## 1.7 Projektdetails
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Wenn dieses SAD im Rahmen eines bestimmten Projekts oder einer Anderungsaktivitat erstellt wird:
+
+| Feld | Wert |
+|------|------|
+| **Projektname** | *[...]* |
+| **Projektcode / ID** | *[...]* |
+| **Projektleiter** | *[...]* |
+| **Geschatzte Losungskosten (Capex)** | *[...]* |
+| **Geschatzte Losungskosten (Opex)** | *[...]* |
+| **Ziel-Go-Live-Datum** | *[...]* |
+
+## 1.8 Geschaftskritikalitat
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Klassifizieren Sie die Geschaftskritikalitat der Losung:
+
+| Stufe | Beschreibung |
+|-------|-------------|
+| **Stufe 1: Kritisch** | Dienstausfall verursacht sofortige, schwere Geschaftsauswirkung |
+| **Stufe 2: Hohe Auswirkung** | Dienstausfall beeintrachtigt den Geschaftsbetrieb erheblich |
+| **Stufe 3: Mittlere Auswirkung** | Dienstausfall beeintrachtigt den Betrieb, aber Behelfsmassnahmen existieren |
+| **Stufe 4: Geringe Auswirkung** | Dienstausfall hat begrenzte Geschaftsauswirkung |
+| **Stufe 5: Minimal** | Dienstausfall hat vernachlassigbare Auswirkung |
+
+Gewahlte Kritikalitat: *[...]*
+
+Diese Klassifizierung bestimmt die Anforderungen an Resilienz, Wiederherstellungszeitziele und Governance-Grundlichkeit im gesamten Design.
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | Geschaftskontext erwahnt, aber vage; Geltungsbereich undefiniert |
+| **3** | Klare Geschaftstreiber, Geltungsbereich definiert, strategische Ausrichtung dokumentiert |
+| **5** | Alles oben Genannte plus Ist-Zustand-Architektur dokumentiert, Wiederverwendungsbewertung abgeschlossen, Geschaftskritikalitat mit Nachweisen begrundet |
+</div>

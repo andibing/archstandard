@@ -1,0 +1,170 @@
+---
+title: "Konformitat und Anwendung"
+description: "Wie Sie den ADS ubernehmen, Reifeziele festlegen und den Dokumentenlebenszyklus verwalten."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Terminologie
+
+Die Schlusselworter "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "MAY" und "OPTIONAL" in diesem Standard sind wie in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) und [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) beschrieben zu interpretieren.
+
+| Schlusselwort | Bedeutung |
+|---------------|-----------|
+| **SHALL** | Eine absolute Anforderung des Standards |
+| **SHALL NOT** | Ein absolutes Verbot |
+| **SHOULD** | Empfohlen; es kann triftige Grunde fur eine Abweichung geben, deren Auswirkungen jedoch verstanden werden mussen |
+| **SHOULD NOT** | Nicht empfohlen; es kann triftige Grunde fur die Aufnahme geben, deren Auswirkungen jedoch verstanden werden mussen |
+| **MAY** / **OPTIONAL** | Wahrhaft optional; nach Ermessen des Autors einzubeziehen |
+
+Diese Schlusselworter werden den Dokumentationstiefen des Standards wie folgt zugeordnet:
+
+| Dokumentationstiefe | Schlusselwort | Governance-Gate |
+|---------------------|---------------|-----------------|
+| <span class="maturity-indicator maturity-minimum">Minimum</span> | SHALL | Entwicklungs-/Test-Review |
+| <span class="maturity-indicator maturity-recommended">Empfohlen</span> | SHOULD | Produktionsfreigabe |
+| <span class="maturity-indicator maturity-comprehensive">Umfassend</span> | MAY | Unternehmens-Review |
+
+## Erste Schritte
+
+Verwenden Sie den folgenden Arbeitsablauf, um ein Solution Architecture Document zu erstellen. Jeder Schritt baut auf dem vorherigen auf.
+
+<div class="workflow-steps">
+
+**Schritt 1 — Wahlen Sie Ihre Tiefe.** Wahlen Sie die Dokumentationstiefe fur Ihr Projekt:
+- <span class="maturity-indicator maturity-minimum">Minimum</span> — Fruhphasige Designs, Machbarkeitsnachweise, Entwicklungs-/Test-Reviews
+- <span class="maturity-indicator maturity-recommended">Empfohlen</span> — Produktionsreife Designs mit erforderlicher Governance-Genehmigung
+- <span class="maturity-indicator maturity-comprehensive">Umfassend</span> — Kritische, regulierte oder unternehmensweite Systeme
+
+**Schritt 2 — Setzen Sie den Kontext** (Abschnitte 0–2). Beginnen Sie mit der Dokumentenlenkung, der Zusammenfassung und den Stakeholdern. Dies bildet den Rahmen fur alles Folgende.
+
+**Schritt 3 — Beschreiben Sie die Architektur** (Abschnitt 3). Arbeiten Sie jede Architekturansicht durch. Eine ubliche Reihenfolge ist die Logische Ansicht (was die Losung tut), dann die Physische Ansicht (wo sie lauft), dann die ubrigen Ansichten.
+
+**Schritt 4 — Bewerten Sie die Qualitat** (Abschnitt 4). Bewerten Sie das Design anhand jedes Qualitatsattributs. Dokumentieren Sie etwaige Abwagungen zwischen ihnen.
+
+**Schritt 5 — Planen Sie den Lebenszyklus** (Abschnitt 5). Dokumentieren Sie, wie die Losung gebaut, bereitgestellt, betrieben und schliesslich ausser Betrieb genommen wird.
+
+**Schritt 6 — Erfassen Sie Entscheidungen und Risiken** (Abschnitt 6). Dokumentieren Sie Einschrankungen, Annahmen, Risiken, Abhangigkeiten und Probleme. Halten Sie wichtige Architekturentscheidungen fest.
+
+**Schritt 7 — Bewerten und einreichen** (Abschnitt 7). Vervollstandigen Sie die Compliance-Bewertungstabelle, fugen Sie Glossar/Referenzen hinzu und reichen Sie das Dokument zur Governance-Prufung ein.
+
+</div>
+
+<Aside type="tip" title="Empfohlene Bearbeitungsreihenfolge">
+Sie mussen die Abschnitte nicht in streng numerischer Reihenfolge ausfullen. Viele Architekten bevorzugen es, mit der Physischen Ansicht (3.3) oder der Sicherheitsansicht (3.5) zu beginnen und dann zur Logischen Ansicht zuruckzuarbeiten. Entscheidend ist, dass alle Abschnitte Ihrer gewahlten Tiefe vor der Einreichung ausgefullt sind.
+</Aside>
+
+### Was aufgenommen und was weggelassen werden sollte
+
+- **Lassen Sie** Abschnitte oberhalb Ihrer Zieltiefe ganz weg. Nehmen Sie sie nicht mit leerem oder "N/A"-Inhalt auf.
+- **Lassen Sie** Abschnitte unterhalb Ihrer Zieltiefe weg, die wirklich nicht relevant sind (z.B. IoT-Gerate fur eine Cloud-API).
+- **Nehmen Sie nur** Abschnitte auf, die dem Leser einen Mehrwert bieten.
+
+## Dokumentenlebenszyklus
+
+Ein nach diesem Standard erstelltes Solution Architecture Document ist ein **lebendes Artefakt**:
+
+- Es MUSS (SHALL) den **aktuellen Stand** der Losungsarchitektur beschreiben
+- Es MUSS (SHALL) aktualisiert werden, wenn architekturrelevante Anderungen vorgenommen werden
+- Es DARF (MAY) von mehreren Teams oder Anderungsaktivitaten aktualisiert werden, entweder sequentiell oder parallel
+- Es DARF NICHT (SHALL NOT) einem einzelnen Projektteam gehoren; die Verantwortung liegt beim zustandigen Architekten fur die Losung
+- Anderungen am Design SOLLTEN (SHOULD) durch den Architektur-Governance-Prozess der Organisation genehmigt werden
+
+<Aside type="tip" title="Inkrementelle Aktualisierungen">
+Wenn ein Projekt nur inkrementelle Anderungen an einer in einem bestehenden SAD dokumentierten Losung vornehmen mochte, mussen nur die fur die Anderung relevanten Abschnitte aktualisiert werden. Die ubrigen Abschnitte MUSSEN (SHALL) unverandert bleiben und weiterhin den aktuellen Stand beschreiben.
+</Aside>
+
+## Organisationsspezifische Anpassung
+
+Dieser Standard ist fur die Ubernahme ohne Anderung konzipiert. Organisationen DURFEN (MAY) ihn jedoch auf folgende Weise erweitern:
+
+1. **Organisationsprofil** — Ordnen Sie generische Abschnitte spezifischen internen Tools, Standards und Governance-Prozessen zu, indem Sie das Feld `organisationProfile` im JSON Schema verwenden
+2. **Benutzerdefinierte Abschnitte** — Fugen Sie organisationsspezifische Abschnitte uber den Erweiterungspunkt `customSections` hinzu, ohne die Kernstruktur des Standards zu andern
+3. **Standards-Ruckverfolgbarkeit** — Verweisen Sie auf interne Designprinzipien, Muster und Standards im Abschnitt zur Compliance-Ruckverfolgbarkeit (Abschnitt 6.4)
+4. **Governance-Gate-Zuordnung** — Ordnen Sie die drei Dokumentationstiefen den Architektur-Governance-Stufen Ihrer Organisation zu (z.B. ARB, Design Authority)
+
+Organisationen DURFEN NICHT (SHALL NOT) Kernabschnitte des Standards umnummerieren. Abschnitte, die fur die Losung nicht anwendbar sind, SOLLTEN (SHOULD) vollstandig weggelassen werden, um Dokumente fokussiert und lesbar zu halten.
+
+## Ausgabeformate
+
+Das JSON Schema des Standards ermoglicht die Erzeugung und Validierung in mehreren Formaten:
+
+| Format | Anwendungsfall |
+|--------|----------------|
+| **Web** | Interaktive Dokumentationsseite (diese Website) |
+| **Markdown** | Einbindung in Git-Repositories neben dem Code |
+| **Word / DOCX** | Formale Governance-Einreichungen und Offline-Prufung |
+| **JSON** | Maschinenlesbar fur Tooling-Integration und Validierung |
+
+Siehe [Vorlagen](/de/standard/templates/) fur herunterladbare leere Vorlagen in jedem Format.
+
+## Architektur-Compliance-Bewertung
+
+Jeder Hauptabschnitt eines Solution Architecture Documents DARF (MAY) mit einem **Compliance-Score von 0–5** bewertet werden. Dies bietet Governance-Gremien eine schnelle, quantitative Sicht auf Architekturreife und Vollstandigkeit — sowohl fur einzelne SADs als auch uber ein Portfolio hinweg.
+
+### Bewertungsskala
+
+| Bewertung | Stufe | Beschreibung |
+|:---------:|-------|-------------|
+| **0** | Nicht behandelt | Keine Nachweise oder Inhalte fur diesen Bereich vorhanden |
+| **1** | Anerkannt | Das Anliegen ist erkannt, aber kein Design oder Nachweis vorhanden |
+| **2** | Teilweise | Einige Anforderungen adressiert; erhebliche Lucken verbleiben |
+| **3** | Uberwiegend adressiert | Die meisten Anforderungen erfullt; kleinere Lucken oder Risiken, die gemindert werden mussen |
+| **4** | Vollstandig adressiert | Alle Anforderungen mit unterstutzenden Nachweisen erfullt |
+| **5** | Vorbildlich | Best-Practice-Implementierung; konnte als Referenzbeispiel dienen |
+
+### Wo die Bewertung angewandt wird
+
+Die Bewertung wird auf **Abschnittsebene** angewandt, nicht auf einzelne Felder. Die folgenden Abschnitte werden bewertet:
+
+| Abschnitt | Bewertungsbereich | Was eine 4/5 bedeutet |
+|-----------|-------------------|----------------------|
+| **1. Zusammenfassung** | Vollstandigkeit & Klarheit | Klarer Geschaftskontext, strategische Ausrichtung nachgewiesen, Geltungsbereich klar definiert |
+| **3.1 Logische Ansicht** | Designqualitat | Komponenten gut zerlegt, Muster begrundet, Vendor-Lock-in bewertet |
+| **3.2 Integration & Datenfluss** | Integrationsreife | Alle Schnittstellen dokumentiert, Protokolle spezifiziert, Authentifizierung definiert |
+| **3.3 Physische Ansicht** | Infrastruktur-Grundlichkeit | Bereitstellungsarchitektur vollstandig, Umgebungen spezifiziert, Konnektivitat dokumentiert |
+| **3.4 Datenansicht** | Daten-Governance | Datenspeicher klassifiziert, Aufbewahrungsfristen definiert, Datensouveranitat adressiert, Verschlusselung spezifiziert |
+| **3.5 Sicherheitsansicht** | Sicherheitslage | Bedrohungsmodell vollstandig, alle Kontrollen dokumentiert, Uberwachung eingerichtet |
+| **3.6 Szenarien** | Designvalidierung | Wichtige Anwendungsfalle dokumentiert, ADRs erfassen wesentliche Entscheidungen mit Begrundung |
+| **4.1 Betriebliche Exzellenz** | Betriebsbereitschaft | Zentralisiertes Logging, Uberwachung, Alarmierung und Runbooks vorhanden |
+| **4.2 Zuverlassigkeit** | Resilienzreife | DR-Strategie definiert, RTO/RPO erfullt, Backup getestet, Fehlertoleranz entworfen |
+| **4.3 Leistung** | Leistungssicherung | Zielwerte definiert, Wachstum prognostiziert, Testansatz dokumentiert |
+| **4.4 Kostenoptimierung** | Kostenbewusstsein | Kostenanalyse durchgefuhrt, Uberwachung aktiviert, Rightsizing nachgewiesen |
+| **4.5 Nachhaltigkeit** | Umweltberucksichtigung | CO2-bewusstes Hosting, automatisches Herunterfahren, Rightsizing |
+| **5. Lebenszyklus** | Betriebsreife | CI/CD dokumentiert, Migration geplant, Kompetenzen bewertet, Ausstiegsplan vorhanden |
+| **6. Entscheidungsfindung** | Governance-Grundlichkeit | RAID-Protokoll vollstandig, ADRs erfasst, Compliance-Ruckverfolgbarkeit nachgewiesen |
+
+### Compliance-Ubersichtstabelle
+
+Jedes SAD SOLLTE (SHOULD) eine Compliance-Ubersicht in den Anhangen (Abschnitt 7) oder der Dokumentenlenkung (Abschnitt 0) enthalten:
+
+| Abschnitt | Bewertung (0–5) | Bewerter | Datum | Anmerkungen |
+|-----------|:---------------:|----------|-------|-------------|
+| 1. Zusammenfassung | | | | |
+| 3.1 Logische Ansicht | | | | |
+| 3.2 Integration & Datenfluss | | | | |
+| 3.3 Physische Ansicht | | | | |
+| 3.4 Datenansicht | | | | |
+| 3.5 Sicherheitsansicht | | | | |
+| 3.6 Szenarien | | | | |
+| 4.1 Betriebliche Exzellenz | | | | |
+| 4.2 Zuverlassigkeit | | | | |
+| 4.3 Leistung | | | | |
+| 4.4 Kostenoptimierung | | | | |
+| 4.5 Nachhaltigkeit | | | | |
+| 5. Lebenszyklus | | | | |
+| 6. Entscheidungsfindung | | | | |
+| **Gesamt** | | | | |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+- Die **Gesamtbewertung** ist typischerweise die niedrigste Einzelabschnittsbewertung (Schwachstes-Glied-Prinzip), kein Durchschnitt. Eine Losung mit 5 bei Leistung, aber 1 bei Sicherheit ist keine "3" — sie hat eine kritische Sicherheitslucke.
+- Die Bewertung ist **kollaborativ**, nicht konfrontativ. Sie sollte gemeinsam zwischen dem Solution Architect und der prufenden Instanz (z.B. ARB oder Design Authority) durchgefuhrt werden.
+- Bewertungen unter **3** in einem Abschnitt SOLLTEN (SHOULD) einen Massnahmenplan mit klarer Zustandigkeit und Zeitrahmen auslosen.
+- Organisationen DURFEN (MAY) akzeptable Mindestbewertungen pro Abschnitt fur verschiedene Governance-Gates definieren (z.B. "alle Abschnitte mussen >= 3 fur die Produktionsfreigabe erreichen").
+</div>
+
+## Normative Referenzen
+
+Siehe die [vollstandige Tabelle der normativen Referenzen](/de/standard/framework-alignment/) auf der Seite zur Framework-Ausrichtung.

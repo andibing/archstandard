@@ -1,0 +1,119 @@
+---
+title: "Designprinzipien"
+description: "Grundlegende Designprinzipien des ADS, einschliesslich atomarem Felddesign und Multi-Format-Kompatibilitat."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Atomares Felddesign
+
+ADS ist mit **atomaren Feldern** konzipiert — strukturierten, diskreten Werten anstelle von Freitext, wo immer moglich. Dies ist ein Kernprinzip des Standards.
+
+### Warum atomare Felder?
+
+| Vorteil | Beschreibung |
+|---------|-------------|
+| **Reduzierte Mehrdeutigkeit** | Autoren wahlen aus definierten Optionen, anstatt Prosatext zu verfassen |
+| **Maschinenverarbeitbar** | Werkzeuge konnen SADs aggregieren, vergleichen, validieren und daruber berichten |
+| **Schneller auszufullen** | Kontrollkastchen und Auswahlen sind schneller als leere Textfelder |
+| **Vergleichbar** | Zwei SADs konnen strukturell verglichen und differenziert werden |
+| **Ubersetzbar** | Enum-Werte konnen eindeutig in jede Sprache ubertragen werden |
+| **Governance-fahig** | Der Architektur-Governance-Prozess kann die Vollstandigkeit programmatisch uberprufen |
+
+### Wie es uber Formate hinweg funktioniert
+
+Dasselbe atomare Feld wird je nach Ausgabeformat unterschiedlich dargestellt, tragt aber identische Bedeutung:
+
+| Schema-Typ | JSON / YAML | Markdown / Word | Confluence / Wiki |
+|------------|-------------|-----------------|-------------------|
+| `boolean` | `true` / `false` | Kontrollkastchen: ☑ / ☐ | Checkbox-Makro |
+| `enum` (einzeln) | `"active-active"` | Optionsfeld oder fett markierte Auswahl | Status-Makro oder Dropdown |
+| `enum` (Array) | `["aws", "azure"]` | Mehrere Kontrollkastchen: ☑ AWS ☑ Azure | Multi-Select-Makro |
+| `yesNoNa` | `"yes"` / `"no"` / `"not-applicable"` | ☑ Ja ☐ Nein ☐ N/A | Status-Makro |
+| `riskLevel` | `"high"` | **HIGH** (mit Farbe) | Status-Plakette |
+| `integer` / `number` | `4096` | Numerisches Feld | Numerisches Feld |
+| `string` (eingeschrankt) | `"PT4H"` (ISO 8601) | "4 Stunden" | Dauerfeld |
+| `string` (Freitext) | Prosa | Prosa | Prosa |
+
+<Aside type="tip" title="Freitext-Felder">
+Freitext-Felder werden weiterhin verwendet, wo strukturierte Optionen nicht praktikabel sind (z.B. `solutionOverview`, `mitigationPlan`, `rationale`). Jedoch sind auch diese zweckgebunden — sie haben einen spezifischen Zweck, der im Schema beschrieben ist, und sind keine offenen "Notiz"-Felder.
+</Aside>
+
+### Atomare Feldkategorien in ADS
+
+Das Schema verwendet die folgenden atomaren Muster:
+
+| Muster | Beispielfelder | Werte |
+|--------|---------------|-------|
+| **Ja / Nein / N/A** | `internetFacing`, `thirdPartyHosted`, `backupEnabled` | `yes`, `no`, `not-applicable` |
+| **Risikostufe** | `residualRisk`, `confidentiality`, `integrity` | `critical`, `high`, `medium`, `low`, `negligible` |
+| **Klassifizierung** | `classification` | `public`, `internal`, `restricted`, `highly-restricted` |
+| **Status** | `document status`, `ADR status`, `risk status` | Je nach Kontext definiert |
+| **Technologie-Enum** | `protocol`, `authenticationMethod`, `secretStore` | Je Feld definiert |
+| **Grossenkategorie** | `dataSizeCategory`, `clusterSize` | Bandbereiche |
+| **Dauer** | `retentionPeriod`, `rtoTarget` | ISO 8601 oder Bandkategorien |
+| **Kritikalitat** | `businessCriticality` | `tier-1-critical` bis `tier-5-minimal` |
+| **ID-Muster** | `UC-01`, `ADR-001`, `R-001` | Regex-eingeschrankte Zeichenketten |
+
+## Multi-Format-Kompatibilitat
+
+ADS ist darauf ausgelegt, gleichermassen gut zu funktionieren als:
+
+- **Von Menschen verfasstes Dokument** (Word, Confluence, Wiki) — wobei atomare Felder zu Kontrollkastchen, Dropdown-Menus und Optionsfeldern werden
+- **Maschinenlesbare Datei** (JSON, YAML, Markdown) — wobei atomare Felder Enums, Booleans und typisierte Werte sind
+- **Webformular** — wobei atomare Felder direkt auf Formularsteuerelemente abgebildet werden
+
+Das JSON Schema ist die einzige Wahrheitsquelle. Alle Ausgabeformate werden daraus abgeleitet, was Konsistenz unabhangig davon gewahrleistet, wie das SAD erstellt oder konsumiert wird.
+
+## Barrierefreiheit & kognitive Belastung
+
+ADS ist so konzipiert, dass es von allen Architekten nutzbar ist, einschliesslich neurodivergenter Personen. Die folgenden Prinzipien reduzieren die kognitive Belastung und verbessern die Lesbarkeit:
+
+### Strukturelle Konsistenz
+
+Jeder Abschnitt im Standard folgt demselben Muster:
+
+1. **Zweck** — eine kurze Erklarung, was dieser Abschnitt behandelt und warum
+2. **Tabellen / Felder** — strukturierte, atomare Felder zum Ausfullen
+3. **Leitfaden** — kontextbezogene Hilfe in einem deutlich markierten Feld
+
+Diese vorhersehbare Struktur bedeutet, dass Sie immer wissen, was Sie erwartet, wenn Sie einen neuen Abschnitt offnen.
+
+### Reduzierung der kognitiven Belastung
+
+| Prinzip | Wie ADS es umsetzt |
+|---------|-------------------|
+| **Atomare Felder statt leerer Seiten** | Kontrollkastchen, Enums und strukturierte Tabellen ersetzen offene Textfelder. Sie wahlen aus, anstatt zu formulieren. |
+| **Schrittweise Offenlegung** | Drei Dokumentationstiefen (Minimum -> Empfohlen -> Umfassend) ermoglichen es, einfach zu beginnen und Details nur bei Bedarf hinzuzufugen. |
+| **Eine Idee pro Zeile** | Tabellen prasentieren ein Feld pro Zeile, anstatt mehrere Konzepte zu kombinieren. |
+| **Konsistente Terminologie** | Das [Glossar](/de/standard/7-appendices/#71-glossar) definiert alle Akronyme. Begriffe werden durchgehend einheitlich verwendet. |
+| **Visuelle Markierungen** | Farbcodierte Tiefeindikatoren (<span class="maturity-indicator maturity-minimum">Minimum</span> <span class="maturity-indicator maturity-recommended">Empfohlen</span> <span class="maturity-indicator maturity-comprehensive">Umfassend</span>) ermoglichen ein schnelles Erkennen der Anforderungen. |
+| **Klare Bewertung** | Die 0–5 Compliance-Skala liefert eindeutiges, numerisches Feedback statt subjektiver Prosa. |
+
+### Akronyme & Terminologie
+
+Alle in ADS verwendeten Akronyme sind im [Glossar](/de/standard/7-appendices/#71-glossar) definiert. Beim Erstellen eines SAD:
+
+- Definieren Sie alle Akronyme bei der ersten Verwendung im Dokument
+- Fugen Sie in jedem SAD ein Glossar (Abschnitt 7.1) ein
+- Vermeiden Sie Fachjargon, wo eine klare Alternative existiert
+
+### Lesbarkeitsleitlinien fur SAD-Autoren
+
+Beim Verfassen von Freitext-Inhalten in einem SAD:
+
+- Verwenden Sie kurze Satze. Eine Idee pro Satz.
+- Verwenden Sie Aufzahlungspunkte anstelle von langen Absatzen.
+- Verwenden Sie aktive Sprache ("Der Dienst sendet Daten an...") statt passiver ("Daten werden vom Dienst gesendet an...").
+- Verwenden Sie Diagramme zur Erganzung von Text, nicht als Ersatz.
+- Stellen Sie sicher, dass Diagramme Alt-Text-Beschreibungen fur Screenreader haben.
+
+## Erweiterbarkeit ohne Mehrdeutigkeit
+
+Wenn Organisationen benutzerdefinierte Abschnitte uber den Erweiterungspunkt `customSections` hinzufugen, SOLLTEN (SHOULD) sie denselben Prinzipien fur atomare Felder folgen:
+
+1. Verwenden Sie `boolean` fur Ja/Nein-Fragen
+2. Definieren Sie `enum`-Werte fur jedes Feld mit einer endlichen Menge gultiger Antworten
+3. Verwenden Sie typisierte Felder (`integer`, `number`, `date`) fur messbare Werte
+4. Reservieren Sie Freitext-`string`-Felder fur wirklich offene Inhalte
+5. Fugen Sie jedem Feld eine `description` hinzu, um seinen Zweck zu verdeutlichen

@@ -1,0 +1,104 @@
+---
+title: Warum ADS?
+description: Wie ADS im Vergleich zu bestehenden Frameworks und Vorlagen fur Architekturdokumentation abschneidet.
+---
+
+import { Aside, Badge, Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Das Problem
+
+Architekturdokumentation ist branchenweit inkonsistent. Teams verwenden ein Flickwerk aus Vorlagen — einige zu abstrakt, um echte Arbeit anzuleiten, andere zu plattformspezifisch, um verallgemeinert zu werden. Nach der Analyse von acht weit verbreiteten Frameworks und realen Architekturdokumenten zeigen sich funf Lucken in **jedem einzelnen**.
+
+## Landschaftsanalyse
+
+Wir haben offentlich verfugbare Frameworks, Vorlagen und ausgefullte Beispiele fur Architekturdokumentation aus Open-Source-, Unternehmens-, Regierungs- und EU-Forschungskontexten uberpruft.
+
+### Uberprufete Frameworks und Vorlagen
+
+| Framework / Vorlage | Herkunft | Starken | Wesentliche Lucken |
+|---------------------|----------|---------|---------------------|
+| **arc42** | Open-Source (Europa) | Vollstandigste offene Vorlage; 35+ reale Beispiele; mehrstufige Baustein-Ansichten; starke Community | Keine Sicherheitsansicht; keine Datenansicht; keine Cloud-WAF-konformen Qualitatsattribute; keine Tiefenstufen |
+| **bflorat-Vorlage** | Franzosische Regierung / Unternehmen | Rollenbasierte Ansichtstrennung; konsistente Struktur: Einschrankungen -> NFRs -> Losung pro Ansicht; eigene Sicherheitsansicht | Keine Integrationsansicht; keine Szenarien-Ansicht; kein Lebenszyklus; keine Risiko-Governance; keine ADRs |
+| **shekhargulati-Vorlage** | GitHub (Startups) | Back-of-Envelope-Grossenschatzungen; leichtgewichtig und zuganglich | Keine physische, Sicherheits-, Daten- oder Prozessansichten; keine Qualitatsattribute; kein Lebenszyklus |
+| **ServiceNow SAD** | Plattformspezifisch (ITSM) | Starke Daten-Governance (Klassifizierung, Archivierung, Anonymisierung); Ist-Soll-Zustandsprogression | Plattformspezifisch; monolithische Struktur; keine Architekturansichten; keine Qualitatsattribute |
+| **NHS England SAF** | Britische Regierung (NHS) | Governance-fokussiert; verweist auf Cloud-WAFs; RAID-basiertes Risiko-Tracking | Nur Meta-Framework — beschreibt, was zu tun ist, bietet aber keine konkrete Ausfullvorlage |
+| **HELMET D3.1 HLD** | EU Horizon 2020 (Verkehr) | Echtes 86-seitiges ausgefulltes HLD; Multi-Domain (Schiene, Automobil, UAV); Fokus auf Sicherheitsintegritat | Nach Domanen-Segment statt Blickwinkeln organisiert; keine Sicherheitsansicht; keine Qualitatsattribute |
+| **ALMBoK SAD** | Unternehmensmethodik | 13 Blickwinkel — breiteste gefundene Abdeckung; vollstandiger Ist-zu-Soll-Lebenszyklus | 13 Blickwinkel ohne Anleitung, welche ubersprungen werden konnen; keine Tiefenstufen; kein Schema; keine atomaren Felder |
+| **nocomplexity Playbook** | Open-Source | Einzigartige Behandlung der Beziehungen zwischen Ansichten | Zu abstrakt — schreibt nicht vor, welche Ansichten enthalten sein sollen; keine Qualitatsattribute; skeletthaft |
+
+### Die funf universellen Lucken
+
+Jedes analysierte Framework wies mindestens funf dieser Fahigkeiten nicht auf:
+
+<CardGrid>
+  <Card title="Dokumentationstiefenstufen" icon="bars-2">
+    Keine bestehende Vorlage bietet Anleitung, wie viel Detail fur verschiedene Projektgrossen benotigt wird. ADS definiert drei Stufen (**Minimum**, **Empfohlen**, **Umfassend**) mit RFC 2119-Schlusselwortern (SHALL / SHOULD / MAY), damit Teams ihren Aufwand richtig bemessen.
+  </Card>
+  <Card title="Maschinenlesbares Schema" icon="seti:json">
+    Jede uberpruefte Vorlage ist rein prosabasiert. ADS bietet ein JSON Schema mit atomaren, aufgezahlten Feldern — was automatisierte Vollstandigkeitsprufungen, SAD-ubergreifende Vergleiche und Multi-Format-Erzeugung (Markdown, Word, Web) ermoglicht.
+  </Card>
+  <Card title="Eigene Sicherheitsansicht" icon="warning">
+    6 von 8 Frameworks haben keine eigene Sicherheitsansicht. Sicherheit ist entweder in "querschnittliche Konzepte" eingebettet oder ganz abwesend. ADS behandelt Sicherheit als erstklassige Architekturansicht (Abschnitt 3.5).
+  </Card>
+  <Card title="Eigene Datenansicht" icon="open-book">
+    6 von 8 Frameworks fehlt eine strukturierte Datenansicht. Datenarchitektur ist uber andere Ansichten verstreut oder fehlt. ADS bietet eine eigene Datenansicht (Abschnitt 3.4), die Datenmodelle, -flusse, Klassifizierung, Aufbewahrung und Souveranitat abdeckt.
+  </Card>
+  <Card title="Cloud-WAF-konforme Qualitatsattribute" icon="star">
+    7 von 8 Frameworks haben keine Qualitatsattribute, die an AWS-, Azure-, GCP-, Oracle- oder IBM-Well-Architected-Frameworks ausgerichtet sind. ADS ordnet funf querschnittliche Qualitatsattribute (Abschnitt 4) allen funf Cloud-Anbietern zu.
+  </Card>
+</CardGrid>
+
+## Funktionsvergleich
+
+Wie ADS im Funktionsvergleich gegen die am weitesten verbreiteten Frameworks abschneidet:
+
+| Funktion | ADS | arc42 | bflorat | ALMBoK | NHS SAF |
+|----------|:---:|:-----:|:-------:|:------:|:-------:|
+| **Architekturansichten (4+1-konform)** | 6 Ansichten | 4 Ansichten | 5 Ansichten | 13 Ansichten | Nur Anleitung |
+| **Eigene Sicherheitsansicht** | ✅ | ❌ | ✅ | ✅ | Nur Anleitung |
+| **Eigene Datenansicht** | ✅ | ❌ | ❌ | ✅ | Nur Anleitung |
+| **Integrations- & Datenflussansicht** | ✅ | Teilweise | ❌ | ✅ | Nur Anleitung |
+| **Cloud-WAF-Qualitatsattribute** | ✅ 5 Anbieter | ❌ | ❌ | ❌ | Nur Referenzen |
+| **Dokumentationstiefenstufen** | ✅ 3 Stufen | ❌ | ❌ | ❌ | Informell |
+| **RFC 2119-Schlusselworter** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **JSON Schema / Validierung** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Atomare aufgezahlte Felder** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Lebenszyklusmanagement** | ✅ | ❌ | ❌ | ✅ | ❌ |
+| **Entscheidungsfindung & Governance** | ✅ | Teilweise | ❌ | ❌ | ✅ |
+| **Herunterladbare Vorlagen** | ✅ MD/YAML/JSON | ❌ | ✅ AsciiDoc | ❌ | ❌ |
+| **Multi-Format-Erzeugung** | ✅ | ❌ | ✅ | ❌ | ❌ |
+| **Plattformunabhangig** | ✅ | ✅ | ✅ | ✅ | NHS-spezifisch |
+| **Open-Source / kostenlos** | ✅ | ✅ | ✅ | Teilweise | ✅ |
+
+## Wie sich ADS von ISO 42010 unterscheidet
+
+ADS ist *ausgerichtet* an ISO/IEC/IEEE 42010:2022, geht aber erheblich daruber hinaus:
+
+- **Qualitatsattribute** — ISO 42010 definiert Blickwinkel und Ansichten, schreibt aber keine Qualitatsbewertung vor. ADS integriert Betriebliche Exzellenz, Zuverlassigkeit, Leistungseffizienz, Kostenoptimierung und Nachhaltigkeit als querschnittliche Qualitatsattribute, zugeordnet zu den Well-Architected Frameworks von AWS, Azure, GCP, Oracle und IBM.
+- **Dokumentationstiefenstufen** — ISO 42010 adressiert nicht, wie viel Detail benotigt wird. ADS definiert drei Stufen (Minimum / Empfohlen / Umfassend) mit RFC 2119-Anforderungsschlusselwortern (SHALL / SHOULD / MAY).
+- **Sicherheit als erstklassige Ansicht** — ISO 42010 schreibt keinen Sicherheits-Blickwinkel vor. ADS beinhaltet eine eigene Sicherheitsansicht (Abschnitt 3.5), die Bedrohungsmodellierung, Identitat, Netzwerksicherheit, Datenschutz und Compliance abdeckt.
+- **Lebenszyklusmanagement** — ISO 42010 konzentriert sich auf die Architekturbeschreibung selbst, nicht auf den Losungslebenszyklus. ADS umfasst CI/CD-Pipeline-Design, betriebliche Runbooks und Ausstiegs-/Ausserbetriebnahmeplanung.
+- **Entscheidungsfindung & Governance** — ISO 42010 adressiert keine Risikoregister, Compliance-Ruckverfolgbarkeit oder Architecture Decision Records. ADS beinhaltet alle drei.
+- **JSON Schema** — ISO 42010 ist ein prosabasierter Standard. ADS bietet ein maschinenlesbares JSON Schema mit atomaren Feldern fur automatisierte Validierung und Multi-Format-Erzeugung.
+- **Herunterladbare Vorlagen** — ISO 42010 stellt keine Vorlagen bereit. ADS enthalt sofort einsatzbereite Markdown-, YAML- und JSON-Vorlagen.
+
+## Wer profitiert
+
+<CardGrid>
+  <Card title="Solution Architects" icon="pencil">
+    Eine strukturierte Ausfullvorlage, die das Problem der leeren Seite beseitigt. Atomare Felder bedeuten weniger Mehrdeutigkeit. Tiefenstufen bedeuten, dass Sie nur schreiben, was benotigt wird.
+  </Card>
+  <Card title="Architektur-Governance" icon="approve-check-circle">
+    Ein konsistenter Standard zur Prufung von SADs. Maschinenlesbares Schema ermoglicht automatisierte Vollstandigkeitsprufungen uber ein Portfolio von Architekturbeschreibungen.
+  </Card>
+  <Card title="Delivery-Teams" icon="rocket">
+    Klare, strukturierte Architekturdokumentation, die nach Rolle navigierbar ist — Infrastruktur-Ingenieure lesen die Physische Ansicht, Sicherheitsteams lesen die Sicherheitsansicht.
+  </Card>
+  <Card title="Organisationen" icon="setting">
+    Vergleichbare Architekturbeschreibungen uber Projekte hinweg. Portfolioweite Analyse von Qualitatsattributen, Risikolage und Compliance-Abdeckung.
+  </Card>
+</CardGrid>
+
+<Aside type="tip" title="Erste Schritte">
+  Laden Sie eine [Vorlage](/de/standard/templates/) herunter und beginnen Sie mit dem Ausfullen. Die Dokumentationstiefenstufen sagen Ihnen genau, welche Felder fur die Grosse Ihres Projekts erforderlich sind.
+</Aside>

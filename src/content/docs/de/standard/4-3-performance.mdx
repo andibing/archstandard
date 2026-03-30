@@ -1,0 +1,91 @@
+---
+title: "4.3 Leistungseffizienz"
+description: Leistungsanforderungen, Ressourcenoptimierung und Netzwerkleistung.
+---
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+<span class="framework-badge badge-aws-waf">AWS Performance</span>
+<span class="framework-badge badge-azure-waf">Azure Performance</span>
+
+## Zweck
+
+Leistungseffizienz konzentriert sich auf die effiziente Nutzung von Rechenressourcen zur Erfullung der Anforderungen und die Aufrechterhaltung dieser Effizienz bei sich andernder Nachfrage und technologischer Weiterentwicklung.
+
+## 4.3.1 Leistungsanforderungen
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+### Wesentliche Leistungskennzahlen
+
+| Metrik | Zielwert | Messmethode |
+|--------|----------|-------------|
+| Antwortzeit (P50 / P95 / P99) | *[z.B. < 200ms / < 500ms / < 1s]* | *[wie gemessen]* |
+| Durchsatz | *[z.B. 1000 Anfragen/Sek.]* | *[wie gemessen]* |
+| Gleichzeitige Benutzer | *[z.B. 10.000 simultan]* | *[wie gemessen]* |
+| Batch-Verarbeitungszeit | *[z.B. < 2 Stunden fur taglichen Batch]* | *[wie gemessen]* |
+| Datenverarbeitungslatenz | *[z.B. < 5 Sekunden End-to-End]* | *[wie gemessen]* |
+
+### Leistungstests
+
+| Attribut | Detail |
+|----------|--------|
+| Leistungstestansatz | *[Lasttests, Stresstests, Dauerbelastungstests]* |
+| Testwerkzeuge | *[z.B. JMeter, Gatling, k6, Locust]* |
+| Testumgebung | *[welche Umgebung, Vergleichbarkeit mit Produktion]* |
+| Testhaufigkeit | *[wann Leistungstests durchgefuhrt werden]* |
+
+### Kapazitats- & Wachstumsprognosen
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Metrik | Aktuell | 1 Jahr | 3 Jahre | 5 Jahre |
+|--------|---------|--------|---------|---------|
+| Benutzer (gesamt) | *[n]* | *[n]* | *[n]* | *[n]* |
+| Gleichzeitige Benutzer (Spitze) | *[n]* | *[n]* | *[n]* | *[n]* |
+| Datenvolumen | *[n GB/TB]* | *[n GB/TB]* | *[n GB/TB]* | *[n GB/TB]* |
+| Transaktionsvolumen (pro Tag) | *[n]* | *[n]* | *[n]* | *[n]* |
+| Speicherbedarf | *[n GB/TB]* | *[n GB/TB]* | *[n GB/TB]* | *[n GB/TB]* |
+
+| Frage | Antwort |
+|-------|---------|
+| Kann das aktuelle Design das prognostizierte Wachstum bewaltigen? | Ja / Nein — *[falls nein, beschreiben Sie erforderliche Anderungen]* |
+| Gibt es bekannte saisonale oder zyklische Nachfragemuster? | Ja / Nein — *[falls ja, beschreiben Sie Spitzenzeiten]* |
+
+## 4.3.2 Ressourcenoptimierung
+
+<span class="maturity-indicator maturity-comprehensive">Umfassend</span>
+
+Dokumentieren Sie, wie die Losung die Ressourcennutzung optimiert:
+
+| Strategie | Implementierung |
+|-----------|----------------|
+| Rightsizing | *[wie Rechenressourcen angemessen dimensioniert werden]* |
+| Caching | *[Caching-Schichten und -Strategien]* |
+| Connection Pooling | *[Datenbank- und Dienst-Verbindungsverwaltung]* |
+| Asynchrone Verarbeitung | *[Nutzung von Warteschlangen, Hintergrund-Jobs]* |
+| Content Delivery | *[CDN-Nutzung fur statische Inhalte]* |
+| Datenbankoptimierung | *[Indexierungsstrategie, Abfrageoptimierung]* |
+
+## 4.3.3 Netzwerkleistung
+
+<span class="maturity-indicator maturity-comprehensive">Umfassend</span>
+
+Querverweis auf Abschnitt 3.3.3 fur die Netzwerktopologie. Dieser Abschnitt dokumentiert leistungsspezifische Netzwerkuberlegungen:
+
+| Attribut | Detail |
+|----------|--------|
+| Latenzanforderungen | *[Round-Trip-Time-Erwartungen]* |
+| Bandbreitenanforderungen | *[Datentransfervolumen]* |
+| QoS-Anforderungen | *[Quality-of-Service-Bedurfnisse]* |
+| Content-Delivery-Strategie | *[CDN, Edge Caching, regionale Bereitstellung]* |
+| Netzwerkoptimierung | *[Kompression, Verbindungswiederverwendung, Protokollwahl]* |
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | Allgemeine Leistungserwartungen formuliert, aber keine Zielwerte |
+| **3** | Antwortzeit-, Durchsatz- und Nebenlaufigkeitsziele definiert; Wachstumsprognosen dokumentiert |
+| **5** | Alles oben Genannte plus Leistungstests automatisiert, Caching-Strategie dokumentiert, Ressourcenoptimierung nachgewiesen, saisonale Muster berucksichtigt |
+</div>

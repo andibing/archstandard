@@ -1,0 +1,50 @@
+---
+title: "4. Architektonische Qualitatsattribute"
+description: Querschnittliche Qualitatsattribute, die uber alle Architekturansichten bewertet werden.
+---
+
+<span class="framework-badge badge-aws-waf">AWS WAF</span>
+<span class="framework-badge badge-azure-waf">Azure WAF</span>
+
+## Zweck
+
+Architektonische Qualitatsattribute sind **querschnittliche Bewertungsebenen**, die uber alle Architekturansichten angewandt werden. Sie stammen aus den Well-Architected Frameworks von AWS, Azure, GCP, Oracle und IBM und sind zu Qualitatsattributen vereint, die die wesentlichen architektonischen Anliegen jeder Losung adressieren.
+
+Im Gegensatz zu den Architekturansichten (Abschnitt 3), die beschreiben, **was** die Losung ist, bewerten Qualitatsattribute, **wie gut** sie entworfen ist.
+
+## Qualitatsattribute
+
+| # | Qualitatsattribut | Schwerpunkt |
+|---|-------------------|-------------|
+| 4.1 | **Betriebliche Exzellenz** | Beobachtbarkeit, Uberwachung, Betriebsverfahren |
+| 4.2 | **Zuverlassigkeit & Resilienz** | DR, Skalierbarkeit, Fehlertoleranz, Backup/Wiederherstellung |
+| 4.3 | **Leistungseffizienz** | Leistungsanforderungen, Ressourcenoptimierung |
+| 4.4 | **Kostenoptimierung** | Kostenanalyse, FinOps, kosteneffektives Design |
+| 4.5 | **Nachhaltigkeit** | Energie, CO2, Ressourceneffizienz |
+
+Diese Qualitatsattribute stammen aus den Well-Architected Frameworks von AWS, Azure, GCP, Oracle und IBM. Fur die vollstandige Anbieter-fur-Anbieter-Zuordnung siehe die Seite [Framework-Ausrichtung](/de/standard/framework-alignment/#cloud-well-architected-framework-ausrichtung).
+
+:::note[Sicherheit als Ansicht, nicht nur als Qualitatsattribut]
+In den Cloud Well-Architected Frameworks ist **Sicherheit** ein Qualitatsattribut (Saule). In diesem Standard wird Sicherheit zu einer vollstandigen **Architekturansicht** (Abschnitt 3.5) erhoben, da die Dokumentationstiefe fur IAM, Verschlusselung, Netzwerksicherheit und Uberwachung dies erfordert. Die Sicherheitsansicht adressiert inharent das Sicherheits-Qualitatsattribut.
+:::
+
+## Verwendung der Qualitatsattribute
+
+1. **Designphase** — Nutzen Sie die Anleitung jedes Qualitatsattributs, um Designentscheidungen zu informieren
+2. **Prufungsphase** — Bewerten Sie das fertige Design gegen jedes Qualitatsattribut
+3. **Abwagungsdokumentation** — Wenn Qualitatsattribut-Anforderungen in Konflikt stehen (z.B. Kosten vs. Resilienz), dokumentieren Sie die Abwagung und die Begrundung fur das gewahlte Gleichgewicht
+4. **Querverweise** — Verweisen Sie auf spezifische Qualitatsattribut-Anliegen innerhalb der Architekturansichten im Qualitatsattribut-Hinweisformat
+
+## Qualitatsattribut-Abwagungen
+
+Die Optimierung eines Qualitatsattributs kann auf Kosten eines anderen gehen. Wesentliche Abwagungen, die zu berucksichtigen sind:
+
+| Abwagung | Beschreibung |
+|----------|-------------|
+| **Zuverlassigkeit vs. Kosten** | Hohere Verfugbarkeit erfordert redundante Infrastruktur |
+| **Leistung vs. Kosten** | Bessere Leistung kann leistungsstarkere (teurere) Ressourcen erfordern |
+| **Sicherheit vs. Benutzerfreundlichkeit** | Starkere Sicherheitskontrollen konnen die Reibung fur Benutzer erhohen |
+| **Nachhaltigkeit vs. Leistung** | Energieeffiziente Optionen sind moglicherweise nicht die leistungsstarksten |
+| **Zuverlassigkeit vs. Nachhaltigkeit** | DR-Umgebungen und Redundanz verbrauchen zusatzliche Ressourcen |
+
+Dokumentieren Sie wesentliche Abwagungen in Abschnitt 3.6 (Szenarien / ADRs).
