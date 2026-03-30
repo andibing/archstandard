@@ -15,17 +15,17 @@ Download a blank SAD template conforming to ADS v1.0.0 in your preferred format.
   <Card title="Markdown Template" icon="document">
     Complete template in Markdown format. Ideal for version control alongside code in git repositories.
 
-    **[Download hld-template.md](/templates/hld-template.md)**
+    **[Download sad-template.md](/templates/sad-template.md)**
   </Card>
   <Card title="YAML Template" icon="setting">
     Structured template in YAML format. Ideal for programmatic processing, CI/CD integration, and tooling.
 
-    **[Download hld-template.yaml](/templates/hld-template.yaml)**
+    **[Download sad-template.yaml](/templates/sad-template.yaml)**
   </Card>
   <Card title="JSON Template" icon="document">
     Structured template in JSON format. Validates against the ADS JSON Schema.
 
-    **[Download hld-template.json](/templates/hld-template.json)**
+    **[Download sad-template.json](/templates/sad-template.json)**
   </Card>
 </CardGrid>
 
@@ -42,7 +42,7 @@ The Markdown template can be converted to Word format using standard tools:
 
 ```bash
 # Using Pandoc (recommended)
-pandoc hld-template.md -o hld-template.docx --reference-doc=template.docx
+pandoc sad-template.md -o sad-template.docx --reference-doc=template.docx
 
 # Using a custom script with the JSON/YAML template
 # (See the schema documentation for programmatic generation)
@@ -77,10 +77,10 @@ The JSON and YAML templates can be validated against the [ADS JSON Schema](/stan
 
 ```bash
 # Validate JSON template
-npx ajv validate -s schema/hld-standard.schema.json -d my-hld.json
+npx ajv validate -s schema/ads.schema.json -d my-sad.json
 
 # Validate YAML (convert to JSON first)
-npx js-yaml my-hld.yaml | npx ajv validate -s schema/hld-standard.schema.json -d /dev/stdin
+npx js-yaml my-sad.yaml | npx ajv validate -s schema/ads.schema.json -d /dev/stdin
 ```
 
 ## Organisation Customisation

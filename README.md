@@ -101,7 +101,7 @@ After DNS propagation (usually minutes, up to 48 hours):
 ├── public/
 │   └── templates/             # Downloadable SAD templates (MD, YAML, JSON)
 ├── schema/
-│   └── hld-standard.schema.json  # JSON Schema for validation
+│   └── ads.schema.json  # JSON Schema for validation
 ├── astro.config.mjs           # Site configuration and sidebar
 └── package.json
 ```
