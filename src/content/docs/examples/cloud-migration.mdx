@@ -1,0 +1,1228 @@
+---
+title: "Example: Cloud Migration"
+description: "A completed SAD for an on-premises to Azure cloud migration, demonstrating ADS migration sections and the 6 R's."
+---
+
+<div class="guidance-box">
+<h4>About This Example</h4>
+
+This is a **fictional but realistic** completed Solution Architecture Document at **Recommended** depth. It demonstrates how to document an on-premises to cloud migration using ADS, with particular emphasis on:
+
+- **Section 1.5** — Current-state / as-is architecture for a legacy system
+- **Section 5.2** — Migration classification (6 R's) and transition planning
+- **Section 3.6** — ADRs capturing migration strategy decisions
+
+The fictional company "Meridian Financial Services" is migrating its legacy HR/Payroll system "PayrollPro" from on-premises Windows Server infrastructure to Microsoft Azure.
+</div>
+
+---
+
+## 0. Document Control
+
+### 0.1 Document Metadata
+
+| Field | Value |
+|-------|-------|
+| **Document Title** | Solution Architecture Document — PayrollPro Azure Migration |
+| **Application / Solution Name** | PayrollPro |
+| **Application ID** | APP-0347 |
+| **Author(s)** | Sarah Chen, Lead Solution Architect |
+| **Owner** | Sarah Chen |
+| **Version** | 1.0 |
+| **Status** | In Review |
+| **Created Date** | 2026-01-15 |
+| **Last Updated** | 2026-03-28 |
+| **Classification** | Internal |
+
+### 0.2 Change History
+
+| Version | Date | Author / Editor | Description of Change |
+|---------|------|-----------------|----------------------|
+| 0.1 | 2026-01-15 | Sarah Chen | Initial draft |
+| 0.2 | 2026-01-30 | Sarah Chen | Added data view and security view following DBA and InfoSec review |
+| 0.3 | 2026-02-14 | James Okoro | Incorporated infrastructure sizing and network topology |
+| 0.4 | 2026-02-28 | Sarah Chen | Added migration plan and transition details following workshop |
+| 0.5 | 2026-03-10 | Sarah Chen | Updated cost analysis with Azure pricing calculator outputs |
+| 1.0 | 2026-03-28 | Sarah Chen | Submitted for ARB review |
+
+### 0.3 Contributors & Approvals
+
+| Name | Role | Contribution Type |
+|------|------|------------------|
+| Sarah Chen | Lead Solution Architect | Author |
+| James Okoro | Infrastructure Architect | Reviewer |
+| Priya Sharma | Security Architect | Reviewer |
+| David Thornton | DBA Lead | Reviewer |
+| Helen Marsh | HR Director (Business Sponsor) | Approver |
+| ARB | Architecture Review Board | Approver |
+
+### 0.4 Document Purpose & Scope
+
+This SAD describes the target-state architecture for migrating the PayrollPro application from on-premises hosting to Microsoft Azure. It covers the re-platforming of the web application tier, database tier, and document storage, alongside the transitional connectivity required during the migration period.
+
+**In scope:**
+- PayrollPro web application and database migration to Azure
+- Data migration strategy and cutover plan
+- Transitional VPN connectivity between on-premises and Azure
+- Integration continuity with BACS, pension provider, and HMRC
+
+**Out of scope:**
+- Citrix VDI replacement (deferred to Phase 2)
+- Application refactoring to microservices (deferred to Phase 2)
+- Other HR systems (recruitment portal, learning management)
+- Detailed low-level database migration runbook (separate document)
+
+**Related documents:**
+- PayrollPro Database Migration Runbook (DBA-RB-0347)
+- Meridian Azure Landing Zone Design (INFRA-SAD-0091)
+- Meridian Entra ID Connect Deployment Plan (IAM-PRJ-0042)
+
+---
+
+## 1. Executive Summary
+
+### 1.1 Solution Overview
+
+PayrollPro is the primary payroll processing system for Meridian Financial Services, serving approximately 2,400 employees across six UK offices. The application processes monthly payroll runs, generates payslips, submits PAYE data to HMRC, and interfaces with the corporate pension provider and BACS payment gateway.
+
+The current on-premises hosting infrastructure is approaching end of life (Dell PowerEdge R630 servers purchased in 2017, Windows Server 2016 reaching end of extended support). This project migrates PayrollPro to Microsoft Azure using a **Replatform** strategy — upgrading the application runtime from .NET Framework 4.8 to .NET 6 and moving the database from SQL Server 2017 on bare metal to Azure SQL Database. This approach delivers improved reliability, disaster recovery, and operational efficiency whilst deferring a full architectural refactoring to a later phase.
+
+### 1.2 Business Context & Drivers
+
+| Driver | Description | Priority |
+|--------|------------|----------|
+| Hardware end of life | Dell PowerEdge R630 servers are 9 years old; warranty expired 2024; replacement parts increasingly difficult to source | High |
+| OS end of support | Windows Server 2016 extended support ends October 2027; migration must complete well before this date | High |
+| No disaster recovery | Current single-site deployment has no DR capability; a hardware failure would cause total service loss | High |
+| Cost reduction | Annual on-premises hosting costs (hardware refresh, datacentre power, cooling, patching labour) exceed projected Azure OpEx | Medium |
+| Month-end performance | Payroll batch runs at month-end take over 6 hours on current hardware, creating tight processing windows | Medium |
+| Modernisation | Align with Meridian's cloud-first strategy and reduce technical debt in the .NET Framework codebase | Medium |
+| Manual patching | All OS and SQL patching is manual, consuming approximately 3 days per month of DBA and infrastructure time | Low |
+
+### 1.3 Strategic Alignment
+
+#### Organisational Strategy Alignment
+
+| Question | Response |
+|----------|----------|
+| Which organisational strategy or initiative does this solution support? | Meridian Cloud-First Strategy 2025-2028; IT Modernisation Programme |
+| Has this solution been reviewed against the organisation's capability model? | Yes — payroll processing is an existing capability being migrated, not duplicated |
+| Does this solution duplicate any existing capability? | No |
+
+#### Reuse of Shared Services & Platforms
+
+| Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
+|-----------|--------------------------|---------|------------------------------|
+| Identity & Access | Entra ID (corporate tenant) | Yes | — |
+| Monitoring & Logging | Azure Monitor + Log Analytics (corporate workspace) | Yes | — |
+| CI/CD | Azure DevOps (corporate instance) | Yes | — |
+| Networking | Azure Landing Zone (Hub-Spoke, UK South) | Yes | — |
+| Secret Management | Azure Key Vault (per-workload vault) | Yes | — |
+| API Management | Azure API Management | No | Not required — PayrollPro is not API-first; external integrations use SFTP and point-to-point API calls |
+| Data & Analytics | Snowflake (corporate data platform) | No | Payroll data feeds to Snowflake are out of scope for this phase; existing nightly CSV extract to finance is retained |
+
+### 1.4 Scope
+
+#### In Scope
+
+- PayrollPro web application (all modules: payroll processing, payslip generation, reporting, employee self-service)
+- PayrollPro SQL Server database (schema, data, stored procedures, SSIS packages)
+- Document storage (payslips, P60s, P45s) — currently on a Windows file share
+- Integration with BACS, pension provider API, and HMRC API
+- Development, staging, and production environments on Azure
+- Disaster recovery to UK West region
+- Transitional VPN connectivity from Azure to on-premises (for Citrix and AD)
+
+#### Out of Scope
+
+- Citrix VDI infrastructure (users will continue to access PayrollPro via Citrix until Phase 2 migrates to Azure Virtual Desktop)
+- Application refactoring to microservices architecture (Phase 2)
+- Recruitment Portal (APP-0215) and Learning Management System (APP-0389)
+- Corporate Snowflake data pipeline changes
+- End-user device refresh
+
+### 1.5 Current State / As-Is Architecture
+
+PayrollPro was originally developed in 2014 as an ASP.NET Web Forms application on .NET Framework 4.5, subsequently upgraded to .NET Framework 4.8 in 2020. It is deployed on-premises in the Meridian London datacentre (Docklands).
+
+#### Current Infrastructure
+
+| Component | Detail |
+|-----------|--------|
+| **Application servers** | 2x Dell PowerEdge R630 (purchased 2017, warranty expired 2024). Windows Server 2016 Standard. 16 vCPU, 64 GB RAM each. IIS 10 with NLB. |
+| **Database server** | 1x Dell PowerEdge R730 (purchased 2017). Windows Server 2016 Standard. SQL Server 2017 Enterprise. 24 vCPU, 128 GB RAM, 2 TB SAN storage. |
+| **File storage** | Windows file share on NetApp FAS2750. Approximately 180 GB of payslip PDFs and statutory documents. |
+| **Active Directory** | On-premises Windows Server AD (forest: meridian.local). PayrollPro uses Windows Authentication via IIS. |
+| **User access** | Citrix XenApp 7.15. Users connect via Citrix Receiver from office desktops and remote laptops. |
+| **Networking** | Flat VLAN (no network segmentation between app and DB tiers). Firewall rules managed on Palo Alto PA-3260. |
+| **Backup** | Veeam Backup & Replication to local NAS. Daily full backups retained for 30 days. No off-site replication. |
+| **Monitoring** | Basic SCOM 2016 monitoring for CPU/disk thresholds. No application-level monitoring or log aggregation. |
+
+#### Current Integration Points
+
+| Integration | Method | Direction | Schedule |
+|------------|--------|-----------|----------|
+| BACS payment gateway | SFTP file upload (Standard 18 format) | Outbound | Monthly (payroll run day) |
+| Pension provider (Aviva) | REST API | Outbound | Monthly (day after payroll run) |
+| HMRC PAYE RTI | REST API (Government Gateway) | Outbound | Monthly (FPS) and annual (P60) |
+| Corporate AD | Windows Integrated Authentication | Inbound | Real-time (user logon) |
+| Finance system (SAP) | CSV export to shared folder | Outbound | Nightly batch |
+
+#### Current Pain Points
+
+1. **No disaster recovery** — Single-site deployment with no replication. Estimated recovery time from backup is 24-48 hours. A total server failure during payroll week would breach statutory payment deadlines.
+2. **Month-end performance** — The payroll calculation batch takes 5-7 hours on current hardware. If errors are found, there is insufficient time to re-run before the BACS submission deadline.
+3. **Manual patching** — All Windows and SQL Server patching is performed manually during weekend maintenance windows. Average 3 days per month of DBA/infrastructure engineer time.
+4. **Hardware risk** — Servers are 9 years old with no warranty. Two disk failures in the past 12 months, resolved from diminishing spare stock.
+5. **No network segmentation** — Application and database tiers share a flat VLAN, contrary to Meridian's updated security standards.
+6. **Limited monitoring** — SCOM provides basic threshold alerts only. No application performance monitoring, no structured logging, no capacity trending.
+
+### 1.6 Key Decisions & Constraints
+
+| Decision / Constraint | Rationale | Impact |
+|----------------------|-----------|--------|
+| Replatform (not lift-and-shift) | Enables use of Azure PaaS services (App Service, Azure SQL) for reduced operational overhead. Lift-and-shift to IaaS would perpetuate patching burden. | Requires .NET 6 upgrade; adds development effort but reduces long-term OpEx |
+| Replatform (not refactor) | Full microservices refactoring would extend timeline beyond hardware EOL. Monolithic architecture is retained for Phase 1. | Limits scalability benefits; accepted as Phase 1 constraint |
+| Azure SQL Database (not SQL Server on VM) | Managed service eliminates OS and SQL patching, provides built-in geo-replication and automated backups | Some T-SQL features may need reworking; SQL Agent jobs replaced by Azure Data Factory |
+| Retain Citrix for Phase 1 | Replacing Citrix VDI simultaneously would increase project risk and delay delivery | Requires transitional VPN from Azure to on-premises Citrix infrastructure |
+| UK data residency | Payroll data includes NI numbers, salary, and bank details — must remain in UK datacentres | Constrains deployment to Azure UK South and UK West regions only |
+| Must complete before Dec 2026 | Hardware failure risk is increasing; Windows Server 2016 extended support ends Oct 2027 | Drives phased approach with firm migration window |
+
+### 1.7 Project Details
+
+| Field | Value |
+|-------|-------|
+| **Project Name** | PayrollPro Cloud Migration |
+| **Project Code / ID** | PRJ-2026-017 |
+| **Project Manager** | Rachel Fitzpatrick |
+| **Estimated Solution Cost (Capex)** | £185,000 (development, migration, testing, training) |
+| **Estimated Solution Cost (Opex)** | £4,200/month Azure consumption (production + DR) |
+| **Target Go-Live Date** | November 2026 |
+
+### 1.8 Business Criticality
+
+| Tier | Description |
+|------|-------------|
+| **Tier 1: Critical** | Service failure causes immediate, severe business impact |
+| **Tier 2: High Impact** | Service failure significantly impacts business operations |
+| **Tier 3: Medium Impact** | Service failure impacts operations but workarounds exist |
+| **Tier 4: Low Impact** | Service failure has limited business impact |
+| **Tier 5: Minimal** | Service failure has negligible impact |
+
+**Selected criticality: Tier 2 — High Impact**
+
+PayrollPro is classified as Tier 2 because a prolonged outage during the payroll processing window (typically days 22-25 of each month) would prevent statutory salary payments to 2,400 employees. Outside the payroll window, a short outage is tolerable (employee self-service and reporting can wait). The system does not directly process financial transactions in real time (Tier 1), but failure to pay staff on time carries significant legal, reputational, and employee welfare consequences.
+
+---
+
+## 2. Stakeholders & Concerns
+
+### 2.1 Stakeholder Register
+
+| Stakeholder | Role / Group | Key Concerns | Relevant Views |
+|-------------|-------------|--------------|----------------|
+| Helen Marsh | HR Director (Business Sponsor) | Payroll continuity, zero missed payments, minimal user disruption during cutover | Executive Summary, Scenarios, Reliability |
+| Karen Wells | Payroll Team Lead | System performance at month-end, training on any UI changes, data accuracy after migration | Scenarios, Performance, Lifecycle |
+| Sarah Chen | Lead Solution Architect | Design integrity, standards compliance, migration risk | All views |
+| James Okoro | Infrastructure Architect | Azure infrastructure, networking, VPN, environments | Physical View, Reliability |
+| Priya Sharma | Security Architect | Data protection (PII/SPI), access controls, encryption, SIEM integration | Security View, Data View |
+| David Thornton | DBA Lead | Database migration, Azure SQL compatibility, stored procedure rework, data integrity | Data View, Logical View, Lifecycle |
+| Rachel Fitzpatrick | Project Manager | Timeline, budget, resource availability, dependencies | Lifecycle, Decision Making |
+| Mark Stevens | Change Manager | End-user communications, training plan, go/no-go criteria | Lifecycle, Scenarios |
+| IT Operations | Infrastructure & Support | Ongoing monitoring, incident management, on-call support | Operational Excellence, Reliability |
+
+### 2.2 Concerns Matrix
+
+| Concern | Stakeholder(s) | Addressed In |
+|---------|---------------|-------------|
+| Payroll runs must complete without interruption | Helen Marsh, Karen Wells | 3.6 Scenarios (UC-01), 4.2 Reliability |
+| Payroll data (PII/SPI) must be protected during and after migration | Priya Sharma, Helen Marsh | 3.4 Data View, 3.5 Security View |
+| Migration must not cause data loss or corruption | David Thornton, Karen Wells | 5.2 Transition Plan, 3.4 Data View |
+| System must be recoverable within 4 hours | IT Operations, Helen Marsh | 4.2 Reliability (RTO/RPO) |
+| Azure costs must not exceed approved budget | Rachel Fitzpatrick | 4.4 Cost Optimisation |
+| Team must be trained on Azure operations | IT Operations, James Okoro | 5.6 Resourcing & Skills |
+| Cutover must be reversible (rollback plan) | Rachel Fitzpatrick, Sarah Chen | 5.2 Transition Plan |
+| Month-end batch performance must improve | Karen Wells | 4.3 Performance |
+
+### 2.3 Compliance & Regulatory Context
+
+#### Regulatory Requirements
+
+| Regulation / Standard | Applicability | Impact on Design |
+|----------------------|--------------|-----------------|
+| UK GDPR / Data Protection Act 2018 | Payroll data contains PII and SPI (salary, NI numbers, bank details) | Field-level encryption for SPI; DPIA required; data residency in UK |
+| HMRC PAYE regulations | Statutory obligation to report payroll via Real Time Information (RTI) | HMRC API integration must be maintained throughout migration |
+| Employment Rights Act 1996 | Statutory obligation to pay employees on time | Drives Tier 2 criticality and RTO requirements |
+| FCA operational resilience (indirect) | Meridian is FCA-regulated; critical internal systems must demonstrate resilience | DR capability required; documented RTO/RPO |
+
+#### Compliance Standards
+
+| Standard | Version | Applicability |
+|----------|---------|--------------|
+| Meridian Information Security Standard | v3.2 | All sections — encryption, access control, monitoring |
+| Meridian Cloud Security Baseline | v1.0 | Physical View, Security View — Azure-specific controls |
+| Meridian Data Classification Policy | v2.1 | Data View — classification and handling requirements |
+
+---
+
+## 3. Architectural Views
+
+### 3.1 Logical View
+
+#### 3.1.1 Application Architecture Diagram
+
+*[Diagram would show: Browser (via Citrix) -> Azure App Service (PayrollPro .NET 6 web app) -> Azure SQL Database; App Service -> Azure Blob Storage (payslips); App Service -> BACS (SFTP), Pension Provider (API), HMRC (API); Entra ID providing authentication; Azure Key Vault providing secrets]*
+
+#### 3.1.2 Component Decomposition
+
+| Component | Type | Description | Technology | Owner |
+|-----------|------|-------------|------------|-------|
+| PayrollPro Web Application | Application | Monolithic web application handling payroll processing, employee self-service, reporting, and payslip generation | ASP.NET Core (.NET 6), hosted on Azure App Service (P2v3) | Payroll Development Team |
+| PayrollPro Database | Database | Relational database storing employee records, payroll calculations, tax codes, and historical payroll data | Azure SQL Database (Business Critical, Gen5, 8 vCores) | DBA Team |
+| Payslip Document Store | Storage | PDF storage for payslips, P60s, P45s, and other statutory documents | Azure Blob Storage (Hot tier, LRS) | Payroll Development Team |
+| BACS Payment File Generator | Application Module | Generates Standard 18 format payment files for BACS submission | Component within PayrollPro (replaces legacy SSIS package) | Payroll Development Team |
+| Payroll Batch Processor | Application Module | Executes monthly payroll calculations, tax deductions, and NI contributions | Component within PayrollPro (scheduled via Azure WebJobs) | Payroll Development Team |
+| HMRC RTI Submission Module | Application Module | Submits Full Payment Submission (FPS) and Employer Payment Summary (EPS) to HMRC | Component within PayrollPro using HMRC Government Gateway API | Payroll Development Team |
+| Pension Contribution Module | Application Module | Calculates and submits pension contributions to Aviva | Component within PayrollPro using Aviva REST API | Payroll Development Team |
+| Finance Export Job | Scheduled Job | Nightly CSV export of payroll journal entries to SAP finance shared folder | Azure Data Factory pipeline (replaces legacy SQL Agent job) | DBA Team |
+
+#### 3.1.3 Service & Capability Mapping
+
+| Service ID | Service Name | Capability ID | Capability Name |
+|-----------|-------------|--------------|----------------|
+| SVC-047 | Payroll Processing | CAP-HR-003 | Employee Compensation |
+| SVC-047 | Payroll Processing | CAP-HR-004 | Statutory Reporting |
+| SVC-048 | Employee Self-Service | CAP-HR-005 | Employee Portal |
+| SVC-049 | Payslip Distribution | CAP-HR-006 | Document Management |
+
+#### 3.1.4 Application Impact
+
+| Application Name | Application ID | Impact Type | Change Details | Comments |
+|-----------------|---------------|-------------|----------------|----------|
+| Corporate Active Directory | INFRA-001 | Use | Entra ID Connect syncs identities; PayrollPro switches from Windows Auth to Entra ID OIDC | Dependency on Entra ID Connect deployment (D-001) |
+| Citrix XenApp | INFRA-042 | Use | Citrix published app URL updated to point to Azure App Service endpoint via VPN | Transitional — removed in Phase 2 |
+| SAP Finance | APP-0112 | Use | Finance export CSV delivery path changes from on-prem file share to Azure Blob + ADF pipeline | Requires SAP team to update import job path |
+| SCOM Monitoring | INFRA-033 | Change | PayrollPro removed from SCOM monitoring; replaced by Azure Monitor | SCOM agent decommissioned post-migration |
+
+#### 3.1.6 Technology & Vendor Lock-in Assessment
+
+| Component / Service | Vendor / Technology | Lock-in Level | Mitigation | Portability Notes |
+|---|---|---|---|---|
+| Azure App Service | Microsoft Azure | Moderate | Application uses standard ASP.NET Core; could deploy to any container host or IaaS | .NET 6 is cross-platform; no Azure-specific SDK dependencies in application code |
+| Azure SQL Database | Microsoft Azure | Moderate | Standard T-SQL; data exportable via BACPAC or DMS | Some Azure SQL-specific features (geo-replication) would need replacement on another platform |
+| Azure Blob Storage | Microsoft Azure | Low | Standard REST API; data exportable via AzCopy or Storage Explorer | Could migrate to S3 or any object store with tooling |
+| Azure Key Vault | Microsoft Azure | Low | Secrets and keys exportable; application uses abstraction layer | Could replace with HashiCorp Vault or AWS Secrets Manager |
+| Azure Data Factory | Microsoft Azure | Moderate | Pipeline definitions are JSON-based; logic is simple CSV export | Could replace with any ETL tool; low complexity pipeline |
+| Entra ID | Microsoft Azure | High | Meridian is an Entra ID organisation; this is an enterprise-wide dependency, not PayrollPro-specific | Migration away from Entra ID would be an enterprise programme, not a per-application decision |
+
+### 3.2 Integration & Data Flow View
+
+#### 3.2.1 Data Flow Diagrams
+
+*[Diagram would show the monthly payroll data flow: Employee data entry -> PayrollPro -> Payroll calculation engine -> Payment file (BACS), Pension submission (Aviva API), HMRC RTI submission (HMRC API), Payslip PDFs (Blob Storage), Finance journal (ADF -> SAP)]*
+
+#### 3.2.2 Internal Component Connectivity
+
+| Source Component | Destination Component | Protocol / Encryption | Authentication Method | Purpose |
+|-----------------|----------------------|----------------------|----------------------|---------|
+| PayrollPro Web App | Azure SQL Database | TDS / TLS 1.2 | Managed Identity (Entra ID token-based) | Application data access |
+| PayrollPro Web App | Azure Blob Storage | HTTPS / TLS 1.2 | Managed Identity | Payslip PDF storage and retrieval |
+| PayrollPro Web App | Azure Key Vault | HTTPS / TLS 1.2 | Managed Identity | Retrieve secrets (API keys, connection strings) |
+| Azure Data Factory | Azure SQL Database | TDS / TLS 1.2 | Managed Identity | Finance export pipeline reads payroll journal data |
+| Azure Data Factory | Azure Blob Storage | HTTPS / TLS 1.2 | Managed Identity | Writes finance CSV to blob for SAP pickup |
+
+#### 3.2.3 External Integration Architecture
+
+| Source Application | Destination Application | Protocol / Encryption | Authentication | Security Proxy | Purpose |
+|-------------------|------------------------|----------------------|---------------|---------------|---------|
+| PayrollPro | BACS Payment Gateway | SFTP / SSH | Certificate-based authentication | N/A (direct SFTP) | Monthly salary payment file submission |
+| PayrollPro | Aviva Pension API | HTTPS / TLS 1.2 | OAuth 2.0 client credentials | N/A | Monthly pension contribution submission |
+| PayrollPro | HMRC Government Gateway | HTTPS / TLS 1.2 | OAuth 2.0 (HMRC MTD) | N/A | PAYE RTI submission (FPS, EPS, P60) |
+| PayrollPro | On-premises AD (via VPN) | LDAPS / TLS 1.2 | Service account | Azure VPN Gateway | Transitional — user directory lookup during Entra ID sync period |
+| Azure Data Factory | SAP Finance (on-prem) | HTTPS / TLS 1.2 via VPN | Service account | Self-hosted Integration Runtime | Nightly finance journal CSV delivery |
+
+##### End User Access
+
+| User Type | Access Method | Authentication | Protocol |
+|-----------|-------------|---------------|----------|
+| Payroll operators | Citrix XenApp published application (transitional) | Entra ID SSO via OIDC (replaces Windows Auth) | HTTPS via Citrix ICA |
+| HR administrators | Citrix XenApp published application (transitional) | Entra ID SSO via OIDC | HTTPS via Citrix ICA |
+| Employees (self-service) | Citrix XenApp published application (transitional) | Entra ID SSO via OIDC | HTTPS via Citrix ICA |
+| IT Operations | Azure Portal + App Service Kudu console | Entra ID with MFA + PIM | HTTPS |
+
+### 3.3 Physical View (Infrastructure & Deployment)
+
+#### 3.3.1 Deployment Architecture Diagram
+
+*[Diagram would show: Azure UK South region containing: Hub VNet (VPN Gateway connecting to on-prem), Spoke VNet (App Service with VNet Integration, Azure SQL with Private Endpoint, Blob Storage with Private Endpoint, Key Vault with Private Endpoint). Azure UK West region containing: Azure SQL geo-replica (read-only). Azure Monitor and Log Analytics workspace spanning both.]*
+
+#### 3.3.2 Hosting & Infrastructure
+
+##### Hosting Venues
+
+| Attribute | Selection |
+|-----------|----------|
+| **Hosting Venue Type** | Cloud |
+| **Hosting Region(s)** | UK South (primary), UK West (DR) |
+| **Service Model** | PaaS |
+| **Cloud Provider** | Azure |
+| **Account / Subscription Type** | Meridian Production Subscription (sub-prod-001); Meridian Non-Production Subscription (sub-nonprod-001) |
+
+##### Compute
+
+###### Servers (Physical / Virtual)
+
+Not applicable — PaaS deployment; no IaaS virtual machines.
+
+###### Azure App Service (PaaS Compute)
+
+| Attribute | Detail |
+|-----------|--------|
+| **App Service Plan** | P2v3 (Premium v3) |
+| **vCPU** | 4 |
+| **Memory (GB)** | 16 |
+| **Instances (production)** | 2 (minimum), 5 (maximum, auto-scale) |
+| **Instances (staging)** | 1 |
+| **Instances (dev)** | 1 (B2 plan, lower tier) |
+| **Runtime** | .NET 6 on Windows |
+
+###### Azure SQL Database
+
+| Attribute | Detail |
+|-----------|--------|
+| **Service Tier** | Business Critical |
+| **Compute Tier** | Provisioned, Gen5 |
+| **vCores (production)** | 8 |
+| **Max Data Size** | 500 GB |
+| **Zone Redundant** | Yes |
+| **Geo-Replication** | Active geo-replication to UK West (asynchronous) |
+| **vCores (staging)** | 4 (General Purpose) |
+| **vCores (dev)** | 2 (General Purpose, serverless) |
+
+##### Security Agents
+
+- [x] Anti-Malware — Microsoft Defender for App Service
+- [x] Endpoint Detection and Response (EDR) — Microsoft Defender for Cloud
+- [x] Vulnerability Management — Microsoft Defender for Cloud (vulnerability assessment)
+
+#### 3.3.3 Network Topology & Connectivity
+
+##### Connectivity Summary
+
+| Question | Response |
+|----------|----------|
+| Is this an Internet-facing application? | No — accessed via Citrix (Phase 1). App Service has VNet integration with no public endpoint. |
+| Outbound Internet connectivity required? | Yes — for BACS SFTP, Aviva API, HMRC API |
+| Cloud-to-on-premises connectivity required? | Yes — VPN Gateway for Citrix connectivity and SAP finance export (transitional) |
+| Wireless networking required? | No |
+| Third-party / co-location connectivity required? | No — third-party integrations use Internet-facing APIs |
+| Cloud network peering required? | Yes — spoke VNet peered to Meridian hub VNet (Azure Landing Zone) |
+
+##### User & Administrator Access
+
+| Attribute | Selection |
+|-----------|----------|
+| **User access method** | Citrix (transitional, Phase 1) |
+| **User locations** | UK offices (6 sites), Remote (VPN to corporate network) |
+| **Administrator access method** | Azure Portal (HTTPS), App Service Kudu (HTTPS), Azure SQL — SSMS via Private Endpoint |
+| **VPN required** | Yes — site-to-site VPN from Azure to Meridian London datacentre |
+| **Direct Connect / ExpressRoute** | No — VPN Gateway sufficient for transitional connectivity; ExpressRoute to be evaluated for Phase 2 |
+
+##### Transport Protocols
+
+| Protocol | Used? | Purpose |
+|----------|-------|---------|
+| HTTPS (TLS 1.2+) | Yes | All web traffic, API calls, Azure management |
+| SFTP | Yes | BACS payment file submission |
+| TDS (TLS 1.2) | Yes | Azure SQL Database connectivity |
+| TCP (other) | No | — |
+| gRPC | No | — |
+| WebSocket | No | — |
+
+##### Internet Perimeter Protection
+
+| Control | Implemented | Detail |
+|---------|------------|--------|
+| DDoS Protection | Yes | Azure DDoS Protection (Basic, included with VNet) |
+| Rate Limiting | N/A | No public-facing endpoints in Phase 1 |
+| Source IP Restrictions | Yes | App Service access restrictions — allow only Meridian hub VNet and Citrix subnet |
+| Web Application Firewall (WAF) | No | Not required — no public-facing endpoints. To be added in Phase 2 when Citrix is removed. |
+| Client Verification Controls | N/A | — |
+| File Upload Protection | Yes | Defender for App Service scans uploaded payslip templates |
+
+#### 3.3.4 Environments
+
+| Environment | Description | Count & Venue | Compute Solution |
+|------------|-------------|--------------|-----------------|
+| Development | Software development and unit testing | 1x Azure (Non-Production Subscription, UK South) | App Service B2, Azure SQL Serverless (2 vCores) |
+| Staging | Integration testing, UAT, and pre-production validation | 1x Azure (Non-Production Subscription, UK South) | App Service P2v3 (1 instance), Azure SQL GP (4 vCores) |
+| Production | Live service environment | 1x Azure (Production Subscription, UK South) | App Service P2v3 (2-5 instances), Azure SQL BC (8 vCores) |
+| DR | Disaster recovery (warm standby, database only) | 1x Azure (Production Subscription, UK West) | Azure SQL geo-replica (read-only); App Service deployed on-demand via IaC |
+
+##### Connectivity Between Environments
+
+- [x] Yes — Staging environment connects to BACS sandbox and HMRC test gateway for integration testing. Production and non-production environments do not share any other connectivity.
+
+### 3.4 Data View
+
+#### 3.4.1 Data Architecture & Storage
+
+| Data Name | Store Technology | Authoritative? | Retention Period | Data Size | Classification | Personal Data? | Encryption Level | Key Management |
+|-----------|-----------------|---------------|-----------------|-----------|---------------|---------------|-----------------|---------------|
+| Employee records | Azure SQL Database | Yes | Duration of employment + 7 years | 12 GB | Restricted | Yes (PII + SPI) | Application (field-level for SPI) + Storage (TDE) | Azure Key Vault (customer-managed key) |
+| Payroll calculations | Azure SQL Database | Yes | 7 years (statutory) | 85 GB | Restricted | Yes (PII + SPI) | Application (field-level for SPI) + Storage (TDE) | Azure Key Vault (customer-managed key) |
+| Payslip PDFs | Azure Blob Storage | Yes | 7 years (statutory) | 180 GB (migrated) + ~20 GB/year growth | Restricted | Yes (PII + SPI) | Storage (SSE with CMK) | Azure Key Vault (customer-managed key) |
+| Audit logs | Azure SQL Database + Log Analytics | Yes | 2 years (application), 1 year (platform) | 5 GB/year | Internal | Yes (PII — user IDs, actions) | Storage (TDE / platform encryption) | Microsoft-managed key |
+| Application logs | Log Analytics | No | 90 days | 2 GB/month | Internal | No (PII scrubbed before logging) | Platform encryption | Microsoft-managed key |
+
+##### Storage Systems
+
+| Attribute | Detail |
+|-----------|--------|
+| **Storage Product** | Azure Blob Storage |
+| **Storage Size** | 200 GB initial, projected 300 GB in 5 years |
+| **Storage Type** | Object |
+| **Storage Protocol** | HTTPS (REST API) |
+| **Replication** | Locally Redundant Storage (LRS) — UK South. Backup copies in geo-redundant vault. |
+| **Minimum RPO** | 1 hour |
+
+#### 3.4.2 Data Classification
+
+| Classification Level | Data Types | Handling Requirements |
+|---------------------|------------|----------------------|
+| **Internal** | Application logs, infrastructure metrics, non-sensitive configuration | Standard access controls, no special encryption beyond platform defaults |
+| **Restricted** | Employee names, addresses, dates of birth, employee IDs, payroll amounts, tax codes, NI numbers, bank account details, pension contributions | Encrypted at rest (TDE + field-level for SPI), encrypted in transit (TLS 1.2), access audited, RBAC enforced, DPIA completed |
+
+#### 3.4.3 Data Lifecycle
+
+| Stage | Description | Controls |
+|-------|-------------|----------|
+| **Creation / Ingestion** | Employee data entered by HR via PayrollPro UI; payroll calculated monthly by batch processor | Input validation, mandatory field checks, duplicate detection |
+| **Processing** | Payroll calculations, tax deductions, NI contributions, pension calculations | Audit trail of all calculations, dual-approval for manual adjustments |
+| **Storage** | Employee records and payroll data in Azure SQL; payslips in Blob Storage | TDE + field-level encryption, RBAC, managed identity access, private endpoints |
+| **Sharing / Transfer** | BACS payment files (SFTP), pension data (API), HMRC submissions (API), finance CSV (ADF) | TLS 1.2 / SSH encryption in transit, data minimisation (only required fields sent) |
+| **Archival** | Records older than 2 years moved to Azure SQL long-term retention; payslips moved to Cool tier after 1 year | Automated lifecycle policy, data remains encrypted and access-controlled |
+| **Deletion / Purging** | Records deleted after statutory retention period (7 years) via automated purge job | Soft delete followed by hard delete after 30-day grace period; deletion logged in audit trail |
+
+#### 3.4.4 Data Privacy & Protection
+
+##### Privacy Assessments
+
+| Assessment Type | ID | Status | Link |
+|----------------|-----|--------|------|
+| DPIA | DPIA-2026-009 | Complete | SharePoint: /compliance/dpia/DPIA-2026-009 |
+
+##### Use of Production Data for Testing
+
+| Approach | Selected |
+|----------|----------|
+| Only Public/Internal data is used | |
+| Restricted/Highly Restricted attributes are deleted first | |
+| Sensitive data is masked (describe method below) | [x] |
+| Sensitive production data is used (provide justification below) | |
+| Production data is not used for testing | |
+
+Staging environment uses a masked copy of production data. Masking is applied via a custom SQL script that replaces NI numbers with generated values (format-preserving), randomises salary figures within bands, and replaces bank details with test account numbers. Names and addresses are replaced with synthetic data from Faker.js. The masked dataset is refreshed quarterly.
+
+##### Data Integrity
+
+- [x] Yes — Payroll calculation checksums are computed and stored alongside each payroll run. Reconciliation reports compare calculated totals against BACS submission totals and pension contribution totals. Any discrepancy triggers an alert and blocks submission.
+
+##### Data on End User Devices
+
+- [x] Yes — Employees can download their own payslip PDFs via the self-service portal (accessed through Citrix). Payslips are downloaded to the Citrix session local drive only; data-loss prevention policies prevent copying to personal devices.
+
+#### 3.4.5 Data Transfers & Sovereignty
+
+##### Data Transfers to Third Parties
+
+| Destination | Data Type | Classification | Transfer Method | Protection |
+|------------|-----------|---------------|----------------|------------|
+| BACS (Vocalink) | Payment instructions (employee names, sort codes, account numbers, amounts) | Restricted | SFTP with SSH key authentication | Data encrypted in transit; BACS contractual DPA in place |
+| Aviva (pension provider) | Employee names, NI numbers, pension contribution amounts | Restricted | REST API over HTTPS / TLS 1.2 | OAuth 2.0 authentication; Aviva DPA in place |
+| HMRC | Employee names, NI numbers, tax codes, pay amounts, tax deducted | Restricted | REST API over HTTPS / TLS 1.2 | HMRC Government Gateway OAuth 2.0; statutory data sharing basis |
+
+##### Data Sovereignty
+
+- [x] Yes — All payroll data must reside within the United Kingdom. Azure SQL Database and Blob Storage are deployed in UK South (London) and UK West (Cardiff) regions only. Geo-replication is restricted to UK regions. Azure backup vaults are configured for UK geo-redundancy only.
+
+### 3.5 Security View
+
+#### 3.5.1 Security Overview & Threat Model
+
+##### Security Context
+
+| Question | Response |
+|----------|----------|
+| Does the solution support regulated activities? | Yes — payroll processing for an FCA-regulated firm; subject to UK GDPR, employment law |
+| Is the solution SaaS or third-party hosted? | No — hosted on Meridian's own Azure subscription |
+| Has a third-party risk assessment been completed? | N/A — not a third-party solution |
+
+##### Business Impact Assessment
+
+| Impact Category | Business Impact if Compromised |
+|----------------|-------------------------------|
+| **Confidentiality** | High — Exposure of salary data, NI numbers, and bank details would trigger ICO notification, regulatory action, and severe reputational damage |
+| **Integrity** | High — Corrupted payroll data could lead to incorrect payments, tax filing errors, and HMRC penalties |
+| **Availability** | High — Prolonged unavailability during payroll window would delay statutory payments to 2,400 employees |
+| **Non-Repudiation** | Medium — Audit trail needed for payroll approvals, manual adjustments, and HMRC submissions |
+
+#### 3.5.2 Identity & Access Management
+
+##### Authentication Model — Internal Users
+
+| Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
+|------------|---------|----------------|----------------------|----------------------|
+| End Users (employees) | Employee Self-Service | PayrollPro self-service portal | Entra ID SSO (OIDC) with MFA | Entra ID Conditional Access; MFA via Authenticator app |
+| Payroll Operators | Payroll Operator | PayrollPro payroll processing modules | Entra ID SSO (OIDC) with MFA | Entra ID Conditional Access; MFA enforced for all access |
+| HR Administrators | HR Admin | PayrollPro admin modules | Entra ID SSO (OIDC) with MFA | Entra ID Conditional Access; MFA enforced |
+| IT Operations | Platform Admin | Azure Portal, App Service, Azure SQL | Entra ID with PIM (just-in-time) | PIM activation with MFA + approval; sessions time-limited |
+| Service Accounts | Application Identity | Azure SQL, Blob Storage, Key Vault | Managed Identity (system-assigned) | No credentials stored; token-based via Entra ID |
+
+##### Authentication Details
+
+| Control | Response |
+|---------|----------|
+| Does the application use SSO or group-wide authentication? | Yes — Entra ID SSO via OIDC |
+| What is the unique identifier for user accounts? | Entra ID Object ID (GUID), mapped to employee ID in PayrollPro |
+| What is the authentication flow? | User authenticates via Entra ID OIDC; JWT token issued; PayrollPro validates token and extracts claims for authorisation |
+| How are credentials issued to users? | Entra ID self-service; MFA enrolled via Authenticator app |
+| What are the credential complexity rules? | Entra ID Password Protection; minimum 12 characters; banned password list |
+| What are the credential rotation rules? | No forced rotation (NIST 800-63B guidance); risk-based re-authentication |
+| What are the account lockout rules? | Entra ID Smart Lockout: 10 failed attempts, 60-second lockout |
+| How can users reset forgotten credentials? | Entra ID Self-Service Password Reset (SSPR) |
+
+##### Authorisation Model
+
+| Access Type | Role / Scope | Entitlement Store | Provisioning Process |
+|------------|-------------|-------------------|---------------------|
+| Employee Self-Service | View own payslips, personal details | Entra ID security groups | Automatic via HR onboarding workflow |
+| Payroll Operator | Run payroll, generate payment files, submit to BACS | Entra ID security groups + PayrollPro role table | Requested via ServiceNow, approved by Payroll Team Lead |
+| HR Admin | Full access to employee records, payroll configuration, reporting | Entra ID security groups + PayrollPro role table | Requested via ServiceNow, approved by HR Director |
+| Read-Only Auditor | View-only access to all modules for audit purposes | Entra ID security groups + PayrollPro role table | Requested via ServiceNow, approved by Compliance |
+| Platform Admin | Azure resource management (no application-level data access) | Entra ID PIM roles | PIM just-in-time activation, approved by IT Manager |
+
+##### Privileged Access
+
+| Account Type | Management Approach |
+|-------------|-------------------|
+| Azure subscription contributor | Entra ID PIM; just-in-time activation; 4-hour maximum session; approval required; all activations logged |
+| Azure SQL administrator | Entra ID authentication only; no SQL authentication enabled; PIM-protected; queries logged in Azure SQL Auditing |
+| Application admin (PayrollPro) | Entra ID role assignment; no separate admin credentials; all actions audit-logged |
+
+#### 3.5.3 Network Security & Perimeter Protection
+
+| Control | Implementation |
+|---------|---------------|
+| Network segmentation | App Service deployed with VNet Integration into dedicated subnet; Azure SQL and Blob Storage accessible only via Private Endpoints; NSGs restrict traffic to required flows only |
+| Ingress filtering | App Service access restrictions: allow only from Meridian hub VNet (Citrix subnet and VPN). No public access. |
+| Egress filtering | App Service subnet uses UDR to route Internet-bound traffic through Azure Firewall in hub VNet; allowed destinations: BACS SFTP endpoint, Aviva API, HMRC API |
+| Encryption in transit | TLS 1.2 minimum enforced on all endpoints; App Service configured with minimum TLS 1.2; Azure SQL enforces encrypted connections |
+
+#### 3.5.4 Data Protection
+
+##### Encryption at Rest
+
+| Attribute | Detail |
+|-----------|--------|
+| Encryption deployment level | Storage (TDE for Azure SQL, SSE for Blob) + Application (field-level for SPI columns) |
+| Key type | Symmetric (AES-256) |
+| Algorithm / cipher / key length | AES-256 (TDE, SSE); AES-256-GCM (field-level application encryption) |
+| Key generation method | Azure Key Vault (software-protected keys; HSM-protected to be evaluated for Phase 2) |
+| Key storage | Azure Key Vault (customer-managed keys) |
+| Key rotation schedule | Annual automatic rotation for TDE and SSE keys; field-level encryption keys rotated annually with key versioning |
+
+##### Secret & Password Protection
+
+| Attribute | Detail |
+|-----------|--------|
+| Secret store | Azure Key Vault (per-workload vault: kv-payrollpro-prod) |
+| Secret distribution | Retrieved on-demand by application via Managed Identity |
+| Secret protection on host | Memory only — secrets not written to disk or environment variables |
+| Secret rotation | BACS SFTP certificate: annual renewal; Aviva/HMRC OAuth client secrets: annual rotation via Key Vault |
+
+#### 3.5.5 Security Monitoring & Threat Detection
+
+| Capability | Implementation |
+|-----------|---------------|
+| Security event logging | Entra ID sign-in logs, Azure SQL Auditing, App Service access logs — all forwarded to Log Analytics |
+| SIEM integration | Microsoft Sentinel (Meridian corporate instance); custom analytics rules for PayrollPro-specific alerts |
+| Infrastructure event detection | Microsoft Defender for Cloud; Defender for App Service; Defender for SQL |
+| Security alerting | High-severity alerts routed to IT Security on-call via PagerDuty; medium-severity via email to security team |
+
+### 3.6 Scenarios
+
+#### 3.6.1 Key Use Cases
+
+**UC-01: Monthly Payroll Run**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Payroll Operator (Karen Wells or team member) |
+| **Trigger** | Scheduled monthly payroll processing date (typically day 22 of each month) |
+| **Pre-conditions** | All employee data changes for the month have been entered and approved; tax code updates from HMRC have been imported |
+| **Main Flow** | 1. Payroll Operator logs in via Citrix, authenticated by Entra ID (MFA). 2. Operator initiates payroll run via PayrollPro UI. 3. Payroll Batch Processor (Azure WebJob) executes on App Service, reading employee and configuration data from Azure SQL. 4. Batch calculates gross pay, tax deductions (PAYE), NI contributions, pension deductions, student loan repayments for all 2,400 employees. 5. Payslip PDFs are generated and stored in Azure Blob Storage. 6. BACS Standard 18 payment file is generated. 7. Operator reviews summary report and approves. 8. BACS file is submitted via SFTP. 9. HMRC FPS is submitted via Government Gateway API. 10. Pension contributions are submitted to Aviva via REST API. |
+| **Post-conditions** | All employees paid; HMRC notified; pension contributions submitted; payslips available in self-service portal; audit trail recorded |
+| **Views Involved** | Logical, Integration & Data Flow, Physical, Data, Security |
+
+**UC-02: New Starter Onboarding**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | HR Administrator |
+| **Trigger** | New employee joining Meridian |
+| **Pre-conditions** | Employee has accepted offer; Entra ID account created by IT; employee added to PayrollPro security group |
+| **Main Flow** | 1. HR Administrator logs in via Citrix, authenticated by Entra ID (MFA). 2. Administrator creates new employee record in PayrollPro: personal details, contract terms, salary, tax code, bank details, pension opt-in. 3. Bank details and NI number are encrypted at field level before storage (AES-256-GCM via Key Vault). 4. Employee is included in the next payroll run. 5. Employee gains access to self-service portal via Entra ID group membership. |
+| **Post-conditions** | Employee record created with all required fields; SPI encrypted; employee visible in next payroll run; self-service access available |
+| **Views Involved** | Logical, Data, Security |
+
+#### 3.6.2 Architecture Decision Records (ADRs)
+
+**ADR-001: Replatform over Rehost**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2026-01-20 |
+| **Context** | PayrollPro must be migrated from on-premises to Azure before hardware end of life (Dec 2026). The team evaluated Rehost (lift-and-shift to Azure VMs) versus Replatform (upgrade to .NET 6, deploy to App Service and Azure SQL). |
+| **Decision** | Replatform — upgrade the application to .NET 6 and deploy to Azure PaaS services (App Service + Azure SQL Database). |
+| **Alternatives Considered** | (1) **Rehost to Azure VMs**: Lower initial effort but perpetuates manual patching burden, does not address performance issues, and incurs higher ongoing IaaS costs. (2) **Refactor to microservices**: Best long-term architecture but timeline exceeds hardware EOL deadline; estimated 18+ months vs. 10 months for replatform. (3) **Replace with SaaS payroll**: Evaluated Workday and ADP; neither met Meridian's bespoke BACS and pension integration requirements without significant customisation and data migration risk. |
+| **Consequences** | Positive: Managed patching, built-in geo-replication, auto-scaling, reduced OpEx. Negative: .NET 6 upgrade requires development effort (~6 weeks); some legacy stored procedures must be reworked for Azure SQL compatibility. |
+| **Quality Attribute Tradeoffs** | Improves: Reliability (managed DR), Operational Excellence (managed patching), Performance (auto-scaling). Neutral: Security (equivalent controls). Cost: Higher initial capex but lower ongoing opex vs. rehost. |
+
+**ADR-002: Azure SQL Database over SQL Server on VM**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2026-01-25 |
+| **Context** | The database tier could be deployed as SQL Server on an Azure VM (IaaS) or as Azure SQL Database (PaaS). The DBA team raised concerns about Azure SQL compatibility with existing T-SQL features. |
+| **Decision** | Use Azure SQL Database (Business Critical tier) as the primary data store. |
+| **Alternatives Considered** | (1) **SQL Server on Azure VM**: Full SQL Server feature parity but requires manual patching, backup configuration, and HA setup (Always On Availability Groups). (2) **Azure SQL Managed Instance**: Closer to on-prem feature parity than Azure SQL DB but higher cost and slower provisioning; features not needed by PayrollPro. |
+| **Consequences** | Positive: Built-in automated backups (PITR 35 days), geo-replication, automatic patching, zone redundancy. Negative: SQL Agent jobs must be replaced with Azure Data Factory or WebJobs; some cross-database queries must be refactored; DBA team requires Azure SQL training. |
+| **Quality Attribute Tradeoffs** | Improves: Reliability (built-in HA and DR), Operational Excellence (automated patching and backups). Cost: Lower than SQL on VM (no Windows Server licensing). Trade-off: Some DBA flexibility reduced vs. full SQL Server instance. |
+
+**ADR-003: Retain Citrix in Phase 1**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2026-02-05 |
+| **Context** | PayrollPro is currently accessed exclusively via Citrix XenApp. Migrating both the application and the access method simultaneously increases risk and extends the timeline. |
+| **Decision** | Retain Citrix access for Phase 1. Users will access the Azure-hosted PayrollPro via Citrix, routed through a site-to-site VPN. Phase 2 will replace Citrix with direct browser access or Azure Virtual Desktop. |
+| **Alternatives Considered** | (1) **Direct browser access from Phase 1**: Eliminates Citrix dependency but requires WAF deployment, public endpoint exposure, and additional security review — adding 6-8 weeks. (2) **Azure Virtual Desktop from Phase 1**: Replaces Citrix but is a separate infrastructure project with its own timeline and budget. |
+| **Consequences** | Positive: Reduces migration scope and risk; maintains familiar user experience. Negative: Requires transitional VPN; Citrix becomes a dependency and single point of access; VPN adds latency for Azure-hosted application. |
+| **Quality Attribute Tradeoffs** | Performance: Slight increase in latency due to VPN hop (estimated +10-20ms, acceptable). Reliability: Citrix and VPN become dependencies; mitigated by existing Citrix HA. Cost: VPN Gateway adds ~£250/month. |
+
+---
+
+## 4. Quality Attributes
+
+### 4.1 Operational Excellence
+
+#### 4.1.1 Observability — Logging
+
+| Log Type | Events Logged | Local Storage | Retention Period | Remote Services |
+|----------|--------------|--------------|-----------------|----------------|
+| Application logs | Payroll run start/complete, errors, warnings, user actions, batch job status | App Service file system (transient) | 90 days | Azure Log Analytics (Meridian corporate workspace) |
+| Data store logs | Query performance, deadlocks, audit events (all DML on sensitive tables) | Azure SQL built-in | 90 days (diagnostic logs), 2 years (audit logs) | Azure Log Analytics, Microsoft Sentinel |
+| Infrastructure logs | App Service platform events, scaling events, health checks, deployment logs | Azure platform | 90 days | Azure Log Analytics |
+| Security event logs | Entra ID sign-ins, failed authentications, PIM activations, Key Vault access | Azure platform | 1 year | Microsoft Sentinel |
+
+#### 4.1.2 Observability — Monitoring & Alerting
+
+##### Operational Alerts
+
+| Alert Category | Trigger Condition | Notification Method | Recipient |
+|---------------|-------------------|-------------------|-----------|
+| Application error rate | > 5% HTTP 5xx responses in 5-minute window | PagerDuty | IT Operations on-call |
+| Payroll batch failure | WebJob exits with non-zero status | PagerDuty + Email | IT Operations on-call + Payroll Team Lead |
+| Database DTU utilisation | > 80% sustained for 15 minutes | Email | DBA Team, IT Operations |
+| App Service health check failure | 3 consecutive failed health probes | PagerDuty | IT Operations on-call |
+| Storage account capacity | > 80% of provisioned quota | Email | Infrastructure Team |
+| Security alert (Defender) | Any high-severity finding | PagerDuty | IT Security on-call |
+| Certificate expiry | BACS SFTP certificate within 30 days of expiry | Email | IT Operations, DBA Team |
+
+##### Monitoring Tools
+
+| Capability | Tool | Coverage |
+|-----------|------|----------|
+| Application Performance Monitoring | Azure Application Insights | PayrollPro web application (request tracing, dependency tracking, exception logging) |
+| Infrastructure Monitoring | Azure Monitor | App Service, Azure SQL, Blob Storage, VPN Gateway |
+| Log Aggregation | Azure Log Analytics | All application, platform, and security logs |
+| Alerting | Azure Monitor Alerts + PagerDuty integration | All operational and security alerts |
+
+### 4.2 Reliability & Resilience
+
+#### 4.2.1 Geographic Footprint & Disaster Recovery
+
+| Question | Response |
+|----------|----------|
+| Is the application deployed across multiple hosting venues for continuity? | Yes — Azure SQL geo-replicated from UK South to UK West. App Service can be deployed to UK West via IaC within 30 minutes. |
+| What is the DR strategy? | Warm Standby (database) / Pilot Light (application). Azure SQL active geo-replication provides a read-only replica in UK West. App Service is deployed on-demand via Bicep templates stored in Azure DevOps. |
+| Are there data sovereignty requirements affecting geographic choices? | Yes — UK data residency required. Both primary (UK South) and DR (UK West) regions are within the United Kingdom. |
+
+#### 4.2.2 Scalability
+
+##### Application Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Scaling capability** | Partial auto-scaling |
+| **Scaling details** | App Service auto-scales from 2 to 5 instances based on CPU utilisation (threshold: 70%) and HTTP queue length (threshold: 100). Scale-out is triggered during month-end payroll processing. Scale-in occurs after batch completion. Azure SQL is provisioned at 8 vCores (Business Critical); manual scale-up to 16 vCores available if needed (tested, takes < 2 minutes with no downtime). |
+
+##### Dependency Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Dependencies adequately sized?** | Yes (confirmed) |
+| **Dependency details** | BACS SFTP gateway and HMRC API are externally managed services with documented rate limits (BACS: no limit for Standard 18 files; HMRC: 1,000 requests/hour). Aviva API has a 500 requests/hour limit, sufficient for monthly batch of ~2,400 records. |
+
+#### 4.2.3 Fault Tolerance
+
+- [x] **Yes**
+  - **Component failures**: App Service runs on minimum 2 instances; if one instance fails, traffic is routed to the healthy instance. Azure SQL Business Critical tier includes built-in local HA (3 replicas).
+  - **Graceful degradation**: If Blob Storage is temporarily unavailable, payslip viewing returns an informative error but payroll processing continues. If a third-party API (BACS, HMRC, Aviva) is unavailable, the submission is queued and retried with exponential backoff (3 retries, 5/15/60 minute intervals).
+  - **Health checks**: App Service health check endpoint (/health) validates database connectivity and Key Vault access. Unhealthy instances are automatically removed from the load balancer.
+
+#### 4.2.4 Failure Modes & Recovery Behaviour
+
+| Component / Dependency | Failure Mode | Detection Method | Recovery Behaviour | User Impact |
+|----------------------|-------------|-----------------|-------------------|-------------|
+| App Service instance | Instance crash or unresponsive | Health check probe (30s interval) | Automatic restart; traffic routed to healthy instances | Transparent (brief request timeout for in-flight requests) |
+| Azure SQL Database | Primary unavailable | Azure SQL built-in monitoring | Automatic failover to local replica (Business Critical HA); < 30 seconds | Brief connection interruption (< 30s) |
+| Azure SQL — UK South region failure | Regional outage | Azure Service Health alert | Manual failover to UK West geo-replica; App Service deployed to UK West via IaC | 1-4 hour outage (manual DR invocation) |
+| Azure Blob Storage | Service degradation | Application error logging; Azure Service Health | Retry with exponential backoff; payslip viewing degraded but payroll processing continues | Payslips temporarily unavailable; payroll unaffected |
+| VPN Gateway | Site-to-site VPN tunnel down | Azure VPN monitoring; Citrix health check | Automatic tunnel re-establishment (Azure VPN); users cannot access until restored | Full user outage (Citrix dependency) |
+| BACS SFTP Gateway | Connection timeout | Application retry logic | 3 retries with exponential backoff; manual re-submission if all retries fail; alert to Payroll Team Lead | Delayed payment submission; no data loss |
+| HMRC API | Service unavailable | HTTP 503 response | Retry with exponential backoff; HMRC allows submissions up to 3 days after payroll | Delayed statutory submission; no penalty if within HMRC window |
+
+#### 4.2.5 Backup & Recovery
+
+##### Backup Design
+
+| Attribute | Detail |
+|-----------|--------|
+| Backup strategy | Azure SQL: automated PITR backups (full, differential, transaction log). Blob Storage: soft delete + versioning. |
+| Backup product/service | Azure SQL built-in PITR; Azure Blob soft delete; Azure Backup vault (weekly long-term retention) |
+| Backup type | Continuous (PITR); weekly full backups for long-term retention |
+| Backup frequency | Transaction logs: every 5-10 minutes. Differential: every 12 hours. Full: weekly. |
+| Backup retention | PITR: 35 days. Long-term retention (LTR): weekly backups for 7 years (statutory requirement). Blob soft delete: 30 days. |
+
+##### Backup Protection
+
+| Control | Detail |
+|---------|--------|
+| Immutability | Azure SQL backups are managed by the platform and cannot be deleted by administrators. LTR backups stored in immutable vault. |
+| Encryption | All backups encrypted with TDE (customer-managed key in Key Vault) |
+| Access control | Backup restore requires Azure SQL Contributor role (PIM-protected) |
+
+#### 4.2.6 Recovery Scenarios
+
+| # | Scenario | Recovery Approach | RTO | RPO |
+|---|----------|------------------|-----|-----|
+| 1 | UK South region failure | Failover Azure SQL to UK West geo-replica; deploy App Service to UK West via Bicep; update DNS | 4 hours | 1 hour (geo-replication lag) |
+| 2 | App Service failure | Platform auto-heals; if persistent, redeploy via Azure DevOps pipeline | 15 minutes | 0 (no data in compute tier) |
+| 3 | Azure SQL failure (single instance) | Automatic failover to Business Critical local replica | < 30 seconds | 0 |
+| 4 | VPN connectivity failure | Azure VPN automatic tunnel re-establishment; if prolonged, configure direct browser access as emergency workaround | 30 minutes | 0 |
+| 5 | Ransomware / cyber-attack | Isolate affected resources; restore Azure SQL from PITR to last known good point; restore Blob from soft delete / versioning | 8 hours | Variable (restore to pre-attack point) |
+| 6 | Accidental data deletion | Azure SQL PITR to specific point in time; Blob soft delete recovery | 1 hour | Minutes (PITR granularity) |
+
+### 4.3 Performance Efficiency
+
+#### 4.3.1 Performance Requirements
+
+##### Key Performance Indicators
+
+| Metric | Target | Measurement Method |
+|--------|--------|-------------------|
+| Web UI response time (P95) | < 2 seconds | Application Insights (server-side request duration) |
+| Monthly payroll batch duration | < 2 hours (for 2,400 employees) | WebJob execution time logged to Application Insights |
+| Payslip PDF generation | < 5 seconds per payslip | Application Insights custom metric |
+| BACS file generation | < 10 minutes | Application Insights custom metric |
+| Concurrent users (steady state) | 50 | Application Insights concurrent session count |
+| Concurrent users (month-end peak) | 150 | Application Insights concurrent session count |
+
+##### Performance Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| Performance testing approach | Load testing of month-end payroll batch; stress testing of concurrent user access during payroll window |
+| Testing tools | Azure Load Testing (cloud-hosted JMeter) |
+| Testing environment | Staging (reduced-scale; results extrapolated to production sizing) |
+| Testing frequency | Before initial go-live; before each quarterly release thereafter |
+
+##### Capacity & Growth Projections
+
+| Metric | Current | 1 Year | 3 Years | 5 Years |
+|--------|---------|--------|---------|---------|
+| Employees (total) | 2,400 | 2,600 | 3,000 | 3,500 |
+| Concurrent users (peak) | 120 | 150 | 175 | 200 |
+| Database size | 100 GB | 115 GB | 155 GB | 200 GB |
+| Blob storage | 180 GB | 200 GB | 240 GB | 300 GB |
+
+| Question | Response |
+|----------|----------|
+| Will the current design scale to accommodate projected growth? | Yes — App Service auto-scaling to 5 instances and Azure SQL 8 vCores are sufficient for projected 5-year growth. Azure SQL can be scaled to 16 vCores without downtime if needed. |
+| Are there known seasonal or cyclical demand patterns? | Yes — Significant peak during monthly payroll window (days 22-25). Additional peaks at tax year end (April) for P60 generation. |
+
+### 4.4 Cost Optimisation
+
+#### 4.4.1 Cost Influence & Analysis
+
+##### Design Cost Decisions
+
+| Posture | Selected | Detail |
+|---------|----------|--------|
+| Design decisions chosen for specific reasons other than cost | [x] | Azure SQL Business Critical tier selected for built-in HA and zone redundancy, despite being more expensive than General Purpose. This decision is driven by the Tier 2 reliability requirement. |
+| Most cost-effective options intentionally not selected | [x] | Azure SQL Serverless was evaluated for production but rejected due to cold-start latency incompatible with payroll batch SLA. Used for dev environment only. |
+| Most cost-effective options selected | [x] | Blob Storage LRS (not GRS) selected for primary payslip storage; geo-redundancy provided via Azure Backup vault at lower cost than GRS. |
+
+##### Cost Analysis
+
+- [x] **Yes** — Azure Pricing Calculator used to model production and non-production costs. TCO comparison performed against on-premises refresh cost (new Dell servers + 3-year licensing + datacentre costs).
+
+Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annualised on-premises TCO (£72,000/year including hardware refresh, licensing, datacentre hosting, and patching labour). Break-even on migration capex (£185,000) is reached within 3 years.
+
+#### 4.4.2 Cost Implications
+
+- [x] **No** — The design fully meets requirements; cost has not constrained the design. The Business Critical Azure SQL tier was selected despite higher cost to meet reliability requirements.
+
+### 4.5 Sustainability
+
+#### 4.5.1 Hosting Efficiency
+
+##### Hosting Location
+
+| Question | Response |
+|----------|----------|
+| Has the hosting location been chosen to reduce environmental impact? | Partially — UK South and UK West were selected primarily for data sovereignty. Microsoft Azure UK regions are powered by a mix of renewable and non-renewable energy; Microsoft has committed to 100% renewable energy by 2025. |
+| What is the expected workload demand pattern? | Variable — significant peak during monthly payroll window (days 22-25); low utilisation remainder of month |
+
+##### On-Demand Availability
+
+| Question | Response |
+|----------|----------|
+| Must the application be available continuously? | Yes — production must be available during business hours (07:00-20:00 UK). Out-of-hours access is required for month-end payroll runs. |
+| Can the solution be shut down or scaled down during off-peak hours? | Partially — App Service scales down to 2 instances outside peak periods via auto-scaling rules. Cannot be fully shut down due to employee self-service access. |
+| Are non-production environments configured to downscale or shut down when not in use? | Yes — Dev environment uses Azure SQL Serverless (auto-pause after 1 hour inactivity). Staging App Service scaled to 0 instances outside working hours via scheduled scaling rules. |
+
+##### Resource Efficiency
+
+| Question | Response |
+|----------|----------|
+| Are resources rightsized to avoid overprovisioning? | Yes — App Service tier (P2v3) and Azure SQL vCores (8) sized based on performance testing of production-equivalent payroll batch. Auto-scaling ensures minimum instances during quiet periods. |
+| Is vCPU utilisation monitored? | Yes — target average utilisation of 40-60% at steady state, rising to 70-80% during month-end peak (scaling trigger at 70%). |
+| Are the highest performance-per-watt hardware options used? | Azure manages underlying hardware selection. P2v3 plan uses latest-generation Dv3 series VMs with good performance-per-watt characteristics. |
+
+---
+
+## 5. Lifecycle Management
+
+### 5.1 Software Development & CI/CD
+
+#### Development Practices
+
+- [x] Yes — PayrollPro includes internally developed software (the web application and batch processing components).
+
+| Attribute | Detail |
+|-----------|--------|
+| Source control platform | Azure DevOps Repos (Git) |
+| CI/CD platform | Azure DevOps Pipelines |
+| Build automation | Automated build triggered on push to main branch; NuGet restore, .NET 6 build, unit tests, code coverage report |
+| Deployment automation | Azure DevOps release pipeline with stages: Build -> Deploy to Dev -> Deploy to Staging (manual gate) -> Deploy to Production (manual gate with approval) |
+| Test automation | Unit tests (xUnit, ~85% coverage), integration tests (run against staging), SCA (NuGet Audit), SAST (SonarQube) |
+
+#### Application Security in Development
+
+| Control | Implementation |
+|---------|---------------|
+| Security requirements identification | Threat modelling performed during design phase; security requirements tracked in Azure DevOps backlog |
+| Static Application Security Testing (SAST) | SonarQube (integrated in CI pipeline; build fails on critical findings) |
+| Dynamic Application Security Testing (DAST) | Yes — OWASP ZAP scan run against staging after each deployment |
+| Software Composition Analysis (SCA) | NuGet Audit (integrated in CI pipeline; build fails on known critical vulnerabilities) |
+| Container image scanning | N/A — not containerised |
+| Secure coding practices | OWASP Top 10 training for development team; mandatory code review by senior developer |
+| Patch management | .NET 6 LTS patches applied within 14 days of release; security patches within 7 days |
+
+### 5.2 Service Transition & Migration
+
+#### Migration Classification (6 R's)
+
+| Classification | Selected? | Description |
+|---------------|-----------|-------------|
+| **Retain** | | Keep as-is, not suitable for migration at this time |
+| **Retire** | | Decommission; functionality no longer needed |
+| **Rehost** | | Lift-and-shift to new infrastructure with minimal changes |
+| **Replatform** | ☑ | Lift-and-shift with targeted optimisations: .NET Framework 4.8 upgraded to .NET 6; SQL Server on bare metal migrated to Azure SQL Database; file share migrated to Azure Blob Storage |
+| **Refactor** | | Re-architect components to take advantage of new platform capabilities (deferred to Phase 2) |
+| **Replace** | | Replace entirely with a new solution (evaluated and rejected — see ADR-001) |
+
+#### Transition Plan
+
+| Attribute | Detail |
+|-----------|--------|
+| Deployment strategy | Blue-Green. Production traffic remains on the on-premises system until cutover. Azure environment is fully deployed and validated in parallel. Cutover switches Citrix published app to the Azure endpoint. |
+| Data migration mode | Phased |
+| Data migration method | Azure Database Migration Service (DMS) for online migration with continuous sync. Initial full backup restore, then continuous replication of transaction log changes until cutover. Payslip files migrated via AzCopy from on-premises file share to Azure Blob Storage. |
+| Data volume to migrate | Database: ~100 GB. Blob (payslips): ~180 GB. |
+| End-user cutover approach | One-off. All users switch to the Azure-hosted application simultaneously via Citrix published app update. |
+| External system cutover | One-off. BACS SFTP endpoint, HMRC API credentials, and Aviva API credentials updated to originate from Azure. |
+| Maximum acceptable downtime | 4 hours (scheduled weekend maintenance window) |
+| Rollback plan | On-premises servers retained for 30 days post-cutover. If critical issues found within rollback window: (1) Stop DMS continuous sync. (2) Revert Citrix published app to on-premises endpoint. (3) Apply any transactions from Azure SQL back to on-premises SQL Server via DMS reverse sync. Rollback tested during rehearsal. |
+| Acceptance criteria | (1) All payroll data verified via reconciliation checksums. (2) Test payroll run completes successfully on Azure. (3) BACS test file submitted to sandbox. (4) HMRC test submission accepted. (5) Performance test confirms batch completes in < 2 hours. (6) DR failover test completed. (7) Payroll Team Lead sign-off. |
+| Transient infrastructure needed? | Yes — Azure DMS instance (Standard tier, 4 vCores) provisioned for duration of migration (estimated 2 weeks). Decommissioned after cutover validation. On-premises servers retained for 30-day rollback window. |
+
+#### Migration Timeline
+
+| Phase | Activity | Duration | Target Date |
+|-------|----------|----------|-------------|
+| 1 | .NET 6 upgrade and Azure SQL compatibility testing | 8 weeks | Jan-Mar 2026 |
+| 2 | Azure infrastructure deployment (IaC) and configuration | 3 weeks | Mar 2026 |
+| 3 | Application deployment to Azure staging; integration testing | 4 weeks | Apr-May 2026 |
+| 4 | Performance testing and DR validation | 3 weeks | May-Jun 2026 |
+| 5 | UAT with payroll team (parallel run in staging) | 4 weeks | Jun-Jul 2026 |
+| 6 | Data migration rehearsal (DMS dry run) | 2 weeks | Aug 2026 |
+| 7 | Go/no-go decision | 1 week | Sep 2026 |
+| 8 | Production data migration and cutover (weekend window) | 1 weekend | Oct 2026 |
+| 9 | Hypercare and monitoring | 4 weeks | Oct-Nov 2026 |
+| 10 | On-premises decommissioning (after 30-day rollback window) | 2 weeks | Dec 2026 |
+
+### 5.3 Test Strategy
+
+| Test Type | Scope | Approach | Environment | Automated? |
+|-----------|-------|----------|-------------|-----------|
+| Integration testing | All external integrations (BACS, HMRC, Aviva, SAP finance export) | End-to-end test against sandbox/test APIs | Staging | Partially (triggered manually, execution automated) |
+| Performance testing | Payroll batch for 2,400 employees; 150 concurrent users | Azure Load Testing (JMeter); batch execution timed | Staging | Yes (Azure DevOps pipeline) |
+| Security testing | OWASP Top 10; penetration test of App Service and Azure SQL | OWASP ZAP (automated DAST); annual third-party pen test | Staging | Partially |
+| DR testing | Region failover from UK South to UK West | Simulated regional failure; App Service deployment to UK West; SQL failover; end-to-end payroll validation | Production (scheduled maintenance window) | No (manual, tested annually) |
+| Data migration testing | DMS full migration rehearsal with reconciliation | Full DMS migration from on-prem to Azure staging; row count and checksum reconciliation | Staging | No (manual rehearsal) |
+
+### 5.4 Release Management
+
+| Attribute | Detail |
+|-----------|--------|
+| Release frequency | Monthly (aligned with post-payroll window; releases deployed in first week of each month to avoid payroll disruption) |
+| Release process | Feature branches merged to main; automated CI/CD pipeline deploys to Dev, then Staging (manual approval), then Production (manual approval with change ticket) |
+| Release validation | Smoke tests run automatically post-deployment; payroll team validates key functions in staging before production approval |
+| Feature flags / toggles | Not currently used; to be evaluated for Phase 2 refactoring |
+
+### 5.5 Operations & Support
+
+| Attribute | Detail |
+|-----------|--------|
+| Support model | Level 1: IT Service Desk (ServiceNow). Level 2: IT Operations (infrastructure and platform). Level 3: Payroll Development Team (application defects). DBA Team (database issues). |
+| Support hours | Business hours (08:00-18:00 UK) with on-call escalation for P1/P2 incidents during payroll window (days 22-25 of month) |
+| SLAs | P1 (payroll processing blocked): 1-hour response, 4-hour resolution target. P2 (degraded service): 2-hour response, 8-hour resolution target. P3 (minor issue): next business day. |
+| Escalation paths | Service Desk -> IT Operations -> Development Team / DBA Team -> Lead Solution Architect -> IT Director |
+
+### 5.6 Resourcing & Skills
+
+#### Team Capability Assessment
+
+| Skill Area | Current Level | Action Required |
+|-----------|--------------|-----------------|
+| Azure platform (App Service, Azure SQL, Blob Storage) | Medium | Azure Administrator (AZ-104) training for 2 infrastructure engineers; completed by Apr 2026 |
+| Infrastructure as Code (Bicep) | Low | Bicep training for infrastructure team; 2-day course scheduled Feb 2026 |
+| CI/CD pipeline management (Azure DevOps) | High | No action — team already proficient |
+| Application technology stack (.NET 6) | Medium | .NET 6 migration training for 3 developers; completed by Mar 2026 |
+| Database administration (Azure SQL) | Medium | Azure SQL DBA training for David Thornton + 1 DBA; DP-300 certification targeted by May 2026 |
+| Security & compliance | High | No action — Priya Sharma (Security Architect) is Azure security certified |
+
+#### Operational Readiness
+
+| Question | Response |
+|----------|----------|
+| Can the team fully operate and support this solution in production? | B: Partially capable — team has strong on-premises skills but limited Azure operational experience |
+| If B, C, or D: what additional resources are required? | Azure platform training (see above); 3-month engagement with Microsoft FastTrack for hands-on migration support; Meridian Cloud Centre of Excellence available for advisory support |
+| Is a managed service being considered for ongoing operations? | No — Meridian IT Operations will manage the solution with PaaS reducing operational burden |
+
+### 5.8 Maintainability
+
+| Concern | Approach |
+|---------|----------|
+| Keeping software versions current and supported | .NET 6 LTS supported until November 2027; upgrade to .NET 8 LTS planned for 2027. Azure SQL patched automatically by Microsoft. |
+| Hardware lifecycle management | N/A — PaaS deployment; no hardware to manage |
+| Certificate management | BACS SFTP certificate stored in Key Vault with 30-day expiry alert. TLS certificates managed by Azure App Service (managed certificates for custom domains). |
+| Dependency management | NuGet packages reviewed quarterly; SCA (NuGet Audit) runs on every build; critical vulnerabilities patched within 7 days |
+
+### 5.10 Exit Planning
+
+| Attribute | Detail |
+|-----------|--------|
+| Exit strategy | Application is standard ASP.NET Core; can be deployed to any container host or IaaS. Database is standard T-SQL; exportable via BACPAC. Blob data exportable via AzCopy. |
+| Data portability | Azure SQL supports BACPAC export for full schema and data. Blob Storage supports AzCopy for bulk data transfer. All encryption keys are customer-managed and exportable. |
+| Vendor lock-in assessment | Moderate — see Section 3.1.6. Primary lock-in is Azure SQL managed features (geo-replication, automated backups) which would need replacement on another platform. Application code has no Azure-specific SDK dependencies. |
+| Exit timeline estimate | 3-6 months to migrate to an alternative cloud or on-premises platform, including database export, application redeployment, and integration reconfiguration |
+
+---
+
+## 6. Decision Making & Governance
+
+### 6.1 Constraints
+
+| ID | Constraint | Category | Impact on Design | Last Assessed |
+|----|-----------|----------|-----------------|---------------|
+| C-001 | Migration must complete before December 2026 | Time | Drives phased migration approach and rules out full refactoring | 2026-01-15 |
+| C-002 | All payroll data must reside in UK datacentres | Regulatory | Limits Azure deployment to UK South and UK West regions | 2026-01-15 |
+| C-003 | Must maintain BACS Standard 18 file format for payment submissions | Technical | Payment file generation module must produce identical output format | 2026-01-20 |
+| C-004 | Budget ceiling of £200,000 capex | Commercial | Limits scope of Phase 1; defers refactoring and Citrix replacement | 2026-01-20 |
+| C-005 | Must use Meridian Azure Landing Zone (hub-spoke topology) | Organisational | Network design must conform to existing hub-spoke architecture; VPN Gateway deployed in hub | 2026-02-01 |
+
+### 6.2 Assumptions
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | Entra ID Connect will be deployed and syncing on-premises AD by June 2026 | PayrollPro authentication cannot work without Entra ID; migration would be blocked | High | Open | James Okoro | IAM project plan (IAM-PRJ-0042) confirmed for Q2 2026 delivery |
+| A-002 | Citrix XenApp can connect to Azure App Service via site-to-site VPN with acceptable latency (< 50ms round trip) | Users would experience unacceptable performance; alternative access method needed | High | Closed | James Okoro | VPN latency tested at 18ms round trip (test report TR-2026-003) |
+| A-003 | Existing .NET Framework 4.8 code can be upgraded to .NET 6 within 8 weeks | Timeline overrun; potential delay to cutover window | Medium | Closed | David Thornton | .NET Upgrade Assistant analysis completed; 14 breaking changes identified, all resolvable (DEV-2026-017) |
+| A-004 | Azure SQL Database supports all T-SQL features used by PayrollPro stored procedures | Stored procedures would need rework, potentially delaying migration | Medium | Closed | David Thornton | Compatibility assessment completed; 3 procedures require rework (linked user queries, cross-database joins); estimated 2 weeks effort |
+| A-005 | BACS, HMRC, and Aviva integrations will function from Azure without changes to their end | Integration reconfiguration needed; potential re-certification with providers | High | Open | Sarah Chen | HMRC and Aviva confirmed no IP allowlisting required. BACS gateway requires new SSH key registration (in progress). |
+
+### 6.3 Risks
+
+**Risk identification:**
+
+| ID | Risk Event | Category | Severity | Likelihood | Owner |
+|----|-----------|----------|----------|-----------|-------|
+| R-001 | .NET 6 upgrade introduces regression bugs affecting payroll calculations | Technical | High | Medium | Sarah Chen |
+| R-002 | Data migration via DMS causes data loss or corruption | Technical | High | Low | David Thornton |
+| R-003 | Azure SQL performance for payroll batch is worse than on-premises SQL Server | Technical | Medium | Low | David Thornton |
+| R-004 | DBA resource availability — David Thornton is single point of expertise for PayrollPro database | Delivery | High | Medium | Rachel Fitzpatrick |
+| R-005 | VPN connectivity instability between Azure and on-premises during Citrix access | Technical | Medium | Low | James Okoro |
+| R-006 | Entra ID Connect deployment delayed beyond June 2026 | Delivery | High | Low | James Okoro |
+
+**Risk response:**
+
+| ID | Mitigation Strategy | Mitigation Plan | Residual Risk | Last Assessed |
+|----|-------------------|-----------------|--------------|---------------|
+| R-001 | Mitigate | Parallel payroll run in staging with reconciliation against on-premises results for 2 months before cutover; comprehensive unit and integration tests for calculation engine | Low | 2026-03-15 |
+| R-002 | Mitigate | DMS migration rehearsal with full data reconciliation (row counts, checksums, sample verification); rehearsal scheduled for Aug 2026 | Low | 2026-03-15 |
+| R-003 | Mitigate | Performance testing on Azure SQL with production-scale data; Azure SQL can be scaled up (8 -> 16 vCores) within minutes if needed | Low | 2026-03-15 |
+| R-004 | Mitigate | Cross-train second DBA (Amir Patel) on PayrollPro database; document all migration procedures in runbook | Medium | 2026-03-15 |
+| R-005 | Mitigate | VPN tested and proven stable (A-002). Monitoring and auto-reconnect configured. Emergency fallback: enable temporary public access to App Service with IP restrictions. | Low | 2026-03-15 |
+| R-006 | Mitigate | PayrollPro migration plan has Entra ID Connect as a dependency; regular check-ins with IAM project team; fallback: temporary Azure AD-only authentication without on-prem sync | Low | 2026-03-15 |
+
+### 6.4 Dependencies
+
+| ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
+|----|-----------|-----------|--------|-------|----------|---------------|
+| D-001 | Entra ID Connect deployment (IAM-PRJ-0042) must be complete before PayrollPro cutover | Inbound | Committed | James Okoro | IAM project plan confirms Q2 2026 delivery | 2026-03-01 |
+| D-002 | Azure Landing Zone hub VNet and VPN Gateway must be provisioned | Inbound | Resolved | James Okoro | Landing zone deployed Feb 2026 (INFRA-CR-2026-008) | 2026-02-28 |
+| D-003 | BACS gateway must register new SSH public key for Azure-originated connections | Inbound | Committed | Sarah Chen | BACS support ticket raised; confirmation pending | 2026-03-10 |
+| D-004 | SAP Finance team must update CSV import job to read from Azure Blob Storage (via ADF) | Outbound | Not Committed | Rachel Fitzpatrick | Meeting scheduled with SAP team for April 2026 | 2026-03-15 |
+
+### 6.5 Issues
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | DBA resource conflict — David Thornton is also committed to the SAP upgrade project (PRJ-2026-012) for April-May 2026 | Delivery | Medium | Rachel Fitzpatrick | Escalated to IT Director; agreed David will prioritise PayrollPro migration; SAP project to use contractor DBA for overlap period | In Progress | 2026-03-20 |
+| I-002 | Three stored procedures use cross-database queries not supported by Azure SQL | Technical | Low | David Thornton | Procedures rewritten to use single-database approach; two completed, one in progress | In Progress | 2026-03-25 |
+
+### 6.6 Guardrail Exceptions
+
+#### Policy Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create any exception to current policies and standards? | No |
+| If yes, have exceptions been logged and accepted through the exceptions process? | N/A |
+
+#### Process Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create an issue against the process library? | No |
+| If yes, has this been acknowledged by the process owner? | N/A |
+
+#### Risk Profile Impact
+
+| Question | Response |
+|----------|----------|
+| Does the design materially change the organisation's technology risk profile? | No — the migration improves the risk profile by adding DR capability, eliminating hardware EOL risk, and improving security posture (network segmentation, managed patching, field-level encryption) |
+| If yes, has this been evaluated with Risk and Controls teams? | N/A |
+
+### 6.7 Architectural Decisions Log
+
+| ADR # | Title | Status | Date | Impact |
+|-------|-------|--------|------|--------|
+| ADR-001 | Replatform over Rehost | Accepted | 2026-01-20 | Drives .NET 6 upgrade and PaaS adoption; higher initial effort but lower ongoing OpEx |
+| ADR-002 | Azure SQL Database over SQL Server on VM | Accepted | 2026-01-25 | Requires DBA rework of some stored procedures; eliminates manual patching and backup management |
+| ADR-003 | Retain Citrix in Phase 1 | Accepted | 2026-02-05 | Reduces migration scope; introduces transitional VPN dependency |
+
+---
+
+## 7. Appendices
+
+### 7.1 Glossary
+
+| Term | Definition |
+|------|-----------|
+| 6 R's | Six common migration strategies: Retain, Retire, Rehost, Replatform, Refactor, Replace |
+| BACS | Bankers' Automated Clearing Services — the UK electronic payment system used for salary payments |
+| Bicep | A domain-specific language for deploying Azure resources declaratively (Infrastructure as Code) |
+| Blue-Green Deployment | A release strategy using two identical environments; traffic is switched from the old (blue) to the new (green) after validation |
+| DMS | Azure Database Migration Service — a managed service for migrating databases to Azure |
+| Entra ID | Microsoft Entra ID (formerly Azure Active Directory) — cloud-based identity and access management service |
+| Entra ID Connect | A tool that synchronises on-premises Active Directory identities to Entra ID |
+| FPS | Full Payment Submission — the HMRC Real Time Information submission made each time employees are paid |
+| NI Number | National Insurance Number — a unique identifier used in the UK tax and benefits system (Sensitive Personal Information) |
+| PAYE | Pay As You Earn — the UK system for collecting income tax and National Insurance from employment |
+| PIM | Privileged Identity Management — Entra ID feature providing just-in-time privileged access |
+| PITR | Point-In-Time Restore — Azure SQL feature allowing database restoration to any point within the retention period |
+| Replatform | A migration strategy that moves a workload to a new platform with targeted optimisations (e.g., adopting managed database services) without re-architecting the application |
+| RTI | Real Time Information — HMRC system requiring employers to report payroll data in real time |
+| Standard 18 | The BACS file format specification for payment instruction files |
+| TDE | Transparent Data Encryption — SQL Server and Azure SQL feature that encrypts data at rest |
+
+### 7.2 Reference Documents
+
+| Document | Version | Description | Location |
+|----------|---------|-------------|----------|
+| PayrollPro Database Migration Runbook | 0.3 | Step-by-step DMS migration procedures | Azure DevOps Wiki: PayrollPro/docs/migration-runbook |
+| Meridian Azure Landing Zone SAD | 1.2 | Hub-spoke network architecture and shared services | SharePoint: /architecture/sads/INFRA-SAD-0091 |
+| Meridian Entra ID Connect Deployment Plan | 1.0 | Identity synchronisation project plan and design | SharePoint: /projects/IAM-PRJ-0042 |
+| DPIA — PayrollPro Cloud Migration | 1.0 | Data Protection Impact Assessment | SharePoint: /compliance/dpia/DPIA-2026-009 |
+| Azure SQL Compatibility Assessment | 1.0 | T-SQL compatibility analysis results | Azure DevOps: PayrollPro/docs/azure-sql-compat |
+
+### 7.3 Standards & Patterns Referenced
+
+| Standard / Pattern ID | Name | Version | Applicability |
+|----------------------|------|---------|--------------|
+| ADS | Architecture Description Standard | 1.0 | Document structure and compliance scoring |
+| MSIS-3.2 | Meridian Information Security Standard | 3.2 | Sections 3.4, 3.5 — data protection and security controls |
+| MCSB-1.0 | Meridian Cloud Security Baseline | 1.0 | Sections 3.3, 3.5 — Azure-specific security controls |
+| MDCP-2.1 | Meridian Data Classification Policy | 2.1 | Section 3.4 — data classification and handling |
+| OWASP Top 10 | OWASP Top 10 Web Application Security Risks | 2021 | Section 5.1 — application security testing |
+
+### 7.4 Approval Sign-Off
+
+| Role | Name | Date | Signature / Approval Reference |
+|------|------|------|-------------------------------|
+| Lead Solution Architect | Sarah Chen | 2026-03-28 | Pending |
+| Security Architect | Priya Sharma | Pending | — |
+| DBA Lead | David Thornton | Pending | — |
+| ARB / Design Authority | Architecture Review Board | Pending | — |
+| Business Sponsor | Helen Marsh | Pending | — |
+
+---
+
+## Architecture Compliance Scoring
+
+| Section | Score (0–5) | Assessor | Date | Notes |
+|---------|:-----------:|----------|------|-------|
+| 1. Executive Summary | 4 | Sarah Chen | 2026-03-28 | Strong business context, current state well-documented, strategic alignment demonstrated. Scored 4 not 5: reuse assessment could include more detail on rejected platforms. |
+| 3.1 Logical View | 3 | Sarah Chen | 2026-03-28 | Components documented with technology choices; vendor lock-in assessed. Scored 3 not 4: component interactions could be more formally specified (e.g., API contracts between modules). Monolithic architecture limits decomposition detail. |
+| 3.2 Integration & Data Flow | 4 | Sarah Chen | 2026-03-28 | All internal and external integrations documented with protocols and authentication. End user access documented. |
+| 3.3 Physical View | 4 | James Okoro | 2026-03-28 | Deployment architecture complete, compute sized, networking documented, environments listed. Connectivity protocols specified. |
+| 3.4 Data View | 4 | Priya Sharma | 2026-03-28 | All data stores classified, retention and encryption specified, PII/SPI identified, data sovereignty addressed, data transfers documented. |
+| 3.5 Security View | 4 | Priya Sharma | 2026-03-28 | Business impact assessed, authentication and authorisation fully documented, encryption at rest and in transit specified, secrets management documented, SIEM integration confirmed. Scored 4 not 5: formal threat model (STRIDE) not yet completed. |
+| 3.6 Scenarios | 3 | Sarah Chen | 2026-03-28 | Key use cases documented with flows; ADRs capture significant decisions with rationale and alternatives. Scored 3 not 4: use cases could cross-reference views more explicitly. |
+| 4.1 Operational Excellence | 3 | James Okoro | 2026-03-28 | Centralised logging, monitoring, and alerting in place. Scored 3 not 4: operational runbooks not yet fully documented (in progress). |
+| 4.2 Reliability | 4 | Sarah Chen | 2026-03-28 | DR strategy documented with RTO/RPO targets, backup configured with immutability, auto-scaling defined, fault tolerance designed with failure modes. |
+| 4.3 Performance | 3 | Sarah Chen | 2026-03-28 | Targets defined, growth projected. Scored 3 not 4: performance testing not yet executed (planned for May-Jun 2026). |
+| 4.4 Cost Optimisation | 3 | Rachel Fitzpatrick | 2026-03-28 | Cost analysis performed using Azure Pricing Calculator, TCO comparison documented. Scored 3 not 4: FinOps practices (tagging, rightsizing reviews) not yet formalised. |
+| 4.5 Sustainability | 3 | Sarah Chen | 2026-03-28 | Non-production auto-shutdown enabled, resources right-sized, demand patterns documented. |
+| 5. Lifecycle | 4 | Sarah Chen | 2026-03-28 | CI/CD documented, migration plan detailed with 6 R's classification, phased timeline, rollback plan, skills assessment with training plan. Strong migration section. |
+| 6. Decision Making | 3 | Sarah Chen | 2026-03-28 | Constraints, assumptions, risks, and dependencies documented with ownership. ADRs captured. Scored 3 not 4: some assumptions still open; compliance traceability not yet complete. |
+| **Overall** | **3** | Sarah Chen | 2026-03-28 | Weakest-link scoring. Multiple sections at 3 reflect the pre-go-live state: operational runbooks, performance testing, and FinOps practices are in progress and will improve scores to 4 before production approval. |

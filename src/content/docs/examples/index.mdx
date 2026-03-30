@@ -1,0 +1,44 @@
+---
+title: "Example SADs"
+description: "Completed Solution Architecture Document examples demonstrating ADS in practice across different solution types."
+---
+
+import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
+
+## Learning by Example
+
+These example SADs demonstrate how to apply the Architecture Description Standard to real-world solutions. Each example is a completed (fictional) Solution Architecture Document showing what good looks like across different project types.
+
+<Aside type="tip" title="Not Real Projects">
+These examples are fictional but realistic. They are designed to demonstrate the standard's sections, fields, and scoring — not to prescribe specific technology choices.
+</Aside>
+
+<CardGrid>
+  <Card title="Employee Directory" icon="open-book">
+    A simple internal web application. Demonstrates a straightforward SAD at **Recommended** depth — ideal for understanding the basics.
+
+    [View example &rarr;](/examples/employee-directory/)
+  </Card>
+  <Card title="Customer API Platform" icon="rocket">
+    A cloud-native, customer-facing REST API on AWS. Demonstrates a **Comprehensive** SAD with full quality attributes, security, and governance.
+
+    [View example &rarr;](/examples/customer-api-platform/)
+  </Card>
+  <Card title="Cloud Migration" icon="setting">
+    An on-premises legacy application migrating to Azure. Demonstrates the migration sections (6 R's), current-state architecture, and transition planning.
+
+    [View example &rarr;](/examples/cloud-migration/)
+  </Card>
+  <Card title="archstandard.org" icon="star">
+    This website. A meta-example showing how ADS documents a simple static site — demonstrating that even small projects benefit from structured architecture documentation.
+
+    [View example &rarr;](/examples/archstandard-org/)
+  </Card>
+</CardGrid>
+
+## How to Use These Examples
+
+1. **Read one that matches your project type** — pick the example closest to your solution
+2. **Note the depth** — each example states its documentation depth (Minimum, Recommended, or Comprehensive)
+3. **Check the scoring** — each example includes a compliance scoring table showing how it was assessed
+4. **Copy the structure** — download a [blank template](/standard/templates/) and use the example as a reference while completing your own SAD

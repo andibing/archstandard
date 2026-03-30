@@ -103,6 +103,17 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Examples',
+					translations: { fr: 'Exemples', de: 'Beispiele' },
+					items: [
+						{ label: 'Example SADs', slug: 'examples', translations: { fr: 'Exemples de SAD', de: 'Beispiel-SADs' } },
+						{ label: 'Employee Directory', slug: 'examples/employee-directory', translations: { fr: 'Annuaire des employés', de: 'Mitarbeiterverzeichnis' } },
+						{ label: 'Customer API Platform', slug: 'examples/customer-api-platform', translations: { fr: 'Plateforme API client', de: 'Kunden-API-Plattform' } },
+						{ label: 'Cloud Migration', slug: 'examples/cloud-migration', translations: { fr: 'Migration cloud', de: 'Cloud-Migration' } },
+						{ label: 'archstandard.org', slug: 'examples/archstandard-org' },
+					],
+				},
+				{
 					label: 'Resources',
 					translations: { fr: 'Ressources', de: 'Ressourcen' },
 					items: [
