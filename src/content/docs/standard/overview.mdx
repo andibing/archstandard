@@ -32,6 +32,8 @@ This standard applies to the documentation of any technology solution architectu
 - **Industry** — the standard is organisation-agnostic and sector-neutral
 - **Lifecycle stage** — new builds, migrations, modernisations, or incremental changes
 
+The standard is **extensible** — organisations can add custom sections, map to internal tools and standards, and define governance gates without modifying the core structure. See [Organisation Customisation](/standard/how-to-use/#organisation-customisation) for details.
+
 ## Audience
 
 This standard is intended for use by:
@@ -66,9 +68,9 @@ Together, these views form the **High Level Design (HLD)** of the solution:
 
 No single view provides a complete description of the architecture. Together, the six views provide a holistic picture addressable by all stakeholder concerns.
 
-### Tier 2 — Quality Attributes (Sections 4.1 – 4.5)
+### Tier 2 — Quality Attributes (cross-cutting)
 
-Five cross-cutting quality attributes are evaluated **across** all architectural views. These are derived from the AWS and Azure Well-Architected Frameworks:
+Cross-cutting quality attributes are evaluated **across** all architectural views. These are derived from the cloud Well-Architected Frameworks:
 
 | Quality Attribute | Focus |
 |--------|-------|
@@ -78,9 +80,15 @@ Five cross-cutting quality attributes are evaluated **across** all architectural
 | **4.4 Cost Optimisation** | Cost analysis, FinOps practices |
 | **4.5 Sustainability** | Energy efficiency, carbon impact, resource efficiency |
 
-### Tier 3 — Lifecycle & Governance (Sections 5 – 7)
+### Tier 3 — Lifecycle & Governance
 
-Supporting sections address how the solution is developed, operated, governed, and retired throughout its lifecycle.
+#### Lifecycle Management (Section 5)
+
+Describes how the solution is developed, deployed, operated, and eventually retired — including CI/CD, migration strategy, resourcing, release management, and exit planning.
+
+#### Decision Making & Governance (Section 6)
+
+Captures the constraints, assumptions, risks, dependencies, and issues that shaped the design. Documents key architecture decisions (ADRs), guardrail exceptions, and compliance traceability.
 
 ### How the Sections Relate
 
