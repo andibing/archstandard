@@ -1,0 +1,33 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ebf8ff', 'primaryBorderColor': '#2b6cb0', 'secondaryColor': '#fefcbf', 'secondaryBorderColor': '#d69e2e', 'tertiaryColor': '#f0fff4', 'tertiaryBorderColor': '#38a169', 'fontSize': '14px' }}}%%
+graph TD
+    subgraph context["Context"]
+        DC["0. Document Control"]
+        ES["1. Executive Summary"]
+        SC["2. Stakeholders & Concerns"]
+    end
+
+    subgraph tier1["TIER 1: Architectural Views"]
+        LV["3.1 Logical View"]
+        IV["3.2 Integration & Data Flow"]
+        PV["3.3 Physical View"]
+        DV["3.4 Data View"]
+        SV["3.5 Security View"]
+        SN["3.6 Scenarios"]
+    end
+
+    subgraph tier2["TIER 2: Quality Attributes (cross-cutting)"]
+        OE["4.1 Ops Excellence"]
+        RL["4.2 Reliability"]
+        PE["4.3 Performance"]
+        CO["4.4 Cost"]
+        SU["4.5 Sustainability"]
+    end
+
+    subgraph tier3["TIER 3: Lifecycle & Governance"]
+        LM["5. Lifecycle Management"]
+        DM["6. Decision Making"]
+        AP["7. Appendices"]
+    end
+
+    tier1 -->|"evaluated by"| tier2
+    tier2 -->|"supported by"| tier3

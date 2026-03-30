@@ -351,9 +351,9 @@ qualityAttributes:
     workloadPattern: constant           # constant | variable-predictable | variable-unpredictable
     continuousAvailabilityRequired: false
   tradeoffs:
-    - pillarsInvolved: []               # operational-excellence | reliability | performance | cost-optimisation | sustainability
+    - attributesInvolved: []               # operational-excellence | reliability | performance | cost-optimisation | sustainability
       description: ""
-      chosenPriority: reliability       # (same pillar options)
+      chosenPriority: reliability       # (same attribute options)
       rationale: ""
 
 # ─────────────────────────────────────────────

@@ -14,22 +14,15 @@ Unlike the Architectural Views (Section 3), which describe **what** the solution
 
 ## Quality Attributes
 
-| # | Quality Attribute | AWS | Azure | GCP | Oracle | IBM | Focus |
-|---|------------------|-----|-------|-----|--------|-----|-------|
-| 4.1 | **Operational Excellence** | Operational Excellence | Operational Excellence | Operational Excellence | Operational Efficiency | Operational Excellence | Observability, monitoring, operational procedures |
-| 4.2 | **Reliability & Resilience** | Reliability | Reliability | Reliability | Reliability and Resilience | Reliability | DR, scalability, fault tolerance, backup/recovery |
-| 4.3 | **Performance Efficiency** | Performance Efficiency | Performance Efficiency | Performance Optimization | Performance and Cost Optimization | Performance | Performance requirements, resource optimisation |
-| 4.4 | **Cost Optimisation** | Cost Optimization | Cost Optimization | Cost Optimization | *(combined with Performance)* | Cost Optimization | Cost analysis, FinOps, cost-effective design |
-| 4.5 | **Sustainability** | Sustainability | *(not separate)* | Sustainability | *(not separate)* | *(not separate)* | Energy, carbon, resource efficiency |
+| # | Quality Attribute | Focus |
+|---|------------------|-------|
+| 4.1 | **Operational Excellence** | Observability, monitoring, operational procedures |
+| 4.2 | **Reliability & Resilience** | DR, scalability, fault tolerance, backup/recovery |
+| 4.3 | **Performance Efficiency** | Performance requirements, resource optimisation |
+| 4.4 | **Cost Optimisation** | Cost analysis, FinOps, cost-effective design |
+| 4.5 | **Sustainability** | Energy, carbon, resource efficiency |
 
-Each cloud provider also defines additional quality attributes specific to their platform strategy:
-
-| Provider | Additional Quality Attribute | Focus |
-|----------|---------------------------|-------|
-| **Oracle** | Distributed Cloud | Hybrid, edge, and multicloud deployment scenarios |
-| **IBM** | Hybrid and Portable | Workload portability across public, private, and on-premises environments |
-| **Oracle** | Security and Compliance | Combined security and compliance (separate view in ADS) |
-| **IBM** | Security | Combined security (separate view in ADS) |
+These quality attributes are derived from the Well-Architected Frameworks published by AWS, Azure, GCP, Oracle, and IBM. For the full provider-by-provider mapping, see the [Framework Alignment](/standard/framework-alignment/#cloud-well-architected-framework-alignment) page.
 
 :::note[Security as a View, Not Just a Quality Attribute]
 In the cloud Well-Architected Frameworks, **Security** is a quality attribute (pillar). In this standard, Security is elevated to a full **Architectural View** (Section 3.5) because of the depth of documentation required for IAM, encryption, network security, and monitoring. The Security View inherently addresses the security quality attribute.
