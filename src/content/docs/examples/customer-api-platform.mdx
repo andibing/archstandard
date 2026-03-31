@@ -28,8 +28,8 @@ This is a **fictional but realistic** Solution Architecture Document for Meridia
 | **Document Title** | Solution Architecture Document -- Customer API Platform |
 | **Application / Solution Name** | Customer API Platform (CAP) |
 | **Application ID** | APP-0472 |
-| **Author(s)** | Sarah Chen (Lead Solution Architect) |
-| **Owner** | Sarah Chen |
+| **Author(s)** | Fred Bloggs (Lead Solution Architect) |
+| **Owner** | Fred Bloggs |
 | **Version** | 2.1 |
 | **Status** | Approved |
 | **Created Date** | 2024-09-15 |
@@ -40,21 +40,21 @@ This is a **fictional but realistic** Solution Architecture Document for Meridia
 
 | Version | Date | Author / Editor | Description of Change |
 |---------|------|-----------------|----------------------|
-| 0.1 | 2024-09-15 | Sarah Chen | Initial draft with executive summary and logical view |
-| 0.2 | 2024-09-28 | Sarah Chen | Added physical view, data view, security view |
+| 0.1 | 2024-09-15 | Fred Bloggs | Initial draft with executive summary and logical view |
+| 0.2 | 2024-09-28 | Fred Bloggs | Added physical view, data view, security view |
 | 0.3 | 2024-10-10 | James Okonkwo | Security review feedback incorporated |
-| 0.5 | 2024-10-22 | Sarah Chen, Priya Sharma | Added quality attributes, governance, lifecycle |
-| 1.0 | 2024-11-05 | Sarah Chen | First approved version following ARB review |
-| 1.1 | 2025-01-15 | Sarah Chen | Updated cost model following reserved instance purchase |
-| 1.2 | 2025-03-20 | Sarah Chen | Added fraud detection integration (Phase 2) |
-| 2.0 | 2025-08-01 | Sarah Chen | Major revision: EKS upgrade to 1.29, Graviton migration, updated capacity projections |
-| 2.1 | 2025-11-20 | Sarah Chen | Updated DR testing results, refreshed cost analysis |
+| 0.5 | 2024-10-22 | Fred Bloggs, Priya Sharma | Added quality attributes, governance, lifecycle |
+| 1.0 | 2024-11-05 | Fred Bloggs | First approved version following ARB review |
+| 1.1 | 2025-01-15 | Fred Bloggs | Updated cost model following reserved instance purchase |
+| 1.2 | 2025-03-20 | Fred Bloggs | Added fraud detection integration (Phase 2) |
+| 2.0 | 2025-08-01 | Fred Bloggs | Major revision: EKS upgrade to 1.29, Graviton migration, updated capacity projections |
+| 2.1 | 2025-11-20 | Fred Bloggs | Updated DR testing results, refreshed cost analysis |
 
 ### 0.3 Contributors & Approvals
 
 | Name | Role | Contribution Type |
 |------|------|------------------|
-| Sarah Chen | Lead Solution Architect | Author |
+| Fred Bloggs | Lead Solution Architect | Author |
 | James Okonkwo | Principal Security Architect | Reviewer |
 | Priya Sharma | Data Architect | Reviewer |
 | Tom Bradley | SRE Lead | Reviewer |
@@ -204,7 +204,7 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 | Dr. Helen Zhao | CTO | Strategic alignment, technology direction, cost justification | Executive Summary, Cost |
 | Marcus Webb | CISO | Threat model, data protection, PCI-DSS compliance, incident response | Security View, Governance |
 | Fiona Gallagher | Head of Compliance | Open Banking compliance, FCA regulations, audit trail, data sovereignty | Security View, Data View, Governance |
-| Sarah Chen | Lead Solution Architect | Design integrity, standards compliance, technical debt, scalability | All views |
+| Fred Bloggs | Lead Solution Architect | Design integrity, standards compliance, technical debt, scalability | All views |
 | James Okonkwo | Principal Security Architect | Authentication, encryption, network security, penetration testing | Security View, Physical View |
 | Priya Sharma | Data Architect | Data classification, PII handling, data sovereignty, retention | Data View |
 | Tom Bradley | SRE Lead | Observability, incident response, reliability, on-call | Quality Attributes, Lifecycle |
@@ -227,9 +227,9 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 | Security posture and threat mitigation | Marcus Webb, James Okonkwo | 3.5 Security View |
 | Partner onboarding and developer experience | Laura Mendez, External API consumers | 3.2 Integration & Data Flow, 3.6 Scenarios |
 | Operational supportability | Tom Bradley | 4.1 Operational Excellence, 5.5 Operations & Support |
-| Scalability for growth | Sarah Chen, Dr. Helen Zhao | 4.2 Reliability, 4.3 Performance, 3.3 Physical View |
+| Scalability for growth | Fred Bloggs, Dr. Helen Zhao | 4.2 Reliability, 4.3 Performance, 3.3 Physical View |
 | Migration from legacy PIL | Rachel Winters, Amir Hassan | 1.5 Current State, 5.2 Service Transition |
-| Vendor lock-in | Sarah Chen, David Park | 3.1 Logical View, 5.10 Exit Planning |
+| Vendor lock-in | Fred Bloggs, David Park | 3.1 Logical View, 5.10 Exit Planning |
 
 ### 2.3 Compliance & Regulatory Context
 
@@ -1333,7 +1333,7 @@ Application start-up sequence:
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
 | A-001 | Core banking Oracle read replicas will support 15,000 queries/s at peak | Platform cannot meet performance targets; would require caching redesign or additional read replicas | High | Closed | Priya Sharma | Load test results (TEST-2025-031) confirmed 18,000 queries/s sustained |
-| A-002 | Featurespace ARIC API will maintain &lt;100ms P95 latency under our projected load | Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently | Medium | Open | Sarah Chen | Featurespace SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at our projected 3-year volume |
+| A-002 | Featurespace ARIC API will maintain &lt;100ms P95 latency under our projected load | Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently | Medium | Open | Fred Bloggs | Featurespace SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at our projected 3-year volume |
 | A-003 | Partner adoption will grow linearly to 80 partners over 3 years | Non-linear growth could exceed capacity plans; under-adoption would mean over-provisioned infrastructure (cost waste) | Medium | Open | Laura Mendez | Business development pipeline shows 50 partners in negotiation; growth rate tracking to plan |
 
 ### 6.3 Risks
@@ -1470,7 +1470,7 @@ Application start-up sequence:
 
 | Role | Name | Date | Signature / Approval Reference |
 |------|------|------|-------------------------------|
-| Lead Solution Architect | Sarah Chen | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
+| Lead Solution Architect | Fred Bloggs | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
 | Principal Security Architect | James Okonkwo | 2025-11-18 | JIRA: CAP-SEC-2025-012 (approved) |
 | Data Architect | Priya Sharma | 2025-11-15 | JIRA: CAP-DATA-2025-007 (approved) |
 | Head of Compliance | Fiona Gallagher | 2025-11-19 | JIRA: CAP-COMP-2025-004 (approved) |

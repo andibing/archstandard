@@ -31,8 +31,8 @@ The fictional company "Meridian Financial Services" is migrating its legacy HR/P
 | **Document Title** | Solution Architecture Document — PayrollPro Azure Migration |
 | **Application / Solution Name** | PayrollPro |
 | **Application ID** | APP-0347 |
-| **Author(s)** | Sarah Chen, Lead Solution Architect |
-| **Owner** | Sarah Chen |
+| **Author(s)** | Fred Bloggs, Lead Solution Architect |
+| **Owner** | Fred Bloggs |
 | **Version** | 1.0 |
 | **Status** | In Review |
 | **Created Date** | 2026-01-15 |
@@ -43,18 +43,18 @@ The fictional company "Meridian Financial Services" is migrating its legacy HR/P
 
 | Version | Date | Author / Editor | Description of Change |
 |---------|------|-----------------|----------------------|
-| 0.1 | 2026-01-15 | Sarah Chen | Initial draft |
-| 0.2 | 2026-01-30 | Sarah Chen | Added data view and security view following DBA and InfoSec review |
+| 0.1 | 2026-01-15 | Fred Bloggs | Initial draft |
+| 0.2 | 2026-01-30 | Fred Bloggs | Added data view and security view following DBA and InfoSec review |
 | 0.3 | 2026-02-14 | James Okoro | Incorporated infrastructure sizing and network topology |
-| 0.4 | 2026-02-28 | Sarah Chen | Added migration plan and transition details following workshop |
-| 0.5 | 2026-03-10 | Sarah Chen | Updated cost analysis with Azure pricing calculator outputs |
-| 1.0 | 2026-03-28 | Sarah Chen | Submitted for ARB review |
+| 0.4 | 2026-02-28 | Fred Bloggs | Added migration plan and transition details following workshop |
+| 0.5 | 2026-03-10 | Fred Bloggs | Updated cost analysis with Azure pricing calculator outputs |
+| 1.0 | 2026-03-28 | Fred Bloggs | Submitted for ARB review |
 
 ### 0.3 Contributors & Approvals
 
 | Name | Role | Contribution Type |
 |------|------|------------------|
-| Sarah Chen | Lead Solution Architect | Author |
+| Fred Bloggs | Lead Solution Architect | Author |
 | James Okoro | Infrastructure Architect | Reviewer |
 | Priya Sharma | Security Architect | Reviewer |
 | David Thornton | DBA Lead | Reviewer |
@@ -228,7 +228,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 |-------------|-------------|--------------|----------------|
 | Helen Marsh | HR Director (Business Sponsor) | Payroll continuity, zero missed payments, minimal user disruption during cutover | Executive Summary, Scenarios, Reliability |
 | Karen Wells | Payroll Team Lead | System performance at month-end, training on any UI changes, data accuracy after migration | Scenarios, Performance, Lifecycle |
-| Sarah Chen | Lead Solution Architect | Design integrity, standards compliance, migration risk | All views |
+| Fred Bloggs | Lead Solution Architect | Design integrity, standards compliance, migration risk | All views |
 | James Okoro | Infrastructure Architect | Azure infrastructure, networking, VPN, environments | Physical View, Reliability |
 | Priya Sharma | Security Architect | Data protection (PII/SPI), access controls, encryption, SIEM integration | Security View, Data View |
 | David Thornton | DBA Lead | Database migration, Azure SQL compatibility, stored procedure rework, data integrity | Data View, Logical View, Lifecycle |
@@ -246,7 +246,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 | System must be recoverable within 4 hours | IT Operations, Helen Marsh | 4.2 Reliability (RTO/RPO) |
 | Azure costs must not exceed approved budget | Rachel Fitzpatrick | 4.4 Cost Optimisation |
 | Team must be trained on Azure operations | IT Operations, James Okoro | 5.6 Resourcing & Skills |
-| Cutover must be reversible (rollback plan) | Rachel Fitzpatrick, Sarah Chen | 5.2 Transition Plan |
+| Cutover must be reversible (rollback plan) | Rachel Fitzpatrick, Fred Bloggs | 5.2 Transition Plan |
 | Month-end batch performance must improve | Karen Wells | 4.3 Performance |
 
 ### 2.3 Compliance & Regulatory Context
@@ -1114,7 +1114,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | A-002 | Citrix XenApp can connect to Azure App Service via site-to-site VPN with acceptable latency (< 50ms round trip) | Users would experience unacceptable performance; alternative access method needed | High | Closed | James Okoro | VPN latency tested at 18ms round trip (test report TR-2026-003) |
 | A-003 | Existing .NET Framework 4.8 code can be upgraded to .NET 6 within 8 weeks | Timeline overrun; potential delay to cutover window | Medium | Closed | David Thornton | .NET Upgrade Assistant analysis completed; 14 breaking changes identified, all resolvable (DEV-2026-017) |
 | A-004 | Azure SQL Database supports all T-SQL features used by PayrollPro stored procedures | Stored procedures would need rework, potentially delaying migration | Medium | Closed | David Thornton | Compatibility assessment completed; 3 procedures require rework (linked user queries, cross-database joins); estimated 2 weeks effort |
-| A-005 | BACS, HMRC, and Crestfield integrations will function from Azure without changes to their end | Integration reconfiguration needed; potential re-certification with providers | High | Open | Sarah Chen | HMRC and Crestfield confirmed no IP allowlisting required. BACS gateway requires new SSH key registration (in progress). |
+| A-005 | BACS, HMRC, and Crestfield integrations will function from Azure without changes to their end | Integration reconfiguration needed; potential re-certification with providers | High | Open | Fred Bloggs | HMRC and Crestfield confirmed no IP allowlisting required. BACS gateway requires new SSH key registration (in progress). |
 
 ### 6.3 Risks
 
@@ -1122,7 +1122,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 
 | ID | Risk Event | Category | Severity | Likelihood | Owner |
 |----|-----------|----------|----------|-----------|-------|
-| R-001 | .NET 6 upgrade introduces regression bugs affecting payroll calculations | Technical | High | Medium | Sarah Chen |
+| R-001 | .NET 6 upgrade introduces regression bugs affecting payroll calculations | Technical | High | Medium | Fred Bloggs |
 | R-002 | Data migration via DMS causes data loss or corruption | Technical | High | Low | David Thornton |
 | R-003 | Azure SQL performance for payroll batch is worse than on-premises SQL Server | Technical | Medium | Low | David Thornton |
 | R-004 | DBA resource availability — David Thornton is single point of expertise for PayrollPro database | Delivery | High | Medium | Rachel Fitzpatrick |
@@ -1146,7 +1146,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 |----|-----------|-----------|--------|-------|----------|---------------|
 | D-001 | Entra ID Connect deployment (IAM-PRJ-0042) must be complete before PayrollPro cutover | Inbound | Committed | James Okoro | IAM project plan confirms Q2 2026 delivery | 2026-03-01 |
 | D-002 | Azure Landing Zone hub VNet and VPN Gateway must be provisioned | Inbound | Resolved | James Okoro | Landing zone deployed Feb 2026 (INFRA-CR-2026-008) | 2026-02-28 |
-| D-003 | BACS gateway must register new SSH public key for Azure-originated connections | Inbound | Committed | Sarah Chen | BACS support ticket raised; confirmation pending | 2026-03-10 |
+| D-003 | BACS gateway must register new SSH public key for Azure-originated connections | Inbound | Committed | Fred Bloggs | BACS support ticket raised; confirmation pending | 2026-03-10 |
 | D-004 | SAP Finance team must update CSV import job to read from Azure Blob Storage (via ADF) | Outbound | Not Committed | Rachel Fitzpatrick | Meeting scheduled with SAP team for April 2026 | 2026-03-15 |
 
 ### 6.5 Issues
@@ -1236,7 +1236,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 
 | Role | Name | Date | Signature / Approval Reference |
 |------|------|------|-------------------------------|
-| Lead Solution Architect | Sarah Chen | 2026-03-28 | Pending |
+| Lead Solution Architect | Fred Bloggs | 2026-03-28 | Pending |
 | Security Architect | Priya Sharma | Pending | — |
 | DBA Lead | David Thornton | Pending | — |
 | ARB / Design Authority | Architecture Review Board | Pending | — |
@@ -1248,20 +1248,20 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 
 | Section | Score (0–5) | Assessor | Date | Notes |
 |---------|:-----------:|----------|------|-------|
-| 1. Executive Summary | 4 | Sarah Chen | 2026-03-28 | Strong business context, current state well-documented, strategic alignment demonstrated. Scored 4 not 5: reuse assessment could include more detail on rejected platforms. |
-| 3.1 Logical View | 3 | Sarah Chen | 2026-03-28 | Components documented with technology choices; vendor lock-in assessed. Scored 3 not 4: component interactions could be more formally specified (e.g., API contracts between modules). Monolithic architecture limits decomposition detail. |
-| 3.2 Integration & Data Flow | 4 | Sarah Chen | 2026-03-28 | All internal and external integrations documented with protocols and authentication. End user access documented. |
+| 1. Executive Summary | 4 | Fred Bloggs | 2026-03-28 | Strong business context, current state well-documented, strategic alignment demonstrated. Scored 4 not 5: reuse assessment could include more detail on rejected platforms. |
+| 3.1 Logical View | 3 | Fred Bloggs | 2026-03-28 | Components documented with technology choices; vendor lock-in assessed. Scored 3 not 4: component interactions could be more formally specified (e.g., API contracts between modules). Monolithic architecture limits decomposition detail. |
+| 3.2 Integration & Data Flow | 4 | Fred Bloggs | 2026-03-28 | All internal and external integrations documented with protocols and authentication. End user access documented. |
 | 3.3 Physical View | 4 | James Okoro | 2026-03-28 | Deployment architecture complete, compute sized, networking documented, environments listed. Connectivity protocols specified. |
 | 3.4 Data View | 4 | Priya Sharma | 2026-03-28 | All data stores classified, retention and encryption specified, PII/SPI identified, data sovereignty addressed, data transfers documented. |
 | 3.5 Security View | 4 | Priya Sharma | 2026-03-28 | Business impact assessed, authentication and authorisation fully documented, encryption at rest and in transit specified, secrets management documented, SIEM integration confirmed. Scored 4 not 5: formal threat model (STRIDE) not yet completed. |
-| 3.6 Scenarios | 3 | Sarah Chen | 2026-03-28 | Key use cases documented with flows; ADRs capture significant decisions with rationale and alternatives. Scored 3 not 4: use cases could cross-reference views more explicitly. |
+| 3.6 Scenarios | 3 | Fred Bloggs | 2026-03-28 | Key use cases documented with flows; ADRs capture significant decisions with rationale and alternatives. Scored 3 not 4: use cases could cross-reference views more explicitly. |
 | 4.1 Operational Excellence | 3 | James Okoro | 2026-03-28 | Centralised logging, monitoring, and alerting in place. Scored 3 not 4: operational runbooks not yet fully documented (in progress). |
-| 4.2 Reliability | 4 | Sarah Chen | 2026-03-28 | DR strategy documented with RTO/RPO targets, backup configured with immutability, auto-scaling defined, fault tolerance designed with failure modes. |
-| 4.3 Performance | 3 | Sarah Chen | 2026-03-28 | Targets defined, growth projected. Scored 3 not 4: performance testing not yet executed (planned for May-Jun 2026). |
+| 4.2 Reliability | 4 | Fred Bloggs | 2026-03-28 | DR strategy documented with RTO/RPO targets, backup configured with immutability, auto-scaling defined, fault tolerance designed with failure modes. |
+| 4.3 Performance | 3 | Fred Bloggs | 2026-03-28 | Targets defined, growth projected. Scored 3 not 4: performance testing not yet executed (planned for May-Jun 2026). |
 | 4.4 Cost Optimisation | 3 | Rachel Fitzpatrick | 2026-03-28 | Cost analysis performed using Azure Pricing Calculator, TCO comparison documented. Scored 3 not 4: FinOps practices (tagging, rightsizing reviews) not yet formalised. |
-| 4.5 Sustainability | 3 | Sarah Chen | 2026-03-28 | Non-production auto-shutdown enabled, resources right-sized, demand patterns documented. |
-| 5. Lifecycle | 4 | Sarah Chen | 2026-03-28 | CI/CD documented, migration plan detailed with 6 R's classification, phased timeline, rollback plan, skills assessment with training plan. Strong migration section. |
-| 6. Decision Making | 3 | Sarah Chen | 2026-03-28 | Constraints, assumptions, risks, and dependencies documented with ownership. ADRs captured. Scored 3 not 4: some assumptions still open; compliance traceability not yet complete. |
-| **Overall** | **3** | Sarah Chen | 2026-03-28 | Weakest-link scoring. Multiple sections at 3 reflect the pre-go-live state: operational runbooks, performance testing, and FinOps practices are in progress and will improve scores to 4 before production approval. |
+| 4.5 Sustainability | 3 | Fred Bloggs | 2026-03-28 | Non-production auto-shutdown enabled, resources right-sized, demand patterns documented. |
+| 5. Lifecycle | 4 | Fred Bloggs | 2026-03-28 | CI/CD documented, migration plan detailed with 6 R's classification, phased timeline, rollback plan, skills assessment with training plan. Strong migration section. |
+| 6. Decision Making | 3 | Fred Bloggs | 2026-03-28 | Constraints, assumptions, risks, and dependencies documented with ownership. ADRs captured. Scored 3 not 4: some assumptions still open; compliance traceability not yet complete. |
+| **Overall** | **3** | Fred Bloggs | 2026-03-28 | Weakest-link scoring. Multiple sections at 3 reflect the pre-go-live state: operational runbooks, performance testing, and FinOps practices are in progress and will improve scores to 4 before production approval. |
 
 </div>
