@@ -49,9 +49,9 @@ Use this as a reference when completing your own SAD. The structure, field names
 | Name | Role | Contribution Type |
 |------|------|------------------|
 | Fred Bloggs | Solution Architect | Author |
-| David Okoro | IT Operations Lead | Reviewer |
-| Priya Sharma | HR Systems Manager | Reviewer |
-| James Whitfield | Information Security Analyst | Reviewer |
+| Bob Smith | IT Operations Lead | Reviewer |
+| Jane Doe | HR Systems Manager | Reviewer |
+| Joe Bloggs | Information Security Analyst | Reviewer |
 | Architecture Review Board | Governance | Approver |
 
 ### 0.4 Document Purpose & Scope
@@ -148,7 +148,7 @@ The new application will completely replace this spreadsheet, which will be arch
 |-------|-------|
 | **Project Name** | Employee Directory Replacement |
 | **Project Code / ID** | PRJ-2025-089 |
-| **Project Manager** | Ravi Patel |
+| **Project Manager** | Jim Doe |
 | **Estimated Solution Cost (Capex)** | GBP 18,000 (development) |
 | **Estimated Solution Cost (Opex)** | GBP 2,400/year (Azure hosting) |
 | **Target Go-Live Date** | 2026-02-01 |
@@ -167,11 +167,11 @@ The Employee Directory is a convenience tool. If the service is unavailable, emp
 
 | Stakeholder | Role / Group | Key Concerns | Relevant Views |
 |-------------|-------------|--------------|----------------|
-| Priya Sharma | HR Systems Manager (Business Owner) | Data accuracy, ease of use, reduction in manual queries | Executive Summary, Data View |
+| Jane Doe | HR Systems Manager (Business Owner) | Data accuracy, ease of use, reduction in manual queries | Executive Summary, Data View |
 | Fred Bloggs | Solution Architect | Design integrity, standards compliance, maintainability | All views |
-| James Whitfield | Information Security Analyst | Data protection, access control, authentication | Security View, Data View |
-| David Okoro | IT Operations Lead | Deployment, monitoring, support burden | Physical View, Operational Excellence, Lifecycle |
-| Tom Bradley | Development Lead | Technology stack, build pipeline, code maintainability | Logical View, Lifecycle |
+| Joe Bloggs | Information Security Analyst | Data protection, access control, authentication | Security View, Data View |
+| Bob Smith | IT Operations Lead | Deployment, monitoring, support burden | Physical View, Operational Excellence, Lifecycle |
+| John Smith | Development Lead | Technology stack, build pipeline, code maintainability | Logical View, Lifecycle |
 | All Employees (c.450) | End Users | Fast search, up-to-date information, usability | Executive Summary, Scenarios |
 | HR Team (8 staff) | Data Maintainers | Admin interface for corrections, photo uploads | Scenarios, Logical View |
 
@@ -912,8 +912,8 @@ The application includes internally developed software.
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
-| A-001 | PeopleSync CSV export format will remain stable and will not change without notice | CSV import job would fail; data would become stale until the import is updated | High | Closed | Priya Sharma (HR Systems Manager) | Confirmed with PeopleSync vendor that format is contractually stable through 2027 |
-| A-002 | The existing ExpressRoute connection between Meridian data centre and Azure UK South has sufficient bandwidth for the nightly CSV upload (< 10 MB) | CSV upload would fail or be slow | High | Closed | David Okoro (IT Operations Lead) | Confirmed; ExpressRoute has 200 Mbps capacity with < 5% utilisation at 02:00 UTC |
+| A-001 | PeopleSync CSV export format will remain stable and will not change without notice | CSV import job would fail; data would become stale until the import is updated | High | Closed | Jane Doe (HR Systems Manager) | Confirmed with PeopleSync vendor that format is contractually stable through 2027 |
+| A-002 | The existing ExpressRoute connection between Meridian data centre and Azure UK South has sufficient bandwidth for the nightly CSV upload (< 10 MB) | CSV upload would fail or be slow | High | Closed | Bob Smith (IT Operations Lead) | Confirmed; ExpressRoute has 200 Mbps capacity with < 5% utilisation at 02:00 UTC |
 
 ### 6.3 Risks
 
@@ -921,8 +921,8 @@ The application includes internally developed software.
 
 | ID | Risk Event | Category | Severity | Likelihood | Owner |
 |----|-----------|----------|----------|-----------|-------|
-| R-001 | PeopleSync is replaced or decommissioned, breaking the CSV integration | Technical | Medium | Low | Priya Sharma |
-| R-002 | Employee photograph storage exceeds Azure SQL Basic tier limits (2 GB) | Technical | Low | Low | Tom Bradley |
+| R-001 | PeopleSync is replaced or decommissioned, breaking the CSV integration | Technical | Medium | Low | Jane Doe |
+| R-002 | Employee photograph storage exceeds Azure SQL Basic tier limits (2 GB) | Technical | Low | Low | John Smith |
 
 **Risk response:**
 
@@ -935,7 +935,7 @@ The application includes internally developed software.
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
-| D-001 | PeopleSync nightly CSV export must be enabled and running | Inbound | Committed | Priya Sharma | PeopleSync export configured and tested in development | 2025-10-15 |
+| D-001 | PeopleSync nightly CSV export must be enabled and running | Inbound | Committed | Jane Doe | PeopleSync export configured and tested in development | 2025-10-15 |
 
 ### 6.5 Issues
 
@@ -1003,7 +1003,7 @@ No open issues at the time of writing.
 | Role | Name | Date | Signature / Approval Reference |
 |------|------|------|-------------------------------|
 | Solution Architect | Fred Bloggs | 2025-11-18 | ARB-2025-089-SA |
-| Information Security | James Whitfield | 2025-11-19 | ARB-2025-089-SEC |
+| Information Security | Joe Bloggs | 2025-11-19 | ARB-2025-089-SEC |
 | Architecture Review Board | ARB Panel | 2025-11-20 | ARB-2025-089-APPROVED |
 
 ---

@@ -42,8 +42,8 @@ This is a **fictional but realistic** Solution Architecture Document for Meridia
 |---------|------|-----------------|----------------------|
 | 0.1 | 2024-09-15 | Fred Bloggs | Initial draft with executive summary and logical view |
 | 0.2 | 2024-09-28 | Fred Bloggs | Added physical view, data view, security view |
-| 0.3 | 2024-10-10 | James Okonkwo | Security review feedback incorporated |
-| 0.5 | 2024-10-22 | Fred Bloggs, Priya Sharma | Added quality attributes, governance, lifecycle |
+| 0.3 | 2024-10-10 | Joe Bloggs | Security review feedback incorporated |
+| 0.5 | 2024-10-22 | Fred Bloggs, Jane Doe | Added quality attributes, governance, lifecycle |
 | 1.0 | 2024-11-05 | Fred Bloggs | First approved version following ARB review |
 | 1.1 | 2025-01-15 | Fred Bloggs | Updated cost model following reserved instance purchase |
 | 1.2 | 2025-03-20 | Fred Bloggs | Added fraud detection integration (Phase 2) |
@@ -55,13 +55,13 @@ This is a **fictional but realistic** Solution Architecture Document for Meridia
 | Name | Role | Contribution Type |
 |------|------|------------------|
 | Fred Bloggs | Lead Solution Architect | Author |
-| James Okonkwo | Principal Security Architect | Reviewer |
-| Priya Sharma | Data Architect | Reviewer |
-| Tom Bradley | SRE Lead | Reviewer |
+| Joe Bloggs | Principal Security Architect | Reviewer |
+| Jane Doe | Data Architect | Reviewer |
+| John Smith | SRE Lead | Reviewer |
 | Dr. Helen Zhao | CTO | Approver |
-| Marcus Webb | CISO | Approver |
-| Fiona Gallagher | Head of Compliance | Approver |
-| David Park | ARB Chair | Approver |
+| Tom Jones | CISO | Approver |
+| Alice Doe | Head of Compliance | Approver |
+| Bob Smith | ARB Chair | Approver |
 
 ### 0.4 Document Purpose & Scope
 
@@ -178,7 +178,7 @@ The current Partner Integration Layer (PIL) was built in 2016 on Oracle SOA Suit
 |-------|-------|
 | **Project Name** | Customer API Platform (Open Banking) |
 | **Project Code / ID** | PROJ-0098 |
-| **Project Manager** | Rachel Winters |
+| **Project Manager** | Nelly Bloggs |
 | **Estimated Solution Cost (Capex)** | GBP 1,200,000 |
 | **Estimated Solution Cost (Opex)** | GBP 384,000 per annum |
 | **Target Go-Live Date** | 2025-03-01 (Phase 1 -- achieved); 2025-09-01 (Phase 2 -- achieved) |
@@ -202,34 +202,34 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 | Stakeholder | Role / Group | Key Concerns | Relevant Views |
 |-------------|-------------|--------------|----------------|
 | Dr. Helen Zhao | CTO | Strategic alignment, technology direction, cost justification | Executive Summary, Cost |
-| Marcus Webb | CISO | Threat model, data protection, PCI-DSS compliance, incident response | Security View, Governance |
-| Fiona Gallagher | Head of Compliance | Open Banking compliance, FCA regulations, audit trail, data sovereignty | Security View, Data View, Governance |
+| Tom Jones | CISO | Threat model, data protection, PCI-DSS compliance, incident response | Security View, Governance |
+| Alice Doe | Head of Compliance | Open Banking compliance, FCA regulations, audit trail, data sovereignty | Security View, Data View, Governance |
 | Fred Bloggs | Lead Solution Architect | Design integrity, standards compliance, technical debt, scalability | All views |
-| James Okonkwo | Principal Security Architect | Authentication, encryption, network security, penetration testing | Security View, Physical View |
-| Priya Sharma | Data Architect | Data classification, PII handling, data sovereignty, retention | Data View |
-| Tom Bradley | SRE Lead | Observability, incident response, reliability, on-call | Quality Attributes, Lifecycle |
-| Amir Hassan | Development Lead | Component design, API contracts, CI/CD, developer experience | Logical View, Integration & Data Flow, Lifecycle |
-| Rachel Winters | Project Manager | Delivery timeline, cost, dependencies, risks | Executive Summary, Governance |
-| Laura Mendez | Partner Manager | Partner onboarding experience, API availability, SLA commitments | Integration & Data Flow, Reliability |
+| Joe Bloggs | Principal Security Architect | Authentication, encryption, network security, penetration testing | Security View, Physical View |
+| Jane Doe | Data Architect | Data classification, PII handling, data sovereignty, retention | Data View |
+| John Smith | SRE Lead | Observability, incident response, reliability, on-call | Quality Attributes, Lifecycle |
+| Mo Doe | Development Lead | Component design, API contracts, CI/CD, developer experience | Logical View, Integration & Data Flow, Lifecycle |
+| Nelly Bloggs | Project Manager | Delivery timeline, cost, dependencies, risks | Executive Summary, Governance |
+| Sally Doe | Partner Manager | Partner onboarding experience, API availability, SLA commitments | Integration & Data Flow, Reliability |
 | External API consumers | Partner fintech developers | API documentation, latency, uptime, versioning, error handling | Integration & Data Flow, Performance |
-| David Park | ARB Chair | Architecture standards compliance, reuse assessment, governance | All views |
+| Bob Smith | ARB Chair | Architecture standards compliance, reuse assessment, governance | All views |
 | Finance team | Finance & Procurement | Cost forecasting, reserved instance optimisation, budget adherence | Cost Optimisation |
 
 ### 2.2 Concerns Matrix
 
 | Concern | Stakeholder(s) | Addressed In |
 |---------|---------------|-------------|
-| Regulatory compliance (PSD2, Open Banking) | Fiona Gallagher, Dr. Helen Zhao | 1. Executive Summary, 2.3 Compliance, 3.5 Security View, 6. Governance |
-| Data protection and PII handling | Marcus Webb, Priya Sharma | 3.4 Data View, 3.5 Security View |
-| Platform availability and SLA | Tom Bradley, Laura Mendez, External API consumers | 4.2 Reliability, 5.5 Operations & Support |
-| API performance and latency | Amir Hassan, External API consumers | 4.3 Performance, 3.2 Integration & Data Flow |
-| Cost-effectiveness and budget | Dr. Helen Zhao, Finance team, Rachel Winters | 4.4 Cost Optimisation |
-| Security posture and threat mitigation | Marcus Webb, James Okonkwo | 3.5 Security View |
-| Partner onboarding and developer experience | Laura Mendez, External API consumers | 3.2 Integration & Data Flow, 3.6 Scenarios |
-| Operational supportability | Tom Bradley | 4.1 Operational Excellence, 5.5 Operations & Support |
+| Regulatory compliance (PSD2, Open Banking) | Alice Doe, Dr. Helen Zhao | 1. Executive Summary, 2.3 Compliance, 3.5 Security View, 6. Governance |
+| Data protection and PII handling | Tom Jones, Jane Doe | 3.4 Data View, 3.5 Security View |
+| Platform availability and SLA | John Smith, Sally Doe, External API consumers | 4.2 Reliability, 5.5 Operations & Support |
+| API performance and latency | Mo Doe, External API consumers | 4.3 Performance, 3.2 Integration & Data Flow |
+| Cost-effectiveness and budget | Dr. Helen Zhao, Finance team, Nelly Bloggs | 4.4 Cost Optimisation |
+| Security posture and threat mitigation | Tom Jones, Joe Bloggs | 3.5 Security View |
+| Partner onboarding and developer experience | Sally Doe, External API consumers | 3.2 Integration & Data Flow, 3.6 Scenarios |
+| Operational supportability | John Smith | 4.1 Operational Excellence, 5.5 Operations & Support |
 | Scalability for growth | Fred Bloggs, Dr. Helen Zhao | 4.2 Reliability, 4.3 Performance, 3.3 Physical View |
-| Migration from legacy PIL | Rachel Winters, Amir Hassan | 1.5 Current State, 5.2 Service Transition |
-| Vendor lock-in | Fred Bloggs, David Park | 3.1 Logical View, 5.10 Exit Planning |
+| Migration from legacy PIL | Nelly Bloggs, Mo Doe | 1.5 Current State, 5.2 Service Transition |
+| Vendor lock-in | Fred Bloggs, Bob Smith | 3.1 Logical View, 5.10 Exit Planning |
 
 ### 2.3 Compliance & Regulatory Context
 
@@ -919,11 +919,11 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 
 | Procedure | Description | Owner | Documentation |
 |-----------|-------------|-------|--------------|
-| Incident response | P1: 15-min response, P2: 30-min response; follow ITIL incident management; post-incident review within 48 hours | SRE Lead (Tom Bradley) | Confluence: /ops/runbooks/incident-response |
+| Incident response | P1: 15-min response, P2: 30-min response; follow ITIL incident management; post-incident review within 48 hours | SRE Lead (John Smith) | Confluence: /ops/runbooks/incident-response |
 | Change management | All changes via GitHub PR; production deploys require 2 approvals; change window: Tuesday-Thursday; emergency change process for P1 fixes | SRE Lead | Confluence: /ops/runbooks/change-management |
 | Escalation paths | L1: SRE on-call --> L2: SRE Lead --> L3: Solution Architect --> L4: CTO. Security incidents: CISO notified immediately for P1 | SRE Lead | Confluence: /ops/runbooks/escalation |
 | On-call rotation | 24x7, 1-week rotation across 6 SRE engineers; secondary on-call for DBA coverage | SRE Lead | PagerDuty schedule: cap-production |
-| Partner communication | Status page updates within 15 minutes of confirmed incident; post-incident report to affected partners within 5 business days | Partner Manager (Laura Mendez) | Confluence: /ops/runbooks/partner-comms |
+| Partner communication | Status page updates within 15 minutes of confirmed incident; post-incident report to affected partners within 5 business days | Partner Manager (Sally Doe) | Confluence: /ops/runbooks/partner-comms |
 | Database maintenance | Weekly vacuum/analyse (automated via pg_cron); monthly index review; quarterly RDS minor version assessment | DBA team | Confluence: /ops/runbooks/database-maintenance |
 
 ---
@@ -1332,9 +1332,9 @@ Application start-up sequence:
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
-| A-001 | Core banking Oracle read replicas will support 15,000 queries/s at peak | Platform cannot meet performance targets; would require caching redesign or additional read replicas | High | Closed | Priya Sharma | Load test results (TEST-2025-031) confirmed 18,000 queries/s sustained |
+| A-001 | Core banking Oracle read replicas will support 15,000 queries/s at peak | Platform cannot meet performance targets; would require caching redesign or additional read replicas | High | Closed | Jane Doe | Load test results (TEST-2025-031) confirmed 18,000 queries/s sustained |
 | A-002 | Featurespace ARIC API will maintain &lt;100ms P95 latency under our projected load | Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently | Medium | Open | Fred Bloggs | Featurespace SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at our projected 3-year volume |
-| A-003 | Partner adoption will grow linearly to 80 partners over 3 years | Non-linear growth could exceed capacity plans; under-adoption would mean over-provisioned infrastructure (cost waste) | Medium | Open | Laura Mendez | Business development pipeline shows 50 partners in negotiation; growth rate tracking to plan |
+| A-003 | Partner adoption will grow linearly to 80 partners over 3 years | Non-linear growth could exceed capacity plans; under-adoption would mean over-provisioned infrastructure (cost waste) | Medium | Open | Sally Doe | Business development pipeline shows 50 partners in negotiation; growth rate tracking to plan |
 
 ### 6.3 Risks
 
@@ -1342,10 +1342,10 @@ Application start-up sequence:
 
 | ID | Risk Event | Category | Severity | Likelihood | Owner |
 |----|-----------|----------|----------|-----------|-------|
-| R-001 | Core banking Oracle DB upgrade causes schema changes that break data replication | Technical | High | Medium | Priya Sharma |
-| R-002 | Partner onboarding volume exceeds forecast, overwhelming support capacity | Operational | Medium | Medium | Laura Mendez |
-| R-003 | Critical vulnerability discovered in base container image requiring emergency patching across all services | Security | High | High | James Okonkwo |
-| R-004 | AWS eu-west-2 region experiences prolonged outage exceeding DR activation threshold | Operational | Critical | Low | Tom Bradley |
+| R-001 | Core banking Oracle DB upgrade causes schema changes that break data replication | Technical | High | Medium | Jane Doe |
+| R-002 | Partner onboarding volume exceeds forecast, overwhelming support capacity | Operational | Medium | Medium | Sally Doe |
+| R-003 | Critical vulnerability discovered in base container image requiring emergency patching across all services | Security | High | High | Joe Bloggs |
+| R-004 | AWS eu-west-2 region experiences prolonged outage exceeding DR activation threshold | Operational | Critical | Low | John Smith |
 
 #### Risk Response
 
@@ -1368,8 +1368,8 @@ Application start-up sequence:
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
-| I-001 | Redis cluster failover caused 45-second cache miss spike during October maintenance window | Operational | Low | Tom Bradley | Updated maintenance procedure to pre-warm cache before failover; implemented dual-write to new primary during planned failover | Resolved | 2025-11-01 |
-| I-002 | Three partners have not completed mTLS certificate renewal (certificates expiring in 60 days) | Operational | Medium | Laura Mendez | Automated renewal reminders sent at 90/60/30/7 days; partner manager directly contacting non-responsive partners; contingency: temporary API key fallback (with CISO approval) | In Progress | 2025-11-15 |
+| I-001 | Redis cluster failover caused 45-second cache miss spike during October maintenance window | Operational | Low | John Smith | Updated maintenance procedure to pre-warm cache before failover; implemented dual-write to new primary during planned failover | Resolved | 2025-11-01 |
+| I-002 | Three partners have not completed mTLS certificate renewal (certificates expiring in 60 days) | Operational | Medium | Sally Doe | Automated renewal reminders sent at 90/60/30/7 days; partner manager directly contacting non-responsive partners; contingency: temporary API key fallback (with CISO approval) | In Progress | 2025-11-15 |
 
 ### 6.6 Guardrail Exceptions
 
@@ -1471,12 +1471,12 @@ Application start-up sequence:
 | Role | Name | Date | Signature / Approval Reference |
 |------|------|------|-------------------------------|
 | Lead Solution Architect | Fred Bloggs | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
-| Principal Security Architect | James Okonkwo | 2025-11-18 | JIRA: CAP-SEC-2025-012 (approved) |
-| Data Architect | Priya Sharma | 2025-11-15 | JIRA: CAP-DATA-2025-007 (approved) |
-| Head of Compliance | Fiona Gallagher | 2025-11-19 | JIRA: CAP-COMP-2025-004 (approved) |
-| CISO | Marcus Webb | 2025-11-19 | JIRA: CAP-SEC-2025-013 (approved) |
+| Principal Security Architect | Joe Bloggs | 2025-11-18 | JIRA: CAP-SEC-2025-012 (approved) |
+| Data Architect | Jane Doe | 2025-11-15 | JIRA: CAP-DATA-2025-007 (approved) |
+| Head of Compliance | Alice Doe | 2025-11-19 | JIRA: CAP-COMP-2025-004 (approved) |
+| CISO | Tom Jones | 2025-11-19 | JIRA: CAP-SEC-2025-013 (approved) |
 | CTO | Dr. Helen Zhao | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
-| ARB Chair | David Park | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
+| ARB Chair | Bob Smith | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
 
 ---
 
