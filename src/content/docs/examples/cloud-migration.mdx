@@ -277,14 +277,14 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 #### 3.1.1 Application Architecture Diagram
 
 <Mermaid chart={`graph LR
-    Browser["Browser (via Citrix)"] --> AppSvc["Azure App Service (PayrollPro .NET 6)"]
-    AppSvc --> SQL["Azure SQL Database"]
-    AppSvc --> Blob["Azure Blob Storage (payslips)"]
-    AppSvc -->|"SFTP"| BACS["BACS Payment Gateway"]
-    AppSvc -->|"API"| Pension["Crestfield Pension (API)"]
-    AppSvc -->|"API"| HMRC["HMRC (API)"]
-    EntraID["Entra ID (SSO + MFA)"] --> AppSvc
-    KeyVault["Azure Key Vault"] --> AppSvc`} />
+    Browser[Browser via Citrix] --> AppSvc[App Service - PayrollPro .NET 6]
+    AppSvc --> SQL[Azure SQL Database]
+    AppSvc --> Blob[Blob Storage - payslips]
+    AppSvc -- SFTP --> BACS[BACS Payment Gateway]
+    AppSvc -- API --> Pension[Crestfield Pension]
+    AppSvc -- API --> HMRC[HMRC]
+    EntraID[Entra ID - SSO + MFA] --> AppSvc
+    KeyVault[Azure Key Vault] --> AppSvc`} />
 
 #### 3.1.2 Component Decomposition
 
@@ -333,14 +333,14 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 #### 3.2.1 Data Flow Diagrams
 
 <Mermaid chart={`graph LR
-    Entry["Employee Data Entry"] --> PP["PayrollPro"]
-    PP --> Calc["Payroll Calculation"]
-    Calc -->|"Payment file"| BACS["BACS"]
-    Calc -->|"Pension submission"| Pension["Crestfield API"]
-    Calc -->|"RTI submission"| HMRC["HMRC API"]
-    Calc -->|"Payslip PDFs"| Blob["Blob Storage"]
-    Calc -->|"Finance journal"| ADF["ADF"]
-    ADF --> SAP["SAP"]`} />
+    Entry[Employee Data Entry] --> PP[PayrollPro]
+    PP --> Calc[Payroll Calculation]
+    Calc -- Payment file --> BACS[BACS]
+    Calc -- Pension --> Pension[Crestfield API]
+    Calc -- RTI --> HMRC[HMRC API]
+    Calc -- Payslip PDFs --> Blob[Blob Storage]
+    Calc -- Finance journal --> ADF[ADF]
+    ADF --> SAP[SAP]`} />
 
 #### 3.2.2 Internal Component Connectivity
 
@@ -376,22 +376,22 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 #### 3.3.1 Deployment Architecture Diagram
 
 <Mermaid chart={`graph TD
-    subgraph UKSouth["Azure UK South"]
-        subgraph Hub["Hub VNet"]
-            VPN["VPN Gateway"]
+    subgraph UKSouth[Azure UK South]
+        subgraph Hub[Hub VNet]
+            VPN[VPN Gateway]
         end
-        subgraph Spoke["Spoke VNet"]
-            AppSvc["App Service (VNet Integration)"]
-            SQL["Azure SQL (Private Endpoint)"]
-            Blob["Blob Storage (Private Endpoint)"]
-            KV["Key Vault (Private Endpoint)"]
+        subgraph Spoke[Spoke VNet]
+            AppSvc[App Service]
+            SQL[Azure SQL]
+            Blob[Blob Storage]
+            KV[Key Vault]
         end
     end
-    VPN -->|"to on-prem"| OnPrem["On-Premises"]
-    subgraph UKWest["Azure UK West"]
-        SQLReplica["Azure SQL Geo-Replica (read-only)"]
+    VPN -- to on-prem --> OnPrem[On-Premises]
+    subgraph UKWest[Azure UK West]
+        SQLReplica[Azure SQL Geo-Replica]
     end
-    SQL -->|"geo-replication"| SQLReplica`} />
+    SQL -- geo-replication --> SQLReplica`} />
 
 #### 3.3.2 Hosting & Infrastructure
 

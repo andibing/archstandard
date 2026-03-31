@@ -215,11 +215,11 @@ The Employee Directory is a convenience tool. If the service is unavailable, emp
 #### 3.1.1 Application Architecture Diagram
 
 <Mermaid chart={`graph LR
-    SPA["React SPA (Frontend)"] -->|"HTTPS/JSON"| API["Node.js API (Express)"]
-    API -->|"TDS/TLS"| DB["Azure SQL DB (employees)"]
-    SPA -->|"OIDC auth"| EntraID["Entra ID (SSO)"]
-    API -->|"Reads CSV"| Blob["Azure Blob Storage (CSV staging)"]
-    HR["PeopleSync (HR System)"] -->|"Nightly SFTP"| Blob`} />
+    SPA[React SPA] -- HTTPS/JSON --> API[Node.js API]
+    API -- TDS/TLS --> DB[Azure SQL DB]
+    SPA -- OIDC --> EntraID[Entra ID SSO]
+    API -- Reads CSV --> Blob[Azure Blob Storage]
+    HR[PeopleSync HR System] -- Nightly SFTP --> Blob`} />
 
 #### 3.1.2 Component Decomposition
 
@@ -304,12 +304,12 @@ The Employee Directory is a convenience tool. If the service is unavailable, emp
 #### 3.3.1 Deployment Architecture Diagram
 
 <Mermaid chart={`graph TD
-    subgraph Azure["Meridian Azure Tenant - UK South"]
-        AppSvc["Azure App Service (B1 Basic) - React SPA + Node.js API"]
-        SQL["Azure SQL Database (Basic, 5 DTU)"]
-        Blob["Azure Blob Storage (csv-staging)"]
-        Func["Azure Functions (Consumption) - CSV Import Job"]
-        AppIns["Application Insights + Log Analytics"]
+    subgraph Azure[Meridian Azure Tenant - UK South]
+        AppSvc[App Service - React SPA + Node.js API]
+        SQL[Azure SQL Database]
+        Blob[Azure Blob Storage]
+        Func[Azure Functions - CSV Import]
+        AppIns[Application Insights]
         AppSvc --> SQL
         Func --> Blob
         Func --> SQL
