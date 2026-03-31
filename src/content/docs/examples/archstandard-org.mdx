@@ -128,7 +128,7 @@ Service failure has negligible business impact. The standard content exists in t
 
 The solution is a static site with no runtime application logic. All processing occurs at build time.
 
-```mermaid
+<pre class="mermaid">
 graph TD
     subgraph Build["Build Time"]
         MDX["MDX Content\n(EN/FR/DE)"] --> SSG["Astro + Starlight\nStatic Site Generator"]
@@ -138,7 +138,7 @@ graph TD
     end
     Output --> CF["Cloudflare Pages\n(Global CDN)"]
     CF --> Users["End Users\n(Web Browsers)"]
-```
+</pre>
 
 **Components:**
 

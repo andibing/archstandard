@@ -212,14 +212,14 @@ The Employee Directory is a convenience tool. If the service is unavailable, emp
 
 #### 3.1.1 Application Architecture Diagram
 
-```mermaid
+<pre class="mermaid">
 graph LR
     SPA["React SPA\n(Frontend)"] -->|"HTTPS/JSON"| API["Node.js API\n(Express)"]
     API -->|"TDS/TLS"| DB["Azure SQL DB\n(employees)"]
     SPA -->|"OIDC auth"| EntraID["Entra ID\n(SSO)"]
     API -->|"Reads CSV"| Blob["Azure Blob\nStorage\n(CSV staging)"]
     HR["PeopleSync\n(HR System)"] -->|"Nightly SFTP"| Blob
-```
+</pre>
 
 #### 3.1.2 Component Decomposition
 
@@ -303,7 +303,7 @@ graph LR
 
 #### 3.3.1 Deployment Architecture Diagram
 
-```mermaid
+<pre class="mermaid">
 graph TD
     subgraph Azure["Meridian Azure Tenant — UK South"]
         AppSvc["Azure App Service\n(B1 Basic)\nReact SPA + Node.js API"]
@@ -316,7 +316,7 @@ graph TD
         Func --> SQL
         AppSvc --> AppIns
     end
-```
+</pre>
 
 #### 3.3.2 Hosting & Infrastructure
 
