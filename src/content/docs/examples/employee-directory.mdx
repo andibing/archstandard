@@ -212,31 +212,13 @@ The Employee Directory is a convenience tool. If the service is unavailable, emp
 
 #### 3.1.1 Application Architecture Diagram
 
-```
-+------------------+       HTTPS/JSON       +------------------+       TDS/TLS        +------------------+
-|                  | ---------------------> |                  | ------------------> |                  |
-|   React SPA      |                        |   Node.js API    |                     |   Azure SQL DB   |
-|   (Frontend)     | <--------------------- |   (Express)      | <------------------ |   (employees)    |
-|                  |       JSON responses   |                  |       Query results |                  |
-+------------------+                        +------------------+                     +------------------+
-        |                                          |
-        | OIDC auth flow                           | Reads CSV from
-        v                                          v
-+------------------+                        +------------------+
-|                  |                        |                  |
-|   Entra ID       |                        |   Azure Blob     |
-|   (SSO)          |                        |   Storage         |
-|                  |                        |   (CSV staging)  |
-+------------------+                        +------------------+
-                                                   ^
-                                                   | Nightly SFTP upload
-                                                   |
-                                            +------------------+
-                                            |                  |
-                                            |   PeopleSync     |
-                                            |   (HR System)    |
-                                            |                  |
-                                            +------------------+
+```mermaid
+graph LR
+    SPA["React SPA\n(Frontend)"] -->|"HTTPS/JSON"| API["Node.js API\n(Express)"]
+    API -->|"TDS/TLS"| DB["Azure SQL DB\n(employees)"]
+    SPA -->|"OIDC auth"| EntraID["Entra ID\n(SSO)"]
+    API -->|"Reads CSV"| Blob["Azure Blob\nStorage\n(CSV staging)"]
+    HR["PeopleSync\n(HR System)"] -->|"Nightly SFTP"| Blob
 ```
 
 #### 3.1.2 Component Decomposition
@@ -321,45 +303,19 @@ The Employee Directory is a convenience tool. If the service is unavailable, emp
 
 #### 3.3.1 Deployment Architecture Diagram
 
-```
-                        Meridian Azure Tenant
-                        UK South Region
-                   +------------------------------+
-                   |   Resource Group:             |
-                   |   rg-employeedir-prod-uksouth |
-                   |                              |
-                   |  +------------------------+  |
-                   |  | Azure App Service       |  |
-                   |  | (Plan: B1 Basic)        |  |
-                   |  | - React SPA (static)    |  |
-                   |  | - Node.js API           |  |
-                   |  +------------------------+  |
-                   |            |                  |
-                   |            v                  |
-                   |  +------------------------+  |
-                   |  | Azure SQL Database      |  |
-                   |  | (Basic, 5 DTU)          |  |
-                   |  | Server: sql-empdir-prod |  |
-                   |  +------------------------+  |
-                   |                              |
-                   |  +------------------------+  |
-                   |  | Azure Blob Storage      |  |
-                   |  | (stempdirsync)          |  |
-                   |  | Container: csv-staging  |  |
-                   |  +------------------------+  |
-                   |                              |
-                   |  +------------------------+  |
-                   |  | Azure Functions         |  |
-                   |  | (Consumption plan)      |  |
-                   |  | - CSV Import Job        |  |
-                   |  +------------------------+  |
-                   |                              |
-                   |  +------------------------+  |
-                   |  | Application Insights    |  |
-                   |  | (Log Analytics          |  |
-                   |  |  workspace)             |  |
-                   |  +------------------------+  |
-                   +------------------------------+
+```mermaid
+graph TD
+    subgraph Azure["Meridian Azure Tenant — UK South"]
+        AppSvc["Azure App Service\n(B1 Basic)\nReact SPA + Node.js API"]
+        SQL["Azure SQL Database\n(Basic, 5 DTU)"]
+        Blob["Azure Blob Storage\n(csv-staging)"]
+        Func["Azure Functions\n(Consumption)\nCSV Import Job"]
+        AppIns["Application Insights\n+ Log Analytics"]
+        AppSvc --> SQL
+        Func --> Blob
+        Func --> SQL
+        AppSvc --> AppIns
+    end
 ```
 
 #### 3.3.2 Hosting & Infrastructure

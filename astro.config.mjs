@@ -1,13 +1,22 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
 export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Architecture Description Standard',
 			description: 'ADS: The Architecture Description Standard — defining the structure and content of Solution Architecture Documents.',
 			customCss: ['./src/styles/custom.css'],
+			head: [
+				{
+					tag: 'script',
+					attrs: { type: 'module' },
+					content: `
+						import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+						mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+					`,
+				},
+			],
 			defaultLocale: 'root',
 			locales: {
 				root: {

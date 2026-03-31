@@ -128,34 +128,16 @@ Service failure has negligible business impact. The standard content exists in t
 
 The solution is a static site with no runtime application logic. All processing occurs at build time.
 
-```
-┌──────────────────────────────────────────────────┐
-│                  Build Time                       │
-│                                                   │
-│  ┌─────────────┐    ┌──────────────────────────┐ │
-│  │ MDX Content  │───▶│  Astro + Starlight       │ │
-│  │ (EN/FR/DE)   │    │  Static Site Generator   │ │
-│  └─────────────┘    └───────────┬──────────────┘ │
-│  ┌─────────────┐                │                 │
-│  │ JSON Schema  │───▶           │                 │
-│  └─────────────┘                ▼                 │
-│  ┌─────────────┐    ┌──────────────────────────┐ │
-│  │ Template Gen │    │  Static HTML / CSS / JS   │ │
-│  │ (Node.js)    │───▶│  + downloadable files     │ │
-│  └─────────────┘    └──────────────────────────┘ │
-└──────────────────────────────────────────────────┘
-                          │
-                          ▼
-              ┌──────────────────────┐
-              │   Cloudflare Pages   │
-              │   (Global CDN)       │
-              └──────────────────────┘
-                          │
-                          ▼
-              ┌──────────────────────┐
-              │   End Users          │
-              │   (Web Browsers)     │
-              └──────────────────────┘
+```mermaid
+graph TD
+    subgraph Build["Build Time"]
+        MDX["MDX Content\n(EN/FR/DE)"] --> SSG["Astro + Starlight\nStatic Site Generator"]
+        Schema["JSON Schema"] --> SSG
+        TemplateGen["Template Generator\n(Node.js)"] --> SSG
+        SSG --> Output["Static HTML / CSS / JS\n+ downloadable files"]
+    end
+    Output --> CF["Cloudflare Pages\n(Global CDN)"]
+    CF --> Users["End Users\n(Web Browsers)"]
 ```
 
 **Components:**
