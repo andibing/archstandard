@@ -57,7 +57,7 @@ The fictional company "Meridian Financial Services" is migrating its legacy HR/P
 | Fred Bloggs | Lead Solution Architect | Author |
 | Joe Bloggs | Infrastructure Architect | Reviewer |
 | Jane Doe | Security Architect | Reviewer |
-| Charlie Brown | DBA Lead | Reviewer |
+| Claire Doe | DBA Lead | Reviewer |
 | Betty Bloggs | HR Director (Business Sponsor) | Approver |
 | ARB | Architecture Review Board | Approver |
 
@@ -199,7 +199,7 @@ PayrollPro was originally developed in 2014 as an ASP.NET Web Forms application 
 |-------|-------|
 | **Project Name** | PayrollPro Cloud Migration |
 | **Project Code / ID** | PRJ-2026-017 |
-| **Project Manager** | Polly Smith |
+| **Project Manager** | Polly Doe |
 | **Estimated Solution Cost (Capex)** | £185,000 (development, migration, testing, training) |
 | **Estimated Solution Cost (Opex)** | £4,200/month Azure consumption (production + DR) |
 | **Target Go-Live Date** | November 2026 |
@@ -227,27 +227,27 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 | Stakeholder | Role / Group | Key Concerns | Relevant Views |
 |-------------|-------------|--------------|----------------|
 | Betty Bloggs | HR Director (Business Sponsor) | Payroll continuity, zero missed payments, minimal user disruption during cutover | Executive Summary, Scenarios, Reliability |
-| Mary Smith | Payroll Team Lead | System performance at month-end, training on any UI changes, data accuracy after migration | Scenarios, Performance, Lifecycle |
+| Mary Bloggs | Payroll Team Lead | System performance at month-end, training on any UI changes, data accuracy after migration | Scenarios, Performance, Lifecycle |
 | Fred Bloggs | Lead Solution Architect | Design integrity, standards compliance, migration risk | All views |
 | Joe Bloggs | Infrastructure Architect | Azure infrastructure, networking, VPN, environments | Physical View, Reliability |
 | Jane Doe | Security Architect | Data protection (PII/SPI), access controls, encryption, SIEM integration | Security View, Data View |
-| Charlie Brown | DBA Lead | Database migration, Azure SQL compatibility, stored procedure rework, data integrity | Data View, Logical View, Lifecycle |
-| Polly Smith | Project Manager | Timeline, budget, resource availability, dependencies | Lifecycle, Decision Making |
-| Bill Bloggs | Change Manager | End-user communications, training plan, go/no-go criteria | Lifecycle, Scenarios |
+| Claire Doe | DBA Lead | Database migration, Azure SQL compatibility, stored procedure rework, data integrity | Data View, Logical View, Lifecycle |
+| Polly Doe | Project Manager | Timeline, budget, resource availability, dependencies | Lifecycle, Decision Making |
+| Sarah Bloggs | Change Manager | End-user communications, training plan, go/no-go criteria | Lifecycle, Scenarios |
 | IT Operations | Infrastructure & Support | Ongoing monitoring, incident management, on-call support | Operational Excellence, Reliability |
 
 ### 2.2 Concerns Matrix
 
 | Concern | Stakeholder(s) | Addressed In |
 |---------|---------------|-------------|
-| Payroll runs must complete without interruption | Betty Bloggs, Mary Smith | 3.6 Scenarios (UC-01), 4.2 Reliability |
+| Payroll runs must complete without interruption | Betty Bloggs, Mary Bloggs | 3.6 Scenarios (UC-01), 4.2 Reliability |
 | Payroll data (PII/SPI) must be protected during and after migration | Jane Doe, Betty Bloggs | 3.4 Data View, 3.5 Security View |
-| Migration must not cause data loss or corruption | Charlie Brown, Mary Smith | 5.2 Transition Plan, 3.4 Data View |
+| Migration must not cause data loss or corruption | Claire Doe, Mary Bloggs | 5.2 Transition Plan, 3.4 Data View |
 | System must be recoverable within 4 hours | IT Operations, Betty Bloggs | 4.2 Reliability (RTO/RPO) |
-| Azure costs must not exceed approved budget | Polly Smith | 4.4 Cost Optimisation |
+| Azure costs must not exceed approved budget | Polly Doe | 4.4 Cost Optimisation |
 | Team must be trained on Azure operations | IT Operations, Joe Bloggs | 5.6 Resourcing & Skills |
-| Cutover must be reversible (rollback plan) | Polly Smith, Fred Bloggs | 5.2 Transition Plan |
-| Month-end batch performance must improve | Mary Smith | 4.3 Performance |
+| Cutover must be reversible (rollback plan) | Polly Doe, Fred Bloggs | 5.2 Transition Plan |
+| Month-end batch performance must improve | Mary Bloggs | 4.3 Performance |
 
 ### 2.3 Compliance & Regulatory Context
 
@@ -695,7 +695,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 
 | Attribute | Detail |
 |-----------|--------|
-| **Actor(s)** | Payroll Operator (Mary Smith or team member) |
+| **Actor(s)** | Payroll Operator (Mary Bloggs or team member) |
 | **Trigger** | Scheduled monthly payroll processing date (typically day 22 of each month) |
 | **Pre-conditions** | All employee data changes for the month have been entered and approved; tax code updates from HMRC have been imported |
 | **Main Flow** | 1. Payroll Operator logs in via Citrix, authenticated by Entra ID (MFA). 2. Operator initiates payroll run via PayrollPro UI. 3. Payroll Batch Processor (Azure WebJob) executes on App Service, reading employee and configuration data from Azure SQL. 4. Batch calculates gross pay, tax deductions (PAYE), NI contributions, pension deductions, student loan repayments for all 2,400 employees. 5. Payslip PDFs are generated and stored in Azure Blob Storage. 6. BACS Standard 18 payment file is generated. 7. Operator reviews summary report and approves. 8. BACS file is submitted via SFTP. 9. HMRC FPS is submitted via Government Gateway API. 10. Pension contributions are submitted to Crestfield via REST API. |
@@ -1063,7 +1063,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | Infrastructure as Code (Bicep) | Low | Bicep training for infrastructure team; 2-day course scheduled Feb 2026 |
 | CI/CD pipeline management (Azure DevOps) | High | No action — team already proficient |
 | Application technology stack (.NET 6) | Medium | .NET 6 migration training for 3 developers; completed by Mar 2026 |
-| Database administration (Azure SQL) | Medium | Azure SQL DBA training for Charlie Brown + 1 DBA; DP-300 certification targeted by May 2026 |
+| Database administration (Azure SQL) | Medium | Azure SQL DBA training for Claire Doe + 1 DBA; DP-300 certification targeted by May 2026 |
 | Security & compliance | High | No action — Jane Doe (Security Architect) is Azure security certified |
 
 #### Operational Readiness
@@ -1112,8 +1112,8 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 |----|-----------|----------------|-----------|--------|-------|----------|
 | A-001 | Entra ID Connect will be deployed and syncing on-premises AD by June 2026 | PayrollPro authentication cannot work without Entra ID; migration would be blocked | High | Open | Joe Bloggs | IAM project plan (IAM-PRJ-0042) confirmed for Q2 2026 delivery |
 | A-002 | Citrix XenApp can connect to Azure App Service via site-to-site VPN with acceptable latency (< 50ms round trip) | Users would experience unacceptable performance; alternative access method needed | High | Closed | Joe Bloggs | VPN latency tested at 18ms round trip (test report TR-2026-003) |
-| A-003 | Existing .NET Framework 4.8 code can be upgraded to .NET 6 within 8 weeks | Timeline overrun; potential delay to cutover window | Medium | Closed | Charlie Brown | .NET Upgrade Assistant analysis completed; 14 breaking changes identified, all resolvable (DEV-2026-017) |
-| A-004 | Azure SQL Database supports all T-SQL features used by PayrollPro stored procedures | Stored procedures would need rework, potentially delaying migration | Medium | Closed | Charlie Brown | Compatibility assessment completed; 3 procedures require rework (linked user queries, cross-database joins); estimated 2 weeks effort |
+| A-003 | Existing .NET Framework 4.8 code can be upgraded to .NET 6 within 8 weeks | Timeline overrun; potential delay to cutover window | Medium | Closed | Claire Doe | .NET Upgrade Assistant analysis completed; 14 breaking changes identified, all resolvable (DEV-2026-017) |
+| A-004 | Azure SQL Database supports all T-SQL features used by PayrollPro stored procedures | Stored procedures would need rework, potentially delaying migration | Medium | Closed | Claire Doe | Compatibility assessment completed; 3 procedures require rework (linked user queries, cross-database joins); estimated 2 weeks effort |
 | A-005 | BACS, HMRC, and Crestfield integrations will function from Azure without changes to their end | Integration reconfiguration needed; potential re-certification with providers | High | Open | Fred Bloggs | HMRC and Crestfield confirmed no IP allowlisting required. BACS gateway requires new SSH key registration (in progress). |
 
 ### 6.3 Risks
@@ -1123,9 +1123,9 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | ID | Risk Event | Category | Severity | Likelihood | Owner |
 |----|-----------|----------|----------|-----------|-------|
 | R-001 | .NET 6 upgrade introduces regression bugs affecting payroll calculations | Technical | High | Medium | Fred Bloggs |
-| R-002 | Data migration via DMS causes data loss or corruption | Technical | High | Low | Charlie Brown |
-| R-003 | Azure SQL performance for payroll batch is worse than on-premises SQL Server | Technical | Medium | Low | Charlie Brown |
-| R-004 | DBA resource availability — Charlie Brown is single point of expertise for PayrollPro database | Delivery | High | Medium | Polly Smith |
+| R-002 | Data migration via DMS causes data loss or corruption | Technical | High | Low | Claire Doe |
+| R-003 | Azure SQL performance for payroll batch is worse than on-premises SQL Server | Technical | Medium | Low | Claire Doe |
+| R-004 | DBA resource availability — Claire Doe is single point of expertise for PayrollPro database | Delivery | High | Medium | Polly Doe |
 | R-005 | VPN connectivity instability between Azure and on-premises during Citrix access | Technical | Medium | Low | Joe Bloggs |
 | R-006 | Entra ID Connect deployment delayed beyond June 2026 | Delivery | High | Low | Joe Bloggs |
 
@@ -1147,14 +1147,14 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | D-001 | Entra ID Connect deployment (IAM-PRJ-0042) must be complete before PayrollPro cutover | Inbound | Committed | Joe Bloggs | IAM project plan confirms Q2 2026 delivery | 2026-03-01 |
 | D-002 | Azure Landing Zone hub VNet and VPN Gateway must be provisioned | Inbound | Resolved | Joe Bloggs | Landing zone deployed Feb 2026 (INFRA-CR-2026-008) | 2026-02-28 |
 | D-003 | BACS gateway must register new SSH public key for Azure-originated connections | Inbound | Committed | Fred Bloggs | BACS support ticket raised; confirmation pending | 2026-03-10 |
-| D-004 | SAP Finance team must update CSV import job to read from Azure Blob Storage (via ADF) | Outbound | Not Committed | Polly Smith | Meeting scheduled with SAP team for April 2026 | 2026-03-15 |
+| D-004 | SAP Finance team must update CSV import job to read from Azure Blob Storage (via ADF) | Outbound | Not Committed | Polly Doe | Meeting scheduled with SAP team for April 2026 | 2026-03-15 |
 
 ### 6.5 Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
-| I-001 | DBA resource conflict — Charlie Brown is also committed to the SAP upgrade project (PRJ-2026-012) for April-May 2026 | Delivery | Medium | Polly Smith | Escalated to IT Director; agreed David will prioritise PayrollPro migration; SAP project to use contractor DBA for overlap period | In Progress | 2026-03-20 |
-| I-002 | Three stored procedures use cross-database queries not supported by Azure SQL | Technical | Low | Charlie Brown | Procedures rewritten to use single-database approach; two completed, one in progress | In Progress | 2026-03-25 |
+| I-001 | DBA resource conflict — Claire Doe is also committed to the SAP upgrade project (PRJ-2026-012) for April-May 2026 | Delivery | Medium | Polly Doe | Escalated to IT Director; agreed David will prioritise PayrollPro migration; SAP project to use contractor DBA for overlap period | In Progress | 2026-03-20 |
+| I-002 | Three stored procedures use cross-database queries not supported by Azure SQL | Technical | Low | Claire Doe | Procedures rewritten to use single-database approach; two completed, one in progress | In Progress | 2026-03-25 |
 
 ### 6.6 Guardrail Exceptions
 
@@ -1238,7 +1238,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 |------|------|------|-------------------------------|
 | Lead Solution Architect | Fred Bloggs | 2026-03-28 | Pending |
 | Security Architect | Jane Doe | Pending | — |
-| DBA Lead | Charlie Brown | Pending | — |
+| DBA Lead | Claire Doe | Pending | — |
 | ARB / Design Authority | Architecture Review Board | Pending | — |
 | Business Sponsor | Betty Bloggs | Pending | — |
 
@@ -1258,7 +1258,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | 4.1 Operational Excellence | 3 | Joe Bloggs | 2026-03-28 | Centralised logging, monitoring, and alerting in place. Scored 3 not 4: operational runbooks not yet fully documented (in progress). |
 | 4.2 Reliability | 4 | Fred Bloggs | 2026-03-28 | DR strategy documented with RTO/RPO targets, backup configured with immutability, auto-scaling defined, fault tolerance designed with failure modes. |
 | 4.3 Performance | 3 | Fred Bloggs | 2026-03-28 | Targets defined, growth projected. Scored 3 not 4: performance testing not yet executed (planned for May-Jun 2026). |
-| 4.4 Cost Optimisation | 3 | Polly Smith | 2026-03-28 | Cost analysis performed using Azure Pricing Calculator, TCO comparison documented. Scored 3 not 4: FinOps practices (tagging, rightsizing reviews) not yet formalised. |
+| 4.4 Cost Optimisation | 3 | Polly Doe | 2026-03-28 | Cost analysis performed using Azure Pricing Calculator, TCO comparison documented. Scored 3 not 4: FinOps practices (tagging, rightsizing reviews) not yet formalised. |
 | 4.5 Sustainability | 3 | Fred Bloggs | 2026-03-28 | Non-production auto-shutdown enabled, resources right-sized, demand patterns documented. |
 | 5. Lifecycle | 4 | Fred Bloggs | 2026-03-28 | CI/CD documented, migration plan detailed with 6 R's classification, phased timeline, rollback plan, skills assessment with training plan. Strong migration section. |
 | 6. Decision Making | 3 | Fred Bloggs | 2026-03-28 | Constraints, assumptions, risks, and dependencies documented with ownership. ADRs captured. Scored 3 not 4: some assumptions still open; compliance traceability not yet complete. |
