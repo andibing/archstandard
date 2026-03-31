@@ -3,6 +3,8 @@ title: "Example: archstandard.org"
 description: "A completed SAD for the archstandard.org website — a meta-example demonstrating ADS at Minimum depth for a simple static site."
 ---
 
+import Mermaid from '../../../components/Mermaid.astro';
+
 <div class="example-sad">
 
 
@@ -128,7 +130,15 @@ Service failure has negligible business impact. The standard content exists in t
 
 The solution is a static site with no runtime application logic. All processing occurs at build time.
 
-<div class="mermaid">graph TD; subgraph Build["Build Time"]; MDX["MDX Content (EN/FR/DE)"] --> SSG["Astro + Starlight SSG"]; Schema["JSON Schema"] --> SSG; TemplateGen["Template Generator (Node.js)"] --> SSG; SSG --> Output["Static HTML/CSS/JS + downloads"]; end; Output --> CF["Cloudflare Pages (Global CDN)"]; CF --> Users["End Users (Web Browsers)"]</div>
+<Mermaid chart={`graph TD
+    subgraph Build["Build Time"]
+        MDX["MDX Content (EN/FR/DE)"] --> SSG["Astro + Starlight SSG"]
+        Schema["JSON Schema"] --> SSG
+        TemplateGen["Template Generator (Node.js)"] --> SSG
+        SSG --> Output["Static HTML/CSS/JS + downloads"]
+    end
+    Output --> CF["Cloudflare Pages (Global CDN)"]
+    CF --> Users["End Users (Web Browsers)"]`} />
 
 **Components:**
 
