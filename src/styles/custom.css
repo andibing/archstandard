@@ -156,18 +156,47 @@
 }
 
 /* Example SAD response highlighting */
-/* In example SADs, highlight the filled-in values (second column onwards) */
+/* In example SADs, highlight user-supplied content in purple */
 .example-sad td:not(:first-child) {
 	color: #5b21b6;
 }
 
+.example-sad p,
+.example-sad li {
+	color: #5b21b6;
+}
+
+/* Keep headings, table headers, and bold field labels in default colour */
+.example-sad h1,
+.example-sad h2,
+.example-sad h3,
+.example-sad h4,
+.example-sad h5,
+.example-sad h6,
+.example-sad th,
+.example-sad td:first-child,
+.example-sad strong {
+	color: inherit;
+}
+
+/* Guidance boxes stay in default colour */
+.example-sad .guidance-box,
+.example-sad .guidance-box p,
+.example-sad .guidance-box li {
+	color: inherit;
+}
+
 @media (prefers-color-scheme: dark) {
-	.example-sad td:not(:first-child) {
+	.example-sad td:not(:first-child),
+	.example-sad p,
+	.example-sad li {
 		color: #c4b5fd;
 	}
 }
 
-[data-theme='dark'] .example-sad td:not(:first-child) {
+[data-theme='dark'] .example-sad td:not(:first-child),
+[data-theme='dark'] .example-sad p,
+[data-theme='dark'] .example-sad li {
 	color: #c4b5fd;
 }
 
