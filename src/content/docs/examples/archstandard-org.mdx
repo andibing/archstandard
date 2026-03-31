@@ -172,24 +172,11 @@ There are no runtime integrations. The site serves only static files; no APIs ar
 
 #### 3.3.1 Deployment Architecture
 
-```
-┌──────────────┐     webhook     ┌───────────────────────────┐
-│   GitHub      │───────────────▶│   Cloudflare Pages        │
-│   Repository  │                │                           │
-└──────────────┘                 │  ┌─────────────────────┐  │
-                                 │  │  Build Environment   │  │
-                                 │  │  (npm run build)     │  │
-                                 │  └─────────┬───────────┘  │
-                                 │            ▼              │
-                                 │  ┌─────────────────────┐  │
-                                 │  │  Global CDN Edge    │  │
-                                 │  │  (300+ locations)    │  │
-                                 │  └─────────────────────┘  │
-                                 └───────────────────────────┘
-                                              │
-                                    archstandard.org
-                                         (HTTPS)
-```
+<Mermaid chart={`graph LR
+    GitHub[GitHub Repository] -- webhook --> CF[Cloudflare Pages]
+    CF --> Build[Build Environment - npm run build]
+    Build --> CDN[Global CDN Edge - 300+ locations]
+    CDN -- HTTPS --> Users[archstandard.org]`} />
 
 #### 3.3.2 Hosting and Infrastructure
 
