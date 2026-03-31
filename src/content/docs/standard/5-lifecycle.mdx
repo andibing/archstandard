@@ -162,17 +162,57 @@ Describe how the solution design enables ongoing maintenance:
 | Certificate management | *[renewal process]* |
 | Dependency management | *[how third-party dependencies are tracked and updated]* |
 
-## 5.9 End-of-Life & Decommissioning
+## 5.9 Decommissioning & Legacy Removal
 
-<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Where this solution replaces or modifies existing systems, document the plan for removing legacy infrastructure and retiring technical debt.
+
+### Solution Lifespan
 
 | Attribute | Detail |
 |-----------|--------|
 | Intended lifespan | *[expected or planned lifetime of the solution]* |
 | End-of-life triggers | *[what would trigger decommissioning]* |
 | Decommissioning blockers | *[dependencies or constraints on retirement]* |
-| Data disposal | *[how data will be securely erased]* |
-| Infrastructure disposal | *[how hardware/cloud resources will be decommissioned]* |
+
+### Legacy Infrastructure Removal
+
+| Legacy Component | Current State | Decommission Date | Owner | Dependencies | Status |
+|-----------------|--------------|-------------------|-------|-------------|--------|
+| *[system/server/service]* | *[running / standby / powered off]* | *[target date]* | *[person/team]* | *[what depends on it]* | Planned / In Progress / Complete |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Common items to decommission after migration or replacement:
+- **Servers and VMs** — physical or virtual machines no longer needed
+- **Licences** — software licences that can be released or cancelled
+- **Network rules** — firewall rules, DNS entries, load balancer configs for retired systems
+- **Data stores** — databases, file shares, or storage accounts (after data migration and retention period)
+- **Monitoring and alerting** — dashboards, alerts, and runbooks for retired systems
+- **Service accounts and credentials** — accounts and secrets for decommissioned integrations
+- **Documentation** — update or archive architecture documents for retired systems
+</div>
+
+### Technical Debt Register
+
+Document any technical debt introduced or inherited by this solution:
+
+| ID | Description | Category | Impact | Remediation Plan | Target Date | Owner |
+|----|-----------|----------|--------|-----------------|-------------|-------|
+| TD-001 | *[describe the debt]* | Design / Code / Infrastructure / Security / Operational | High / Medium / Low | *[plan to resolve]* | *[date]* | *[person]* |
+
+### Data and Infrastructure Disposal
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+| Attribute | Detail |
+|-----------|--------|
+| Data disposal method | *[how data will be securely erased — crypto-shredding, secure wipe, physical destruction]* |
+| Data retention obligations | *[any data that must be retained beyond decommissioning, and for how long]* |
+| Infrastructure disposal | *[how hardware/cloud resources will be decommissioned — resource deletion, subscription cancellation, hardware return]* |
+| Cost savings realised | *[expected cost reduction from decommissioning]* |
 
 ## 5.10 Exit Planning
 
