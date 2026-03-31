@@ -155,6 +155,22 @@
 	overflow-x: auto;
 }
 
+/* Example SAD response highlighting */
+/* In example SADs, highlight the filled-in values (second column onwards) */
+.example-sad td:not(:first-child) {
+	color: #5b21b6;
+}
+
+@media (prefers-color-scheme: dark) {
+	.example-sad td:not(:first-child) {
+		color: #c4b5fd;
+	}
+}
+
+[data-theme='dark'] .example-sad td:not(:first-child) {
+	color: #c4b5fd;
+}
+
 /* Version badge in header */
 .version-badge {
 	display: inline-flex;
