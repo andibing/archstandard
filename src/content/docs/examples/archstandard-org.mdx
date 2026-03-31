@@ -128,17 +128,7 @@ Service failure has negligible business impact. The standard content exists in t
 
 The solution is a static site with no runtime application logic. All processing occurs at build time.
 
-<pre class="mermaid">
-graph TD
-    subgraph Build["Build Time"]
-        MDX["MDX Content\n(EN/FR/DE)"] --> SSG["Astro + Starlight\nStatic Site Generator"]
-        Schema["JSON Schema"] --> SSG
-        TemplateGen["Template Generator\n(Node.js)"] --> SSG
-        SSG --> Output["Static HTML / CSS / JS\n+ downloadable files"]
-    end
-    Output --> CF["Cloudflare Pages\n(Global CDN)"]
-    CF --> Users["End Users\n(Web Browsers)"]
-</pre>
+<div class="mermaid">graph TD; subgraph Build["Build Time"]; MDX["MDX Content (EN/FR/DE)"] --> SSG["Astro + Starlight SSG"]; Schema["JSON Schema"] --> SSG; TemplateGen["Template Generator (Node.js)"] --> SSG; SSG --> Output["Static HTML/CSS/JS + downloads"]; end; Output --> CF["Cloudflare Pages (Global CDN)"]; CF --> Users["End Users (Web Browsers)"]</div>
 
 **Components:**
 

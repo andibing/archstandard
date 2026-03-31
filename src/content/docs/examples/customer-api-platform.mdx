@@ -263,7 +263,7 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 
 #### 3.1.1 Application Architecture Diagram
 
-*[A C4 Container-level diagram would be inserted here showing: API Gateway fronting four microservices (Account Service, Transaction Service, Auth Service, Notification Service), backed by RDS PostgreSQL, ElastiCache Redis, and EventBridge. External integrations shown to Core Banking (Oracle DB), Fraud Detection (Featurespace ARIC), and notification channels (SES, SNS). Partner applications connect via API Gateway with OAuth 2.0 + mTLS. Internal administrators connect via Okta SSO.]*
+<div class="mermaid">graph TD; Partners["Partner Apps (OAuth 2.0 + mTLS)"] --> APIGW["API Gateway"]; Admins["Internal Admins (Okta SSO)"] --> APIGW; APIGW --> AuthSvc["Auth Service"]; APIGW --> AcctSvc["Account Service"]; APIGW --> TxnSvc["Transaction Service"]; AcctSvc --> RDS["RDS PostgreSQL"]; TxnSvc --> RDS; AcctSvc --> Redis["ElastiCache Redis"]; TxnSvc --> Redis; AcctSvc --> EB["EventBridge"]; TxnSvc --> EB; EB --> NotifSvc["Notification Service"]; NotifSvc --> SES["Amazon SES"]; NotifSvc --> SNS["Amazon SNS"]; AcctSvc -->|"Direct Connect"| CoreBank["Core Banking (Oracle DB)"]; TxnSvc -->|"API"| Fraud["Fraud Detection (Featurespace ARIC)"]</div>
 
 #### 3.1.2 Component Decomposition
 
@@ -332,7 +332,7 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 
 #### 3.2.1 Data Flow Diagrams
 
-*[A data flow diagram would be inserted here showing: Partner App --> API Gateway (TLS 1.3 + mTLS) --> Auth Service (OAuth 2.0 token validation) --> Account/Transaction Service --> Core Banking Adapter --> Oracle DB Read Replica (via Direct Connect). Async flows: Account/Transaction Service --> EventBridge --> SQS --> Notification Service --> SES/Partner Webhooks. All flows also emit audit events to EventBridge --> SQS --> S3.]*
+<div class="mermaid">graph LR; Partner["Partner App"] -->|"TLS 1.3 + mTLS"| APIGW["API Gateway"]; APIGW --> Auth["Auth Service (OAuth 2.0)"]; Auth --> Svc["Account/Transaction Service"]; Svc --> Adapter["Core Banking Adapter"]; Adapter -->|"Direct Connect"| Oracle["Oracle DB Read Replica"]; Svc -->|"async"| EB["EventBridge"]; EB --> SQS["SQS"]; SQS --> Notif["Notification Service"]; Notif --> SES["SES / Partner Webhooks"]; EB -->|"audit"| AuditQ["SQS (audit)"]; AuditQ --> S3["S3 (audit logs)"]</div>
 
 #### 3.2.2 Internal Component Connectivity
 
@@ -390,7 +390,7 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 
 #### 3.3.1 Deployment Architecture Diagram
 
-*[A deployment diagram would be inserted here showing: AWS eu-west-2 (London) region with two Availability Zones. VPC containing: public subnets (NLB, NAT Gateways), private subnets (EKS node groups, RDS, ElastiCache), isolated subnets (Direct Connect Gateway to on-premises). API Gateway and CloudFront at the edge. AWS WAF and Shield Advanced in front. Route 53 for DNS. DR region eu-west-1 shown with pilot light configuration.]*
+<div class="mermaid">graph TD; R53["Route 53"] --> WAF["AWS WAF + Shield Advanced"]; WAF --> CF["CloudFront"]; CF --> APIGW["API Gateway"]; subgraph Primary["eu-west-2 (London) - 2 AZs"]; subgraph Public["Public Subnets"]; NLB["NLB"]; NAT["NAT Gateways"]; end; subgraph Private["Private Subnets"]; EKS["EKS Node Groups"]; RDS["RDS PostgreSQL (Multi-AZ)"]; ElastiCache["ElastiCache Redis"]; end; subgraph Isolated["Isolated Subnets"]; DX["Direct Connect Gateway"]; end; end; APIGW --> NLB --> EKS; EKS --> RDS; EKS --> ElastiCache; DX -->|"to on-premises"| OnPrem["Core Banking"]; subgraph DR["eu-west-1 (DR - Pilot Light)"]; RDSDR["RDS Replica"]; end; RDS -->|"cross-region replica"| RDSDR</div>
 
 #### 3.3.2 Hosting & Infrastructure
 

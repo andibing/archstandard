@@ -274,7 +274,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 
 #### 3.1.1 Application Architecture Diagram
 
-*[Diagram would show: Browser (via Citrix) -> Azure App Service (PayrollPro .NET 6 web app) -> Azure SQL Database; App Service -> Azure Blob Storage (payslips); App Service -> BACS (SFTP), Pension Provider (API), HMRC (API); Entra ID providing authentication; Azure Key Vault providing secrets]*
+<div class="mermaid">graph LR; Browser["Browser (via Citrix)"] --> AppSvc["Azure App Service (PayrollPro .NET 6)"]; AppSvc --> SQL["Azure SQL Database"]; AppSvc --> Blob["Azure Blob Storage (payslips)"]; AppSvc -->|"SFTP"| BACS["BACS Payment Gateway"]; AppSvc -->|"API"| Pension["Crestfield Pension (API)"]; AppSvc -->|"API"| HMRC["HMRC (API)"]; EntraID["Entra ID (SSO + MFA)"] --> AppSvc; KeyVault["Azure Key Vault"] --> AppSvc</div>
 
 #### 3.1.2 Component Decomposition
 
@@ -322,7 +322,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 
 #### 3.2.1 Data Flow Diagrams
 
-*[Diagram would show the monthly payroll data flow: Employee data entry -> PayrollPro -> Payroll calculation engine -> Payment file (BACS), Pension submission (Crestfield API), HMRC RTI submission (HMRC API), Payslip PDFs (Blob Storage), Finance journal (ADF -> SAP)]*
+<div class="mermaid">graph LR; Entry["Employee Data Entry"] --> PP["PayrollPro"]; PP --> Calc["Payroll Calculation"]; Calc -->|"Payment file"| BACS["BACS"]; Calc -->|"Pension submission"| Pension["Crestfield API"]; Calc -->|"RTI submission"| HMRC["HMRC API"]; Calc -->|"Payslip PDFs"| Blob["Blob Storage"]; Calc -->|"Finance journal"| ADF["ADF"] --> SAP["SAP"]</div>
 
 #### 3.2.2 Internal Component Connectivity
 
@@ -357,7 +357,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 
 #### 3.3.1 Deployment Architecture Diagram
 
-*[Diagram would show: Azure UK South region containing: Hub VNet (VPN Gateway connecting to on-prem), Spoke VNet (App Service with VNet Integration, Azure SQL with Private Endpoint, Blob Storage with Private Endpoint, Key Vault with Private Endpoint). Azure UK West region containing: Azure SQL geo-replica (read-only). Azure Monitor and Log Analytics workspace spanning both.]*
+<div class="mermaid">graph TD; subgraph UKSouth["Azure UK South"]; subgraph Hub["Hub VNet"]; VPN["VPN Gateway"] -->|"to on-prem"| OnPrem["On-Premises"]; end; subgraph Spoke["Spoke VNet"]; AppSvc["App Service (VNet Integration)"]; SQL["Azure SQL (Private Endpoint)"]; Blob["Blob Storage (Private Endpoint)"]; KV["Key Vault (Private Endpoint)"]; end; end; subgraph UKWest["Azure UK West"]; SQLReplica["Azure SQL Geo-Replica (read-only)"]; end; SQL -->|"geo-replication"| SQLReplica; Monitor["Azure Monitor + Log Analytics"] --> UKSouth; Monitor --> UKWest</div>
 
 #### 3.3.2 Hosting & Infrastructure
 
