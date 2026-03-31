@@ -72,7 +72,7 @@ export default defineConfig({
 						{ label: 'Views Overview', slug: 'standard/3-views-overview', translations: { fr: 'Aperçu des vues', de: 'Ansichtenübersicht' } },
 						{ label: '3.1 Logical View', slug: 'standard/3-1-logical-view', translations: { fr: '3.1 Vue logique', de: '3.1 Logische Sicht' } },
 						{ label: '3.2 Integration & Data Flow', slug: 'standard/3-2-process-view', translations: { fr: '3.2 Intégration et flux de données', de: '3.2 Integration und Datenfluss' } },
-						{ label: '3.3 Physical View (Infra)', slug: 'standard/3-3-physical-view', translations: { fr: '3.3 Vue physique (Infra)', de: '3.3 Physische Sicht (Infra)' } },
+						{ label: '3.3 Physical View', slug: 'standard/3-3-physical-view', translations: { fr: '3.3 Vue physique', de: '3.3 Physische Sicht' } },
 						{ label: '3.4 Data View', slug: 'standard/3-4-data-view', translations: { fr: '3.4 Vue des données', de: '3.4 Datensicht' } },
 						{ label: '3.5 Security View', slug: 'standard/3-5-security-view', translations: { fr: '3.5 Vue sécurité', de: '3.5 Sicherheitssicht' } },
 						{ label: '3.6 Scenarios', slug: 'standard/3-6-scenarios', translations: { fr: '3.6 Scénarios', de: '3.6 Szenarien' } },
