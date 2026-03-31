@@ -14,25 +14,25 @@ The standard follows the ISO 42010 conceptual model:
 | ISO 42010 Concept | ADS Mapping |
 |-------------------|---------------------|
 | System of Interest | The solution being documented |
-| Stakeholders | Section 2: Stakeholders & Concerns |
-| Concerns | Section 2: Concerns Matrix |
-| Architecture Viewpoint | Section 3: Six defined viewpoints |
-| Architecture View | The content within each Section 3.x |
+| Stakeholders | Stakeholders & Concerns |
+| Concerns | Concerns Matrix |
+| Architecture Viewpoint | Defined viewpoints |
+| Architecture View | The content within each view |
 | Model Kind | Diagrams, tables, and descriptions within views |
 | Correspondences | Cross-references between views and quality attribute refs |
 | Architecture Description | The complete Solution Architecture Document |
 
 ## 4+1 View Model Alignment
 
-| 4+1 Original View | ADS Section | Key Content |
+| 4+1 Original View | ADS View | Key Content |
 |-------------------|---------------------|-------------|
-| Logical View | 3.1 Logical View | Component architecture, service mapping |
-| Process View | 3.2 Integration & Data Flow View *(adapted)* | Data flows, integrations, interfaces |
-| Development View | 5. Lifecycle Management | CI/CD, SDLC, tooling |
-| Physical View | 3.3 Physical View | Deployment, infrastructure, networking |
-| +1 Scenarios | 3.6 Scenarios | Use cases, ADRs |
-| *(Extended)* | 3.4 Data View | Data architecture (from RM-ODP Information viewpoint) |
-| *(Extended)* | 3.5 Security View | Security architecture (cross-cutting in 4+1, elevated to full view) |
+| Logical View | Logical View | Component architecture, service mapping |
+| Process View | Integration & Data Flow View *(adapted)* | Data flows, integrations, interfaces |
+| Development View | Lifecycle Management | CI/CD, SDLC, tooling |
+| Physical View | Physical View | Deployment, infrastructure, networking |
+| +1 Scenarios | Scenarios | Use cases, ADRs |
+| *(Extended)* | Data View | Data architecture (from RM-ODP Information viewpoint) |
+| *(Extended)* | Security View | Security architecture (cross-cutting in 4+1, elevated to full view) |
 
 :::note
 The standard extends the classic 4+1 model with dedicated **Data** and **Security** views. In the original 4+1 model, these are cross-cutting concerns spread across all views. Modern solution architecture demands they be treated as first-class views due to regulatory, compliance, and data governance requirements. The Process View has been adapted to focus on integration and data flows rather than concurrency.
@@ -43,39 +43,39 @@ The standard extends the classic 4+1 model with dedicated **Data** and **Securit
 | Quality Attribute | AWS | Azure | GCP | Oracle | IBM |
 |------------------|-----|-------|-----|--------|-----|
 | Operational Excellence | Operational Excellence | Operational Excellence | Operational Excellence | Operational Efficiency | Operational Excellence |
-| Security | Security *(Section 3.5)* | Security *(Section 3.5)* | Security, Privacy & Compliance *(Section 3.5)* | Security & Compliance *(Section 3.5)* | Security *(Section 3.5)* |
+| Security | Security *(as a View)* | Security *(as a View)* | Security, Privacy & Compliance *(as a View)* | Security & Compliance *(as a View)* | Security *(as a View)* |
 | Reliability | Reliability | Reliability | Reliability | Reliability & Resilience | Reliability |
 | Performance | Performance Efficiency | Performance Efficiency | Performance Optimization | *(combined with Cost)* | Performance |
 | Cost | Cost Optimization | Cost Optimization | Cost Optimization | Performance & Cost Optimization | Cost Optimization |
 | Sustainability | Sustainability | *(not separate)* | Sustainability | *(not separate)* | *(not separate)* |
 | *(provider-specific)* | — | — | — | Distributed Cloud | Hybrid & Portable |
 
-## TOGAF Architecture Domains
+## TOGAF Architecture Domain Alignment
 
-| TOGAF Domain | ADS Section(s) |
+| TOGAF Domain | ADS Section |
 |-------------|------------------------|
-| Business Architecture | 1. Executive Summary, 2. Stakeholders |
-| Data Architecture | 3.4 Data View |
-| Application Architecture | 3.1 Logical View, 3.2 Integration & Data Flow View |
-| Technology Architecture | 3.3 Physical View |
+| Business Architecture | Executive Summary, Stakeholders |
+| Data Architecture | Data View |
+| Application Architecture | Logical View, Integration & Data Flow View |
+| Technology Architecture | Physical View |
 
 ## Section-to-Framework Traceability Matrix
 
 | ADS Section | ISO 42010 | 4+1 | Cloud WAFs | TOGAF |
 |-----------------|-----------|-----|-----------|-------|
-| 0. Document Control | AD metadata | — | — | — |
-| 1. Executive Summary | — | — | — | Business |
-| 2. Stakeholders | Stakeholders, Concerns | — | — | Business |
-| 3.1 Logical View | Viewpoint, View | Logical | — | Application |
-| 3.2 Integration & Data Flow | Viewpoint, View | Process *(adapted)* | — | Application |
-| 3.3 Physical View (Infra) | Viewpoint, View | Physical | — | Technology |
-| 3.4 Data View | Viewpoint, View | *(extended)* | — | Data |
-| 3.5 Security View | Viewpoint, View | *(extended)* | Security | — |
-| 3.6 Scenarios | Correspondences | +1 Scenarios | — | — |
-| 4.1 Operational Excellence | — | — | Ops Excellence | — |
-| 4.2 Reliability & Resilience | — | — | Reliability | — |
-| 4.3 Performance Efficiency | — | — | Performance | — |
-| 4.4 Cost Optimisation | — | — | Cost Optimization | — |
-| 4.5 Sustainability | — | — | Sustainability *(AWS, GCP)* | — |
-| 5. Lifecycle Management | — | Development | Ops Excellence | — |
-| 6. Decision Making & Governance | Correspondences | — | — | — |
+| Document Control | AD metadata | — | — | — |
+| Executive Summary | — | — | — | Business |
+| Stakeholders | Stakeholders, Concerns | — | — | Business |
+| Logical View | Viewpoint, View | Logical | — | Application |
+| Integration & Data Flow | Viewpoint, View | Process *(adapted)* | — | Application |
+| Physical View | Viewpoint, View | Physical | — | Technology |
+| Data View | Viewpoint, View | *(extended)* | — | Data |
+| Security View | Viewpoint, View | *(extended)* | Security | — |
+| Scenarios | Correspondences | +1 Scenarios | — | — |
+| Operational Excellence | — | — | Ops Excellence | — |
+| Reliability & Resilience | — | — | Reliability | — |
+| Performance Efficiency | — | — | Performance | — |
+| Cost Optimisation | — | — | Cost Optimization | — |
+| Sustainability | — | — | Sustainability *(AWS, GCP)* | — |
+| Lifecycle Management | — | Development | Ops Excellence | — |
+| Decision Making & Governance | Correspondences | — | — | — |
