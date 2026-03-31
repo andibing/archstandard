@@ -10,7 +10,8 @@
     "astro": "astro",
     "generate:templates": "node scripts/generate-templates.cjs",
     "generate:diagrams": "bash scripts/generate-diagrams.sh",
-    "generate": "npm run generate:templates"
+    "generate": "npm run generate:templates",
+    "release:version": "bash scripts/release-version.sh"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.38.2",

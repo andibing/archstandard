@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 export default defineConfig({
+	site: 'https://archstandard.org',
 	integrations: [
 		starlight({
 			title: 'Architecture Description Standard',
