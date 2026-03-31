@@ -9,13 +9,13 @@ description: Anwendungsarchitektur, Komponentenzerlegung, Dienstzuordnung und En
 
 ## Zweck
 
-Die Logische Ansicht beschreibt die funktionale Struktur der Losung — die Anwendungskomponenten, wie sie zueinander in Beziehung stehen und wie sie auf Geschaftsdienste und -fahigkeiten abgebildet werden. Sie adressiert die Anliegen von Solution Architects und Entwicklern.
+Die Logische Ansicht beschreibt die funktionale Struktur der Lösung — die Anwendungskomponenten, wie sie zueinander in Beziehung stehen und wie sie auf Geschäftsdienste und -fähigkeiten abgebildet werden. Sie adressiert die Anliegen von Solution Architects und Entwicklern.
 
 ## 3.1.1 Anwendungsarchitektur-Diagramm
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
-Stellen Sie ein Blockdiagramm bereit, das die in der Losung verwendeten Softwarekomponenten (Anwendungen, Middleware, Datenbanken, APIs usw.) zeigt, wie sie interagieren und wie sie mit externen Plattformen integriert sind.
+Stellen Sie ein Blockdiagramm bereit, das die in der Lösung verwendeten Softwarekomponenten (Anwendungen, Middleware, Datenbanken, APIs usw.) zeigt, wie sie interagieren und wie sie mit externen Plattformen integriert sind.
 
 *[Anwendungsarchitektur-Diagramm einfugen]*
 
@@ -26,27 +26,27 @@ Das Diagramm sollte zeigen:
 - Alle wesentlichen Anwendungskomponenten und ihre Rollen
 - Interaktionen und Datenflusse zwischen Komponenten
 - Integrationspunkte mit externen Systemen
-- Klare Grenzen zwischen der Losung und ihrer Umgebung
-- Erwagen Sie die Verwendung des C4 Model (Context, Container, Component) fur schrittweise Detaillierung
+- Klare Grenzen zwischen der Lösung und ihrer Umgebung
+- Erwagen Sie die Verwendung des C4 Model (Context, Container, Component) für schrittweise Detaillierung
 </div>
 
 ## 3.1.2 Komponentenzerlegung
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Beschreiben Sie jede wesentliche Komponente der Losung:
+Beschreiben Sie jede wesentliche Komponente der Lösung:
 
 | Komponente | Typ | Beschreibung | Technologie | Verantwortlich |
 |-----------|-----|-------------|------------|---------------|
 | *[Name]* | Application / Service / API / Database / Queue / etc. | *[was sie tut]* | *[Technologie-Stack]* | *[Team]* |
 
-## 3.1.3 Dienst- & Fahigkeitszuordnung
+## 3.1.3 Dienst- & Fähigkeitszuordnung
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Ordnen Sie die Losung den Geschaftsdiensten und -fahigkeiten zu, die sie unterstutzt:
+Ordnen Sie die Lösung den Geschäftsdiensten und -fähigkeiten zu, die sie unterstutzt:
 
-| Dienst-ID | Dienstname | Fahigkeits-ID | Fahigkeitsname |
+| Dienst-ID | Dienstname | Fähigkeits-ID | Fähigkeitsname |
 |-----------|------------|---------------|----------------|
 | *[...]* | *[...]* | *[...]* | *[...]* |
 
@@ -54,7 +54,7 @@ Ordnen Sie die Losung den Geschaftsdiensten und -fahigkeiten zu, die sie unterst
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Identifizieren Sie andere Anwendungen, die von dieser Losung betroffen sind:
+Identifizieren Sie andere Anwendungen, die von dieser Lösung betroffen sind:
 
 | Anwendungsname | Anwendungs-ID | Auswirkungsart | Anderungsdetails | Kommentare |
 |---------------|---------------|----------------|-----------------|-----------|
@@ -64,9 +64,9 @@ Identifizieren Sie andere Anwendungen, die von dieser Losung betroffen sind:
 
 <span class="maturity-indicator maturity-comprehensive">Umfassend</span>
 
-Dokumentieren Sie die in dieser Losung angewandten Architektur- und Entwurfsmuster:
+Dokumentieren Sie die in dieser Lösung angewandten Architektur- und Entwurfsmuster:
 
-| Muster | Wo angewandt | Begrundung |
+| Muster | Wo angewandt | Begründung |
 |--------|-------------|-----------|
 | *[z.B. Microservices, Event-Driven, CQRS, Strangler Fig]* | *[welche Komponenten]* | *[warum dieses Muster gewahlt wurde]* |
 
@@ -74,7 +74,7 @@ Dokumentieren Sie die in dieser Losung angewandten Architektur- und Entwurfsmust
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Bewerten Sie den Grad der Anbieter- oder Technologieabhangigkeit fur wesentliche Komponenten:
+Bewerten Sie den Grad der Anbieter- oder Technologieabhängigkeit für wesentliche Komponenten:
 
 | Komponente / Dienst | Anbieter / Technologie | Lock-in-Stufe | Minderung | Portabilitatshinweise |
 |---------------------|------------------------|---------------|-----------|----------------------|
@@ -83,14 +83,14 @@ Bewerten Sie den Grad der Anbieter- oder Technologieabhangigkeit fur wesentliche
 <div class="guidance-box">
 <h4>Leitfaden</h4>
 
-Berucksichtigen Sie Lock-in uber mehrere Dimensionen:
-- **Proprietare APIs** — Verwendet die Losung anbieterspezifische APIs ohne offenes Aquivalent?
+Berucksichtigen Sie Lock-in über mehrere Dimensionen:
+- **Proprietare APIs** — Verwendet die Lösung anbieterspezifische APIs ohne offenes Aquivalent?
 - **Datenformate** — Konnen Daten in standardisierten, offenen Formaten exportiert werden?
 - **Vertraglich** — Gibt es Mindestlaufzeiten oder Austrittsstrafen?
-- **Betrieblich** — Hat das Team die Fahigkeiten, auf einer alternativen Plattform zu betreiben?
+- **Betrieblich** — Hat das Team die Fähigkeiten, auf einer alternativen Plattform zu betreiben?
 - **Migrationsaufwand** — Wie viel Neuentwicklung ware erforderlich, um zu einer Alternative zu wechseln?
 
-Diese Bewertung sollte in die Ausstiegsplanung (5.10) und das Qualitatsattribut Kostenoptimierung (4.4) einfliessen.
+Diese Bewertung sollte in die Ausstiegsplanung (5.10) und das Qualitätsattribut Kostenoptimierung (4.4) einfliessen.
 </div>
 
 <div class="guidance-box">
@@ -98,16 +98,16 @@ Diese Bewertung sollte in die Ausstiegsplanung (5.10) und das Qualitatsattribut 
 
 | Bewertung | Was dies bedeutet |
 |:---------:|-------------------|
-| **1** | Uberblicksdiagramm vorhanden, aber Komponenten nicht zerlegt |
+| **1** | Überblicksdiagramm vorhanden, aber Komponenten nicht zerlegt |
 | **3** | Komponenten mit Technologieentscheidungen dokumentiert, Entwurfsmuster begrundet |
-| **5** | Alles oben Genannte plus Vendor-Lock-in bewertet, Komponenteninteraktionen vollstandig spezifiziert, alle Status (neu/bestehend/ausser Betrieb genommen) dokumentiert |
+| **5** | Alles oben Genannte plus Vendor-Lock-in bewertet, Komponenteninteraktionen vollständig spezifiziert, alle Status (neu/bestehend/ausser Betrieb genommen) dokumentiert |
 </div>
 
 <div class="quality-attribute-ref">
 
-**Qualitatsattribut-Querverweise:**
+**Qualitätsattribut-Querverweise:**
 - **4.3 Leistungseffizienz** — Komponentendesign beeinflusst Leistungseigenschaften
-- **4.2 Zuverlassigkeit** — Komponentenzerlegung beeinflusst Fehlerisolation und Resilienz
+- **4.2 Zuverlässigkeit** — Komponentenzerlegung beeinflusst Fehlerisolation und Resilienz
 - **4.4 Kostenoptimierung** — Vendor-Lock-in beeinflusst langfristige Kostenflexibilitat
 - **4.5 Nachhaltigkeit** — Komponentenarchitektur beeinflusst Ressourcenauslastung
 

@@ -1,0 +1,183 @@
+---
+title: "6. Entscheidungsfindung und Governance"
+description: Einschränkungen, Annahmen, Risiken, Abhängigkeiten, Probleme, Architekturentscheidungen und Compliance-Rückverfolgbarkeit.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Zweck
+
+Dieser Abschnitt erfasst den Entscheidungskontext für die Architektur: die Einschränkungen und Annahmen, die sie geprägt haben, die Risiken und Abhängigkeiten, die verwaltet werden müssen, die getroffenen Schlüsselentscheidungen (und warum), etwaige Ausnahmen von organisatorischen Standards sowie die Compliance-Nachweise, die belegen, dass das Design überprüft und genehmigt wurde.
+
+## 6.1 Einschränkungen
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Einschränkungen sind feste Begrenzungen, innerhalb derer das Design funktionieren muss. Sie sind nicht verhandelbar und definieren die Lösungsgrenzen.
+
+| ID | Einschränkung | Kategorie | Auswirkung auf das Design | Zuletzt bewertet |
+|----|--------------|-----------|--------------------------|-----------------|
+| C-001 | *[Einschränkung beschreiben]* | Regulatory / Technical / Commercial / Organisational / Time | *[wie dies das Design einschränkt]* | *[Datum]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Häufige Einschränkungen umfassen:
+- **Regulatory** — Datenresidenz, Branchenkonformität (PCI-DSS, GDPR, FCA)
+- **Technical** — Nutzung vorhandener Plattform erforderlich, bestimmte Technologie vorgeschrieben, Legacy-Integration
+- **Commercial** — Budgetobergrenze, bestehende Lizenzvereinbarungen, Lieferantenverträge
+- **Organisational** — Teamkompetenzen, organisatorische Standards, Governance-Prozesse
+- **Time** — Feste Liefertermine, regulatorische Compliance-Fristen
+</div>
+
+## 6.2 Annahmen
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Annahmen sind Faktoren, die als wahr angenommen, aber noch nicht verifiziert wurden. Jede Annahme sollte validiert und bis zum Abschluss nachverfolgt werden. Eine Annahme, die sich als falsch erweist, kann zu einem Risiko oder Problem werden.
+
+| ID | Annahme | Auswirkung bei Unrichtigkeit | Sicherheit | Status | Verantwortlicher | Nachweis |
+|----|---------|------------------------------|------------|--------|-----------------|---------|
+| A-001 | *[Annahme beschreiben]* | *[Auswirkung auf das Design bei Unrichtigkeit]* | High / Medium / Low | Open / Closed | *[Person]* | *[Referenz]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Erfassen Sie Annahmen zu:
+- **Technical** — API-Verfügbarkeit, Systemkapazität, Technologiekompatibilität
+- **Organisational** — Ressourcenverfügbarkeit, Teamkompetenzen, Prozessbereitschaft
+- **Third-party** — Lieferantenzeitpläne, SLA-Zusagen, Dienstverfügbarkeit
+- **Data** — Datenqualität, Volumina, Formate, Migrationsdurchführbarkeit
+- **Timeline** — Abhängige Liefertermine, Genehmigungszeitpläne
+
+Offene Annahmen sollten aktiv nachverfolgt werden. Der Verantwortliche ist für die Validierung der Annahme und die Bereitstellung von Abschlussnachweisen zuständig.
+</div>
+
+## 6.3 Risiken
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Risiken sind potenzielle Ereignisse, die sich negativ auf das Design oder dessen Umsetzung auswirken könnten. Jedes Risiko sollte eine Mitigationsstrategie und klare Verantwortlichkeit haben.
+
+**Risikoidentifikation:**
+
+| ID | Risikoereignis | Kategorie | Schweregrad | Wahrscheinlichkeit | Verantwortlicher |
+|----|---------------|-----------|-------------|--------------------|-----------------|
+| R-001 | *[Risiko beschreiben]* | Technical / Security / Operational / Delivery / Commercial / Compliance | High / Medium / Low | High / Medium / Low | *[Person]* |
+
+**Risikobehandlung:**
+
+| ID | Mitigationsstrategie | Mitigationsplan | Restrisiko | Zuletzt bewertet |
+|----|---------------------|-----------------|-----------|-----------------|
+| R-001 | Accept / Mitigate / Transfer / Avoid | *[Details des Mitigationsplans]* | High / Medium / Low | *[Datum]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Berücksichtigen Sie Risiken in Bezug auf:
+- **Technical** — Technologieentscheidungen, Komplexität, Integration, Leistung
+- **Security** — Schwachstellen, Zugriffskontrolllücken, Datenexposition
+- **Operational** — Betreibbarkeit, Überwachungslücken, Kompetenzenverfügbarkeit
+- **Delivery** — Zeitplan, Abhängigkeiten, Ressourcenverfügbarkeit
+- **Commercial** — Lieferantenrisiko, Lizenzierung, Kostenüberschreitungen
+- **Compliance** — Regulatorische Lücken, Nichtkonformität mit Standards
+
+Mitigationsstrategien sollten eine der folgenden sein: **Accept** (Genehmigung durch den Geschäftsverantwortlichen), **Mitigate** (Wahrscheinlichkeit oder Auswirkung reduzieren), **Transfer** (Versicherung, vertraglich), oder **Avoid** (Design ändern).
+</div>
+
+## 6.4 Abhängigkeiten
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Abhängigkeiten sind externe Faktoren, auf die das Design angewiesen ist oder die auf dieses Design angewiesen sind. Verfolgen Sie sowohl eingehende (dieses Design hängt ab von) als auch ausgehende (andere Designs hängen hiervon ab) Abhängigkeiten.
+
+| ID | Abhängigkeit | Richtung | Status | Verantwortlicher | Nachweis | Zuletzt bewertet |
+|----|-------------|----------|--------|-----------------|---------|-----------------|
+| D-001 | *[Abhängigkeit beschreiben]* | Inbound / Outbound | Committed / Not Committed / Resolved | *[Person]* | *[Referenz]* | *[Datum]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Häufige Abhängigkeiten umfassen:
+- **Infrastructure** — Netzwerkkonnektivität, Plattformverfügbarkeit, gemeinsame Dienste
+- **Application** — APIs, Datenfeeds, vor-/nachgelagerte Systeme
+- **Team** — Lieferergebnisse anderer Projekte, gemeinsame Ressourcen, Spezialkenntnisse
+- **Vendor** — Bereitschaft von Drittanbieterdiensten, Vertragsabschluss
+- **Governance** — Genehmigungsstufen, Compliance-Freigabe, Change Advisory Board
+</div>
+
+## 6.5 Probleme
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Probleme sind Schwierigkeiten, die bereits eingetreten sind und einer Lösung bedürfen. Im Gegensatz zu Risiken (die potenziell sind) sind Probleme aktuell und aktiv.
+
+| ID | Problem | Kategorie | Auswirkung | Verantwortlicher | Lösungsplan | Status | Zuletzt bewertet |
+|----|---------|-----------|------------|-----------------|-------------|--------|-----------------|
+| I-001 | *[Problem beschreiben]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[Person]* | *[Lösungsplan]* | Open / In Progress / Resolved | *[Datum]* |
+
+## 6.6 Leitplanken-Ausnahmen
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Dokumentieren Sie alle Ausnahmen von organisatorischen Richtlinien, Standards oder Leitplanken:
+
+### Richtlinien-Ausnahmen
+
+| Frage | Antwort |
+|-------|---------|
+| Erzeugt dieses Design eine Ausnahme zu bestehenden Richtlinien und Standards? | Yes / No |
+| Falls ja, wurden die Ausnahmen im Ausnahmeprozess protokolliert und akzeptiert? | Yes / No / N/A |
+
+### Prozess-Ausnahmen
+
+| Frage | Antwort |
+|-------|---------|
+| Erzeugt dieses Design ein Problem gegenüber der Prozessbibliothek? | Yes / No |
+| Falls ja, wurde dies vom Prozessverantwortlichen bestätigt? | Yes / No / N/A |
+
+### Auswirkung auf das Risikoprofil
+
+| Frage | Antwort |
+|-------|---------|
+| Verändert das Design das Technologie-Risikoprofil der Organisation wesentlich? | Yes / No |
+| Falls ja, wurde dies mit den Risk- und Controls-Teams bewertet? | Yes / No / N/A |
+
+## 6.7 Architekturentscheidungsprotokoll
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Stellen Sie einen zusammenfassenden Index aller Architecture Decision Records bereit. Vollständige ADR-Details finden sich in [Abschnitt 3.6.2](/de/standard/3-6-scenarios/#362-architecture-decision-records-adrs).
+
+| ADR # | Titel | Status | Datum | Auswirkung |
+|-------|-------|--------|-------|------------|
+| ADR-001 | *[Titel]* | Accepted / Proposed / Superseded | *[Datum]* | *[Kurzzusammenfassung der Auswirkung]* |
+
+## 6.8 Compliance-Rückverfolgbarkeit
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Ordnen Sie Designelemente den Standards und Prinzipien zu, die sie erfüllen:
+
+| Standard / Prinzip | Anforderung | Wie das Design sie erfüllt | Nachweisabschnitt |
+|--------------------|-------------|---------------------------|-------------------|
+| *[Standard-ID]* | *[Anforderungstext]* | *[Designansatz]* | *[Abschnittsverweis]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Diese Tabelle bietet Rückverfolgbarkeit zwischen externen Standards/Prinzipien und dem SAD-Inhalt, der die Konformität nachweist. Sie ermöglicht es Prüfern und Auditoren zu verifizieren, dass alle anwendbaren Anforderungen im Design adressiert sind.
+
+Organisationen können diesen Abschnitt nutzen, um ihre internen Designprinzipien, Branchenstandards (z. B. PCI-DSS, ISO 27001) oder regulatorische Anforderungen abzubilden.
+</div>
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Wie das aussieht |
+|:---------:|-----------------|
+| **1** | Einige Risiken aufgelistet, aber keine Mitigationspläne oder Verantwortlichkeiten |
+| **3** | Einschränkungen, Annahmen, Risiken und Abhängigkeiten mit Verantwortlichkeiten dokumentiert; wichtige ADRs erfasst; Leitplanken-Ausnahmen protokolliert |
+| **5** | Alles oben Genannte plus alle Einträge mit Nachweisen und Daten versehen, Compliance-Rückverfolgbarkeit vollständig, Probleme bis zur Lösung nachverfolgt |
+</div>

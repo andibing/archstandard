@@ -11,24 +11,24 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## Zweck
 
-Die Physische Ansicht beschreibt **die gesamte Infrastruktur**, die die Losung hostet und unterstutzt — ob physische Hardware, virtuelle Maschinen, Container, Serverless-Funktionen oder Cloud-verwaltete Dienste. Sie adressiert die Anliegen von Infrastruktur-Ingenieuren, DevOps-Teams, Plattform-Ingenieuren und Cloud-Architekten.
+Die Physische Ansicht beschreibt **die gesamte Infrastruktur**, die die Lösung hostet und unterstutzt — ob physische Hardware, virtuelle Maschinen, Container, Serverless-Funktionen oder Cloud-verwaltete Dienste. Sie adressiert die Anliegen von Infrastruktur-Ingenieuren, DevOps-Teams, Plattform-Ingenieuren und Cloud-Architekten.
 
 <Aside type="note" title="Warum 'Physische Ansicht'?">
-Der Name "Physische Ansicht" wird zur Ausrichtung am 4+1 Architectural View Model von Kruchten beibehalten, wo er ursprunglich die Abbildung von Software auf Hardware beschrieb. In der modernen Praxis umfasst diese Ansicht **die gesamte Bereitstellungsinfrastruktur** unabhangig von der Abstraktionsebene — von Bare-Metal-Servern bis hin zu vollstandig verwalteten Cloud-Diensten. Sie entspricht der **Technology Architecture** Domane in TOGAF und der **Deployment View** in einigen anderen Frameworks.
+Der Name "Physische Ansicht" wird zur Ausrichtung am 4+1 Architectural View Model von Kruchten beibehalten, wo er ursprunglich die Abbildung von Software auf Hardware beschrieb. In der modernen Praxis umfasst diese Ansicht **die gesamte Bereitstellungsinfrastruktur** unabhängig von der Abstraktionsebene — von Bare-Metal-Servern bis hin zu vollständig verwalteten Cloud-Diensten. Sie entspricht der **Technology Architecture** Domane in TOGAF und der **Deployment View** in einigen anderen Frameworks.
 </Aside>
 
 ## 3.3.1 Bereitstellungsarchitektur-Diagramm
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
-Stellen Sie ein Diagramm bereit, das die Infrastruktur zeigt, die die Losung antreibt.
+Stellen Sie ein Diagramm bereit, das die Infrastruktur zeigt, die die Lösung antreibt.
 
 *[Bereitstellungsarchitektur-Diagramm einfugen]*
 
 <div class="guidance-box">
 <h4>Leitfaden</h4>
 
-Zeigen Sie: physische/virtuelle Server, Container, Cloud-Dienste, Speicher, Netzwerke, Firewalls, Load Balancer, Internet-Gateways, SaaS-Plattformen und alle anderen Infrastrukturkomponenten. Schliessen Sie Cloud-Regionen, Verfugbarkeitszonen und VPCs ein, wo zutreffend.
+Zeigen Sie: physische/virtuelle Server, Container, Cloud-Dienste, Speicher, Netzwerke, Firewalls, Load Balancer, Internet-Gateways, SaaS-Plattformen und alle anderen Infrastrukturkomponenten. Schliessen Sie Cloud-Regionen, Verfügbarkeitszonen und VPCs ein, wo zutreffend.
 </div>
 
 ## 3.3.2 Hosting & Infrastruktur
@@ -59,7 +59,7 @@ Zeigen Sie: physische/virtuelle Server, Container, Cloud-Dienste, Speicher, Netz
 
 | Attribut | Detail |
 |----------|--------|
-| **Container-Plattform** | EKS / AKS / GKE / Docker / Kubernetes / Sonstige |
+| **Container-Plattform** | EKS / AKS / GKE / Docker / Kübernetes / Sonstige |
 | **Basis-Image(s)** | *[z.B. Alpine, Node, NGINX]* |
 | **Clustergrosse** | *[Anzahl der Knoten]* |
 
@@ -97,11 +97,11 @@ Dokumentieren Sie auf Compute-Ressourcen bereitgestellte Sicherheitsagenten:
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
-### Konnektivitatsubersicht
+### Konnektivitatsübersicht
 
 | Frage | Antwort |
 |-------|---------|
-| Ist dies eine internetfahige Anwendung? | Ja / Nein — *[Details]* |
+| Ist dies eine internetfähige Anwendung? | Ja / Nein — *[Details]* |
 | Ist ausgehende Internetkonnektivitat erforderlich? | Ja / Nein — *[Details]* |
 | Ist Cloud-zu-On-Premises-Konnektivitat erforderlich? | Ja / Nein — *[Details]* |
 | Ist drahtlose Vernetzung erforderlich? | Ja / Nein — *[Details]* |
@@ -164,7 +164,7 @@ Dokumentieren Sie auf Compute-Ressourcen bereitgestellte Sicherheitsagenten:
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-| Umgebung | Beschreibung | Anzahl & Standort | Compute-Losung |
+| Umgebung | Beschreibung | Anzahl & Standort | Compute-Lösung |
 |----------|-------------|-------------------|----------------|
 | Entwicklung | Nur Softwareentwicklung | *[...]* | *[...]* |
 | Test / QA | Komponenten- und Integrationstests | *[...]* | *[...]* |
@@ -174,7 +174,7 @@ Dokumentieren Sie auf Compute-Ressourcen bereitgestellte Sicherheitsagenten:
 
 ### Konnektivitat zwischen Umgebungen
 
-Benotigt die Losung Konnektivitat zwischen Umgebungsstufen (z.B. Produktion zu Nicht-Produktion)?
+Benotigt die Lösung Konnektivitat zwischen Umgebungsstufen (z.B. Produktion zu Nicht-Produktion)?
 
 - [ ] Ja — *[beschreiben Sie welche Komponenten und Datenflusse]*
 - [ ] Nein
@@ -201,14 +201,14 @@ Dokumentieren Sie IoT-Gerate (Drucker, Scanner, Kameras, Sensoren usw.):
 | Bewertung | Was dies bedeutet |
 |:---------:|-------------------|
 | **1** | Hosting-Standort identifiziert, aber Infrastruktur nicht spezifiziert |
-| **3** | Bereitstellungsdiagramm vollstandig, Compute dimensioniert, Netzwerk dokumentiert, Umgebungen aufgelistet |
+| **3** | Bereitstellungsdiagramm vollständig, Compute dimensioniert, Netzwerk dokumentiert, Umgebungen aufgelistet |
 | **5** | Alles oben Genannte plus Konnektivitatsprotokolle spezifiziert, Benutzer-/Administratorzugriffsmethoden dokumentiert, Sicherheitsagenten aufgelistet, Bandbreiten- und Latenzanforderungen quantifiziert |
 </div>
 
 <div class="quality-attribute-ref">
 
-**Qualitatsattribut-Querverweise:**
-- **4.2 Zuverlassigkeit** — Infrastrukturdesign bestimmt direkt Verfugbarkeit und Wiederherstellungsfahigkeit
+**Qualitätsattribut-Querverweise:**
+- **4.2 Zuverlässigkeit** — Infrastrukturdesign bestimmt direkt Verfügbarkeit und Wiederherstellungsfähigkeit
 - **4.3 Leistung** — Compute-Dimensionierung und Netzwerkdesign beeinflussen die Leistung
 - **4.4 Kosten** — Infrastrukturentscheidungen sind der primare Kostentreiber
 - **4.5 Nachhaltigkeit** — Hosting-Standort und Compute-Effizienz beeinflussen die Umweltauswirkung

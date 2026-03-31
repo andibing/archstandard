@@ -8,7 +8,7 @@ description: Hosting-Effizienz, Code-Effizienz und Daten-Effizienz.
 
 ## Zweck
 
-Nachhaltigkeit konzentriert sich auf die Minimierung der Umweltauswirkungen der Losung durch Optimierung der Nutzung von Compute-, Speicher- und Netzwerkressourcen. Dieses Qualitatsattribut wurde vom AWS Well-Architected Framework eingefuhrt und adressiert Energieverbrauch, CO2-Emissionen und Ressourceneffizienz.
+Nachhaltigkeit konzentriert sich auf die Minimierung der Umweltauswirkungen der Lösung durch Optimierung der Nutzung von Compute-, Speicher- und Netzwerkressourcen. Dieses Qualitätsattribut wurde vom AWS Well-Architected Framework eingefuhrt und adressiert Energieverbrauch, CO2-Emissionen und Ressourceneffizienz.
 
 ## 4.5.1 Hosting-Effizienz
 
@@ -21,20 +21,20 @@ Nachhaltigkeit konzentriert sich auf die Minimierung der Umweltauswirkungen der 
 | Wurde der Hosting-Standort gewahlt, um die Umweltauswirkung zu reduzieren? | Ja / Nein — *[beschreiben Sie Kriterien: CO2-Intensitat, erneuerbare Energie, Wasserverbrauch]* |
 | Welches Auslastungsmuster der Arbeitslast wird erwartet? | Variabel / Konstant — *[beschreiben Sie Spitzen und Muster]* |
 
-### On-Demand-Verfugbarkeit
+### On-Demand-Verfügbarkeit
 
 | Frage | Antwort |
 |-------|---------|
-| Muss die Anwendung ununterbrochen verfugbar sein? | Ja / Nein |
-| Kann die Losung ausserhalb der Spitzenzeiten heruntergefahren oder skaliert werden? | Ja / Nein — *[beschreiben Sie Zeitplan]* |
+| Muss die Anwendung ununterbrochen verfügbar sein? | Ja / Nein |
+| Kann die Lösung ausserhalb der Spitzenzeiten heruntergefahren oder skaliert werden? | Ja / Nein — *[beschreiben Sie Zeitplan]* |
 | Sind Nicht-Produktionsumgebungen konfiguriert, bei Nichtverwendung herunterzuskalieren oder abzuschalten? | Ja / Nein — *[Details]* |
 
 ### Ressourceneffizienz
 
 | Frage | Antwort |
 |-------|---------|
-| Sind Ressourcen angemessen dimensioniert, um Uberprovisionierung zu vermeiden? | *[beschreiben Sie Ansatz]* |
-| Wird die vCPU-Auslastung uberwacht? | *[Zielauslastung %]* |
+| Sind Ressourcen angemessen dimensioniert, um Überprovisionierung zu vermeiden? | *[beschreiben Sie Ansatz]* |
+| Wird die vCPU-Auslastung überwacht? | *[Zielauslastung %]* |
 | Werden die leistungsstarksten Hardware-Optionen pro Watt verwendet? | *[Details]* |
 
 ## 4.5.2 Code-Effizienz
@@ -44,7 +44,7 @@ Nachhaltigkeit konzentriert sich auf die Minimierung der Umweltauswirkungen der 
 | Frage | Antwort |
 |-------|---------|
 | Wie tragen die Sprach- und Framework-Entscheidungen zur Effizienz bei? | *[beschreiben]* |
-| Wurde der Code fur die Zielplattform und Arbeitslast optimiert? | *[beschreiben]* |
+| Wurde der Code für die Zielplattform und Arbeitslast optimiert? | *[beschreiben]* |
 | Werden effiziente Algorithmen und Datenstrukturen verwendet? | *[beschreiben]* |
 | Wird die Anzahl der vCPU-Stunden pro Job/Anfrage minimiert? | *[beschreiben]* |
 
@@ -65,10 +65,10 @@ Nachhaltigkeit konzentriert sich auf die Minimierung der Umweltauswirkungen der 
 <h4>Leitfaden</h4>
 
 Berucksichtigen Sie die Umweltauswirkung von:
-- **DR-Umgebungen** — Optimale Muster fur Standby-Compute (z.B. Pilot Light vs. Warm Standby)
+- **DR-Umgebungen** — Optimale Muster für Standby-Compute (z.B. Pilot Light vs. Warm Standby)
 - **Nicht-Produktionsumgebungen** — Automatische Abschaltplane, angemessen dimensionierte Umgebungen
 - **Datenlebenszyklus** — Gestufter Speicher, Datenverfall, Archivstrategien
-- **Netzwerkdesign** — Minimierung von regiosubergreifendem Datenverkehr, Edge Computing
+- **Netzwerkdesign** — Minimierung von regiosübergreifendem Datenverkehr, Edge Computing
 </div>
 
 <div class="guidance-box">
@@ -76,7 +76,7 @@ Berucksichtigen Sie die Umweltauswirkung von:
 
 | Bewertung | Was dies bedeutet |
 |:---------:|-------------------|
-| **1** | Nachhaltigkeit anerkannt, aber keine spezifischen Massnahmen ergriffen |
+| **1** | Nachhaltigkeit anerkannt, aber keine spezifischen Maßnahmen ergriffen |
 | **3** | Hosting-Standort unter CO2-Gesichtspunkten gewahlt, automatisches Abschalten von Nicht-Produktionsumgebungen aktiviert, Ressourcen angemessen dimensioniert |
-| **5** | Alles oben Genannte plus Arbeitslastmuster optimiert, kontinuierliche Verfugbarkeit begrundet wo erforderlich, CO2-Metriken als Ausgangsbasis erfasst |
+| **5** | Alles oben Genannte plus Arbeitslastmuster optimiert, kontinuierliche Verfügbarkeit begrundet wo erforderlich, CO2-Metriken als Ausgangsbasis erfasst |
 </div>

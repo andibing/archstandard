@@ -10,17 +10,17 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## Zweck
 
-Die Integrations- & Datenflussansicht beschreibt, wie Daten durch die Losung fliessen, wie Komponenten kommunizieren und wie die Losung mit internen und externen Systemen integriert ist. Sie adressiert die Anliegen von Integratoren, Betriebsteams und Architekten.
+Die Integrations- & Datenflussansicht beschreibt, wie Daten durch die Lösung fliessen, wie Komponenten kommunizieren und wie die Lösung mit internen und externen Systemen integriert ist. Sie adressiert die Anliegen von Integratoren, Betriebsteams und Architekten.
 
 <Aside type="note" title="Benennung">
-Diese Ansicht ist adaptiert von Kruchtens **Process View**, die sich ursprunglich auf Nebenlaufigkeit und Laufzeit-Prozesszerlegung konzentrierte. In der modernen Losungsarchitektur sind die primaren Anliegen auf dieser Ebene Datenflusse, Integrationsmuster und Schnittstellenvertrage. Der Name wurde aktualisiert, um diesen zeitgemassen Gebrauch widerzuspiegeln.
+Diese Ansicht ist adaptiert von Kruchtens **Process View**, die sich ursprunglich auf Nebenlaufigkeit und Laufzeit-Prozesszerlegung konzentrierte. In der modernen Lösungsarchitektur sind die primaren Anliegen auf dieser Ebene Datenflusse, Integrationsmuster und Schnittstellenvertrage. Der Name wurde aktualisiert, um diesen zeitgemäßen Gebrauch widerzuspiegeln.
 </Aside>
 
 ## 3.2.1 Datenflussdiagramme
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Veranschaulichen Sie, wie Daten von der Eingabe bis zur Ausgabe durch die Losung fliessen, und zeigen Sie Transformationen und Verarbeitungsschritte.
+Veranschaulichen Sie, wie Daten von der Eingabe bis zur Ausgabe durch die Lösung fliessen, und zeigen Sie Transformationen und Verarbeitungsschritte.
 
 *[Datenflussdiagramm(e) einfugen]*
 
@@ -39,7 +39,7 @@ Erwagen Sie die Darstellung von:
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
-Dokumentieren Sie die Konnektivitat zwischen internen Komponenten der Losung:
+Dokumentieren Sie die Konnektivitat zwischen internen Komponenten der Lösung:
 
 | Quellkomponente | Zielkomponente | Protokoll / Verschlusselung | Authentifizierungsmethode | Zweck |
 |----------------|----------------|----------------------------|--------------------------|-------|
@@ -48,7 +48,7 @@ Dokumentieren Sie die Konnektivitat zwischen internen Komponenten der Losung:
 <div class="guidance-box">
 <h4>Leitfaden</h4>
 
-Listen Sie alle Verbindungen zwischen den internen Komponenten der Losung auf. Dokumentieren Sie fur jede Verbindung:
+Listen Sie alle Verbindungen zwischen den internen Komponenten der Lösung auf. Dokumentieren Sie für jede Verbindung:
 - Verbindungsinitiator (Quelle) und Empfanger (Ziel)
 - Verwendetes Protokoll und Verschlusselungsstandard
 - Authentifizierungs- und Autorisierungsmethode
@@ -59,7 +59,7 @@ Listen Sie alle Verbindungen zwischen den internen Komponenten der Losung auf. D
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
-Dokumentieren Sie, wie die Losung mit externen Systemen, Drittanbieterdiensten und anderen internen Anwendungen interagiert:
+Dokumentieren Sie, wie die Lösung mit externen Systemen, Drittanbieterdiensten und anderen internen Anwendungen interagiert:
 
 | Quellanwendung | Zielanwendung | Protokoll / Verschlusselung | Authentifizierung | Sicherheits-Proxy | Zweck |
 |---------------|---------------|----------------------------|-------------------|-------------------|-------|
@@ -67,7 +67,7 @@ Dokumentieren Sie, wie die Losung mit externen Systemen, Drittanbieterdiensten u
 
 ### Endbenutzerzugriff
 
-Dokumentieren Sie, wie Endbenutzer auf die Losung zugreifen:
+Dokumentieren Sie, wie Endbenutzer auf die Lösung zugreifen:
 
 | Benutzertyp | Zugriffsmethode | Authentifizierung | Protokoll |
 |-------------|----------------|-------------------|-----------|
@@ -78,7 +78,7 @@ Dokumentieren Sie, wie Endbenutzer auf die Losung zugreifen:
 
 <span class="maturity-indicator maturity-comprehensive">Umfassend</span>
 
-Dokumentieren Sie die wesentlichen APIs und Schnittstellen, die von der Losung bereitgestellt oder konsumiert werden:
+Dokumentieren Sie die wesentlichen APIs und Schnittstellen, die von der Lösung bereitgestellt oder konsumiert werden:
 
 | API / Schnittstelle | Typ | Richtung | Format | Version | Dokumentation |
 |--------------------|-----|----------|--------|---------|--------------|
@@ -96,9 +96,9 @@ Dokumentieren Sie die wesentlichen APIs und Schnittstellen, die von der Losung b
 
 <div class="quality-attribute-ref">
 
-**Qualitatsattribut-Querverweise:**
-- **4.1 Betriebliche Exzellenz** — Integrationsfehler sind eine Hauptquelle fur Vorfalle
-- **4.2 Zuverlassigkeit** — Externe Abhangigkeiten beeinflussen die Zuverlassigkeitslage
+**Qualitätsattribut-Querverweise:**
+- **4.1 Betriebliche Exzellenz** — Integrationsfehler sind eine Hauptquelle für Vorfalle
+- **4.2 Zuverlässigkeit** — Externe Abhängigkeiten beeinflussen die Zuverlässigkeitslage
 - **4.3 Leistung** — Netzwerklatenz und Durchsatz in Integrationspfaden
 
 </div>

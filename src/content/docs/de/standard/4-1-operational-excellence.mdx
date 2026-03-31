@@ -1,6 +1,6 @@
 ---
 title: "4.1 Betriebliche Exzellenz"
-description: Beobachtbarkeit, Logging, Uberwachung, Alarmierung und Betriebsverfahren.
+description: Beobachtbarkeit, Logging, Überwachung, Alarmierung und Betriebsverfahren.
 ---
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
@@ -9,7 +9,7 @@ description: Beobachtbarkeit, Logging, Uberwachung, Alarmierung und Betriebsverf
 
 ## Zweck
 
-Betriebliche Exzellenz konzentriert sich darauf, wie die Losung uberwacht, betrieben und im Laufe der Zeit verbessert wird. Sie umfasst Beobachtbarkeit (Logging, Metriken, Tracing), Alarmierung, Kapazitatsmanagement und Betriebsverfahren.
+Betriebliche Exzellenz konzentriert sich darauf, wie die Lösung überwacht, betrieben und im Laufe der Zeit verbessert wird. Sie umfasst Beobachtbarkeit (Logging, Metriken, Tracing), Alarmierung, Kapazitatsmanagement und Betriebsverfahren.
 
 ## 4.1.1 Beobachtbarkeit — Logging
 
@@ -27,14 +27,14 @@ Betriebliche Exzellenz konzentriert sich darauf, wie die Losung uberwacht, betri
 <div class="guidance-box">
 <h4>Leitfaden</h4>
 
-Dokumentieren Sie fur jeden Log-Typ:
+Dokumentieren Sie für jeden Log-Typ:
 - Welche Ereignisse erfasst werden (Anwendungsfehler, Zugriffslogs, Audit-Ereignisse usw.)
 - Wo Logs lokal innerhalb der Anwendung gespeichert werden
 - Wie lange Logs vor Rotation oder Loschung aufbewahrt werden
 - Ob Logs an zentralisierte Logging- oder SIEM-Dienste weitergeleitet werden
 </div>
 
-## 4.1.2 Beobachtbarkeit — Uberwachung & Alarmierung
+## 4.1.2 Beobachtbarkeit — Überwachung & Alarmierung
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
@@ -46,12 +46,12 @@ Beschreiben Sie, wie betriebliche Alarme implementiert werden:
 |---------------|-----------------|-------------------------|-----------|
 | *[z.B. Anwendungsfehlerrate]* | *[Schwellenwert]* | *[E-Mail, PagerDuty, Slack]* | *[Team/Rolle]* |
 
-### Uberwachungswerkzeuge
+### Überwachungswerkzeuge
 
-| Fahigkeit | Werkzeug | Abdeckung |
+| Fähigkeit | Werkzeug | Abdeckung |
 |-----------|---------|-----------|
 | Application Performance Monitoring | *[z.B. Datadog, New Relic]* | *[welche Komponenten]* |
-| Infrastrukturuberwachung | *[z.B. CloudWatch, Prometheus]* | *[welche Ressourcen]* |
+| Infrastrukturüberwachung | *[z.B. CloudWatch, Prometheus]* | *[welche Ressourcen]* |
 | Log-Aggregation | *[z.B. ELK, Splunk, Datadog Logs]* | *[welche Log-Quellen]* |
 | Distributed Tracing | *[z.B. Jaeger, X-Ray, Datadog APM]* | *[welche Dienste]* |
 
@@ -61,7 +61,7 @@ Beschreiben Sie, wie betriebliche Alarme implementiert werden:
 
 | Frage | Antwort |
 |-------|---------|
-| Welche Metriken werden fur das Kapazitatsmonitoring erfasst? | *[CPU, Speicher, Storage, Netzwerk, Queue-Tiefe]* |
+| Welche Metriken werden für das Kapazitatsmonitoring erfasst? | *[CPU, Speicher, Storage, Netzwerk, Queue-Tiefe]* |
 | Wie werden Kapazitatstrends analysiert? | *[Werkzeuge, Dashboards, Berichte]* |
 | Sind Kapazitatsschwellenwerte und Alarme konfiguriert? | *[Schwellenwertdetails]* |
 | Gibt es einen Kapazitatsplanungsprozess? | *[Prozessbeschreibung]* |
@@ -84,7 +84,7 @@ Dokumentieren Sie wesentliche Betriebsverfahren und Runbooks:
 
 | Bewertung | Was dies bedeutet |
 |:---------:|-------------------|
-| **1** | Uberwachungswerkzeug identifiziert, aber nicht konfiguriert |
-| **3** | Zentralisiertes Logging, Uberwachung und Alarmierung vorhanden; Runbooks dokumentiert |
+| **1** | Überwachungswerkzeug identifiziert, aber nicht konfiguriert |
+| **3** | Zentralisiertes Logging, Überwachung und Alarmierung vorhanden; Runbooks dokumentiert |
 | **5** | Alles oben Genannte plus Distributed Tracing aktiviert, Dashboards definiert, Vorfallreaktionsverfahren getestet |
 </div>

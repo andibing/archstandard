@@ -9,7 +9,7 @@ description: Datenarchitektur, Speicherung, Klassifizierung, Lebenszyklus, Daten
 
 ## Zweck
 
-Die Datenansicht beschreibt, wie Daten gespeichert, klassifiziert, geschutzt und uber ihren gesamten Lebenszyklus verwaltet werden. Sie adressiert die Anliegen von Datenarchitekten, DBAs, Compliance-Beauftragten und Datenschutzteams.
+Die Datenansicht beschreibt, wie Daten gespeichert, klassifiziert, geschutzt und über ihren gesamten Lebenszyklus verwaltet werden. Sie adressiert die Anliegen von Datenarchitekten, DBAs, Compliance-Beauftragten und Datenschutzteams.
 
 ## 3.4.1 Datenarchitektur & Speicherung
 
@@ -17,7 +17,7 @@ Die Datenansicht beschreibt, wie Daten gespeichert, klassifiziert, geschutzt und
 
 ### Datenfussabdruck
 
-Dokumentieren Sie alle von der Losung genutzten Datenspeicher, einschliesslich Geschaftsdaten, Protokolle, Caches und temporare Speicher:
+Dokumentieren Sie alle von der Lösung genutzten Datenspeicher, einschliesslich Geschäftsdaten, Protokolle, Caches und temporare Speicher:
 
 | Datenname | Speichertechnologie | Autoritative Quelle? | Aufbewahrungsfrist | Datengrosse | Klassifizierung | Personenbezogene Daten? | Verschlusselungsebene | Schlusselverwaltung |
 |-----------|--------------------|-----------------------|--------------------|-----------|-----------------|-----------------------|----------------------|---------------------|
@@ -26,7 +26,7 @@ Dokumentieren Sie alle von der Losung genutzten Datenspeicher, einschliesslich G
 <div class="guidance-box">
 <h4>Leitfaden</h4>
 
-Dokumentieren Sie fur jeden Datenspeicher:
+Dokumentieren Sie für jeden Datenspeicher:
 - **Speichertechnologie** — Die spezifische Technologie (z.B. SQL Server, S3 Bucket, Azure Blob)
 - **Autoritativer Datenspeicher** — Ist dies die Haupt-/autoritative Quelle der Daten?
 - **Aufbewahrungsfrist** — Wie lange werden Daten vor der Loschung aufbewahrt?
@@ -55,14 +55,14 @@ Falls spezifische Speichersysteme bereitgestellt werden mussen:
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Fassen Sie das Datenklassifizierungsprofil der Losung zusammen:
+Fassen Sie das Datenklassifizierungsprofil der Lösung zusammen:
 
 | Klassifizierungsstufe | Datentypen | Handhabungsanforderungen |
 |-----------------------|-----------|--------------------------|
 | **Public** | *[...]* | Offener Zugriff |
 | **Internal / Corporate** | *[...]* | Interne Zugriffskontrollen |
 | **Restricted** | *[...]* | Verschlusselt, zugriffskontrolliert, auditiert |
-| **Highly Restricted** | *[...]* | Verschlusselt, strenger Zugriff, erweiterte Uberwachung |
+| **Highly Restricted** | *[...]* | Verschlusselt, strenger Zugriff, erweiterte Überwachung |
 
 ## 3.4.3 Datenlebenszyklus
 
@@ -72,10 +72,10 @@ Beschreiben Sie, wie Daten durch ihren Lebenszyklus wandern:
 
 | Phase | Beschreibung | Kontrollen |
 |-------|-------------|-----------|
-| **Erstellung / Aufnahme** | Wie Daten in die Losung gelangen | *[Validierung, Klassifizierung]* |
+| **Erstellung / Aufnahme** | Wie Daten in die Lösung gelangen | *[Validierung, Klassifizierung]* |
 | **Verarbeitung** | Wie Daten transformiert oder verwendet werden | *[Zugriffskontrollen, Audit]* |
 | **Speicherung** | Wie Daten im Ruhezustand gespeichert werden | *[Verschlusselung, Backup]* |
-| **Weitergabe / Transfer** | Wie Daten geteilt oder verschoben werden | *[Verschlusselung bei Ubertragung, Autorisierung]* |
+| **Weitergabe / Transfer** | Wie Daten geteilt oder verschoben werden | *[Verschlusselung bei Übertragung, Autorisierung]* |
 | **Archivierung** | Wie Daten archiviert werden | *[Archivspeicher, Wiederherstellungs-SLA]* |
 | **Loschung / Bereinigung** | Wie Daten sicher entfernt werden | *[Sichere Loschungsmethode, Zeitplan]* |
 
@@ -89,30 +89,30 @@ Beschreiben Sie, wie Daten durch ihren Lebenszyklus wandern:
 |-----------------|-----|--------|------|
 | *[PIA / DSFA / LIA]* | *[ID]* | *[Status]* | *[Link]* |
 
-### Verwendung von Produktionsdaten fur Tests
+### Verwendung von Produktionsdaten für Tests
 
 | Ansatz | Ausgewahlt |
 |--------|-----------|
 | Es werden nur Public/Internal-Daten verwendet | [ ] |
 | Restricted/Highly Restricted-Attribute werden vorab geloscht | [ ] |
 | Sensible Daten werden maskiert (Methode unten beschreiben) | [ ] |
-| Sensible Produktionsdaten werden verwendet (Begrundung unten) | [ ] |
-| Produktionsdaten werden nicht fur Tests verwendet | [ ] |
+| Sensible Produktionsdaten werden verwendet (Begründung unten) | [ ] |
+| Produktionsdaten werden nicht für Tests verwendet | [ ] |
 
 *[Zusatzliche Details zu Datenmaskierung, Zugriffskontrollen, Dauer und Vernichtung]*
 
 ### Datenintegritat
 
-Enthalt die Losung spezifische Datenintegritatskontrollen uber Standard-Hardware-, Protokoll- und Zugriffskontrollen hinaus?
+Enthalt die Lösung spezifische Datenintegritatskontrollen über Standard-Hardware-, Protokoll- und Zugriffskontrollen hinaus?
 
 - [ ] Ja — *[beschreiben Sie Integritatskontrollen]*
 - [ ] Nein
 
 ### Daten auf Endgeraten
 
-Erlaubt die Losung das Herunterladen oder Speichern von Daten auf Endgeraten?
+Erlaubt die Lösung das Herunterladen oder Speichern von Daten auf Endgeraten?
 
-- [ ] Ja — *[beschreiben Sie Datenschutzmassnahmen]*
+- [ ] Ja — *[beschreiben Sie Datenschutzmaßnahmen]*
 - [ ] Nein
 
 ## 3.4.5 Datentransfers & Datensouveranitat
@@ -144,8 +144,8 @@ Gibt es Anforderungen an Datensouveranitat oder Datenresidenz?
 
 <div class="quality-attribute-ref">
 
-**Qualitatsattribut-Querverweise:**
-- **4.2 Zuverlassigkeit** — Strategien fur Daten-Backup und -Wiederherstellung
+**Qualitätsattribut-Querverweise:**
+- **4.2 Zuverlässigkeit** — Strategien für Daten-Backup und -Wiederherstellung
 - **4.4 Kosten** — Speicherkosten, Datentransferkosten
 - **4.5 Nachhaltigkeit** — Datenvolumenminimierung, effiziente Speicherformate
 

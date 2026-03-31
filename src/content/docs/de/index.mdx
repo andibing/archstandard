@@ -1,9 +1,9 @@
 ---
 title: "ADS: Der Architecture Description Standard"
-description: Ein praskriptiver Standard, der die Struktur, den Inhalt und die Qualitatsanforderungen fur Losungsarchitekturdokumente definiert.
+description: Ein präskriptiver Standard, der die Struktur, den Inhalt und die Qualitätsanforderungen für Lösungsarchitekturdokumente definiert.
 template: splash
 hero:
-  tagline: "Version 1.0.0 — Ein kostenloser, quelloffener Standard, der die Struktur, den Inhalt und die Qualitatsanforderungen fur Solution Architecture Documents (SADs) definiert. Die Architekturansichten und Qualitatsattribute innerhalb eines SAD bilden das High Level Design (HLD) der Losung."
+  tagline: "Version 1.0.0 — Ein kostenloser, quelloffener Standard, der die Struktur, den Inhalt und die Qualitätsanforderungen für Solution Architecture Documents (SADs) definiert. Die Architekturansichten und Qualitätsattribute innerhalb eines SAD bilden das High Level Design (HLD) der Lösung."
   actions:
     - text: Standard lesen
       link: /de/standard/overview/
@@ -22,66 +22,66 @@ import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
 
 ## Was ist ADS?
 
-ADS ist ein **kostenloser, quelloffener, praskriptiver Standard**, der genau festlegt, welche Abschnitte, Inhalte und Qualitatskriterien ein Solution Architecture Document (SAD) enthalten MUSS. Er wird unter der [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) Lizenz veroffentlicht — jeder darf ihn nutzen, anpassen und weiterverbreiten, auch fur kommerzielle Zwecke.
+ADS ist ein **kostenloser, quelloffener, präskriptiver Standard**, der genau festlegt, welche Abschnitte, Inhalte und Qualitätskriterien ein Solution Architecture Document (SAD) enthalten MUSS. Er wird unter der [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) Lizenz veroffentlicht — jeder darf ihn nutzen, anpassen und weiterverbreiten, auch für kommerzielle Zwecke.
 
-Er basiert auf — ist aber keine Kopie von — ISO/IEC/IEEE 42010, das ein abstraktes konzeptionelles Modell fur Architekturbeschreibungen definiert. Wahrend ISO 42010 besagt *"eine Architekturbeschreibung MUSS Stakeholder und deren Anliegen identifizieren"*, legt ADS fest *"Abschnitt 2.1 MUSS eine Stakeholder-Register-Tabelle mit Spalten fur Stakeholder, Rolle, zentrale Anliegen und relevante Architekturansichten enthalten."*
+Er basiert auf — ist aber keine Kopie von — ISO/IEC/IEEE 42010, das ein abstraktes konzeptionelles Modell für Architekturbeschreibungen definiert. Wahrend ISO 42010 besagt *"eine Architekturbeschreibung MUSS Stakeholder und deren Anliegen identifizieren"*, legt ADS fest *"Abschnitt 2.1 MUSS eine Stakeholder-Register-Tabelle mit Spalten für Stakeholder, Rolle, zentrale Anliegen und relevante Architekturansichten enthalten."*
 
 ### Das Benennungsmodell
 
 | Begriff | Bedeutung | In diesem Standard |
 |---------|-----------|-------------------|
-| **Architecture Description** | Der formale ISO 42010-Begriff fur das Arbeitsergebnis | Der Standard selbst (ADS) orientiert sich an diesem Konzept |
-| **Solution Architecture Document (SAD)** | Die in der Unternehmenspraxis gebrauchliche Bezeichnung fur das Dokument. Das Akronym SAD stammt aus dem Rational Unified Process (RUP), wo es fur "Software Architecture Document" stand. Dieser Standard verwendet "Solution", um den breiteren Umfang jenseits von Software widerzuspiegeln — einschliesslich Infrastruktur, Daten, Sicherheit und Betrieb. | Das Dokument, das Sie mit diesem Standard erstellen |
-| **High Level Design (HLD)** | Der konzeptionelle Designinhalt | Abschnitte 3–4 (Architekturansichten + Qualitatsattribute) innerhalb des SAD |
+| **Architecture Description** | Der formale ISO 42010-Begriff für das Arbeitsergebnis | Der Standard selbst (ADS) orientiert sich an diesem Konzept |
+| **Solution Architecture Document (SAD)** | Die in der Unternehmenspraxis gebrauchliche Bezeichnung für das Dokument. Das Akronym SAD stammt aus dem Rational Unified Process (RUP), wo es für "Software Architecture Document" stand. Dieser Standard verwendet "Solution", um den breiteren Umfang jenseits von Software widerzuspiegeln — einschliesslich Infrastruktur, Daten, Sicherheit und Betrieb. | Das Dokument, das Sie mit diesem Standard erstellen |
+| **High Level Design (HLD)** | Der konzeptionelle Designinhalt | Abschnitte 3–4 (Architekturansichten + Qualitätsattribute) innerhalb des SAD |
 
 ## Geltungsbereich
 
-Dieser Standard definiert die erforderliche und empfohlene Struktur fur Solution Architecture Documents, die:
+Dieser Standard definiert die erforderliche und empfohlene Struktur für Solution Architecture Documents, die:
 
-- **Organisationsunabhangig** sind — von jedem Unternehmen ohne Anderung ubernehmbar
+- **Organisationsunabhängig** sind — von jedem Unternehmen ohne Anderung übernehmbar
 - **Plattformneutral** sind — anwendbar auf Cloud-, On-Premises-, Hybrid- und SaaS-Architekturen
-- **Framework-konform** sind — ruckverfolgbar zu ISO/IEC 42010, dem 4+1 View Model und den AWS/Azure Well-Architected Frameworks
+- **Framework-konform** sind — rückverfolgbbar zu ISO/IEC 42010, dem 4+1 View Model und den AWS/Azure Well-Architected Frameworks
 - **Schemagesteuert** sind — unterstutzt durch ein formales JSON Schema zur Validierung und Erzeugung in mehreren Formaten
 
 ## Aufbau
 
 <CardGrid>
 	<Card title="Architekturansichten" icon="open-book">
-		Sechs Ansichten beschreiben die Losung aus unterschiedlichen Stakeholder-Perspektiven: Logische Ansicht, Integration & Datenfluss, Physische Ansicht, Datenansicht, Sicherheitsansicht und Szenarien. Diese bilden das Kern-High Level Design.
+		Sechs Ansichten beschreiben die Lösung aus unterschiedlichen Stakeholder-Perspektiven: Logische Ansicht, Integration & Datenfluss, Physische Ansicht, Datenansicht, Sicherheitsansicht und Szenarien. Diese bilden das Kern-High Level Design.
 	</Card>
-	<Card title="Qualitatsattribute" icon="approve-check-circle">
-		Funf querschnittliche Bewertungsebenen — Betriebliche Exzellenz, Zuverlassigkeit, Leistung, Kosten und Nachhaltigkeit — angewandt uber alle Ansichten.
+	<Card title="Qualitätsattribute" icon="approve-check-circle">
+		Funf querschnittliche Bewertungsebenen — Betriebliche Exzellenz, Zuverlässigkeit, Leistung, Kosten und Nachhaltigkeit — angewandt über alle Ansichten.
 	</Card>
 	<Card title="Lebenszyklus & Governance" icon="setting">
-		Entwicklungslebenszyklus, Betriebsverfahren, Risikomanagement und Compliance-Ruckverfolgbarkeit fur den gesamten Losungslebenszyklus.
+		Entwicklungslebenszyklus, Betriebsverfahren, Risikomanagement und Compliance-Rückverfolgbarkeit für den gesamten Lösungslebenszyklus.
 	</Card>
 	<Card title="Erweiterbarkeit" icon="puzzle">
-		Ein formales JSON Schema mit Organisationsprofilen und Erweiterungspunkten fur benutzerdefinierte Abschnitte, das eine Einfuhrung ohne Verzweigung des Standards ermoglicht.
+		Ein formales JSON Schema mit Organisationsprofilen und Erweiterungspunkten für benutzerdefinierte Abschnitte, das eine Einführung ohne Verzweigung des Standards ermoglicht.
 	</Card>
 </CardGrid>
 
-## Uber ISO/IEC 42010 hinaus
+## Über ISO/IEC 42010 hinaus
 
-ADS *entspricht* dem konzeptionellen Modell von ISO 42010 und bietet gleichzeitig die konkrete, handlungsorientierte Struktur, die ISO 42010 bewusst den Implementierern uberlasst. Es geht weit uber ISO 42010 hinaus, indem es Folgendes einbezieht:
+ADS *entspricht* dem konzeptionellen Modell von ISO 42010 und bietet gleichzeitig die konkrete, handlungsorientierte Struktur, die ISO 42010 bewusst den Implementierern überlasst. Es geht weit über ISO 42010 hinaus, indem es Folgendes einbezieht:
 
-- **Qualitatsattribute aus den AWS-, Azure- und GCP Well-Architected Frameworks** — Betriebliche Exzellenz, Zuverlassigkeit, Leistungseffizienz, Kostenoptimierung und Nachhaltigkeit als querschnittliche Bewertungsebenen uber alle Architekturansichten
-- **Dokumentationstiefen mit RFC 2119-Anforderungsschlusselwortern** — jeder Abschnitt ist als SHALL (Minimum), SHOULD (Empfohlen) oder MAY (Umfassend) gekennzeichnet, was eine schrittweise Einfuhrung von leichtgewichtigen Designs bis hin zu vollstandiger Unternehmensdokumentation ermoglicht
-- **Sicherheit als eigene Architekturansicht** — ISO 42010 schreibt keine spezifischen Blickwinkel vor; ADS erhebt Sicherheit zu einer erstklassigen Ansicht, die IAM, Verschlusselung, Bedrohungsmodellierung und Uberwachung abdeckt
-- **Lebenszyklusmanagement** — CI/CD-Pipelines, Dienstubergang, Release-Management, Betrieb, Wartbarkeit und Ausstiegsplanung
-- **Entscheidungsfindung & Governance mit Compliance-Ruckverfolgbarkeit** — Designrisiken, Leitplanken-Ausnahmen, Architecture Decision Records und eine Ruckverfolgbarkeitsmatrix, die Designelemente den Standards zuordnet, die sie erfullen
-- **JSON Schema fur Multi-Format-Erzeugung** — ein formales Schema zur Validierung und Erzeugung von Solution Architecture Documents in JSON, YAML, Markdown oder Word
+- **Qualitätsattribute aus den AWS-, Azure- und GCP Well-Architected Frameworks** — Betriebliche Exzellenz, Zuverlässigkeit, Leistungseffizienz, Kostenoptimierung und Nachhaltigkeit als querschnittliche Bewertungsebenen über alle Architekturansichten
+- **Dokumentationstiefen mit RFC 2119-Anforderungsschlusselwortern** — jeder Abschnitt ist als SHALL (Minimum), SHOULD (Empfohlen) oder MAY (Umfassend) gekennzeichnet, was eine schrittweise Einführung von leichtgewichtigen Designs bis hin zu vollständiger Unternehmensdokumentation ermoglicht
+- **Sicherheit als eigene Architekturansicht** — ISO 42010 schreibt keine spezifischen Blickwinkel vor; ADS erhebt Sicherheit zu einer erstklassigen Ansicht, die IAM, Verschlusselung, Bedrohungsmodellierung und Überwachung abdeckt
+- **Lebenszyklusmanagement** — CI/CD-Pipelines, Dienstübergang, Release-Management, Betrieb, Wartbarkeit und Ausstiegsplanung
+- **Entscheidungsfindung & Governance mit Compliance-Rückverfolgbarkeit** — Designrisiken, Leitplanken-Ausnahmen, Architecture Decision Records und eine Rückverfolgbarkeitsmatrix, die Designelemente den Standards zuordnet, die sie erfullen
+- **JSON Schema für Multi-Format-Erzeugung** — ein formales Schema zur Validierung und Erzeugung von Solution Architecture Documents in JSON, YAML, Markdown oder Word
 - **Herunterladbare Vorlagen** — sofort einsatzbereite leere Vorlagen in Markdown-, YAML- und JSON-Formaten
 
 ### Vergleich mit ISO/IEC 42010
 
 | Aspekt | ISO/IEC/IEEE 42010:2022 | ADS (Dieser Standard) |
 |--------|------------------------|------------------------|
-| **Typ** | Meta-Standard (konzeptionelles Modell) | Praskriptiver Standard (Vorlagenebene) |
+| **Typ** | Meta-Standard (konzeptionelles Modell) | Präskriptiver Standard (Vorlagenebene) |
 | **Schreibt Abschnitte vor?** | Nein — definiert nur Konzepte | Ja — definiert exakte Abschnitte, Tabellen und Inhalte |
-| **Schreibt Qualitatskriterien vor?** | Nein | Ja — Qualitatsattribute aus AWS/Azure WAF |
+| **Schreibt Qualitätskriterien vor?** | Nein | Ja — Qualitätsattribute aus AWS/Azure WAF |
 | **Stellt Vorlagen bereit?** | Nein | Ja — Markdown-, YAML-, JSON-Vorlagen |
 | **Definiert Dokumentationstiefen?** | Nein | Ja — Minimum, Empfohlen, Umfassend |
-| **Beinhaltet Sicherheitsansicht?** | Nicht spezifisch | Ja — vollstandige eigene Sicherheitsansicht |
+| **Beinhaltet Sicherheitsansicht?** | Nicht spezifisch | Ja — vollständige eigene Sicherheitsansicht |
 | **Beinhaltet Lebenszyklus?** | Nein | Ja — CI/CD, Betrieb, Ausstiegsplanung |
 | **JSON Schema?** | Nein | Ja — maschinenlesbare Validierung |
 
@@ -91,11 +91,11 @@ ADS *entspricht* dem konzeptionellen Modell von ISO 42010 und bietet gleichzeiti
 |----------|-------|-------------------|
 | ISO/IEC/IEEE 42010:2022 | Architecture Description | Konzeptionelles Modell: Stakeholder, Anliegen, Blickwinkel, Ansichten |
 | Kruchten 4+1 | Architectural View Model | Sechs-Ansichten-Struktur (erweitert um Daten- und Sicherheitsansichten) |
-| AWS Well-Architected | Well-Architected Framework | Definitionen und Bewertungskriterien fur Qualitatsattribute |
-| Azure Well-Architected | Well-Architected Framework | Definitionen von Qualitatsattributen mit Tradeoff-Dokumentation |
-| GCP Architecture | Well-Architected Framework | Definitionen von Qualitatsattributen mit querschnittlichen Perspektiven |
-| Oracle Cloud | Well-Architected Framework | Definitionen von Qualitatsattributen einschliesslich Distributed Cloud |
-| IBM Cloud | Well-Architected Framework | Definitionen von Qualitatsattributen einschliesslich Hybrid und Portable |
+| AWS Well-Architected | Well-Architected Framework | Definitionen und Bewertungskriterien für Qualitätsattribute |
+| Azure Well-Architected | Well-Architected Framework | Definitionen von Qualitätsattributen mit Tradeoff-Dokumentation |
+| GCP Architecture | Well-Architected Framework | Definitionen von Qualitätsattributen mit querschnittlichen Perspektiven |
+| Oracle Cloud | Well-Architected Framework | Definitionen von Qualitätsattributen einschliesslich Distributed Cloud |
+| IBM Cloud | Well-Architected Framework | Definitionen von Qualitätsattributen einschliesslich Hybrid und Portable |
 | TOGAF 10th Edition | The Open Group Architecture Framework | Ausrichtung der Architekturdomanen |
 | RFC 2119 / RFC 8174 | Requirement Level Key Words | SHALL / SHOULD / MAY Terminologie |
 
@@ -105,9 +105,9 @@ Die Schlusselworter "SHALL", "SHOULD", "MAY" und "OPTIONAL" in diesem Standard s
 
 | Dokumentationstiefe | Schlusselwort | Bedeutung |
 |---------------------|---------------|-----------|
-| **Minimum** | SHALL | Erforderlich fur alle Solution Architecture Documents |
-| **Empfohlen** | SHOULD | Erforderlich fur produktionsreife Designs |
-| **Umfassend** | MAY | Fur ausgereiftes Unternehmensdokumentationsniveau |
+| **Minimum** | SHALL | Erforderlich für alle Solution Architecture Documents |
+| **Empfohlen** | SHOULD | Erforderlich für produktionsreife Designs |
+| **Umfassend** | MAY | Für ausgereiftes Unternehmensdokumentationsniveau |
 
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "4.2 Zuverlassigkeit & Resilienz"
+title: "4.2 Zuverlässigkeit & Resilienz"
 description: Geografischer Fussabdruck, Skalierbarkeit, Fehlertoleranz, Backup und Wiederherstellung.
 ---
 
@@ -9,7 +9,7 @@ description: Geografischer Fussabdruck, Skalierbarkeit, Fehlertoleranz, Backup u
 
 ## Zweck
 
-Zuverlassigkeit & Resilienz konzentriert sich auf die Fahigkeit der Losung, Ausfalle zu uberstehen, sich von Storungen zu erholen und bei Bedarf zu skalieren. Dieses Qualitatsattribut ist eng mit der Physischen Ansicht (3.3) und der Datenansicht (3.4) fur Infrastruktur- und Daten-Backup-Details verknupft.
+Zuverlässigkeit & Resilienz konzentriert sich auf die Fähigkeit der Lösung, Ausfalle zu überstehen, sich von Storungen zu erholen und bei Bedarf zu skalieren. Dieses Qualitätsattribut ist eng mit der Physischen Ansicht (3.3) und der Datenansicht (3.4) für Infrastruktur- und Daten-Backup-Details verknupft.
 
 ## 4.2.1 Geografischer Fussabdruck & Disaster Recovery
 
@@ -17,7 +17,7 @@ Zuverlassigkeit & Resilienz konzentriert sich auf die Fahigkeit der Losung, Ausf
 
 | Frage | Antwort |
 |-------|---------|
-| Ist die Anwendung fur Kontinuitat uber mehrere Hosting-Standorte bereitgestellt? | Ja / Nein — *[Details]* |
+| Ist die Anwendung für Kontinuitat über mehrere Hosting-Standorte bereitgestellt? | Ja / Nein — *[Details]* |
 | Wie lautet die DR-Strategie? | Active-Active / Active-Passive / Pilot Light / Backup & Restore |
 | Gibt es Datensouveranitatanforderungen, die die geografische Wahl beeinflussen? | Ja / Nein — *[Details]* |
 
@@ -31,25 +31,25 @@ Zuverlassigkeit & Resilienz konzentriert sich auf die Fahigkeit der Losung, Ausf
 
 | Attribut | Antwort |
 |----------|---------|
-| **Skalierungsfahigkeit** | Keine dynamische Skalierung (vordimensioniert) / Manuelle Skalierung / Teilweise Auto-Skalierung / Vollstandige Auto-Skalierung |
+| **Skalierungsfähigkeit** | Keine dynamische Skalierung (vordimensioniert) / Manuelle Skalierung / Teilweise Auto-Skalierung / Vollständige Auto-Skalierung |
 | **Skalierungsdetails** | *[beschreiben Sie, wie Skalierung funktioniert, Ausloser, Grenzen]* |
 
-### Abhangigkeitsskalierbarkeit
+### Abhängigkeitsskalierbarkeit
 
 | Attribut | Antwort |
 |----------|---------|
-| **Abhangigkeiten ausreichend dimensioniert?** | Ja (bestatigt) / Unbestatigt / Bekannt unzureichend |
-| **Abhangigkeitsdetails** | *[beschreiben Sie die Skalierungslage der Abhangigkeiten]* |
+| **Abhängigkeiten ausreichend dimensioniert?** | Ja (bestatigt) / Unbestatigt / Bekannt unzureichend |
+| **Abhängigkeitsdetails** | *[beschreiben Sie die Skalierungslage der Abhängigkeiten]* |
 
 ## 4.2.3 Fehlertoleranz
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Wurde die Anwendung so entworfen, dass sie unerwartete Storungen wie Ausfall oder Verschlechterung interner Komponenten oder externer Abhangigkeiten toleriert?
+Wurde die Anwendung so entworfen, dass sie unerwartete Storungen wie Ausfall oder Verschlechterung interner Komponenten oder externer Abhängigkeiten toleriert?
 
 - [ ] **Ja** — *[beschreiben Sie das Fehlertolernzdesign, einschliesslich:]*
   - Wie die Anwendung Komponentenausfalle behandelt
-  - Strategien fur graduelle Funktionseinschrankung
+  - Strategien für graduelle Funktionseinschrankung
   - Circuit-Breaker- oder Retry-Muster
   - Health-Check- und Selbstheilungsmechanismen
   - Testpraktiken (Chaos Engineering, Game Days)
@@ -59,22 +59,22 @@ Wurde die Anwendung so entworfen, dass sie unerwartete Storungen wie Ausfall ode
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Dokumentieren Sie, wie sich die Losung verhalt, wenn einzelne Komponenten oder Abhangigkeiten ausfallen:
+Dokumentieren Sie, wie sich die Lösung verhalt, wenn einzelne Komponenten oder Abhängigkeiten ausfallen:
 
-| Komponente / Abhangigkeit | Ausfallmodus | Erkennungsmethode | Wiederherstellungsverhalten | Benutzerauswirkung |
+| Komponente / Abhängigkeit | Ausfallmodus | Erkennungsmethode | Wiederherstellungsverhalten | Benutzerauswirkung |
 |--------------------------|-------------|-------------------|---------------------------|-------------------|
 | *[Komponente]* | *[wie sie ausfallt]* | *[wie erkannt: Health Check, Alarm, Timeout]* | *[Auto-Neustart, Failover, graduelle Einschrankung, manueller Eingriff]* | *[Vollausfall, eingeschrankter Dienst, transparent]* |
 
 <div class="guidance-box">
 <h4>Leitfaden</h4>
 
-Berucksichtigen Sie fur jede kritische Komponente:
-- **Was passiert, wenn sie nicht verfugbar wird?** Fallt die Losung vollstandig aus, wird sie graduell eingeschrankt oder lauft sie mit reduzierter Funktionalitat weiter?
+Berucksichtigen Sie für jede kritische Komponente:
+- **Was passiert, wenn sie nicht verfügbar wird?** Fallt die Lösung vollständig aus, wird sie graduell eingeschrankt oder lauft sie mit reduzierter Funktionalität weiter?
 - **Wie wird der Ausfall erkannt?** Health Checks, Heartbeats, Fehlerschwellenwerte, Timeouts?
 - **Wie wird wiederhergestellt?** Automatischer Neustart, Failover auf Sekundar, Circuit Breaker, manueller Eingriff?
 - **Was erleben die Benutzer?** Vollausfall, eingeschrankte Erfahrung, erhohte Latenz oder transparentes Failover?
 
-Dieser Abschnitt fehlt haufig in Architekturdokumenten, ist aber einer der wertvollsten fur Betriebsteams und SREs.
+Dieser Abschnitt fehlt haufig in Architekturdokumenten, ist aber einer der wertvollsten für Betriebsteams und SREs.
 </div>
 
 ## 4.2.5 Backup & Wiederherstellung
@@ -103,7 +103,7 @@ Dieser Abschnitt fehlt haufig in Architekturdokumenten, ist aber einer der wertv
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Dokumentieren Sie, wie die Losung unter verschiedenen Ausfallszenarien wiederhergestellt wird:
+Dokumentieren Sie, wie die Lösung unter verschiedenen Ausfallszenarien wiederhergestellt wird:
 
 | # | Szenario | Wiederherstellungsansatz | RTO | RPO |
 |---|----------|-------------------------|-----|-----|
@@ -118,11 +118,11 @@ Dokumentieren Sie, wie die Losung unter verschiedenen Ausfallszenarien wiederher
 <div class="guidance-box">
 <h4>Leitfaden</h4>
 
-Beschreiben Sie fur jedes Szenario:
+Beschreiben Sie für jedes Szenario:
 - Wie der Ausfall erkannt wird
 - Automatische vs. manuelle Wiederherstellungsschritte
 - Erwartetes Recovery Time Objective (RTO) und Recovery Point Objective (RPO)
-- Abhangigkeiten von anderen Teams oder Systemen fur die Wiederherstellung
+- Abhängigkeiten von anderen Teams oder Systemen für die Wiederherstellung
 - Ob die Wiederherstellung getestet wurde und wann
 </div>
 

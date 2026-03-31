@@ -1,6 +1,6 @@
 ---
 title: "3.5 Sicherheitsansicht"
-description: Sicherheitsuberblick, IAM, Netzwerksicherheit, Datenschutz und Uberwachung.
+description: Sicherheitsüberblick, IAM, Netzwerksicherheit, Datenschutz und Überwachung.
 ---
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
@@ -9,9 +9,9 @@ description: Sicherheitsuberblick, IAM, Netzwerksicherheit, Datenschutz und Uber
 
 ## Zweck
 
-Die Sicherheitsansicht beschreibt, wie die Losung vor Bedrohungen schutzt, Identitat und Zugriff verwaltet und Daten sichert. Sie adressiert die Anliegen von Security Architects, dem CISO-Buro, Compliance-Teams und Prufern.
+Die Sicherheitsansicht beschreibt, wie die Lösung vor Bedrohungen schutzt, Identitat und Zugriff verwaltet und Daten sichert. Sie adressiert die Anliegen von Security Architects, dem CISO-Buro, Compliance-Teams und Prufern.
 
-## 3.5.1 Sicherheitsuberblick & Bedrohungsmodell
+## 3.5.1 Sicherheitsüberblick & Bedrohungsmodell
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
@@ -19,17 +19,17 @@ Die Sicherheitsansicht beschreibt, wie die Losung vor Bedrohungen schutzt, Ident
 
 | Frage | Antwort |
 |-------|---------|
-| Unterstutzt die Losung regulierte Aktivitaten? | Ja / Nein — *[Details]* |
-| Ist die Losung SaaS oder drittgehostet? | Ja / Nein — *[Details]* |
+| Unterstutzt die Lösung regulierte Aktivitaten? | Ja / Nein — *[Details]* |
+| Ist die Lösung SaaS oder drittgehostet? | Ja / Nein — *[Details]* |
 | Wurde eine Drittanbieter-Risikobewertung durchgefuhrt? | Ja / Nein — *[Referenz]* |
 
-### Bewertung der Geschaftsauswirkung
+### Bewertung der Geschäftsauswirkung
 
-| Auswirkungskategorie | Geschaftsauswirkung bei Kompromittierung |
+| Auswirkungskategorie | Geschäftsauswirkung bei Kompromittierung |
 |---------------------|----------------------------------------|
 | **Vertraulichkeit** | *[Auswirkung eines unbefugten Datenzugriffs]* |
 | **Integritat** | *[Auswirkung einer unbefugten Datenanderung]* |
-| **Verfugbarkeit** | *[Auswirkung einer Dienstverfugungsstorung]* |
+| **Verfügbarkeit** | *[Auswirkung einer Dienstverfugungsstorung]* |
 | **Nichtabstreitbarkeit** | *[Auswirkung, wenn Aktionen bestritten werden konnen]* |
 
 ### Bedrohungsmodell
@@ -70,11 +70,11 @@ Dokumentieren Sie die wesentlichen Bedrohungen und wie das Design sie adressiert
 | Kontrolle | Antwort |
 |-----------|---------|
 | Verwendet die Anwendung SSO oder gruppenweite Authentifizierung? | *[...]* |
-| Was ist der eindeutige Bezeichner fur Benutzerkonten? | *[...]* |
+| Was ist der eindeutige Bezeichner für Benutzerkonten? | *[...]* |
 | Wie sieht der Authentifizierungsfluss aus? | *[beschreiben oder diagrammatisch darstellen]* |
 | Wie werden Anmeldeinformationen an Benutzer ausgegeben? | *[...]* |
-| Welche Komplexitatsregeln gelten fur Anmeldeinformationen? | *[...]* |
-| Welche Rotationsregeln gelten fur Anmeldeinformationen? | *[...]* |
+| Welche Komplexitatsregeln gelten für Anmeldeinformationen? | *[...]* |
+| Welche Rotationsregeln gelten für Anmeldeinformationen? | *[...]* |
 | Welche Kontosperrungsregeln gelten? | *[...]* |
 | Wie konnen Benutzer vergessene Anmeldeinformationen zurucksetzen? | *[...]* |
 
@@ -94,7 +94,7 @@ Dokumentieren Sie die wesentlichen Bedrohungen und wie das Design sie adressiert
 
 | Zugriffstyp | Rolle / Umfang | Berechtigungsspeicher | Bereitstellungsprozess |
 |------------|----------------|----------------------|----------------------|
-| Geschaftsbenutzer | *[Rollen und Umfang]* | *[wo Berechtigungen gespeichert]* | *[wie bereitgestellt]* |
+| Geschäftsbenutzer | *[Rollen und Umfang]* | *[wo Berechtigungen gespeichert]* | *[wie bereitgestellt]* |
 | Technische Benutzer | *[Rollen und Umfang]* | *[wo Berechtigungen gespeichert]* | *[wie bereitgestellt]* |
 | Dienstkonten | *[Rollen und Umfang]* | *[wo Berechtigungen gespeichert]* | *[wie bereitgestellt]* |
 
@@ -106,7 +106,7 @@ Dokumentieren Sie die wesentlichen Bedrohungen und wie das Design sie adressiert
 |-----------|---------|
 | Konto-Rezertifizierungsprozess | *[...]* |
 | Kontrollen zur Funktionstrennung | *[...]* |
-| Delegierte Autorisierungsfahigkeiten | *[...]* |
+| Delegierte Autorisierungsfähigkeiten | *[...]* |
 
 ### Privilegierter Zugriff
 
@@ -122,20 +122,20 @@ Dokumentieren Sie die wesentlichen Bedrohungen und wie das Design sie adressiert
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Beschreiben Sie Netzwerksegmentierung, Firewalls und Perimeterkontrollen. Querverweis auf Abschnitt 3.3.3 (Netzwerktopologie) fur die zugrunde liegende Infrastruktur.
+Beschreiben Sie Netzwerksegmentierung, Firewalls und Perimeterkontrollen. Querverweis auf Abschnitt 3.3.3 (Netzwerktopologie) für die zugrunde liegende Infrastruktur.
 
 | Kontrolle | Implementierung |
 |-----------|----------------|
 | Netzwerksegmentierung | *[Firewalls, Security Groups, NSGs]* |
 | Eingangsfilterung | *[WAF, DDoS, Rate Limiting]* |
 | Ausgangsfilterung | *[Proxy, Gateway, Positivlisten]* |
-| Verschlusselung bei Ubertragung | *[TLS-Versionen, Zertifikatsverwaltung]* |
+| Verschlusselung bei Übertragung | *[TLS-Versionen, Zertifikatsverwaltung]* |
 
 ## 3.5.4 Datenschutz
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Querverweis auf Abschnitt 3.4 (Datenansicht) fur die vollstandige Datenarchitektur. Dieser Abschnitt konzentriert sich auf die angewandten Sicherheitskontrollen.
+Querverweis auf Abschnitt 3.4 (Datenansicht) für die vollständige Datenarchitektur. Dieser Abschnitt konzentriert sich auf die angewandten Sicherheitskontrollen.
 
 ### Verschlusselung im Ruhezustand
 
@@ -157,18 +157,18 @@ Querverweis auf Abschnitt 3.4 (Datenansicht) fur die vollstandige Datenarchitekt
 | Geheimnisschutz auf dem Host | Lokaler Vault / Dateisystem / Nur Arbeitsspeicher / Nicht gespeichert |
 | Geheimnisrotation | Automatisch / Manuell / Nicht rotiert |
 
-## 3.5.5 Sicherheitsuberwachung & Bedrohungserkennung
+## 3.5.5 Sicherheitsüberwachung & Bedrohungserkennung
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-| Fahigkeit | Implementierung |
+| Fähigkeit | Implementierung |
 |-----------|----------------|
 | Sicherheitsereignis-Logging | *[welche Ereignisse, wo gespeichert]* |
 | SIEM-Integration | *[Tool und Integrationsmethode]* |
-| Infrastruktur-Ereigniserkennung | *[wie uberwacht]* |
+| Infrastruktur-Ereigniserkennung | *[wie überwacht]* |
 | Sicherheitsalarmierung | *[wie Alarme generiert und weitergeleitet werden]* |
 
-*[Sicherheitsuberwachungs-Architekturdiagramm einfugen, falls zutreffend]*
+*[Sicherheitsüberwachungs-Architekturdiagramm einfugen, falls zutreffend]*
 
 <div class="guidance-box">
 <h4>Bewertungsleitfaden</h4>
@@ -176,14 +176,14 @@ Querverweis auf Abschnitt 3.4 (Datenansicht) fur die vollstandige Datenarchitekt
 | Bewertung | Was dies bedeutet |
 |:---------:|-------------------|
 | **1** | Authentifizierungsmethode identifiziert, aber Kontrollen nicht detailliert |
-| **3** | Geschaftsauswirkung bewertet, Authentifizierung und Autorisierung dokumentiert, Verschlusselung im Ruhezustand und bei Ubertragung spezifiziert |
-| **5** | Alles oben Genannte plus Bedrohungsmodell vollstandig, Geheimnisverwaltung dokumentiert, Sicherheitsuberwachung mit SIEM integriert, privilegierter Zugriff mit JIT kontrolliert |
+| **3** | Geschäftsauswirkung bewertet, Authentifizierung und Autorisierung dokumentiert, Verschlusselung im Ruhezustand und bei Übertragung spezifiziert |
+| **5** | Alles oben Genannte plus Bedrohungsmodell vollständig, Geheimnisverwaltung dokumentiert, Sicherheitsüberwachung mit SIEM integriert, privilegierter Zugriff mit JIT kontrolliert |
 </div>
 
 <div class="quality-attribute-ref">
 
-**Qualitatsattribut-Querverweise:**
-- **4.1 Betriebliche Exzellenz** — Sicherheitsuberwachung ist Teil der betrieblichen Beobachtbarkeit
-- **4.2 Zuverlassigkeit** — Sicherheitsvorfalle beeintrachtigen die Verfugbarkeit
+**Qualitätsattribut-Querverweise:**
+- **4.1 Betriebliche Exzellenz** — Sicherheitsüberwachung ist Teil der betrieblichen Beobachtbarkeit
+- **4.2 Zuverlässigkeit** — Sicherheitsvorfalle beeintrachtigen die Verfügbarkeit
 
 </div>

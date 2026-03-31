@@ -14,13 +14,13 @@ ADS ist mit **atomaren Feldern** konzipiert — strukturierten, diskreten Werten
 | Vorteil | Beschreibung |
 |---------|-------------|
 | **Reduzierte Mehrdeutigkeit** | Autoren wahlen aus definierten Optionen, anstatt Prosatext zu verfassen |
-| **Maschinenverarbeitbar** | Werkzeuge konnen SADs aggregieren, vergleichen, validieren und daruber berichten |
+| **Maschinenverarbeitbar** | Werkzeuge konnen SADs aggregieren, vergleichen, validieren und darüber berichten |
 | **Schneller auszufullen** | Kontrollkastchen und Auswahlen sind schneller als leere Textfelder |
 | **Vergleichbar** | Zwei SADs konnen strukturell verglichen und differenziert werden |
-| **Ubersetzbar** | Enum-Werte konnen eindeutig in jede Sprache ubertragen werden |
-| **Governance-fahig** | Der Architektur-Governance-Prozess kann die Vollstandigkeit programmatisch uberprufen |
+| **Übersetzbar** | Enum-Werte konnen eindeutig in jede Sprache übertragen werden |
+| **Governance-fähig** | Der Architektur-Governance-Prozess kann die Vollständigkeit programmatisch überprufen |
 
-### Wie es uber Formate hinweg funktioniert
+### Wie es über Formate hinweg funktioniert
 
 Dasselbe atomare Feld wird je nach Ausgabeformat unterschiedlich dargestellt, tragt aber identische Bedeutung:
 
@@ -63,7 +63,7 @@ ADS ist darauf ausgelegt, gleichermassen gut zu funktionieren als:
 - **Maschinenlesbare Datei** (JSON, YAML, Markdown) — wobei atomare Felder Enums, Booleans und typisierte Werte sind
 - **Webformular** — wobei atomare Felder direkt auf Formularsteuerelemente abgebildet werden
 
-Das JSON Schema ist die einzige Wahrheitsquelle. Alle Ausgabeformate werden daraus abgeleitet, was Konsistenz unabhangig davon gewahrleistet, wie das SAD erstellt oder konsumiert wird.
+Das JSON Schema ist die einzige Wahrheitsquelle. Alle Ausgabeformate werden daraus abgeleitet, was Konsistenz unabhängig davon gewährleistet, wie das SAD erstellt oder konsumiert wird.
 
 ## Barrierefreiheit & kognitive Belastung
 
@@ -73,7 +73,7 @@ ADS ist so konzipiert, dass es von allen Architekten nutzbar ist, einschliesslic
 
 Jeder Abschnitt im Standard folgt demselben Muster:
 
-1. **Zweck** — eine kurze Erklarung, was dieser Abschnitt behandelt und warum
+1. **Zweck** — eine kurze Erklärung, was dieser Abschnitt behandelt und warum
 2. **Tabellen / Felder** — strukturierte, atomare Felder zum Ausfullen
 3. **Leitfaden** — kontextbezogene Hilfe in einem deutlich markierten Feld
 
@@ -98,22 +98,22 @@ Alle in ADS verwendeten Akronyme sind im [Glossar](/de/standard/7-appendices/#71
 - Fugen Sie in jedem SAD ein Glossar (Abschnitt 7.1) ein
 - Vermeiden Sie Fachjargon, wo eine klare Alternative existiert
 
-### Lesbarkeitsleitlinien fur SAD-Autoren
+### Lesbarkeitsleitlinien für SAD-Autoren
 
 Beim Verfassen von Freitext-Inhalten in einem SAD:
 
 - Verwenden Sie kurze Satze. Eine Idee pro Satz.
 - Verwenden Sie Aufzahlungspunkte anstelle von langen Absatzen.
 - Verwenden Sie aktive Sprache ("Der Dienst sendet Daten an...") statt passiver ("Daten werden vom Dienst gesendet an...").
-- Verwenden Sie Diagramme zur Erganzung von Text, nicht als Ersatz.
-- Stellen Sie sicher, dass Diagramme Alt-Text-Beschreibungen fur Screenreader haben.
+- Verwenden Sie Diagramme zur Ergänzung von Text, nicht als Ersatz.
+- Stellen Sie sicher, dass Diagramme Alt-Text-Beschreibungen für Screenreader haben.
 
 ## Erweiterbarkeit ohne Mehrdeutigkeit
 
-Wenn Organisationen benutzerdefinierte Abschnitte uber den Erweiterungspunkt `customSections` hinzufugen, SOLLTEN (SHOULD) sie denselben Prinzipien fur atomare Felder folgen:
+Wenn Organisationen benutzerdefinierte Abschnitte über den Erweiterungspunkt `customSections` hinzufugen, SOLLTEN (SHOULD) sie denselben Prinzipien für atomare Felder folgen:
 
-1. Verwenden Sie `boolean` fur Ja/Nein-Fragen
-2. Definieren Sie `enum`-Werte fur jedes Feld mit einer endlichen Menge gultiger Antworten
-3. Verwenden Sie typisierte Felder (`integer`, `number`, `date`) fur messbare Werte
-4. Reservieren Sie Freitext-`string`-Felder fur wirklich offene Inhalte
+1. Verwenden Sie `boolean` für Ja/Nein-Fragen
+2. Definieren Sie `enum`-Werte für jedes Feld mit einer endlichen Menge gultiger Antworten
+3. Verwenden Sie typisierte Felder (`integer`, `number`, `date`) für messbare Werte
+4. Reservieren Sie Freitext-`string`-Felder für wirklich offene Inhalte
 5. Fugen Sie jedem Feld eine `description` hinzu, um seinen Zweck zu verdeutlichen
