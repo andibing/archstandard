@@ -1,0 +1,111 @@
+---
+title: "Spickzettel"
+description: "Eine Einzelseiten-Referenz, die genau zeigt, welche Abschnitte bei jeder Dokumentationstiefe auszufüllen sind."
+---
+
+## Was auszufüllen ist
+
+Verwenden Sie diese Tabelle, um genau zu sehen, welche Abschnitte bei Ihrer gewählten Dokumentationstiefe erforderlich sind. Wählen Sie Ihre Spalte und füllen Sie nur die mit **Ja** markierten Zeilen aus.
+
+| Abschnitt | Minimum | Recommended | Comprehensive |
+|-----------|:-------:|:-----------:|:-------------:|
+| **0. Document Control** | | | |
+| Document metadata | **Ja** | **Ja** | **Ja** |
+| Change history | **Ja** | **Ja** | **Ja** |
+| Contributors & approvals | Nein | **Ja** | **Ja** |
+| Purpose & scope | **Ja** | **Ja** | **Ja** |
+| **1. Executive Summary** | | | |
+| Solution overview | **Ja** | **Ja** | **Ja** |
+| Business context & drivers | **Ja** | **Ja** | **Ja** |
+| Strategic alignment & reuse | Nein | **Ja** | **Ja** |
+| Scope (in/out) | **Ja** | **Ja** | **Ja** |
+| Current state / As-Is | Nein | **Ja** | **Ja** |
+| Key decisions & constraints | **Ja** | **Ja** | **Ja** |
+| Project details | Nein | **Ja** | **Ja** |
+| Business criticality | Nein | **Ja** | **Ja** |
+| **2. Stakeholders** | | | |
+| Stakeholder register | **Ja** | **Ja** | **Ja** |
+| Concerns matrix | Nein | **Ja** | **Ja** |
+| Compliance & regulatory | Nein | **Ja** | **Ja** |
+| **3.1 Logical View** | | | |
+| Architecture diagram | **Ja** | **Ja** | **Ja** |
+| Component decomposition | **Ja** | **Ja** | **Ja** |
+| Design patterns | Nein | **Ja** | **Ja** |
+| Service & capability mapping | Nein | Nein | **Ja** |
+| Vendor lock-in assessment | Nein | **Ja** | **Ja** |
+| **3.2 Integration & Data Flow** | | | |
+| Data flow diagram | **Ja** | **Ja** | **Ja** |
+| Internal connectivity | **Ja** | **Ja** | **Ja** |
+| External integrations | **Ja** | **Ja** | **Ja** |
+| API & interface contracts | Nein | **Ja** | **Ja** |
+| **3.3 Physical View** | | | |
+| Deployment diagram | **Ja** | **Ja** | **Ja** |
+| Hosting & infrastructure | **Ja** | **Ja** | **Ja** |
+| Compute | Nein | **Ja** | **Ja** |
+| User & admin access | Nein | **Ja** | **Ja** |
+| Network connectivity | **Ja** | **Ja** | **Ja** |
+| Environments | Nein | **Ja** | **Ja** |
+| End user compute & IoT | Nein | Nein | **Ja** |
+| **3.4 Data View** | | | |
+| Data stores | **Ja** | **Ja** | **Ja** |
+| Data classification | **Ja** | **Ja** | **Ja** |
+| Data transfers | Nein | **Ja** | **Ja** |
+| Data lifecycle | Nein | Nein | **Ja** |
+| **3.5 Security View** | | | |
+| Business impact assessment | **Ja** | **Ja** | **Ja** |
+| Authentication | **Ja** | **Ja** | **Ja** |
+| Authorisation | **Ja** | **Ja** | **Ja** |
+| Encryption at rest | **Ja** | **Ja** | **Ja** |
+| Secret management | Nein | **Ja** | **Ja** |
+| Security monitoring | Nein | **Ja** | **Ja** |
+| Threat model | Nein | Nein | **Ja** |
+| Network security | Nein | **Ja** | **Ja** |
+| **3.6 Scenarios** | | | |
+| Key use cases | Nein | **Ja** | **Ja** |
+| Architecture decision records | Nein | **Ja** | **Ja** |
+| **4. Quality Attributes** | | | |
+| Operational excellence | Nein | **Ja** | **Ja** |
+| Reliability & resilience | Nein | **Ja** | **Ja** |
+| Performance efficiency | Nein | **Ja** | **Ja** |
+| Cost optimisation | Nein | **Ja** | **Ja** |
+| Sustainability | Nein | **Ja** | **Ja** |
+| Quality attribute tradeoffs | Nein | **Ja** | **Ja** |
+| **5. Lifecycle** | | | |
+| CI/CD & development | Nein | **Ja** | **Ja** |
+| Migration (if applicable) | Nein | **Ja** | **Ja** |
+| Test strategy | Nein | **Ja** | **Ja** |
+| Release management | Nein | **Ja** | **Ja** |
+| Operations & support | Nein | **Ja** | **Ja** |
+| Resourcing & skills | Nein | **Ja** | **Ja** |
+| Service start | Nein | Nein | **Ja** |
+| Maintainability | Nein | **Ja** | **Ja** |
+| Decommissioning | Nein | **Ja** | **Ja** |
+| Exit planning | Nein | **Ja** | **Ja** |
+| **6. Decision Making** | | | |
+| Constraints | **Ja** | **Ja** | **Ja** |
+| Assumptions | **Ja** | **Ja** | **Ja** |
+| Risks | **Ja** | **Ja** | **Ja** |
+| Dependencies | **Ja** | **Ja** | **Ja** |
+| Issues | Nein | **Ja** | **Ja** |
+| Technical debt register | Nein | **Ja** | **Ja** |
+| Guardrail exceptions | Nein | **Ja** | **Ja** |
+| Architectural decisions log | Nein | **Ja** | **Ja** |
+| Compliance traceability | Nein | Nein | **Ja** |
+| Approval sign-off | **Ja** | **Ja** | **Ja** |
+| **7. Appendices** | | | |
+| Glossary | Nein | **Ja** | **Ja** |
+| Reference documents | Nein | **Ja** | **Ja** |
+| Standards referenced | Nein | **Ja** | **Ja** |
+| **Compliance scoring** | Nein | **Ja** | **Ja** |
+
+### Wie Sie diese Tabelle verwenden
+
+1. **Wählen Sie Ihre Tiefe** basierend auf der Kritikalität Ihres Projekts und den Governance-Anforderungen
+2. **Füllen Sie nur die „Ja"-Zeilen** für Ihre gewählte Tiefe aus
+3. **Überspringen Sie alles andere** — fügen Sie keine leeren Abschnitte ein
+
+| Tiefe | Wann verwenden | Ungefähre Dauer | Typisches Gate |
+|-------|---------------|:---------------:|---------------|
+| **Minimum** | Frühe Entwürfe, Proof of Concepts, Dev/Test-Reviews | 15-30 Min. | Development Review |
+| **Recommended** | Produktionsgebundene Entwürfe, formale Governance | 1-2 Stunden | Production Approval |
+| **Comprehensive** | Kritische, regulierte oder unternehmensweite Systeme | 1-2 Tage | Enterprise Architecture Review |

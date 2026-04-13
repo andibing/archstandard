@@ -1,0 +1,111 @@
+---
+title: "Aide-mémoire des niveaux"
+description: "Une référence sur une seule page montrant exactement quelles sections compléter à chaque niveau de profondeur de documentation."
+---
+
+## Quoi remplir
+
+Utilisez ce tableau pour voir exactement quelles sections sont requises au niveau de profondeur de documentation choisi. Choisissez votre colonne et ne remplissez que les lignes marquées **Yes**.
+
+| Section | Minimum | Recommended | Comprehensive |
+|---------|:-------:|:-----------:|:-------------:|
+| **0. Document Control** | | | |
+| Métadonnées du document | **Yes** | **Yes** | **Yes** |
+| Historique des modifications | **Yes** | **Yes** | **Yes** |
+| Contributeurs et approbations | No | **Yes** | **Yes** |
+| Objet et périmètre | **Yes** | **Yes** | **Yes** |
+| **1. Executive Summary** | | | |
+| Vue d'ensemble de la solution | **Yes** | **Yes** | **Yes** |
+| Contexte métier et facteurs | **Yes** | **Yes** | **Yes** |
+| Alignement stratégique et réutilisation | No | **Yes** | **Yes** |
+| Périmètre (inclus/exclus) | **Yes** | **Yes** | **Yes** |
+| État actuel / As-Is | No | **Yes** | **Yes** |
+| Décisions clés et contraintes | **Yes** | **Yes** | **Yes** |
+| Détails du projet | No | **Yes** | **Yes** |
+| Criticité métier | No | **Yes** | **Yes** |
+| **2. Stakeholders** | | | |
+| Registre des parties prenantes | **Yes** | **Yes** | **Yes** |
+| Matrice des préoccupations | No | **Yes** | **Yes** |
+| Conformité et réglementation | No | **Yes** | **Yes** |
+| **3.1 Logical View** | | | |
+| Diagramme d'architecture | **Yes** | **Yes** | **Yes** |
+| Décomposition en composants | **Yes** | **Yes** | **Yes** |
+| Design patterns | No | **Yes** | **Yes** |
+| Cartographie des services et capacités | No | No | **Yes** |
+| Évaluation du vendor lock-in | No | **Yes** | **Yes** |
+| **3.2 Integration & Data Flow** | | | |
+| Diagramme de flux de données | **Yes** | **Yes** | **Yes** |
+| Connectivité interne | **Yes** | **Yes** | **Yes** |
+| Intégrations externes | **Yes** | **Yes** | **Yes** |
+| Contrats API et interfaces | No | **Yes** | **Yes** |
+| **3.3 Physical View** | | | |
+| Diagramme de déploiement | **Yes** | **Yes** | **Yes** |
+| Hébergement et infrastructure | **Yes** | **Yes** | **Yes** |
+| Compute | No | **Yes** | **Yes** |
+| Accès utilisateur et administrateur | No | **Yes** | **Yes** |
+| Connectivité réseau | **Yes** | **Yes** | **Yes** |
+| Environnements | No | **Yes** | **Yes** |
+| Poste utilisateur et IoT | No | No | **Yes** |
+| **3.4 Data View** | | | |
+| Data stores | **Yes** | **Yes** | **Yes** |
+| Classification des données | **Yes** | **Yes** | **Yes** |
+| Transferts de données | No | **Yes** | **Yes** |
+| Cycle de vie des données | No | No | **Yes** |
+| **3.5 Security View** | | | |
+| Évaluation de l'impact métier | **Yes** | **Yes** | **Yes** |
+| Authentication | **Yes** | **Yes** | **Yes** |
+| Authorisation | **Yes** | **Yes** | **Yes** |
+| Encryption at rest | **Yes** | **Yes** | **Yes** |
+| Gestion des secrets | No | **Yes** | **Yes** |
+| Surveillance de la sécurité | No | **Yes** | **Yes** |
+| Threat model | No | No | **Yes** |
+| Sécurité réseau | No | **Yes** | **Yes** |
+| **3.6 Scenarios** | | | |
+| Cas d'utilisation clés | No | **Yes** | **Yes** |
+| Architecture decision records | No | **Yes** | **Yes** |
+| **4. Quality Attributes** | | | |
+| Excellence opérationnelle | No | **Yes** | **Yes** |
+| Fiabilité et résilience | No | **Yes** | **Yes** |
+| Efficacité des performances | No | **Yes** | **Yes** |
+| Optimisation des coûts | No | **Yes** | **Yes** |
+| Durabilité | No | **Yes** | **Yes** |
+| Compromis entre attributs de qualité | No | **Yes** | **Yes** |
+| **5. Lifecycle** | | | |
+| CI/CD et développement | No | **Yes** | **Yes** |
+| Migration (le cas échéant) | No | **Yes** | **Yes** |
+| Stratégie de test | No | **Yes** | **Yes** |
+| Gestion des releases | No | **Yes** | **Yes** |
+| Exploitation et support | No | **Yes** | **Yes** |
+| Ressources et compétences | No | **Yes** | **Yes** |
+| Mise en service | No | No | **Yes** |
+| Maintenabilité | No | **Yes** | **Yes** |
+| Décommissionnement | No | **Yes** | **Yes** |
+| Planification de sortie | No | **Yes** | **Yes** |
+| **6. Decision Making** | | | |
+| Contraintes | **Yes** | **Yes** | **Yes** |
+| Hypothèses | **Yes** | **Yes** | **Yes** |
+| Risques | **Yes** | **Yes** | **Yes** |
+| Dépendances | **Yes** | **Yes** | **Yes** |
+| Problèmes | No | **Yes** | **Yes** |
+| Registre de la dette technique | No | **Yes** | **Yes** |
+| Exceptions aux garde-fous | No | **Yes** | **Yes** |
+| Journal des décisions architecturales | No | **Yes** | **Yes** |
+| Traçabilité de la conformité | No | No | **Yes** |
+| Approbation et signature | **Yes** | **Yes** | **Yes** |
+| **7. Appendices** | | | |
+| Glossaire | No | **Yes** | **Yes** |
+| Documents de référence | No | **Yes** | **Yes** |
+| Standards référencés | No | **Yes** | **Yes** |
+| **Scoring de conformité** | No | **Yes** | **Yes** |
+
+### Comment utiliser ce tableau
+
+1. **Choisissez votre niveau de profondeur** en fonction de la criticité de votre projet et des exigences de gouvernance
+2. **Ne remplissez que les lignes marquées "Yes"** pour le niveau choisi
+3. **Ignorez tout le reste** — n'incluez pas de sections vides
+
+| Profondeur | Quand l'utiliser | Temps approx. | Jalon type |
+|------------|-----------------|:-------------:|-----------|
+| **Minimum** | Conceptions en phase précoce, preuves de concept, revues dev/test | 15-30 min | Revue de développement |
+| **Recommended** | Conceptions destinées à la production, gouvernance formelle | 1-2 heures | Approbation de mise en production |
+| **Comprehensive** | Systèmes critiques, réglementés ou à l'échelle de l'entreprise | 1-2 jours | Revue d'architecture d'entreprise |

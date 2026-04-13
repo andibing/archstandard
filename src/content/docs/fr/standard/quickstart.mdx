@@ -1,0 +1,134 @@
+---
+title: "Démarrage rapide"
+description: "Créez votre premier Document d'Architecture de Solution en 30 minutes avec ADS."
+---
+
+## Créez votre premier SAD
+
+Ce guide vous accompagne dans la production d'un Document d'Architecture de Solution minimal. À la fin, vous disposerez d'un SAD structuré couvrant les sections essentielles.
+
+> **Ce dont vous avez besoin**
+> Un éditeur de texte et une compréhension de base de la solution que vous documentez. Aucun outil ni installation requis.
+
+### Étape 1 : Téléchargez un modèle
+
+Téléchargez le [modèle Markdown](/fr/standard/templates/) — ou copiez-le dans votre presse-papiers pour le coller dans Confluence ou un wiki.
+
+### Étape 2 : Remplissez le contrôle documentaire
+
+Complétez le tableau de métadonnées en haut :
+
+| Champ | Quoi écrire |
+|-------|------------|
+| **Document Title** | Un nom clair — ex. "Customer Portal SAD" |
+| **Solution Name** | Le nom du système ou de l'application |
+| **Author** | Votre nom |
+| **Version** | 0.1 |
+| **Status** | Draft |
+| **Classification** | Internal (point de départ le plus courant) |
+
+### Étape 3 : Rédigez le résumé exécutif
+
+Répondez à trois questions en un court paragraphe :
+
+1. **Que fait la solution ?** — 1-2 paragraphes
+2. **Quel problème métier résout-elle ?** — 1-2 paragraphes
+3. **Quelle est l'approche de haut niveau ?** — 1-2 paragraphes
+
+Puis listez ce qui est **dans le périmètre** et **hors périmètre** sous forme de points.
+
+### Étape 4 : Décrivez l'architecture
+
+Complétez les trois vues principales au niveau de profondeur Minimum :
+
+**Vue logique (Section 3.1)** — Listez les composants principaux :
+
+| Component | Type | Technology | Status |
+|-----------|------|-----------|--------|
+| Frontend | Web App | React | New |
+| API | API Service | Node.js | New |
+| Database | Database | PostgreSQL | New |
+
+**Vue physique (Section 3.3)** — Indiquez où la solution s'exécute :
+
+| Champ | Valeur |
+|-------|--------|
+| Hosting | Cloud (AWS / Azure / GCP) |
+| Service Model | PaaS |
+| Region | UK South |
+
+**Vue sécurité (Section 3.5)** — Indiquez comment les utilisateurs s'authentifient et comment les données sont protégées :
+
+| Champ | Valeur |
+|-------|--------|
+| Authentication | SSO via Entra ID / Okta |
+| Encryption at Rest | Yes (provider-managed keys) |
+| Encryption in Transit | Yes (TLS 1.2+) |
+
+### Étape 5 : Capturez les risques clés
+
+Ajoutez au moins un risque dans la section Prise de décision :
+
+| ID | Risk | Severity | Likelihood | Mitigation |
+|----|------|----------|-----------|-----------|
+| R-001 | Vendor lock-in to cloud provider | Medium | Medium | Use managed services with open APIs where possible |
+
+### Terminé — Voici ce que vous avez construit
+
+Vous disposez maintenant d'un SAD structuré au niveau de profondeur **Minimum**. Il devrait ressembler à ceci :
+
+```markdown
+# Solution Architecture Document — Customer Portal
+
+| Field | Value |
+|-------|-------|
+| Author | Jane Doe |
+| Version | 0.1 |
+| Status | Draft |
+| Classification | Internal |
+
+## 1. Executive Summary
+The Customer Portal is a web application that allows customers
+to view their account details and submit support requests.
+It replaces a legacy PHP application that is end-of-life.
+
+**In Scope:** Portal frontend, API backend, database.
+**Out of Scope:** CRM integration (Phase 2), mobile app.
+
+## 3.1 Logical View
+| Component | Type | Technology | Status |
+|-----------|------|-----------|--------|
+| Frontend  | Web App | React | New |
+| API       | API Service | Node.js | New |
+| Database  | Database | PostgreSQL | New |
+
+## 3.3 Physical View
+| Hosting | Cloud (AWS) |
+| Service Model | PaaS |
+| Region | eu-west-2 |
+
+## 3.5 Security View
+| Authentication | SSO via Okta |
+| Encryption at Rest | Yes (AWS KMS) |
+| Encryption in Transit | Yes (TLS 1.2+) |
+
+## 6.3 Risks
+| ID | Risk | Severity | Mitigation |
+|----|------|----------|-----------|
+| R-001 | Vendor lock-in | Medium | Use open APIs |
+```
+
+Ceci est un SAD valide au niveau de profondeur Minimum. Il couvre les sections requises pour une revue de développement ou de test.
+
+> **Minimum vs standard complet**
+> Le démarrage rapide ne couvre que les sections **Minimum** — suffisantes pour les conceptions en phase précoce et les revues dev/test. Le standard complet comporte davantage de sections pour une documentation prête pour la production et de niveau entreprise (attributs de qualité, cycle de vie, scénarios, etc.). Utilisez l'[Aide-mémoire des niveaux](/fr/standard/cheat-sheet/) pour voir exactement ce qui est requis à chaque niveau — vous ne remplissez que ce dont votre projet a besoin.
+
+### Et ensuite ?
+
+- **Voyez ce qui est nécessaire pour votre niveau de profondeur** — consultez l'[Aide-mémoire des niveaux](/fr/standard/cheat-sheet/) pour une vue d'ensemble sur une seule page de ce qu'il faut remplir
+- **Consultez un exemple complété** — examinez l'[exemple Employee Directory](/examples/employee-directory/) pour voir à quoi ressemble un SAD complet au niveau Recommended
+- **Passez au niveau Recommended** — ajoutez les attributs de qualité (Section 4), le cycle de vie (Section 5) et les scénarios (Section 3.6) avant l'approbation de mise en production
+- **Utilisez l'assistance IA** — importez un [modèle](/fr/standard/templates/) dans ChatGPT, Claude ou Copilot avec le brief de votre projet pour générer un premier brouillon plus détaillé
+
+> **Délai jusqu'à la production ?**
+> Un SAD Minimum prend environ 30 minutes. Un SAD Recommended (prêt pour la production) prend généralement 1 à 2 heures. Un SAD Comprehensive pour un système critique prend 1 à 2 jours. Les niveaux de profondeur de documentation garantissent un investissement en temps proportionnel à la criticité de la solution.
