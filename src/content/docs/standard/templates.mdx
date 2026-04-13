@@ -1,0 +1,195 @@
+---
+title: "Templates"
+description: "How to use ADS templates to create your Solution Architecture Document."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Getting a Template
+
+Download a blank SAD template from the **[Downloads](/standard/downloads/)** page in your preferred format (Word, Markdown, YAML, or JSON).
+
+## Three Ways to Use Templates
+
+**1. Fill in manually** — open the template in your editor, wiki, or word processor and complete each section.
+
+**2. Import into an LLM** — feed the template to ChatGPT, Claude, or Copilot along with a project brief to generate a structured first draft.
+
+**3. Paste into Confluence** — copy the Markdown template to your clipboard and paste directly into Confluence, Notion, or any wiki that supports Markdown.
+
+<button id="copy-md-btn" class="ads-copy-btn">Copy Markdown to Clipboard</button>
+
+<script>
+{`
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('copy-md-btn');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/v1/templates/sad-template.md');
+      const text = await res.text();
+      await navigator.clipboard.writeText(text);
+      btn.textContent = 'Copied!';
+      btn.classList.add('ads-copy-btn-success');
+      setTimeout(() => {
+        btn.textContent = 'Copy Markdown to Clipboard';
+        btn.classList.remove('ads-copy-btn-success');
+      }, 3000);
+    } catch (e) {
+      btn.textContent = 'Copy failed — use download instead';
+      setTimeout(() => { btn.textContent = 'Copy Markdown to Clipboard'; }, 3000);
+    }
+  });
+});
+`}
+</script>
+
+## Converting Between Formats
+
+Use [Pandoc](https://pandoc.org/) to convert between formats:
+
+```bash
+# Markdown to Word
+pandoc sad-template.md -o my-sad.docx
+
+# Markdown to ODF (LibreOffice)
+pandoc sad-template.md -o my-sad.odt
+
+# With custom branding
+pandoc sad-template.md -o my-sad.docx --reference-doc=your-template.docx
+```
+
+## Validating Your SAD
+
+Validate a completed SAD (JSON or YAML) against the ADS schema:
+
+```bash
+npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d my-sad.json
+```
+
+See the [JSON Schema](/standard/schema/) page for more validation options.
+
+## Customising for Your Organisation
+
+You can extend the standard for your organisation without modifying the core sections. There are two extension points:
+
+- **`organisationProfile`** — maps the standard to your internal tools, standards, and governance gates
+- **`customSections`** — adds organisation-specific sections (e.g., cloud governance checklists, data privacy assessments)
+
+### How to Add These to Your SAD
+
+**In YAML or JSON:** Add the `organisationProfile` and/or `customSections` blocks at the end of your SAD file (after `appendices`). They sit at the top level, alongside the standard sections.
+
+**In Markdown:** Add new headings after Section 7 (Appendices) with your custom content. Use the same table format as the rest of the document.
+
+**In Word:** Add new sections after the Appendices. Follow the same heading and table style.
+
+**For your whole organisation:** Create a customised template with the `organisationProfile` pre-filled and distribute it to your architecture teams. This way every new SAD starts with the correct tool mappings and governance gates.
+
+### Organisation Profile Example (YAML)
+
+Add this block to the end of your YAML SAD to map the standard to your organisation's tools and governance:
+
+```yaml
+organisationProfile:
+  organisationName: "Acme Corp"
+  tooling:
+    cmdb: "ServiceNow"
+    secretStore: "HashiCorp Vault"
+    monitoring: "Datadog"
+    siem: "Splunk"
+    cicd: "GitHub Actions"
+    portfolioManagement: "LeanIX"
+  internalStandards:
+    - id: "STD-001"
+      name: "Cloud Platform Standards"
+      version: "2.0"
+      mappedSections: ["physicalView", "securityView"]
+    - id: "POL-008"
+      name: "Information Security Policy"
+      version: "4.1"
+      mappedSections: ["securityView", "dataView"]
+  governanceGates:
+    - gateName: "Dev/Test Review"
+      requiredMaturityLevel: "minimum"
+      requiredSections: ["documentControl", "executiveSummary", "architecturalViews", "riskGovernance"]
+    - gateName: "Production Approval"
+      requiredMaturityLevel: "recommended"
+      requiredSections: ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance"]
+    - gateName: "Enterprise Architecture Review"
+      requiredMaturityLevel: "comprehensive"
+      requiredSections: ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance", "appendices"]
+```
+
+### Organisation Profile Example (JSON)
+
+The same configuration in JSON format:
+
+```json
+{
+  "organisationProfile": {
+    "organisationName": "Acme Corp",
+    "tooling": {
+      "cmdb": "ServiceNow",
+      "secretStore": "HashiCorp Vault",
+      "monitoring": "Datadog",
+      "siem": "Splunk",
+      "cicd": "GitHub Actions",
+      "portfolioManagement": "LeanIX"
+    },
+    "internalStandards": [
+      {
+        "id": "STD-001",
+        "name": "Cloud Platform Standards",
+        "version": "2.0",
+        "mappedSections": ["physicalView", "securityView"]
+      }
+    ],
+    "governanceGates": [
+      {
+        "gateName": "Dev/Test Review",
+        "requiredMaturityLevel": "minimum",
+        "requiredSections": ["documentControl", "executiveSummary", "architecturalViews", "riskGovernance"]
+      },
+      {
+        "gateName": "Production Approval",
+        "requiredMaturityLevel": "recommended",
+        "requiredSections": ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance"]
+      }
+    ]
+  }
+}
+```
+
+### Custom Sections Example
+
+Add organisation-specific sections without modifying the core standard:
+
+```yaml
+customSections:
+  - id: "cloud-governance"
+    title: "Cloud Governance Checklist"
+    description: "Organisation-specific cloud governance requirements"
+    maturityLevel: "recommended"
+    parentSection: "physicalView"
+    content: |
+      | Control | Status | Evidence |
+      |---------|--------|----------|
+      | Tagging policy applied | Yes / No | |
+      | Cost alerts configured | Yes / No | |
+      | Backup policy applied | Yes / No | |
+
+  - id: "data-privacy"
+    title: "Data Privacy Assessment"
+    description: "GDPR and data privacy specific requirements"
+    maturityLevel: "recommended"
+    parentSection: "dataView"
+    content: |
+      | Question | Response |
+      |----------|----------|
+      | DPIA completed? | Yes / No |
+      | Data processor agreements in place? | Yes / No |
+      | Subject access request process documented? | Yes / No |
+```
+
+See [Conformance and Usage](/standard/how-to-use/) for full customisation guidelines.

@@ -1,0 +1,104 @@
+---
+title: "3.2 Integration & Data Flow View"
+description: Data flows, integration architecture, connectivity, and API/interface contracts.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-4plus1">4+1 Process (adapted)</span>
+
+## Purpose
+
+The Integration & Data Flow View describes how data moves through the solution, how components communicate, and how the solution integrates with internal and external systems. It addresses the concerns of integrators, operations teams, and architects.
+
+<Aside type="note" title="Naming">
+This view is adapted from Kruchten's **Process View**, which originally focused on concurrency and runtime process decomposition. In modern solution architecture, the primary concerns at this level are data flows, integration patterns, and interface contracts. The name has been updated to reflect this contemporary usage.
+</Aside>
+
+## 3.2.1 Data Flow Diagrams
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Illustrate how data moves through the solution from input to output, showing transformations and processing stages.
+
+*[Insert data flow diagram(s)]*
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Consider showing:
+- Data ingestion and sourcing
+- Processing and transformation steps
+- Data outputs and destinations
+- Asynchronous vs synchronous flows
+- Event-driven patterns and message queues
+</div>
+
+## 3.2.2 Internal Component Connectivity
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Document the connectivity between internal components of the solution:
+
+| Source Component | Destination Component | Protocol / Encryption | Authentication Method | Purpose |
+|-----------------|----------------------|----------------------|----------------------|---------|
+| *[component]* | *[component]* | *[e.g., HTTPS/TLS 1.3]* | *[e.g., mTLS, API Key]* | *[purpose]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+List all connections between the solution's internal components. For each connection, document:
+- Connection initiator (source) and receiver (destination)
+- Protocol and encryption standard used
+- Authentication and authorisation method
+- Whether the connection is synchronous or asynchronous
+</div>
+
+## 3.2.3 External Integration Architecture
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Document how the solution interfaces with external systems, third-party services, and other internal applications:
+
+| Source Application | Destination Application | Protocol / Encryption | Authentication | Security Proxy | Purpose |
+|-------------------|------------------------|----------------------|---------------|---------------|---------|
+| *[app name / ID]* | *[app name / ID]* | *[protocol]* | *[method]* | *[if applicable]* | *[purpose]* |
+
+### End User Access
+
+Document how end users access the solution:
+
+| User Type | Access Method | Authentication | Protocol |
+|-----------|-------------|---------------|----------|
+| *[e.g., Internal employees]* | *[e.g., Web browser via SSO]* | *[e.g., SAML/OIDC]* | *[HTTPS]* |
+| *[e.g., External customers]* | *[e.g., API]* | *[e.g., OAuth 2.0]* | *[HTTPS]* |
+
+## 3.2.4 API & Interface Contracts
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Document the key APIs and interfaces exposed or consumed by the solution:
+
+| API / Interface | Type | Direction | Format | Version | Documentation |
+|----------------|------|-----------|--------|---------|--------------|
+| *[name]* | REST / GraphQL / gRPC / SOAP / Event | Exposed / Consumed | JSON / XML / Protobuf | *[version]* | *[link]* |
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | Data flow diagram exists but interfaces not detailed |
+| **3** | All internal and external integrations documented with protocols, authentication, and direction |
+| **5** | All of the above plus API contracts versioned, SLA/SLO defined per interface, user access patterns documented |
+</div>
+
+<div class="quality-attribute-ref">
+
+**Quality Attribute Cross-References:**
+- **4.1 Operational Excellence** - Integration failures are a major source of incidents
+- **4.2 Reliability** - External dependencies affect reliability posture
+- **4.3 Performance** - Network latency and throughput in integration paths
+
+</div>

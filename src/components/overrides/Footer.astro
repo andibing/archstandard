@@ -1,0 +1,45 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+---
+<footer class="ads-footer">
+  <div class="ads-footer-content">
+    <a href="/" class="ads-footer-logo" aria-label="ADS home">
+      <img src="/v1/ads-logo-64.png" alt="" width="24" height="24" />
+    </a>
+    <small>
+      Architecture Description Standard &middot;
+      Content: <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> &middot;
+      Code: <a href="https://opensource.org/licenses/MIT">MIT</a> &middot;
+      <a href="https://andi.me/">Andi Chandler</a> &middot;
+      <a href="https://github.com/andibing/archstandard">GitHub</a>
+    </small>
+  </div>
+</footer>
+
+<style>
+  .ads-footer {
+    padding: 1.5rem 1rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+    text-align: center;
+  }
+  .ads-footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .ads-footer-logo img {
+    vertical-align: middle;
+  }
+  .ads-footer small {
+    color: var(--sl-color-gray-3);
+  }
+  .ads-footer a {
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+  }
+  .ads-footer a:hover {
+    text-decoration: underline;
+  }
+</style>

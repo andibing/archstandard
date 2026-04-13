@@ -1,0 +1,27 @@
+{
+  "name": "hldstandard",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build && node scripts/post-build.cjs",
+    "preview": "astro preview",
+    "astro": "astro",
+    "generate:templates": "node scripts/generate-templates.cjs",
+    "generate:diagrams": "bash scripts/generate-diagrams.sh",
+    "generate:pdf": "node scripts/generate-pdf.cjs en",
+    "generate:pdf:fr": "node scripts/generate-pdf.cjs fr",
+    "generate:pdf:de": "node scripts/generate-pdf.cjs de",
+    "generate:pdf:all": "node scripts/generate-pdf.cjs en && node scripts/generate-pdf.cjs fr && node scripts/generate-pdf.cjs de",
+    "generate": "npm run generate:templates",
+    "validate": "node scripts/validate.cjs",
+    "check": "npm run validate && npm run build",
+    "release:version": "bash scripts/release-version.sh"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.38.2",
+    "astro": "^6.0.1",
+    "sharp": "^0.34.2"
+  }
+}

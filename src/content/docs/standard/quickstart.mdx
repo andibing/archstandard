@@ -1,0 +1,139 @@
+---
+title: "Quickstart"
+description: "Create your first Solution Architecture Document in 30 minutes using ADS."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Create Your First SAD
+
+This guide walks you through producing a minimal Solution Architecture Document. By the end, you will have a structured SAD covering the essential sections.
+
+<Aside type="tip" title="What you need">
+A text editor and a basic understanding of the solution you are documenting. No tools or installations required.
+</Aside>
+
+### Step 1: Download a Template
+
+Download the [Markdown template](/standard/templates/) — or copy it to your clipboard for pasting into Confluence or a wiki.
+
+### Step 2: Fill in Document Control
+
+Complete the metadata table at the top:
+
+| Field | What to Write |
+|-------|--------------|
+| **Document Title** | A clear name — e.g., "Customer Portal SAD" |
+| **Solution Name** | The name of the system or application |
+| **Author** | Your name |
+| **Version** | 0.1 |
+| **Status** | Draft |
+| **Classification** | Internal (most common starting point) |
+
+### Step 3: Write the Executive Summary
+
+Answer three questions in a short paragraph:
+
+1. **What does the solution do?** — 1-2 paragraphs
+2. **What business problem does it solve?** — 1-2 paragraphs
+3. **What is the high-level approach?** — 1-2 paragraphs
+
+Then list what is **in scope** and **out of scope** as bullet points.
+
+### Step 4: Describe the Architecture
+
+Complete the three core views at Minimum depth:
+
+**Logical View (Section 3.1)** — List the main components:
+
+| Component | Type | Technology | Status |
+|-----------|------|-----------|--------|
+| Frontend | Web App | React | New |
+| API | API Service | Node.js | New |
+| Database | Database | PostgreSQL | New |
+
+**Physical View (Section 3.3)** — State where it runs:
+
+| Field | Value |
+|-------|-------|
+| Hosting | Cloud (AWS / Azure / GCP) |
+| Service Model | PaaS |
+| Region | UK South |
+
+**Security View (Section 3.5)** — State how users authenticate and how data is protected:
+
+| Field | Value |
+|-------|-------|
+| Authentication | SSO via Entra ID / Okta |
+| Encryption at Rest | Yes (provider-managed keys) |
+| Encryption in Transit | Yes (TLS 1.2+) |
+
+### Step 5: Capture Key Risks
+
+Add at least one risk to the Decision Making section:
+
+| ID | Risk | Severity | Likelihood | Mitigation |
+|----|------|----------|-----------|-----------|
+| R-001 | Vendor lock-in to cloud provider | Medium | Medium | Use managed services with open APIs where possible |
+
+### Done — Here's What You Built
+
+You now have a structured SAD at **Minimum** depth. It should look something like this:
+
+```markdown
+# Solution Architecture Document — Customer Portal
+
+| Field | Value |
+|-------|-------|
+| Author | Jane Doe |
+| Version | 0.1 |
+| Status | Draft |
+| Classification | Internal |
+
+## 1. Executive Summary
+The Customer Portal is a web application that allows customers
+to view their account details and submit support requests.
+It replaces a legacy PHP application that is end-of-life.
+
+**In Scope:** Portal frontend, API backend, database.
+**Out of Scope:** CRM integration (Phase 2), mobile app.
+
+## 3.1 Logical View
+| Component | Type | Technology | Status |
+|-----------|------|-----------|--------|
+| Frontend  | Web App | React | New |
+| API       | API Service | Node.js | New |
+| Database  | Database | PostgreSQL | New |
+
+## 3.3 Physical View
+| Hosting | Cloud (AWS) |
+| Service Model | PaaS |
+| Region | eu-west-2 |
+
+## 3.5 Security View
+| Authentication | SSO via Okta |
+| Encryption at Rest | Yes (AWS KMS) |
+| Encryption in Transit | Yes (TLS 1.2+) |
+
+## 6.3 Risks
+| ID | Risk | Severity | Mitigation |
+|----|------|----------|-----------|
+| R-001 | Vendor lock-in | Medium | Use open APIs |
+```
+
+That is a valid Minimum-depth SAD. It covers the sections required for a development or test review.
+
+<Aside type="note" title="Minimum vs full standard">
+The quickstart covers only the **Minimum** sections — enough for early-stage designs and dev/test reviews. The full standard has more sections for production-ready and enterprise-grade documentation (quality attributes, lifecycle, scenarios, etc.). Use the [Depth Cheat Sheet](/standard/cheat-sheet/) to see exactly what's required at each level — you only fill in what your project needs.
+</Aside>
+
+### What Next?
+
+- **See what's needed for your depth** — check the [Depth Cheat Sheet](/standard/cheat-sheet/) for a single-page view of what to fill in
+- **See a completed example** — review the [Employee Directory example](/examples/employee-directory/) to see what a full Recommended-depth SAD looks like
+- **Expand to Recommended depth** — add quality attributes (Section 4), lifecycle (Section 5), and scenarios (Section 3.6) before production approval
+- **Use AI assistance** — import a [template](/standard/templates/) into ChatGPT, Claude, or Copilot along with your project brief to generate a more detailed first draft
+
+<Aside type="note" title="Time to production?">
+A Minimum SAD takes around 30 minutes. A Recommended SAD (production-ready) typically takes 1-2 hours. A Comprehensive SAD for a critical system takes 1-2 days. The documentation depth levels ensure you invest time proportional to the solution's criticality.
+</Aside>

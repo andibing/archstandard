@@ -1,0 +1,137 @@
+---
+title: "4.2 Reliability & Resilience"
+description: Geographic footprint, scalability, fault tolerance, backup, and recovery.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+<span class="framework-badge badge-aws-waf">AWS Reliability</span>
+<span class="framework-badge badge-azure-waf">Azure Reliability</span>
+
+## Purpose
+
+Reliability & Resilience focuses on the solution's ability to withstand failures, recover from disruptions, and scale to meet demand. This quality attribute is closely tied to the Physical View (3.3) and Data View (3.4) for infrastructure and data backup details. Evaluate this quality attribute across all architectural views documented in Section 3.
+
+## 4.2.1 Geographic Footprint & Disaster Recovery
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Question | Response |
+|----------|----------|
+| Is the application deployed across multiple hosting venues for continuity? | Yes / No - *[details]* |
+| What is the DR strategy? | Active-Active / Active-Passive / Pilot Light / Backup & Restore |
+| Are there data sovereignty requirements affecting geographic choices? | Yes / No - *[details]* |
+
+*[Insert geographic deployment diagram if applicable]*
+
+## 4.2.2 Scalability
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Application Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Scaling capability** | No dynamic scaling (pre-sized) / Manual scaling / Partial auto-scaling / Full auto-scaling |
+| **Scaling details** | *[describe how scaling works, triggers, limits]* |
+
+### Dependency Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Dependencies adequately sized?** | Yes (confirmed) / Unconfirmed / Known insufficient |
+| **Dependency details** | *[describe scaling posture of dependencies]* |
+
+## 4.2.3 Fault Tolerance
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Has the application been designed to tolerate unexpected disruptions such as failure or degradation of internal components or external dependencies?
+
+- [ ] **Yes** - *[describe fault tolerance design, including:]*
+  - How the application handles component failures
+  - Graceful degradation strategies
+  - Circuit breaker or retry patterns
+  - Health check and self-healing mechanisms
+  - Testing practices (chaos engineering, game days)
+- [ ] **No** - *[describe why not]*
+
+## 4.2.4 Failure Modes & Recovery Behaviour
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document how the solution behaves when individual components or dependencies fail:
+
+| Component / Dependency | Failure Mode | Detection Method | Recovery Behaviour | User Impact |
+|----------------------|-------------|-----------------|-------------------|-------------|
+| *[component]* | *[how it fails]* | *[how detected: health check, alert, timeout]* | *[auto-restart, failover, graceful degradation, manual intervention]* | *[full outage, degraded service, transparent]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+For each critical component, consider:
+- **What happens when it becomes unavailable?** Does the solution fail entirely, degrade gracefully, or continue with reduced functionality?
+- **How is the failure detected?** Health checks, heartbeats, error thresholds, timeouts?
+- **How is it recovered?** Automatic restart, failover to secondary, circuit breaker, manual intervention?
+- **What do users experience?** Full outage, degraded experience, increased latency, or transparent failover?
+
+This section is frequently missing from architecture documents but is one of the most valuable for operations teams and SREs.
+</div>
+
+## 4.2.5 Backup & Recovery
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Backup Design
+
+| Attribute | Detail |
+|-----------|--------|
+| Backup strategy | *[what is backed up and how]* |
+| Backup product/service | *[tool used]* |
+| Backup type | Full / Incremental / Differential |
+| Backup frequency | *[schedule]* |
+| Backup retention | *[period]* |
+
+### Backup Protection
+
+| Control | Detail |
+|---------|--------|
+| Immutability | *[how backups are protected against modification/deletion]* |
+| Encryption | *[how backup data is encrypted]* |
+| Access control | *[who can access backups]* |
+
+## 4.2.6 Recovery Scenarios
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document how the solution recovers under different failure scenarios:
+
+| # | Scenario | Recovery Approach | RTO | RPO |
+|---|----------|------------------|-----|-----|
+| 1 | Primary hosting venue / AZ / region failure | *[approach]* | *[time]* | *[time]* |
+| 2 | Critical software component failure | *[approach]* | *[time]* | *[time]* |
+| 3 | Key infrastructure failure (hardware, storage, network) | *[approach]* | *[time]* | *[time]* |
+| 4 | Network connectivity failure between venues | *[approach]* | *[time]* | *[time]* |
+| 5 | External connectivity failure (customer-facing) | *[approach]* | *[time]* | *[time]* |
+| 6 | Ransomware / cyber-attack | *[approach]* | *[time]* | *[time]* |
+| 7 | Accidental or malicious data corruption / deletion | *[approach]* | *[time]* | *[time]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+For each scenario, describe:
+- How the failure is detected
+- Automatic vs. manual recovery steps
+- Expected Recovery Time Objective (RTO) and Recovery Point Objective (RPO)
+- Any dependencies on other teams or systems for recovery
+- Whether recovery has been tested and when
+</div>
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | DR strategy identified but RTO/RPO not defined |
+| **3** | DR strategy documented with RTO/RPO targets, backup configured, scalability approach defined |
+| **5** | All of the above plus fault tolerance designed, chaos testing practised, backup immutability and encryption confirmed, DR tested |
+</div>

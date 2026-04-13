@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- ADS Logo: Three stacked architectural layers representing the three tiers -->
+  <!-- All white boxes have 16px padding from coloured container edges -->
+  <!-- Boxes are vertically centred within each tier -->
+
+  <!-- Tier 1: Architectural Views (blue) - largest layer -->
+  <!-- Container: x=56, w=400, so inner area = x72 to x440 (16px padding each side) -->
+  <!-- Height=120, so inner y area for 2 rows of h=36 with 12px gap: total=84, offset=(120-84)/2=18 -->
+  <rect x="56" y="80" width="400" height="120" rx="16" fill="#2b6cb0"/>
+  <!-- Row 1: y=98, three boxes of w=112 with 16px gaps -->
+  <rect x="72" y="98" width="112" height="36" rx="8" fill="#fff" opacity="0.9"/>
+  <rect x="200" y="98" width="112" height="36" rx="8" fill="#fff" opacity="0.9"/>
+  <rect x="328" y="98" width="112" height="36" rx="8" fill="#fff" opacity="0.9"/>
+  <!-- Row 2: y=146 -->
+  <rect x="72" y="146" width="112" height="36" rx="8" fill="#fff" opacity="0.65"/>
+  <rect x="200" y="146" width="112" height="36" rx="8" fill="#fff" opacity="0.65"/>
+  <rect x="328" y="146" width="112" height="36" rx="8" fill="#fff" opacity="0.65"/>
+
+  <!-- Arrow down -->
+  <polygon points="236,212 256,236 276,212" fill="#4a5568"/>
+
+  <!-- Tier 2: Quality Attributes (amber) - medium layer -->
+  <!-- Container: x=96, w=320, so inner area = x112 to x400 (16px padding each side) -->
+  <!-- Height=80, one row of h=28: offset=(80-28)/2=26, so y=274 -->
+  <rect x="96" y="248" width="320" height="80" rx="16" fill="#d69e2e"/>
+  <!-- 4 boxes: available width=288, 4 boxes with 3 gaps of 12px = 252 for boxes, each=63 -->
+  <rect x="112" y="274" width="63" height="28" rx="6" fill="#fff" opacity="0.9"/>
+  <rect x="187" y="274" width="63" height="28" rx="6" fill="#fff" opacity="0.9"/>
+  <rect x="262" y="274" width="63" height="28" rx="6" fill="#fff" opacity="0.9"/>
+  <rect x="337" y="274" width="63" height="28" rx="6" fill="#fff" opacity="0.7"/>
+
+  <!-- Arrow down -->
+  <polygon points="236,340 256,364 276,340" fill="#4a5568"/>
+
+  <!-- Tier 3: Lifecycle & Governance (green) - smallest layer -->
+  <!-- Container: x=136, w=240, so inner area = x152 to x360 (16px padding each side) -->
+  <!-- Height=64, one row of h=28: offset=(64-28)/2=18, so y=394 -->
+  <rect x="136" y="376" width="240" height="64" rx="16" fill="#38a169"/>
+  <!-- 2 boxes: available width=208, 2 boxes with 1 gap of 16px = 192 for boxes, each=96 -->
+  <rect x="152" y="394" width="96" height="28" rx="6" fill="#fff" opacity="0.9"/>
+  <rect x="264" y="394" width="96" height="28" rx="6" fill="#fff" opacity="0.9"/>
+</svg>

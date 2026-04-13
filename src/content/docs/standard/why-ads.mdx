@@ -1,0 +1,99 @@
+---
+title: Why ADS?
+description: How ADS compares to existing architecture documentation frameworks and templates.
+---
+
+import { Aside, Badge, Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## The Problem
+
+Architecture documentation is inconsistent across the industry. Teams use a patchwork of templates — some too abstract to guide real work, others too platform-specific to generalise. After analysing eight widely-used frameworks and real-world architecture documents, gaps appear in **every single one**.
+
+## Landscape Analysis
+
+We reviewed publicly available architecture documentation frameworks, templates, and filled-in examples across open-source, enterprise, government, and EU research contexts.
+
+### Frameworks and Templates Reviewed
+
+| Framework / Template | Type | Strengths | Key Gaps |
+|---|---|---|---|
+| **[ISO/IEC/IEEE 42010](https://www.iso.org/standard/74393.html)** | International standard (paid) | Defines the conceptual model for architecture descriptions: stakeholders, concerns, viewpoints, views | Meta-standard only — does not prescribe specific views, sections, or content |
+| **[TOGAF 10](https://www.opengroup.org/togaf)** | Enterprise architecture framework (free / paid) | Comprehensive EA framework with ADM lifecycle, four architecture domains, Architecture Board governance | Does not prescribe a SAD template; no quality attributes; no fill-in sections |
+| **[AWS Well-Architected](https://docs.aws.amazon.com/wellarchitected/latest/framework/)** | Cloud quality framework (free) | Quality pillars with best practices; Well-Architected Review Tool | Quality assessment only — no architectural views, no document template, no governance structure |
+| **[Azure Well-Architected](https://learn.microsoft.com/en-us/azure/well-architected/)** | Cloud quality framework (free) | Quality pillars with tradeoff documentation; assessment tooling | Same as AWS — quality assessment only, no SAD template |
+| **[GCP Architecture Framework](https://cloud.google.com/architecture/framework)** | Cloud quality framework (free) | Quality pillars with cross-cutting perspectives | Same as AWS/Azure — quality assessment only, no SAD template |
+| **[arc42](https://arc42.org/)** | Open-source documentation template | Most complete open template; 35+ real examples; multi-level building block views; strong community | No Security View; no Data View; no cloud WAF-aligned quality attributes; no depth levels |
+| **[NHS England SAF](https://architecture.digital.nhs.uk/solution-architecture-framework)** | Government framework | Governance-focused; references cloud WAFs; RAID-based risk tracking | Meta-framework only — describes what to do but provides no concrete fill-in template |
+| **[bflorat template](https://github.com/bflorat/architecture-document-template)** | GitHub community template | Role-based view separation; consistent Constraints → NFRs → Solution structure; dedicated Security View | No Integration View; no Scenarios View; no lifecycle; no risk governance; no ADRs |
+| **[shekhargulati template](https://github.com/shekhargulati/software-architecture-document-template)** | GitHub community template | Back-of-envelope sizing calculations; lightweight and accessible | No Physical, Security, Data, or Process views; no quality attributes; no lifecycle |
+| **[ServiceNow SAD](https://www.servicenow.com/community/architect-articles/recommended-format-solution-design-format-for-your/ta-p/2929116)** | Community blog post (platform-specific) | Strong data governance (classification, archival, anonymisation); current-to-future-state progression | Platform-specific; monolithic structure; no architectural views; no quality attributes |
+| **[HELMET D3.1 HLD](https://www.helmet-project.eu/)** | EU research deliverable | Real 86-page filled-in HLD; multi-domain (rail, automotive, UAV); safety-integrity focus | Organised by domain segment not viewpoints; no Security View; no quality attributes |
+| **[ALMBoK SAD](https://almbok.com/method/sad)** | Methodology website | 13 viewpoints — broadest coverage found; full As-Is to To-Be lifecycle | 13 viewpoints with no guidance on which to skip; no depth levels; no schema; no atomic fields |
+| **[nocomplexity Playbook](https://nocomplexity.com/documents/arplaybook/sad_template.html)** | Open-source personal project | Uniquely addresses relations among views | Too abstract — doesn't prescribe which views to include; no quality attributes; skeletal |
+
+### Framework Analysis
+
+Gaps that appear consistently across the frameworks reviewed:
+
+<CardGrid>
+  <Card title="Documentation Depth Levels" icon="bars-2">
+    No existing template provides guidance on how much detail is needed for different project scales. ADS defines three tiers (**Minimum**, **Recommended**, **Comprehensive**) with RFC 2119 keywords (SHALL / SHOULD / MAY) so teams right-size their effort.
+  </Card>
+  <Card title="Machine-Readable Schema" icon="seti:json">
+    Every template reviewed is prose-only. ADS provides a JSON Schema with atomic, enumerated fields — enabling automated completeness checks, cross-SAD comparison, and multi-format generation (Markdown, Word, web).
+  </Card>
+  <Card title="Dedicated Security View" icon="warning">
+    Most frameworks have no dedicated Security View. Security is either buried in "cross-cutting concepts", treated as a quality pillar, or absent entirely. ADS treats security as a first-class architectural view (Section 3.5).
+  </Card>
+  <Card title="Dedicated Data View" icon="open-book">
+    Most frameworks lack a structured Data View. Data architecture is scattered across other views or missing. ADS provides a dedicated Data View (Section 3.4) covering data models, flows, classification, retention, and sovereignty.
+  </Card>
+  <Card title="Cloud WAF-Aligned Quality Attributes" icon="star">
+    No existing documentation template aligns quality attributes to the cloud Well-Architected Frameworks. ADS maps cross-cutting quality attributes (Section 4) to AWS, Azure, GCP, Oracle, and IBM.
+  </Card>
+</CardGrid>
+
+## Feature Comparison
+
+How ADS compares feature-by-feature against the most widely-used frameworks:
+
+| Feature | ADS | arc42 | bflorat | ALMBoK | NHS SAF |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **Architectural views (4+1 aligned)** | 6 views | 4 views | 5 views | 13 views | Guidance only |
+| **Dedicated Security View** | ✅ | ❌ | ✅ | ✅ | Guidance only |
+| **Dedicated Data View** | ✅ | ❌ | ❌ | ✅ | Guidance only |
+| **Integration & Data Flow View** | ✅ | Partial | ❌ | ✅ | Guidance only |
+| **Cloud WAF quality attributes** | ✅ 5 providers | ❌ | ❌ | ❌ | References only |
+| **Documentation depth levels** | ✅ 3 tiers | ❌ | ❌ | ❌ | Informal |
+| **RFC 2119 keywords** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **JSON Schema / validation** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Atomic enumerated fields** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Lifecycle management** | ✅ | ❌ | ❌ | ✅ | ❌ |
+| **Decision making & governance** | ✅ | Partial | ❌ | ❌ | ✅ |
+| **Downloadable templates** | ✅ MD/YAML/JSON | ❌ | ✅ AsciiDoc | ❌ | ❌ |
+| **Multi-format generation** | ✅ | ❌ | ✅ | ❌ | ❌ |
+| **Platform-agnostic** | ✅ | ✅ | ✅ | ✅ | NHS-specific |
+| **Open-source / free** | ✅ | ✅ | ✅ | Partial | ✅ |
+
+For detailed comparisons showing what ADS shares with and where it differs from each framework (ISO 42010, 4+1, TOGAF, cloud WAFs, arc42), see the [Framework Alignment](/standard/framework-alignment/) page.
+
+## Who Benefits
+
+<CardGrid>
+  <Card title="Solution Architects" icon="pencil">
+    A structured, fill-in template that removes the blank-page problem. Atomic fields mean less ambiguity. Depth levels mean you write only what's needed.
+  </Card>
+  <Card title="Architecture Governance" icon="approve-check-circle">
+    A consistent standard to review SADs against. Machine-readable schema enables automated completeness checks across a portfolio of architecture descriptions.
+  </Card>
+  <Card title="Delivery Teams" icon="rocket">
+    Clear, structured architecture documentation that's navigable by role — infrastructure engineers read the Physical View, security teams read the Security View.
+  </Card>
+  <Card title="Organisations" icon="setting">
+    Comparable architecture descriptions across projects. Portfolio-level analysis of quality attributes, risk posture, and compliance coverage.
+  </Card>
+</CardGrid>
+
+<Aside type="tip" title="Getting Started">
+  Download a [template](/standard/templates/) and start filling it in. The documentation depth levels tell you exactly which fields are required for your project's scale.
+</Aside>

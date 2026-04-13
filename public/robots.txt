@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://archstandard.org/v1/sitemap-index.xml

@@ -1,0 +1,11 @@
+---
+interface Props {
+  chart: string;
+  alt: string;
+}
+const { chart, alt } = Astro.props;
+---
+<figure role="img" aria-label={alt}>
+  <pre class="mermaid" set:html={chart} />
+  <figcaption class="sr-only">{alt}</figcaption>
+</figure>

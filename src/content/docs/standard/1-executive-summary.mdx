@@ -1,0 +1,187 @@
+---
+title: "1. Executive Summary"
+description: Solution overview, business context, scope, and key decisions.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-togaf">TOGAF</span>
+
+## Purpose
+
+The Executive Summary provides a concise overview of the solution for all stakeholders, including non-technical decision-makers. It establishes the business context and frames the architectural decisions that follow.
+
+## 1.1 Solution Overview
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Provide a brief (1-2 paragraph) summary of the solution:
+
+- Describe what the solution does.
+- Describe the business problem it solves.
+- Describe the high-level approach.
+
+*[...]*
+
+## 1.2 Business Context & Drivers
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Describe the business drivers that led to this solution:
+
+| Driver | Description | Priority |
+|--------|------------|----------|
+| *[business driver]* | *[description]* | High / Medium / Low |
+
+Consider:
+- Business requirements and objectives
+- Regulatory or compliance drivers
+- Technology modernisation goals
+- Cost reduction or efficiency targets
+- Market or competitive pressures
+
+## 1.3 Strategic Alignment
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Demonstrate how this solution aligns with organisational strategy and avoids duplication of existing capabilities.
+
+### Organisational Strategy Alignment
+
+| Question | Response |
+|----------|----------|
+| Which organisational strategy or initiative does this solution support? | *[e.g., digital transformation programme, cloud-first strategy]* |
+| Has this solution been reviewed against the organisation's capability model? | Yes / No / N/A |
+| Does this solution duplicate any existing capability? | Yes / No — *[if yes, provide justification]* |
+
+### Reuse of Shared Services & Platforms
+
+Document which existing organisational platforms, shared services, or common components are being reused — and which were considered but not selected (with justification).
+
+| Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
+|-----------|--------------------------|---------|------------------------------|
+| Identity & Access | *[e.g., Entra ID, Okta]* | Yes / No | *[...]* |
+| Messaging / Notifications | *[e.g., GOV.UK Notify, SES, SendGrid]* | Yes / No | *[...]* |
+| API Management | *[e.g., Apigee, AWS API Gateway, Kong]* | Yes / No | *[...]* |
+| Monitoring & Logging | *[e.g., Splunk, Datadog, Grafana]* | Yes / No | *[...]* |
+| Data & Analytics | *[e.g., Snowflake, Databricks]* | Yes / No | *[...]* |
+| CI/CD | *[e.g., GitHub Actions, Jenkins, Azure DevOps]* | Yes / No | *[...]* |
+| Other | *[...]* | Yes / No | *[...]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Most organisations maintain a catalogue of approved platforms and shared services. Architects should demonstrate they have assessed these before proposing new technology. This reduces cost, complexity, and operational overhead. If a shared service is not reused, provide a clear justification. Common reasons include:
+- Capability gap — the shared service does not meet requirements
+- Performance — the shared service cannot meet performance targets
+- Contractual — licensing or vendor constraints prevent use
+</div>
+
+## 1.4 Scope
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+### In Scope
+
+Define what this SAD covers:
+
+- Which applications, services, or components?
+- Which environments (production, DR, test)?
+- Which user groups or business functions?
+
+### Out of Scope
+
+Explicitly state what is excluded. Examples may include:
+
+- Related systems documented elsewhere
+- Future phases not covered in this design
+- Detailed designs (covered in separate documents)
+- Infrastructure managed by other teams
+- Third-party systems outside the solution boundary
+
+## 1.5 Current State / As-Is Architecture
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Understanding the current state helps stakeholders assess the scale of change and identify transition risks.
+
+Where the solution replaces, modifies, or integrates with existing systems, describe the current-state architecture that is relevant to the change:
+
+- What existing systems or components are affected?
+- What are the key limitations or pain points of the current state?
+- What is being retained, replaced, or modified?
+
+*[Insert current-state architecture diagram if applicable]*
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+This section is particularly valuable for migration and modernisation projects. For greenfield solutions with no existing landscape, this section SHOULD be omitted. Keep the description focused on what is directly relevant to the transition — do not reproduce extensive legacy documentation that exists elsewhere.
+</div>
+
+## 1.6 Key Decisions & Constraints
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Summarise the most significant architectural decisions and any constraints that shaped the design:
+
+| Decision / Constraint | Rationale | Impact |
+|----------------------|-----------|--------|
+| *[decision]* | *[why]* | *[effect on design]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Constraints may include:
+- **Technical** - Existing technology stack, platform mandates
+- **Organisational** - Team capabilities, vendor relationships
+- **Financial** - Budget limits, cost targets
+- **Regulatory** - Compliance requirements, data residency
+- **Time** - Delivery deadlines, phased rollouts
+</div>
+
+## 1.7 Project Details
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Linking the architecture to a specific project or change activity provides traceability for governance.
+
+If this SAD is produced as part of a specific project or change activity:
+
+| Field | Value |
+|-------|-------|
+| **Project Name** | *[...]* |
+| **Project Code / ID** | *[...]* |
+| **Project Manager** | *[...]* |
+| **Estimated Solution Cost (Capex)** | *[...]* |
+| **Estimated Solution Cost (Opex)** | *[...]* |
+| **Target Go-Live Date** | *[...]* |
+
+## 1.8 Business Criticality
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Business criticality drives the level of resilience, recovery, and governance rigour required throughout the design.
+
+Classify the business criticality of the solution. The chosen tier suggests a recommended documentation depth:
+
+| Tier | Description | Recommended Depth |
+|------|-------------|------------------|
+| **Tier 1: Critical** | Service failure causes immediate, severe business impact | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> |
+| **Tier 2: High Impact** | Service failure significantly impacts business operations | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> |
+| **Tier 3: Medium Impact** | Service failure impacts operations but workarounds exist | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| **Tier 4: Low Impact** | Service failure has limited business impact | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| **Tier 5: Minimal** | Service failure has negligible impact | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+
+Selected criticality: *[...]*
+
+This classification drives requirements for resilience, recovery time objectives, and governance rigour throughout the design. See the [Depth Cheat Sheet](/standard/cheat-sheet/) for what to fill in at each level.
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | Business context mentioned but vague; scope undefined |
+| **3** | Clear business drivers, scope defined, strategic alignment documented |
+| **5** | All of the above plus current-state architecture documented, reuse assessment complete, business criticality justified with evidence |
+</div>

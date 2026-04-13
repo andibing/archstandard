@@ -1,0 +1,566 @@
+{
+  "$schema": "https://archstandard.org/schema/v1.0.0/ads.schema.json",
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document — archstandard.org",
+      "solutionName": "archstandard.org",
+      "applicationId": "N/A (independent project)",
+      "authors": ["Andi Chandler"],
+      "owner": "Andi Chandler",
+      "version": "1.0",
+      "status": "approved",
+      "createdDate": "2025-05-01",
+      "lastUpdated": "2025-06-15",
+      "classification": "public"
+    },
+    "changeHistory": [
+      {
+        "version": "0.1",
+        "date": "2025-05-01",
+        "author": "Andi Chandler",
+        "changeType": "initial-draft",
+        "description": "Initial draft"
+      },
+      {
+        "version": "1.0",
+        "date": "2025-06-15",
+        "author": "Andi Chandler",
+        "changeType": "approval",
+        "description": "First approved version"
+      }
+    ],
+    "contributors": [
+      {
+        "name": "Andi Chandler",
+        "role": "Solution Architect / Owner",
+        "contributionType": "author"
+      }
+    ],
+    "purpose": "This SAD describes the architecture of archstandard.org, the website that publishes the Architecture Description Standard (ADS). It serves as both reference documentation and a meta-example of ADS applied at Minimum depth for a simple static site.",
+    "scope": "Standard pages, downloadable templates, JSON Schema hosting, worked examples, multi-language support (EN, FR, DE), and template generator script."
+  },
+  "executiveSummary": {
+    "solutionOverview": "archstandard.org is a static documentation website that publishes the Architecture Description Standard. It provides the full standard text, downloadable templates (Markdown, YAML, JSON, DOCX), a JSON Schema for validation, and worked examples — all as a searchable, accessible website. The site is built with Astro and the Starlight documentation theme, compiled to static HTML at build time, and served globally via Cloudflare Pages. There is no backend, no database, and no user authentication.",
+    "businessContext": [
+      {
+        "driver": "Publish the standard",
+        "driverType": "new-capability",
+        "description": "Make the ADS freely accessible as a modern, searchable website",
+        "priority": "high"
+      },
+      {
+        "driver": "Provide templates",
+        "driverType": "new-capability",
+        "description": "Offer downloadable SAD templates in multiple formats",
+        "priority": "medium"
+      },
+      {
+        "driver": "Multi-language support",
+        "driverType": "new-capability",
+        "description": "Serve the standard in English, French, and German",
+        "priority": "medium"
+      }
+    ],
+    "strategicAlignment": {
+      "organisationStrategySupported": "Not applicable. This is an independent open project, not part of a corporate strategy or capability model.",
+      "reviewedAgainstCapabilityModel": "not-applicable",
+      "duplicatesExistingCapability": "not-applicable"
+    },
+    "inScope": [
+      "Standard pages (all ADS sections as MDX content)",
+      "Downloadable templates (Markdown, YAML, JSON, DOCX)",
+      "JSON Schema hosting and documentation",
+      "Worked examples (this document is one of them)",
+      "Multi-language support (EN, FR, DE)",
+      "Template generator script (Node.js build-time tool)"
+    ],
+    "outOfScope": [
+      "User accounts or authentication (beyond pre-launch Basic Auth)",
+      "SAD authoring tool or online editor",
+      "Discussion forum or comments",
+      "Analytics or tracking (no cookies, no PII collection)"
+    ],
+    "keyDecisions": [
+      {
+        "decision": "Must be free or very low cost",
+        "constraintType": "financial",
+        "rationale": "Independent project with no budget",
+        "reversibility": "easily-reversible"
+      },
+      {
+        "decision": "Static site only",
+        "constraintType": "technical",
+        "rationale": "No runtime complexity needed for read-only content",
+        "reversibility": "reversible-with-effort"
+      },
+      {
+        "decision": "Chose Astro/Starlight",
+        "constraintType": "technical",
+        "rationale": "Purpose-built for documentation; fast, accessible, good i18n support. See ADR-001.",
+        "reversibility": "reversible-with-effort"
+      },
+      {
+        "decision": "Chose Cloudflare Pages",
+        "constraintType": "vendor",
+        "rationale": "Free tier with global CDN, automatic SSL, and git-based deploys. See ADR-002.",
+        "reversibility": "easily-reversible"
+      }
+    ],
+    "businessCriticality": "tier-5-minimal"
+  },
+  "stakeholders": {
+    "register": [
+      {
+        "stakeholder": "Andi Chandler",
+        "roleType": "solution-architect",
+        "concerns": ["Content accuracy", "Site reliability", "Cost"],
+        "relevantViews": ["logical", "integration", "physical", "data", "security", "scenarios"]
+      },
+      {
+        "stakeholder": "Solution Architects",
+        "roleType": "end-user",
+        "concerns": ["Standard clarity", "Template usability", "Searchability"],
+        "relevantViews": ["logical", "scenarios"]
+      },
+      {
+        "stakeholder": "Enterprise Architects",
+        "roleType": "end-user",
+        "concerns": ["Framework alignment", "Governance applicability"],
+        "relevantViews": ["scenarios"]
+      },
+      {
+        "stakeholder": "Governance Teams",
+        "roleType": "compliance",
+        "concerns": ["Compliance scoring", "Template completeness"],
+        "relevantViews": ["scenarios"]
+      }
+    ],
+    "compliance": {
+      "supportsRegulatedActivities": "no"
+    }
+  },
+  "architecturalViews": {
+    "logicalView": {
+      "components": [
+        {
+          "name": "MDX Content",
+          "componentType": "file-storage",
+          "description": "Standard pages, examples, guides",
+          "technology": "MDX (Markdown + JSX)",
+          "status": "new"
+        },
+        {
+          "name": "Astro + Starlight",
+          "componentType": "web-application",
+          "description": "Builds HTML from MDX content",
+          "technology": "Astro 5.x, Starlight",
+          "status": "new"
+        },
+        {
+          "name": "JSON Schema",
+          "componentType": "file-storage",
+          "description": "Machine-readable SAD schema",
+          "technology": "JSON Schema Draft 2020-12",
+          "status": "new"
+        },
+        {
+          "name": "Template Generator",
+          "componentType": "batch-job",
+          "description": "Generates templates from JSON Schema",
+          "technology": "Node.js",
+          "status": "new"
+        },
+        {
+          "name": "Static output",
+          "componentType": "web-application",
+          "description": "Compiled site served to users",
+          "technology": "HTML, CSS, JavaScript",
+          "status": "new"
+        }
+      ]
+    },
+    "integrationView": {
+      "externalIntegrations": [
+        {
+          "sourceApp": "Developer (git push)",
+          "destinationApp": "GitHub",
+          "integrationType": "external-service",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "certificate",
+          "purpose": "Source control"
+        },
+        {
+          "sourceApp": "GitHub (webhook)",
+          "destinationApp": "Cloudflare Pages",
+          "integrationType": "external-service",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "api-key",
+          "purpose": "Trigger build and deploy"
+        }
+      ]
+    },
+    "physicalView": {
+      "hosting": {
+        "venueTypes": ["saas"],
+        "regions": ["global"],
+        "serviceModels": ["saas"],
+        "cloudProviders": ["other"]
+      },
+      "compute": {
+        "computeTypes": ["none"]
+      },
+      "networking": {
+        "internetFacing": true,
+        "outboundInternet": false,
+        "cloudToOnPrem": false,
+        "thirdPartyConnectivity": false,
+        "cloudPeering": false,
+        "wirelessRequired": false,
+        "ddosProtection": "yes",
+        "ddosProvider": "cloudflare",
+        "wafEnabled": "yes",
+        "wafProvider": "cloudflare-waf"
+      },
+      "environments": [
+        {
+          "environmentType": "production",
+          "count": 1,
+          "venue": "Cloudflare Pages CDN (global edge, 300+ locations)"
+        }
+      ]
+    },
+    "dataView": {
+      "dataStores": [
+        {
+          "name": "Standard content",
+          "storeType": "file-storage",
+          "technology": "Git (MDX files)",
+          "authoritative": true,
+          "retentionPeriod": "indefinite",
+          "classification": "public",
+          "containsPersonalData": false,
+          "containsSensitivePersonalData": false
+        },
+        {
+          "name": "JSON Schema",
+          "storeType": "file-storage",
+          "technology": "Git (JSON file)",
+          "authoritative": true,
+          "retentionPeriod": "indefinite",
+          "classification": "public",
+          "containsPersonalData": false,
+          "containsSensitivePersonalData": false
+        },
+        {
+          "name": "Templates",
+          "storeType": "file-storage",
+          "technology": "Git (generated files)",
+          "authoritative": true,
+          "retentionPeriod": "indefinite",
+          "classification": "public",
+          "containsPersonalData": false,
+          "containsSensitivePersonalData": false
+        }
+      ],
+      "dataOnEndUserDevices": "no",
+      "dataSovereigntyRequired": "no"
+    },
+    "securityView": {
+      "thirdPartyHosted": "yes",
+      "thirdPartyRiskAssessed": "no",
+      "businessImpact": {
+        "confidentiality": "negligible",
+        "integrity": "low",
+        "availability": "negligible"
+      },
+      "authentication": [
+        {
+          "accessType": "end-user-external",
+          "method": "basic-auth",
+          "usesGroupWideAuth": false
+        }
+      ],
+      "secretManagement": {
+        "secretStore": "none",
+        "distribution": "environment-variable",
+        "rotation": "manual-ad-hoc"
+      }
+    },
+    "scenarios": {
+      "useCases": [
+        {
+          "id": "UC-01",
+          "name": "Architect Reads the Standard",
+          "actors": ["Solution Architect"],
+          "trigger": "Navigates to archstandard.org",
+          "mainFlow": "1. User opens browser and navigates to archstandard.org. 2. Cloudflare CDN serves static HTML. 3. User browses standard sections, uses search, and reads content.",
+          "viewsInvolved": ["logical", "physical"]
+        },
+        {
+          "id": "UC-02",
+          "name": "Architect Downloads a Template",
+          "actors": ["Solution Architect"],
+          "trigger": "Clicks a template download link",
+          "mainFlow": "1. User navigates to the Templates page. 2. User selects a format (Markdown, YAML, JSON, or DOCX). 3. Browser downloads the static file from Cloudflare CDN.",
+          "viewsInvolved": ["logical", "physical"]
+        }
+      ],
+      "adrs": [
+        {
+          "id": "ADR-001",
+          "title": "Chose Astro/Starlight over Docusaurus",
+          "status": "accepted",
+          "date": "2025-04-15",
+          "context": "The project needs a static documentation framework with i18n support, MDX content, search, and strong accessibility.",
+          "decision": "Use Astro with the Starlight documentation theme.",
+          "alternatives": "Docusaurus (React-based, heavier JS bundle, less flexible i18n), MkDocs (Python-based, limited component model), Hugo (Go-based, no native MDX support).",
+          "consequences": "Fast build times, small JS payload, built-in i18n routing, built-in search. Requires Node.js for development. Astro ecosystem is newer and smaller than React/Docusaurus.",
+          "affectedAttributes": ["performance", "sustainability"]
+        },
+        {
+          "id": "ADR-002",
+          "title": "Chose Cloudflare Pages over AWS S3 + CloudFront",
+          "status": "accepted",
+          "date": "2025-04-15",
+          "context": "The site needs free or very low-cost static hosting with a global CDN, automatic SSL, and git-based deployment.",
+          "decision": "Use Cloudflare Pages with GitHub integration.",
+          "alternatives": "AWS S3 + CloudFront (more complex setup, potential cost beyond free tier), GitHub Pages (limited build customisation, no edge functions for Basic Auth middleware), Netlify (comparable but Cloudflare offers better global edge coverage on free tier).",
+          "consequences": "Zero-cost hosting with automatic builds on git push. Custom domain with automatic SSL. Basic Auth middleware possible via Cloudflare Pages Functions. Vendor dependency on Cloudflare, but site is fully portable static HTML.",
+          "affectedAttributes": ["cost-optimisation", "reliability"]
+        }
+      ]
+    }
+  },
+  "qualityAttributes": {
+    "operationalExcellence": {
+      "loggingCentralised": false,
+      "monitoringTool": "None (Cloudflare Pages build status notifications via GitHub)",
+      "tracingEnabled": false,
+      "alertingConfigured": false,
+      "runbooksDocumented": false
+    },
+    "reliability": {
+      "drStrategy": "backup-restore",
+      "multiVenueDeployment": true,
+      "rpoTarget": "PT0S",
+      "scalability": "no-dynamic-scaling",
+      "faultToleranceDesigned": false,
+      "chaosTestingPractised": false,
+      "backupEnabled": true,
+      "backupType": "continuous",
+      "backupFrequency": "real-time"
+    },
+    "performance": {
+      "performanceTestingApproach": "none",
+      "cachingUsed": true,
+      "cdnUsed": true
+    },
+    "costOptimisation": {
+      "costAnalysisPerformed": true,
+      "designConstrainedByCost": true,
+      "reservedCapacity": false,
+      "costMonitoringEnabled": false,
+      "taggingStrategy": false
+    },
+    "sustainability": {
+      "hostingLocationOptimisedForCarbon": true,
+      "nonProdAutoShutdown": false,
+      "resourcesRightsized": true,
+      "workloadPattern": "constant",
+      "continuousAvailabilityRequired": false
+    }
+  },
+  "lifecycleManagement": {
+    "internallyDeveloped": true,
+    "sourceControl": "github",
+    "cicdPlatform": "other",
+    "sast": "none",
+    "dast": "not-applicable",
+    "sca": "none",
+    "containerScanning": "not-applicable",
+    "migration": {
+      "classification": "not-applicable"
+    },
+    "releaseFrequency": "ad-hoc",
+    "supportModel": "community",
+    "vendorLockInLevel": "low"
+  },
+  "riskGovernance": {
+    "constraints": [
+      {
+        "id": "C-001",
+        "constraint": "Must be free or very low cost",
+        "category": "commercial",
+        "impactOnDesign": "Drives selection of free-tier hosting (Cloudflare Pages) and open-source tooling (Astro)"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "A-001",
+        "assumption": "Cloudflare Pages free tier is sufficient for expected traffic",
+        "impactIfFalse": "Would need to evaluate paid tier or alternative host",
+        "certainty": "high",
+        "status": "open"
+      }
+    ],
+    "risks": [
+      {
+        "id": "R-001",
+        "riskEvent": "Cloudflare service disruption causes temporary unavailability",
+        "riskCategory": "operational",
+        "severity": "negligible",
+        "likelihood": "low",
+        "mitigationStrategy": "accept",
+        "mitigationPlan": "Content exists in git repository and can be rebuilt or served from an alternative host at any time. No business processes depend on the site's availability.",
+        "residualRisk": "negligible",
+        "owner": "Andi Chandler"
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "D-001",
+        "dependency": "GitHub",
+        "direction": "outbound",
+        "status": "committed",
+        "owner": "Andi Chandler"
+      }
+    ],
+    "policyExceptions": "no",
+    "processExceptions": "no"
+  },
+  "appendices": {
+    "glossary": [
+      {
+        "term": "ADS",
+        "definition": "Architecture Description Standard — the standard published on this site"
+      },
+      {
+        "term": "Astro",
+        "definition": "A static site generator optimised for content-heavy websites"
+      },
+      {
+        "term": "CDN",
+        "definition": "Content Delivery Network"
+      },
+      {
+        "term": "MDX",
+        "definition": "Markdown with JSX — allows components within Markdown content"
+      },
+      {
+        "term": "SAD",
+        "definition": "Solution Architecture Document"
+      },
+      {
+        "term": "Starlight",
+        "definition": "An Astro theme purpose-built for documentation websites"
+      }
+    ],
+    "references": [
+      {
+        "title": "Architecture Description Standard",
+        "version": "1.0",
+        "url": "https://archstandard.org/standard/overview/",
+        "description": "The standard this site publishes"
+      },
+      {
+        "title": "Astro Documentation",
+        "version": "5.x",
+        "url": "https://docs.astro.build/",
+        "description": "Framework documentation"
+      },
+      {
+        "title": "Starlight Documentation",
+        "version": "Latest",
+        "url": "https://starlight.astro.build/",
+        "description": "Theme documentation"
+      }
+    ],
+    "approvals": [
+      {
+        "role": "Solution Architect",
+        "name": "Andi Chandler",
+        "date": "2025-06-15",
+        "decision": "approved"
+      }
+    ]
+  },
+  "complianceScoring": {
+    "assessments": [
+      {
+        "section": "1. Executive Summary",
+        "score": 4,
+        "notes": "Clear drivers, scope well-defined, criticality stated. No current-state section needed (greenfield)."
+      },
+      {
+        "section": "3.1 Logical View",
+        "score": 3,
+        "notes": "Components documented with technology choices. No complex decomposition needed for a static site."
+      },
+      {
+        "section": "3.2 Integration and Data Flow",
+        "score": 3,
+        "notes": "All integrations documented (there are only two). No runtime interfaces exist."
+      },
+      {
+        "section": "3.3 Physical View",
+        "score": 3,
+        "notes": "Hosting fully documented. No compute, networking, or environments to specify beyond CDN."
+      },
+      {
+        "section": "3.4 Data View",
+        "score": 4,
+        "notes": "Data footprint fully documented. Explicitly confirms no PII and no persistent storage."
+      },
+      {
+        "section": "3.5 Security View",
+        "score": 3,
+        "notes": "Security context documented, BIA completed, transport security confirmed. No threat model needed at this criticality."
+      },
+      {
+        "section": "3.6 Scenarios",
+        "score": 3,
+        "notes": "Two use cases and two ADRs — proportionate to the solution's simplicity."
+      },
+      {
+        "section": "4.1 Operational Excellence",
+        "score": 3,
+        "notes": "Appropriate for a static site — no monitoring needed, build notifications sufficient."
+      },
+      {
+        "section": "4.2 Reliability",
+        "score": 3,
+        "notes": "CDN resilience documented. Git-based recovery strategy clear."
+      },
+      {
+        "section": "4.3 Performance",
+        "score": 3,
+        "notes": "Static site with CDN caching — performance is inherent, not engineered."
+      },
+      {
+        "section": "4.4 Cost Optimisation",
+        "score": 4,
+        "notes": "Cost is effectively zero. Fully documented."
+      },
+      {
+        "section": "4.5 Sustainability",
+        "score": 3,
+        "notes": "Minimal footprint acknowledged. No further action needed."
+      },
+      {
+        "section": "5. Lifecycle",
+        "score": 3,
+        "notes": "Build and deploy process documented. No migration or complex CI/CD needed."
+      },
+      {
+        "section": "6. Decision Making",
+        "score": 3,
+        "notes": "Constraints, assumptions, and dependencies captured. No material risks."
+      }
+    ],
+    "overallScore": 3,
+    "overallNotes": "Appropriate for a Tier 5, Minimum-depth static site. All sections addressed proportionately."
+  }
+}

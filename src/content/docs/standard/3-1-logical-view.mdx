@@ -1,0 +1,118 @@
+---
+title: "3.1 Logical View"
+description: Application architecture, component decomposition, service mapping, and design patterns.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-4plus1">4+1 Logical</span>
+<span class="framework-badge badge-togaf">TOGAF Application</span>
+
+## Purpose
+
+The Logical View describes the solution's functional structure - the application components, how they relate to each other, and how they map to business services and capabilities. It addresses the concerns of solution architects and developers.
+
+## 3.1.1 Application Architecture Diagram
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Provide a block diagram showing the software components used in the solution (applications, middleware, databases, APIs, etc.), how they interact, and how they integrate with external platforms.
+
+*[Insert application architecture diagram]*
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+The diagram should show:
+- All major application components and their roles
+- Interactions and data flows between components
+- Integration points with external systems
+- Clear boundaries between the solution and its environment
+- Consider using the C4 Model (a hierarchical approach to diagramming: Context, Container, Component, Code) for progressive detail
+</div>
+
+## 3.1.2 Component Decomposition
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Describe each major component of the solution:
+
+| Component | Type | Description | Technology | Owner |
+|-----------|------|-------------|------------|-------|
+| *[name]* | Application / Service / API / Database / Queue / etc. | *[what it does]* | *[technology stack]* | *[team]* |
+
+## 3.1.3 Service & Capability Mapping
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Mapping components to business capabilities helps identify duplication and ensures the solution aligns with the organisation's capability model.
+
+Map the solution to business services and capabilities it supports:
+
+| Service ID | Service Name | Capability ID | Capability Name |
+|-----------|-------------|--------------|----------------|
+| *[...]* | *[...]* | *[...]* | *[...]* |
+
+## 3.1.4 Application Impact
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Tracking impacted applications ensures that downstream teams are informed and that integration testing covers all affected systems.
+
+Identify other applications that are impacted by this solution:
+
+| Application Name | Application ID | Impact Type | Change Details | Comments |
+|-----------------|---------------|-------------|----------------|----------|
+| *[name]* | *[id]* | Use / Change / Create | *[details]* | *[notes]* |
+
+## 3.1.5 Key Design Patterns
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Document the architectural and design patterns applied in this solution:
+
+| Pattern | Where Applied | Rationale |
+|---------|--------------|-----------|
+| *[e.g., Microservices, Event-Driven, CQRS, Strangler Fig]* | *[which components]* | *[why this pattern was chosen]* |
+
+## 3.1.6 Technology & Vendor Lock-in Assessment
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Assess the degree of vendor or technology lock-in for key components:
+
+| Component / Service | Vendor / Technology | Lock-in Level | Mitigation | Portability Notes |
+|---|---|---|---|---|
+| *[component]* | *[vendor/technology]* | None / Low / Moderate / High / Critical | *[how lock-in is mitigated]* | *[how portable is this component?]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Consider lock-in across multiple dimensions:
+- **Proprietary APIs** — Does the solution use vendor-specific APIs with no open equivalent?
+- **Data formats** — Can data be exported in standard, open formats?
+- **Contractual** — Are there minimum commitment periods or exit penalties?
+- **Operational** — Does the team have skills to operate on an alternative platform?
+- **Migration effort** — How much re-engineering would be needed to move to an alternative?
+
+This assessment should inform the Exit Planning section (5.10) and the Cost Optimisation quality attribute (4.4).
+</div>
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | High-level diagram exists but components not decomposed |
+| **3** | Components documented with technology choices, design patterns justified |
+| **5** | All of the above plus vendor lock-in assessed, component interactions fully specified, all statuses (new/existing/decommissioned) documented |
+</div>
+
+<div class="quality-attribute-ref">
+
+**Quality Attribute Cross-References:**
+- **4.3 Performance Efficiency** - Component design affects performance characteristics
+- **4.2 Reliability** - Component decomposition influences fault isolation and resilience
+- **4.4 Cost Optimisation** - Vendor lock-in affects long-term cost flexibility
+- **4.5 Sustainability** - Component architecture affects resource utilisation
+
+</div>

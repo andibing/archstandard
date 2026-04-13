@@ -1,0 +1,179 @@
+---
+title: Framework Alignment
+description: How ADS relates to established architecture frameworks — what it shares and where it differs.
+---
+
+## Alignment Model
+
+ADS maps to multiple established frameworks. This page documents both the alignment (what ADS shares with each framework) and the differences (what ADS adds or does differently).
+
+### Framework Badges
+
+Each section page in the standard shows badges indicating which frameworks influenced that section:
+
+| Badge | Meaning |
+|-------|---------|
+| <span class="framework-badge badge-iso42010">ISO 42010</span> | Aligns with the ISO/IEC/IEEE 42010 conceptual model |
+| <span class="framework-badge badge-4plus1">4+1 View</span> | Maps to a view in Kruchten's 4+1 Architectural View Model |
+| <span class="framework-badge badge-togaf">TOGAF</span> | Aligns with a TOGAF architecture domain |
+| <span class="framework-badge badge-aws-waf">AWS WAF</span> | Derived from the AWS Well-Architected Framework |
+| <span class="framework-badge badge-azure-waf">Azure WAF</span> | Derived from the Azure Well-Architected Framework |
+
+The badges are informational only — they show provenance, not requirements. You do not need to comply with these external frameworks to conform to ADS.
+
+## ISO/IEC/IEEE 42010
+
+### What ADS Shares with ISO 42010
+
+ADS follows the ISO 42010 conceptual model for architecture descriptions:
+
+| ISO 42010 Concept | ADS Mapping |
+|-------------------|---------------------|
+| System of Interest | The solution being documented |
+| Stakeholders | Stakeholders & Concerns |
+| Concerns | Concerns Matrix |
+| Architecture Viewpoint | Defined viewpoints |
+| Architecture View | The content within each view |
+| Model Kind | Diagrams, tables, and descriptions within views |
+| Correspondences | Cross-references between views and quality attribute refs |
+| Architecture Description | The complete Solution Architecture Document |
+
+### Where ADS Goes Beyond ISO 42010
+
+ISO 42010 is a meta-standard — it defines *concepts* but deliberately leaves the concrete structure to implementers. ADS provides that concrete structure:
+
+| Aspect | ISO 42010 | ADS |
+|--------|-----------|-----|
+| **Prescribes sections?** | No — defines concepts only | Yes — exact sections, tables, and fields |
+| **Quality assessment?** | No | Yes — quality attributes from cloud WAFs |
+| **Documentation depths?** | No | Yes — Minimum, Recommended, Comprehensive with RFC 2119 |
+| **Security viewpoint?** | Not prescribed | Yes — dedicated Security View |
+| **Lifecycle coverage?** | Focuses on the AD itself | Yes — CI/CD, operations, migration, exit planning |
+| **Risk and governance?** | No | Yes — constraints, risks, assumptions, ADRs, compliance |
+| **Templates?** | No | Yes — Markdown, YAML, JSON |
+| **Machine-readable schema?** | No | Yes — JSON Schema with validation |
+
+## Kruchten 4+1 View Model
+
+### What ADS Shares with 4+1
+
+ADS uses the 4+1 model as the foundation for its architectural views:
+
+| 4+1 Original View | ADS View | Key Content |
+|-------------------|---------------------|-------------|
+| Logical View | Logical View | Component architecture, service mapping |
+| Process View | Integration & Data Flow View *(adapted)* | Data flows, integrations, interfaces |
+| Development View | Lifecycle Management | CI/CD, SDLC, tooling |
+| Physical View | Physical View | Deployment, infrastructure, networking |
+| +1 Scenarios | Scenarios | Use cases, ADRs |
+
+### Where ADS Extends 4+1
+
+| Aspect | 4+1 | ADS |
+|--------|-----|-----|
+| **Data architecture?** | Cross-cutting across views | Dedicated Data View |
+| **Security architecture?** | Cross-cutting across views | Dedicated Security View |
+| **Process View scope** | Concurrency and threading | Adapted to integration and data flows |
+| **Quality assessment?** | No | Yes — cross-cutting quality attributes |
+| **Documentation depths?** | No | Yes — three tiers |
+
+:::note
+The standard extends the classic 4+1 model with dedicated **Data** and **Security** views. In the original 4+1 model, these are cross-cutting concerns spread across all views. Modern solution architecture demands they be treated as first-class views due to regulatory, compliance, and data governance requirements. The Process View has been adapted to focus on integration and data flows rather than concurrency.
+:::
+
+## Cloud Well-Architected Frameworks (AWS, Azure, GCP, Oracle, IBM)
+
+### What ADS Shares with Cloud WAFs
+
+ADS derives its quality attributes from the cloud Well-Architected Frameworks:
+
+*Note: The cloud providers use American English spelling (e.g., "Optimization"). ADS uses British English (e.g., "Optimisation"). The table below preserves each provider's original spelling.*
+
+| Quality Attribute | AWS | Azure | GCP | Oracle | IBM |
+|------------------|-----|-------|-----|--------|-----|
+| Operational Excellence | Operational Excellence | Operational Excellence | Operational Excellence | Operational Efficiency | Operational Excellence |
+| Security | Security *(ADS maps this to a dedicated Security View)* | Security *(ADS maps this to a dedicated Security View)* | Security, Privacy & Compliance *(ADS maps this to a dedicated Security View)* | Security & Compliance *(ADS maps this to a dedicated Security View)* | Security *(ADS maps this to a dedicated Security View)* |
+| Reliability | Reliability | Reliability | Reliability | Reliability & Resilience | Reliability |
+| Performance | Performance Efficiency | Performance Efficiency | Performance Optimization | *(combined with Cost)* | Performance |
+| Cost | Cost Optimization | Cost Optimization | Cost Optimization | Performance & Cost Optimization | Cost Optimization |
+| Sustainability | Sustainability | *(not separate)* | Sustainability | *(not separate)* | *(not separate)* |
+| *(provider-specific)* | — | — | — | Distributed Cloud | Hybrid & Portable |
+
+### Where ADS Differs from Cloud WAFs
+
+| Aspect | Cloud WAFs | ADS |
+|--------|-----------|-----|
+| **Focus** | Quality assessment only | Full SAD structure (views + quality + lifecycle + governance) |
+| **Architectural views?** | No | Yes — six views |
+| **Security** | A quality pillar | Elevated to a dedicated Architectural View |
+| **Document structure?** | No — assessment questions only | Yes — prescriptive sections and tables |
+| **Templates?** | No | Yes — Markdown, YAML, JSON |
+| **Provider-neutral?** | Each is provider-specific | Yes — maps across all providers |
+
+## TOGAF
+
+### What ADS Shares with TOGAF
+
+ADS maps its sections to TOGAF's four architecture domains:
+
+| TOGAF Domain | ADS Section |
+|-------------|------------------------|
+| Business Architecture | Executive Summary, Stakeholders |
+| Data Architecture | Data View |
+| Application Architecture | Logical View, Integration & Data Flow View |
+| Technology Architecture | Physical View |
+
+### Where ADS Differs from TOGAF
+
+| Aspect | TOGAF | ADS |
+|--------|-------|-----|
+| **Scope** | Full enterprise architecture framework (ADM lifecycle, capability planning, governance) | SAD template only — focused on documenting a single solution |
+| **Prescribes SAD sections?** | No — TOGAF describes what an architecture should *address* but not the document structure | Yes — exact sections, tables, and fields |
+| **Quality attributes?** | No | Yes — cross-cutting quality attributes from cloud WAFs |
+| **Security view?** | Security is a cross-cutting concern | Yes — dedicated Security View |
+| **Templates?** | No (paid ArchiMate tooling available separately) | Yes — free Markdown, YAML, JSON templates |
+| **Compliance scoring?** | No | Yes — 0–5 scale per section |
+| **Cost** | Paid (TOGAF certification and library access) | Free and open-source (CC BY 4.0) |
+
+## arc42
+
+### What ADS Shares with arc42
+
+Both ADS and arc42 aim to provide a practical template for documenting software/solution architecture. They share:
+- A view-based approach to describing architecture
+- Explicit sections for quality requirements
+- A glossary and cross-references section
+
+### Where ADS Differs from arc42
+
+| Aspect | arc42 | ADS |
+|--------|-------|-----|
+| **Security view?** | No — security is in "cross-cutting concepts" | Yes — dedicated Security View |
+| **Data view?** | No | Yes — dedicated Data View |
+| **Quality attributes?** | Quality scenarios (unstructured) | Structured quality attributes aligned to cloud WAFs |
+| **Documentation depths?** | No | Yes — three tiers with RFC 2119 |
+| **Machine-readable schema?** | No — prose only | Yes — JSON Schema with validation |
+| **Compliance scoring?** | No | Yes — 0–5 scale per section |
+| **Governance section?** | Partial (risks and technical debt) | Full — constraints, assumptions, risks, dependencies, issues, ADRs, compliance traceability |
+| **Lifecycle management?** | Partial | Full — CI/CD, migration, resourcing, decommissioning, exit planning |
+
+## Section-to-Framework Traceability Matrix
+
+| ADS Section | ISO 42010 | 4+1 | Cloud WAFs | TOGAF |
+|-----------------|-----------|-----|-----------|-------|
+| Document Control | AD metadata | — | — | — |
+| Executive Summary | — | — | — | Business |
+| Stakeholders | Stakeholders, Concerns | — | — | Business |
+| Logical View | Viewpoint, View | Logical | — | Application |
+| Integration & Data Flow | Viewpoint, View | Process *(adapted)* | — | Application |
+| Physical View | Viewpoint, View | Physical | — | Technology |
+| Data View | Viewpoint, View | *(extended)* | — | Data |
+| Security View | Viewpoint, View | *(extended)* | Security | — |
+| Scenarios | Correspondences | +1 Scenarios | — | — |
+| Operational Excellence | — | — | Ops Excellence | — |
+| Reliability & Resilience | — | — | Reliability | — |
+| Performance Efficiency | — | — | Performance | — |
+| Cost Optimisation | — | — | Cost Optimization | — |
+| Sustainability | — | — | Sustainability *(AWS, GCP)* | — |
+| Lifecycle Management | — | Development | Ops Excellence | — |
+| Decision Making & Governance | Correspondences | — | — | — |

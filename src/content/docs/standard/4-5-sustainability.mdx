@@ -1,0 +1,117 @@
+---
+title: "4.5 Sustainability"
+description: Hosting efficiency, code efficiency, and data efficiency.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+<span class="framework-badge badge-aws-waf">AWS Sustainability</span>
+<span class="framework-badge badge-gcp-waf">GCP Sustainability</span>
+
+## Purpose
+
+Sustainability focuses on minimising the environmental impact of the solution by optimising the use of compute, storage, and network resources. This quality attribute was introduced by the AWS Well-Architected Framework and addresses energy consumption, carbon emissions, and resource efficiency. Evaluate this quality attribute across all architectural views documented in Section 3.
+
+## 4.5.1 Hosting Efficiency
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Hosting Location
+
+| Question | Response |
+|----------|----------|
+| Has the hosting location been chosen to reduce environmental impact? | Yes / No - *[describe criteria: CO2 intensity, renewable energy, water usage]* |
+| What is the expected workload demand pattern? | Variable / Constant - *[describe peaks and patterns]* |
+
+### On-Demand Availability
+
+| Question | Response |
+|----------|----------|
+| Must the application be available continuously? | Yes / No |
+| Can the solution be shut down or scaled down during off-peak hours? | Yes / No - *[describe schedule]* |
+| Are non-production environments configured to downscale or shut down when not in use? | Yes / No - *[details]* |
+
+### Resource Efficiency
+
+| Question | Response |
+|----------|----------|
+| Are resources rightsized to avoid overprovisioning? | *[describe approach]* |
+| Is vCPU utilisation monitored? | *[target utilisation %]* |
+| Are the highest performance-per-watt hardware options used? | *[details]* |
+
+## 4.5.2 Carbon Measurement
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Question | Response |
+|----------|----------|
+| Has a carbon footprint baseline been established for the solution? | Yes / No |
+| Which cloud provider carbon reporting tool is used? | AWS Customer Carbon Footprint Tool / Azure Emissions Impact Dashboard / Google Carbon Footprint / Other / None / N/A |
+| Is there a target for carbon reduction? | Yes / No — *[target and timeframe]* |
+| Is the Software Carbon Intensity (SCI) metric tracked? | Yes / No |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+The [Green Software Foundation](https://greensoftware.foundation/) defines three principles for sustainable software:
+- **Carbon efficiency** — emit the least carbon possible
+- **Energy efficiency** — use the least energy possible
+- **Carbon awareness** — do more when the electricity is cleaner, less when it is dirtier
+
+The **Software Carbon Intensity (SCI)** specification provides a standard metric for measuring the carbon impact of software: `SCI = ((E * I) + M) per R` where E = energy, I = carbon intensity of electricity, M = embodied emissions, R = functional unit. See [sci.greensoftware.foundation](https://sci.greensoftware.foundation/).
+</div>
+
+## 4.5.3 Network Efficiency
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+| Question | Response |
+|----------|----------|
+| Is a CDN used to reduce origin server traffic? | Yes / No |
+| Is edge computing used to process data closer to users? | Yes / No |
+| Are efficient protocols used (e.g., HTTP/3, gRPC, protocol buffers)? | Yes / No — *[details]* |
+| Is cross-region data transfer minimised? | Yes / No — *[details]* |
+| Are data compression strategies applied to reduce transfer volumes? | Yes / No |
+
+## 4.5.4 Code Efficiency
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+| Question | Response |
+|----------|----------|
+| How do the language and framework choices contribute to efficiency? | *[describe]* |
+| Has the code been optimised for the target platform and workload? | *[describe]* |
+| Are efficient algorithms and data structures used? | *[describe]* |
+| Is the number of vCPU hours per job/request minimised? | *[describe]* |
+
+## 4.5.5 Data Efficiency
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+| Question | Response |
+|----------|----------|
+| Is data held close to compute to reduce network transfer? | *[details]* |
+| Are data replicas minimised? | *[details]* |
+| Is old or unused data removed to reduce storage? | *[details]* |
+| Are efficient data formats and compression used? | *[details]* |
+| Are jobs prioritised and distributed to optimise resource usage? | *[details]* |
+| Are efficient networking patterns used (reduced distance, data transfer volume)? | *[details]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Consider the environmental impact of:
+- **DR environments** - Optimal patterns for standby compute (e.g., pilot light vs. warm standby)
+- **Non-production environments** - Auto-shutdown schedules, right-sized environments
+- **Data lifecycle** - Tiered storage, data expiry, archive strategies
+- **Network design** - Minimising cross-region traffic, edge computing
+</div>
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | Sustainability acknowledged but no specific actions taken |
+| **3** | Hosting location considered for carbon impact, non-production auto-shutdown enabled, resources right-sized, carbon baseline established |
+| **5** | All of the above plus SCI metric tracked, workload patterns optimised, network efficiency addressed, continuous availability justified where required |
+</div>

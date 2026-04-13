@@ -1,0 +1,233 @@
+---
+title: "3.5 Security View"
+description: Security overview, IAM, network security, data protection, and monitoring.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-aws-waf">AWS Security</span>
+<span class="framework-badge badge-azure-waf">Azure Security</span>
+
+## Purpose
+
+The Security View describes how the solution protects against threats, manages identity and access, and safeguards data. It addresses the concerns of security architects, the CISO office, compliance teams, and auditors.
+
+:::note[Calibrating effort to risk]
+This section can be substantial for high-criticality solutions. For **Tier 4 (Low Impact)** or **Tier 5 (Minimal)** solutions, complete only the Minimum-tagged subsections: Business Impact Assessment, basic Authentication, and Encryption at Rest. The Threat Model, Session Management details, and Privileged Access can be skipped for low-criticality projects unless your governance specifically requires them. See the [Depth Cheat Sheet](/standard/cheat-sheet/) for what's required at each depth.
+:::
+
+## 3.5.1 Security Overview & Threat Model
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+### Security Context
+
+| Question | Response |
+|----------|----------|
+| Does the solution support regulated activities? | Yes / No - *[details]* |
+| Is the solution SaaS or third-party hosted? | Yes / No - *[details]* |
+| Has a third-party risk assessment been completed? | Yes / No - *[reference]* |
+
+### Business Impact Assessment
+
+| Impact Category | Business Impact if Compromised |
+|----------------|-------------------------------|
+| **Confidentiality** | *[impact of unauthorised data access]* |
+| **Integrity** | *[impact of unauthorised data modification]* |
+| **Availability** | *[impact of service unavailability]* |
+| **Non-Repudiation** | *[impact if actions can be denied]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Rate each category as Critical / High / Medium / Low / Negligible. The highest rating drives the security requirements for the solution — a system with Critical confidentiality needs stronger encryption and access controls than one rated Low. Use your organisation's data classification policy to inform these ratings.
+</div>
+
+### Threat Model
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Document the key threats and how the design addresses them:
+
+| Threat | Attack Vector | Likelihood | Impact | Mitigation |
+|--------|-------------|-----------|--------|------------|
+| *[threat]* | *[how]* | H / M / L | H / M / L | *[design controls]* |
+
+## 3.5.2 Identity & Access Management
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+### Authentication Model
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+#### Internal Users
+
+| Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
+|------------|---------|----------------|----------------------|----------------------|
+| End Users | *[roles]* | *[servers/apps]* | *[SSO/SAML/OIDC/etc.]* | *[method]* |
+| IT Operations | *[roles]* | *[servers/apps]* | *[method]* | *[method]* |
+| Service Accounts | *[scope]* | *[servers/apps]* | *[method]* | *[method]* |
+
+#### External Users (if applicable)
+
+| Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
+|------------|---------|----------------|----------------------|----------------------|
+| External Users | *[roles]* | *[servers/apps]* | *[method]* | *[method]* |
+| External Applications | *[scope]* | *[servers/apps]* | *[method]* | *[method]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Document every authentication path into the solution. Prefer federated identity (SSO, OIDC, SAML — see glossary for definitions) over local credentials. Consider:
+- **Internal users** — should use the organisation's identity provider (e.g., Entra ID, Okta)
+- **External users** — may need a separate identity provider or customer-facing auth (e.g., OAuth 2.0)
+- **Service accounts** — prefer managed identity or workload identity over shared secrets
+- **API consumers** — document whether mutual TLS (mTLS), API keys, or OAuth client credentials are used
+</div>
+
+### Authentication Details
+
+For each authentication method identified above, document the detailed configuration:
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Control | Response |
+|---------|----------|
+| Does the application use SSO or group-wide authentication? | *[...]* |
+| What is the unique identifier for user accounts? | *[...]* |
+| What is the authentication flow? | *[describe or diagram]* |
+| How are credentials issued to users? | *[...]* |
+| What are the credential complexity rules? | *[...]* |
+| What are the credential rotation rules? | *[...]* |
+| What are the account lockout rules? | *[...]* |
+| How can users reset forgotten credentials? | *[...]* |
+
+### Session Management
+
+Session management controls prevent session hijacking and ensure users are re-authenticated appropriately.
+
+Document how authenticated sessions are maintained and protected:
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Control | Response |
+|---------|----------|
+| How are sessions established after authentication? | *[tokens, cookies, etc.]* |
+| How are session tokens protected against misuse? | *[signing, encryption, etc.]* |
+| What are the session timeout and concurrency limits? | *[...]* |
+
+### Authorisation Model
+
+Document how access rights are assigned and controlled after authentication:
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+| Access Type | Role / Scope | Entitlement Store | Provisioning Process |
+|------------|-------------|-------------------|---------------------|
+| Business Users | *[roles and scope]* | *[where entitlements stored]* | *[how provisioned]* |
+| Technology Users | *[roles and scope]* | *[where entitlements stored]* | *[how provisioned]* |
+| Service Accounts | *[roles and scope]* | *[where entitlements stored]* | *[how provisioned]* |
+
+### Authorisation Details
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Control | Response |
+|---------|----------|
+| Account re-certification process | *[...]* |
+| Segregation of duties controls | *[...]* |
+| Delegated authorisation capabilities | *[...]* |
+
+### Privileged Access
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Account Type | Management Approach |
+|-------------|-------------------|
+| OS privileged accounts (root/admin) | *[how managed, rotated, audited]* |
+| Infrastructure / platform admin | *[how managed]* |
+| Application admin | *[how managed]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Privileged access is a primary attack vector. Document how privileged accounts are:
+- **Controlled** — who can request access, what approval is needed
+- **Time-limited** — prefer just-in-time (JIT) access over standing privileges
+- **Audited** — session recording, command logging, periodic review
+- **Break-glass** — emergency access process with post-incident review
+</div>
+
+## 3.5.3 Network Security & Perimeter Protection
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Describe network segmentation, firewalls, and perimeter controls. Cross-reference Section 3.3.3 (Network Topology) for the underlying infrastructure.
+
+| Control | Implementation |
+|---------|---------------|
+| Network segmentation | *[firewalls, security groups, NSGs]* |
+| Ingress filtering | *[WAF, DDoS, rate limiting]* |
+| Egress filtering | *[proxy, gateway, allowlists]* |
+| Encryption in transit | *[TLS versions, certificate management]* |
+
+## 3.5.4 Data Protection
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Cross-reference Section 3.4 (Data View) for the full data architecture. Document the security controls applied to the solution.
+
+Encryption at rest and secret management protect sensitive data from exposure if storage or infrastructure is compromised.
+
+### Encryption at Rest
+
+Encryption protects data from unauthorised access even if storage media is compromised.
+
+| Attribute | Detail |
+|-----------|--------|
+| Encryption deployment level | Storage / Logical Container / Application |
+| Key type | Symmetric / Asymmetric |
+| Algorithm / cipher / key length | *[...]* |
+| Key generation method | *[HSM / software / other]* |
+| Key storage | *[HSM / KMS / other]* |
+| Key rotation schedule | *[...]* |
+
+### Secret & Password Protection
+
+| Attribute | Detail |
+|-----------|--------|
+| Secret store | *[e.g., HashiCorp Vault, AWS Secrets Manager, Azure Key Vault]* |
+| Secret distribution | Distributed at deployment / Retrieved on-demand |
+| Secret protection on host | Local vault / File system / Memory only / Not stored |
+| Secret rotation | Automatic / Manual / Not rotated |
+
+## 3.5.5 Security Monitoring & Threat Detection
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Capability | Implementation |
+|-----------|---------------|
+| Security event logging | *[what events, where stored]* |
+| SIEM integration | *[tool and integration method]* |
+| Infrastructure event detection | *[how monitored]* |
+| Security alerting | *[how alerts are generated and routed]* |
+
+*[Insert security monitoring architecture diagram if applicable]*
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | Authentication method identified but controls not detailed |
+| **3** | Business impact assessed, authentication and authorisation documented, encryption at rest and in transit specified |
+| **5** | All of the above plus threat model complete, secrets management documented, security monitoring integrated with SIEM, privileged access controlled with JIT |
+</div>
+
+<div class="quality-attribute-ref">
+
+**Quality Attribute Cross-References:**
+- **4.1 Operational Excellence** - Security monitoring is part of operational observability
+- **4.2 Reliability** - Security incidents affect availability
+
+</div>

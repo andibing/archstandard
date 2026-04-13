@@ -1,0 +1,246 @@
+---
+title: "5. Lifecycle Management"
+description: Software development, CI/CD, service transition, operations, and end-of-life.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+<span class="framework-badge badge-4plus1">4+1 Development</span>
+<span class="framework-badge badge-aws-waf">AWS Ops Excellence</span>
+<span class="framework-badge badge-azure-waf">Azure Ops Excellence</span>
+
+## Purpose
+
+Lifecycle Management describes how the solution is developed, deployed, operated, and eventually retired. It corresponds to the Development View in the 4+1 model and the operational aspects of the AWS/Azure Well-Architected Frameworks.
+
+| Sub-section | Focus | Depth |
+|------------|-------|-------|
+| 5.1 Software Development & CI/CD | Build and deploy pipelines | Recommended |
+| 5.2 Service Transition & Migration | Migration strategy and cutover | Recommended |
+| 5.3 Test Strategy | Architecturally significant testing | Recommended |
+| 5.4 Release Management | Release frequency and process | Recommended |
+| 5.5 Operations & Support | Support model and SLAs | Recommended |
+| 5.6 Resourcing & Skills | Team capability and readiness | Recommended |
+| 5.7 Service Start | Start-up sequence and dependencies | Comprehensive |
+| 5.8 Maintainability | Patching, certificates, dependencies | Recommended |
+| 5.9 Decommissioning & Legacy Removal | End-of-life and disposal | Recommended |
+| 5.10 Exit Planning | Vendor lock-in and exit strategy | Recommended |
+
+## 5.1 Software Development & CI/CD
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Development Practices
+
+Does the application include any software developed internally?
+
+- [ ] Yes - *[complete the sections below]*
+- [ ] No - *[commercial/vendor solution only]*
+
+| Attribute | Detail |
+|-----------|--------|
+| Source control platform | *[e.g., GitHub, GitLab, Bitbucket]* |
+| CI/CD platform | *[e.g., Jenkins, GitHub Actions, Azure DevOps]* |
+| Build automation | *[how builds are triggered and managed]* |
+| Deployment automation | *[how deployments are automated]* |
+| Test automation | *[what testing is automated in the pipeline]* |
+
+### Application Security in Development
+
+| Control | Implementation |
+|---------|---------------|
+| Security requirements identification | *[how security requirements are captured]* |
+| Static Application Security Testing (SAST) | *[tool used]* |
+| Dynamic Application Security Testing (DAST) | Yes / No - *[tool]* |
+| Software Composition Analysis (SCA) | *[tool used]* |
+| Container image scanning | *[if applicable, tool used]* |
+| Secure coding practices | *[standards, training, code review]* |
+| Patch management | *[how security patches are applied and SLAs]* |
+
+## 5.2 Service Transition & Migration
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Migration Classification (6 R's)
+
+If this solution replaces or migrates an existing system, classify the migration approach:
+
+| Classification | Selected? | Description |
+|---------------|-----------|-------------|
+| **Retain** | ☐ | Keep as-is, not suitable for migration at this time |
+| **Retire** | ☐ | Decommission; functionality no longer needed |
+| **Rehost** | ☐ | Lift-and-shift to new infrastructure with minimal changes |
+| **Replatform** | ☐ | Lift-and-shift with targeted optimisations (e.g., managed database) |
+| **Refactor** | ☐ | Re-architect components to take advantage of new platform capabilities |
+| **Replace** | ☐ | Replace entirely with a new solution (e.g., SaaS product) |
+
+### Transition Plan
+
+| Attribute | Detail |
+|-----------|--------|
+| Deployment strategy | Big Bang / Blue-Green / Canary / Strangler Fig / Rolling / Parallel Run |
+| Data migration mode | One-off / Phased / Continuous Sync / Not applicable |
+| Data migration method | *[e.g., Export/Import, ETL, CDC, DMS, manual]* |
+| Data volume to migrate | *[e.g., 500 GB]* |
+| End-user cutover approach | One-off / Phased / Not applicable |
+| External system cutover | One-off / Phased / Not applicable |
+| Maximum acceptable downtime | Zero / Seconds / Minutes / Hours / Days |
+| Rollback plan | *[how to revert if the transition fails]* |
+| Acceptance criteria | *[what must be true before cutover]* |
+| Transient infrastructure needed? | Yes / No — *[if yes, describe temporary infrastructure required during migration]* |
+
+## 5.3 Test Strategy
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Describe the testing approach that validates the architecture:
+
+| Test Type | Scope | Approach | Environment | Automated? |
+|-----------|-------|----------|-------------|-----------|
+| Integration testing | *[what is tested]* | *[approach]* | *[environment]* | Yes / No |
+| Contract testing | *[API contracts between services]* | *[approach]* | *[environment]* | Yes / No |
+| Performance testing | *[load, stress, soak]* | *[approach]* | *[environment]* | Yes / No |
+| Security testing | *[penetration, vulnerability]* | *[approach]* | *[environment]* | Yes / No |
+| DR testing | *[failover, recovery]* | *[approach and frequency]* | *[environment]* | Yes / No |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+This section covers architecturally significant testing — not unit tests or functional test cases (which belong in detailed design / low-level documentation). Focus on testing that validates the architecture itself: integration points, performance characteristics, security posture, and recovery capabilities.
+</div>
+
+## 5.4 Release Management
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Attribute | Detail |
+|-----------|--------|
+| Release frequency | *[e.g., continuous, weekly, monthly, quarterly]* |
+| Release process | *[how releases are planned, approved, and deployed]* |
+| Release validation | *[how releases are validated in production]* |
+| Feature flags / toggles | *[if used, how they are managed]* |
+
+## 5.5 Operations & Support
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+| Attribute | Detail |
+|-----------|--------|
+| Support model | *[which teams or vendors support the application]* |
+| Support hours | *[e.g., 24/7, business hours, follow-the-sun]* |
+| SLAs | *[internal or external service level agreements]* |
+| Escalation paths | *[how issues are escalated]* |
+
+## 5.6 Resourcing & Skills
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Assess whether the team has the skills and resources to build, operate, and support the solution.
+
+### Team Capability Assessment
+
+| Skill Area | Current Level | Action Required |
+|-----------|--------------|-----------------|
+| Cloud platform (e.g., AWS, Azure, GCP) | High / Medium / Low / N/A | *[training, hiring, or contractor needed?]* |
+| Infrastructure as Code (e.g., Terraform, Pulumi) | High / Medium / Low / N/A | *[...]* |
+| CI/CD pipeline management | High / Medium / Low / N/A | *[...]* |
+| Application technology stack | High / Medium / Low / N/A | *[...]* |
+| Database administration | High / Medium / Low / N/A | *[...]* |
+| Security & compliance | High / Medium / Low / N/A | *[...]* |
+
+### Operational Readiness
+
+| Question | Response |
+|----------|----------|
+| Can the team fully operate and support this solution in production? | A: Fully capable / B: Partially capable / C: Not yet capable but willing to learn / D: Not capable and will not be in the foreseeable future |
+| If B, C, or D: what additional resources are required? | *[e.g., DBA, DevOps engineer, cloud architect, managed service]* |
+| Is a managed service being considered for ongoing operations? | Yes / No — *[details]* |
+
+## 5.7 Service Start
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Describe how the application and its supporting services are started:
+
+*[What steps are needed to bring the solution into operation? Are there manual steps? What is the start-up sequence and dependency order?]*
+
+## 5.8 Maintainability
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Describe how the solution design enables ongoing maintenance:
+
+| Concern | Approach |
+|---------|----------|
+| Keeping software versions current and supported | *[patching strategy]* |
+| Hardware lifecycle management | *[refresh cadence]* |
+| Certificate management | *[renewal process]* |
+| Dependency management | *[how third-party dependencies are tracked and updated]* |
+
+## 5.9 Decommissioning & Legacy Removal
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Where this solution replaces or modifies existing systems, document the plan for removing legacy infrastructure.
+
+### Solution Lifespan
+
+| Attribute | Detail |
+|-----------|--------|
+| Intended lifespan | *[expected or planned lifetime of the solution]* |
+| End-of-life triggers | *[what would trigger decommissioning]* |
+| Decommissioning blockers | *[dependencies or constraints on retirement]* |
+
+### Legacy Infrastructure Removal
+
+| Legacy Component | Current State | Decommission Date | Owner | Dependencies | Status |
+|-----------------|--------------|-------------------|-------|-------------|--------|
+| *[system/server/service]* | *[running / standby / powered off]* | *[target date]* | *[person/team]* | *[what depends on it]* | Planned / In Progress / Complete |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Common items to decommission after migration or replacement:
+- **Servers and VMs** — physical or virtual machines no longer needed
+- **Licences** — software licences that can be released or cancelled
+- **Network rules** — firewall rules, DNS entries, load balancer configs for retired systems
+- **Data stores** — databases, file shares, or storage accounts (after data migration and retention period)
+- **Monitoring and alerting** — dashboards, alerts, and runbooks for retired systems
+- **Service accounts and credentials** — accounts and secrets for decommissioned integrations
+- **Documentation** — update or archive architecture documents for retired systems
+</div>
+
+Technical debt is tracked in [Section 6.6 — Technical Debt Register](/standard/6-decision-making/#66-technical-debt-register).
+
+### Data and Infrastructure Disposal
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+| Attribute | Detail |
+|-----------|--------|
+| Data disposal method | *[how data will be securely erased — crypto-shredding, secure wipe, physical destruction]* |
+| Data retention obligations | *[any data that must be retained beyond decommissioning, and for how long]* |
+| Infrastructure disposal | *[how hardware/cloud resources will be decommissioned — resource deletion, subscription cancellation, hardware return]* |
+| Cost savings realised | *[expected cost reduction from decommissioning]* |
+
+## 5.10 Exit Planning
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+If hosted in public cloud or with a third-party provider:
+
+| Attribute | Detail |
+|-----------|--------|
+| Exit strategy | *[how to migrate away from the current provider]* |
+| Data portability | *[how data can be extracted and migrated]* |
+| Vendor lock-in assessment | *[degree of lock-in and mitigation]* |
+| Exit timeline estimate | *[how long an exit would take]* |
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | CI/CD tool identified but pipeline not documented |
+| **3** | Development practices, deployment strategy, support model, and release frequency documented; migration plan in place if applicable |
+| **5** | All of the above plus security scanning integrated in pipeline, team skills assessed with action plan, exit strategy documented with vendor lock-in assessment |
+</div>

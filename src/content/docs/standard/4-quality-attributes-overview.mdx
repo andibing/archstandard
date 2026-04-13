@@ -1,0 +1,50 @@
+---
+title: "4. Architectural Quality Attributes"
+description: Cross-cutting quality attributes evaluated across all architectural views.
+---
+
+<span class="framework-badge badge-aws-waf">AWS WAF</span>
+<span class="framework-badge badge-azure-waf">Azure WAF</span>
+
+## Purpose
+
+Architectural Quality Attributes are **cross-cutting quality checks — evaluated across all views rather than within a single view**. They are derived from the Well-Architected Frameworks published by AWS, Azure, GCP, Oracle, and IBM, unified into quality attributes that address the key architectural concerns of any solution.
+
+Unlike the Architectural Views (Section 3), which describe **what** the solution is, Quality Attributes evaluate **how well** it is designed.
+
+## Quality Attributes
+
+| # | Quality Attribute | Focus |
+|---|------------------|-------|
+| 4.1 | **Operational Excellence** | Observability, monitoring, operational procedures |
+| 4.2 | **Reliability & Resilience** | DR, scalability, fault tolerance, backup/recovery |
+| 4.3 | **Performance Efficiency** | Performance requirements, resource optimisation |
+| 4.4 | **Cost Optimisation** | Cost analysis, FinOps, cost-effective design |
+| 4.5 | **Sustainability** | Energy, carbon, resource efficiency |
+
+These quality attributes are derived from the Well-Architected Frameworks published by AWS, Azure, GCP, Oracle, and IBM. For the full provider-by-provider mapping, see the [Framework Alignment](/standard/framework-alignment/#cloud-well-architected-framework-alignment) page.
+
+:::note[Security as a View, Not Just a Quality Attribute]
+In the cloud Well-Architected Frameworks, **Security** is a quality attribute (pillar). In this standard, Security is elevated to a full **Architectural View** (Section 3.5) because of the depth of documentation required for IAM, encryption, network security, and monitoring. The Security View directly covers the security concerns that cloud providers treat as a quality pillar — so there is no separate security score in the quality attributes table.
+:::
+
+## How to Use Quality Attributes
+
+1. **Design Phase** — Use each quality attribute's guidance to inform design decisions
+2. **Review Phase** — Evaluate the completed design against each quality attribute
+3. **Tradeoff Documentation** — Where quality attribute requirements conflict (e.g., cost vs. resilience), document the tradeoff and the rationale for the chosen balance
+4. **Cross-Reference** — Reference specific quality attribute concerns within the Architectural Views using the quality attribute callout format (the coloured cross-reference boxes at the bottom of each view page)
+
+## Quality Attribute Tradeoffs
+
+Optimising for one quality attribute may come at the expense of another. Key tradeoffs to consider:
+
+| Tradeoff | Description |
+|----------|-------------|
+| **Reliability vs. Cost** | Higher availability requires redundant infrastructure |
+| **Performance vs. Cost** | Better performance may require more powerful (expensive) resources |
+| **Security vs. Usability** | Stronger security controls may increase friction for users |
+| **Sustainability vs. Performance** | Energy-efficient choices may not be the highest-performing |
+| **Reliability vs. Sustainability** | DR environments and redundancy consume additional resources |
+
+Document any significant tradeoffs in Section 3.6 (Scenarios / ADRs).

@@ -1,0 +1,82 @@
+---
+title: "4.5 Durabilité"
+description: Efficacité de l'hébergement, efficacité du code et efficacité des données.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+<span class="framework-badge badge-aws-waf">AWS Sustainability</span>
+
+## Objectif
+
+La durabilité se concentre sur la minimisation de l'impact environnemental de la solution en optimisant l'utilisation des ressources de calcul, de stockage et de réseau. Cet attribut de qualité a été introduit par le framework Well-Architected AWS et traite de la consommation d'énergie, des émissions de carbone et de l'efficacité des ressources.
+
+## 4.5.1 Efficacité de l'hébergement
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+### Emplacement de l'hébergement
+
+| Question | Réponse |
+|----------|----------|
+| L'emplacement de l'hébergement a-t-il été choisi pour réduire l'impact environnemental ? | Yes / No — *[décrire les critères : intensité CO2, énergie renouvelable, consommation d'eau]* |
+| Quel est le pattern de demande attendu de la charge de travail ? | Variable / Constant — *[décrire les pics et patterns]* |
+
+### Disponibilité à la demande
+
+| Question | Réponse |
+|----------|----------|
+| L'application doit-elle être disponible en continu ? | Yes / No |
+| La solution peut-elle être arrêtée ou réduite pendant les heures creuses ? | Yes / No — *[décrire le calendrier]* |
+| Les environnements de non-production sont-ils configurés pour se réduire ou s'arrêter lorsqu'ils ne sont pas utilisés ? | Yes / No — *[détails]* |
+
+### Efficacité des ressources
+
+| Question | Réponse |
+|----------|----------|
+| Les ressources sont-elles dimensionnées de manière optimale pour éviter le sur-provisionnement ? | *[décrire l'approche]* |
+| L'utilisation des vCPU est-elle surveillée ? | *[% d'utilisation cible]* |
+| Les options matérielles les plus performantes par watt sont-elles utilisées ? | *[détails]* |
+
+## 4.5.2 Efficacité du code
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+| Question | Réponse |
+|----------|----------|
+| Comment les choix de langage et de framework contribuent-ils à l'efficacité ? | *[décrire]* |
+| Le code a-t-il été optimisé pour la plateforme cible et la charge de travail ? | *[décrire]* |
+| Des algorithmes et structures de données efficaces sont-ils utilisés ? | *[décrire]* |
+| Le nombre d'heures vCPU par tâche/requête est-il minimisé ? | *[décrire]* |
+
+## 4.5.3 Efficacité des données
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+| Question | Réponse |
+|----------|----------|
+| Les données sont-elles conservées à proximité du calcul pour réduire les transferts réseau ? | *[détails]* |
+| Les répliques de données sont-elles minimisées ? | *[détails]* |
+| Les données anciennes ou inutilisées sont-elles supprimées pour réduire le stockage ? | *[détails]* |
+| Des formats de données et une compression efficaces sont-ils utilisés ? | *[détails]* |
+| Les tâches sont-elles priorisées et distribuées pour optimiser l'utilisation des ressources ? | *[détails]* |
+| Des patterns de réseau efficaces sont-ils utilisés (distance réduite, volume de transfert de données) ? | *[détails]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Considérez l'impact environnemental de :
+- **Environnements DR** — Patterns optimaux pour le calcul en veille (par ex., pilot light vs. warm standby)
+- **Environnements de non-production** — Calendriers d'arrêt automatique, environnements dimensionnés de manière optimale
+- **Cycle de vie des données** — Stockage à plusieurs niveaux, expiration des données, stratégies d'archivage
+- **Conception réseau** — Minimisation du trafic inter-régions, calcul en périphérie
+</div>
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | La durabilité est reconnue mais aucune action spécifique n'est prise |
+| **3** | Emplacement d'hébergement considéré pour l'impact carbone, arrêt automatique de la non-production activé, ressources dimensionnées de manière optimale |
+| **5** | Tout ce qui précède plus les patterns de charge de travail optimisés, la disponibilité continue justifiée là où requise, les métriques carbone de référence établies |
+</div>

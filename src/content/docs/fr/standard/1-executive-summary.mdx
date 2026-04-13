@@ -1,0 +1,170 @@
+---
+title: "1. Résumé exécutif"
+description: Aperçu de la solution, contexte métier, périmètre et décisions clés.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-togaf">TOGAF</span>
+
+## Objectif
+
+Le résumé exécutif fournit un aperçu concis de la solution pour toutes les parties prenantes, y compris les décideurs non techniques. Il établit le contexte métier et cadre les décisions architecturales qui suivent.
+
+## 1.1 Aperçu de la solution
+
+Fournissez un résumé bref (1-2 paragraphes) de la solution :
+
+- Que fait la solution ?
+- Quel problème métier résout-elle ?
+- Quelle est l'approche de haut niveau ?
+
+*[...]*
+
+## 1.2 Contexte métier et facteurs
+
+Décrivez les facteurs métier qui ont conduit à cette solution :
+
+| Facteur | Description | Priorité |
+|--------|------------|----------|
+| *[facteur métier]* | *[description]* | High / Medium / Low |
+
+Considérez :
+- Les exigences et objectifs métier
+- Les facteurs réglementaires ou de conformité
+- Les objectifs de modernisation technologique
+- Les objectifs de réduction des coûts ou d'efficacité
+- Les pressions du marché ou de la concurrence
+
+## 1.3 Alignement stratégique
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Démontrez comment cette solution s'aligne avec la stratégie organisationnelle et évite la duplication des capacités existantes.
+
+### Alignement avec la stratégie organisationnelle
+
+| Question | Réponse |
+|----------|----------|
+| Quelle stratégie ou initiative organisationnelle cette solution soutient-elle ? | *[par ex., programme de transformation numérique, stratégie cloud-first]* |
+| Cette solution a-t-elle été évaluée par rapport au modèle de capacités de l'organisation ? | Yes / No / N/A |
+| Cette solution duplique-t-elle une capacité existante ? | Yes / No — *[si oui, fournir une justification]* |
+
+### Réutilisation des services partagés et plateformes
+
+Documentez quelles plateformes organisationnelles existantes, services partagés ou composants communs sont réutilisés — et lesquels ont été considérés mais non sélectionnés (avec justification).
+
+| Capacité | Service partagé / Plateforme | Réutilisé ? | Justification (si non réutilisé) |
+|-----------|--------------------------|---------|------------------------------|
+| Identité et accès | *[par ex., Entra ID, Okta]* | Yes / No | *[...]* |
+| Messagerie / Notifications | *[par ex., GOV.UK Notify, SES, SendGrid]* | Yes / No | *[...]* |
+| API Management | *[par ex., Apigee, AWS API Gateway, Kong]* | Yes / No | *[...]* |
+| Surveillance et journalisation | *[par ex., Splunk, Datadog, Grafana]* | Yes / No | *[...]* |
+| Données et analytique | *[par ex., Snowflake, Databricks]* | Yes / No | *[...]* |
+| CI/CD | *[par ex., GitHub Actions, Jenkins, Azure DevOps]* | Yes / No | *[...]* |
+| Autre | *[...]* | Yes / No | *[...]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+La plupart des organisations maintiennent un catalogue de plateformes et services partagés approuvés. Les architectes devraient démontrer qu'ils les ont évalués avant de proposer de nouvelles technologies. Cela réduit les coûts, la complexité et la charge opérationnelle. Si un service partagé n'est pas réutilisé, fournissez une justification claire (par ex., manque de capacité, exigence de performance, contrainte contractuelle).
+</div>
+
+## 1.4 Périmètre
+
+### Dans le périmètre
+
+Définissez ce que ce SAD couvre :
+
+- Quelles applications, services ou composants ?
+- Quels environnements (production, DR, test) ?
+- Quels groupes d'utilisateurs ou fonctions métier ?
+
+### Hors périmètre
+
+Indiquez explicitement ce qui est exclu. Les exemples peuvent inclure :
+
+- Les systèmes connexes documentés ailleurs
+- Les phases futures non couvertes dans cette conception
+- Les conceptions détaillées (couvertes dans des documents séparés)
+- L'infrastructure gérée par d'autres équipes
+- Les systèmes tiers en dehors du périmètre de la solution
+
+## 1.5 Architecture actuelle / As-Is
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Lorsque la solution remplace, modifie ou s'intègre à des systèmes existants, décrivez l'architecture actuelle pertinente pour le changement :
+
+- Quels systèmes ou composants existants sont impactés ?
+- Quelles sont les principales limitations ou points de friction de l'état actuel ?
+- Qu'est-ce qui est conservé, remplacé ou modifié ?
+
+*[Insérer un diagramme d'architecture de l'état actuel si applicable]*
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Cette section est particulièrement utile pour les projets de migration et de modernisation. Pour les solutions greenfield sans paysage existant, cette section SHOULD être omise. Gardez la description focalisée sur ce qui est directement pertinent pour la transition — ne reproduisez pas une documentation héritée extensive qui existe ailleurs.
+</div>
+
+## 1.6 Décisions et contraintes clés
+
+Résumez les décisions architecturales les plus significatives et les contraintes qui ont façonné la conception :
+
+| Décision / Contrainte | Justification | Impact |
+|----------------------|-----------|--------|
+| *[décision]* | *[pourquoi]* | *[effet sur la conception]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Les contraintes peuvent inclure :
+- **Techniques** — Stack technologique existant, mandats de plateforme
+- **Organisationnelles** — Capacités de l'équipe, relations fournisseurs
+- **Financières** — Limites budgétaires, objectifs de coûts
+- **Réglementaires** — Exigences de conformité, résidence des données
+- **Temporelles** — Délais de livraison, déploiements par phases
+</div>
+
+## 1.7 Détails du projet
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Si ce SAD est produit dans le cadre d'un projet ou d'une activité de changement spécifique :
+
+| Champ | Valeur |
+|-------|-------|
+| **Nom du projet** | *[...]* |
+| **Code / ID du projet** | *[...]* |
+| **Chef de projet** | *[...]* |
+| **Coût estimé de la solution (Capex)** | *[...]* |
+| **Coût estimé de la solution (Opex)** | *[...]* |
+| **Date de mise en production cible** | *[...]* |
+
+## 1.8 Criticité métier
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Classifiez la criticité métier de la solution :
+
+| Niveau | Description |
+|------|-------------|
+| **Tier 1 : Critique** | La défaillance du service cause un impact métier immédiat et sévère |
+| **Tier 2 : Impact élevé** | La défaillance du service impacte significativement les opérations métier |
+| **Tier 3 : Impact moyen** | La défaillance du service impacte les opérations mais des solutions de contournement existent |
+| **Tier 4 : Impact faible** | La défaillance du service a un impact métier limité |
+| **Tier 5 : Minimal** | La défaillance du service a un impact négligeable |
+
+Criticité sélectionnée : *[...]*
+
+Cette classification détermine les exigences en matière de résilience, d'objectifs de temps de restauration et de rigueur de gouvernance tout au long de la conception.
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | Contexte métier mentionné mais vague ; périmètre non défini |
+| **3** | Facteurs métier clairs, périmètre défini, alignement stratégique documenté |
+| **5** | Tout ce qui précède plus l'architecture actuelle documentée, l'évaluation de la réutilisation complète, la criticité métier justifiée avec des preuves |
+</div>

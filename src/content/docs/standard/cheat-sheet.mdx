@@ -1,0 +1,111 @@
+---
+title: "Depth Cheat Sheet"
+description: "A single-page reference showing exactly which sections to complete at each documentation depth."
+---
+
+## What to Fill In
+
+Use this table to see exactly which sections are required at your chosen documentation depth. Pick your column and fill in only the rows marked **Yes**.
+
+| Section | Minimum | Recommended | Comprehensive |
+|---------|:-------:|:-----------:|:-------------:|
+| **0. Document Control** | | | |
+| Document metadata | **Yes** | **Yes** | **Yes** |
+| Change history | **Yes** | **Yes** | **Yes** |
+| Contributors & approvals | No | **Yes** | **Yes** |
+| Purpose & scope | **Yes** | **Yes** | **Yes** |
+| **1. Executive Summary** | | | |
+| Solution overview | **Yes** | **Yes** | **Yes** |
+| Business context & drivers | **Yes** | **Yes** | **Yes** |
+| Strategic alignment & reuse | No | **Yes** | **Yes** |
+| Scope (in/out) | **Yes** | **Yes** | **Yes** |
+| Current state / As-Is | No | **Yes** | **Yes** |
+| Key decisions & constraints | **Yes** | **Yes** | **Yes** |
+| Project details | No | **Yes** | **Yes** |
+| Business criticality | No | **Yes** | **Yes** |
+| **2. Stakeholders** | | | |
+| Stakeholder register | **Yes** | **Yes** | **Yes** |
+| Concerns matrix | No | **Yes** | **Yes** |
+| Compliance & regulatory | No | **Yes** | **Yes** |
+| **3.1 Logical View** | | | |
+| Architecture diagram | **Yes** | **Yes** | **Yes** |
+| Component decomposition | **Yes** | **Yes** | **Yes** |
+| Design patterns | No | **Yes** | **Yes** |
+| Service & capability mapping | No | No | **Yes** |
+| Vendor lock-in assessment | No | **Yes** | **Yes** |
+| **3.2 Integration & Data Flow** | | | |
+| Data flow diagram | **Yes** | **Yes** | **Yes** |
+| Internal connectivity | **Yes** | **Yes** | **Yes** |
+| External integrations | **Yes** | **Yes** | **Yes** |
+| API & interface contracts | No | **Yes** | **Yes** |
+| **3.3 Physical View** | | | |
+| Deployment diagram | **Yes** | **Yes** | **Yes** |
+| Hosting & infrastructure | **Yes** | **Yes** | **Yes** |
+| Compute | No | **Yes** | **Yes** |
+| User & admin access | No | **Yes** | **Yes** |
+| Network connectivity | **Yes** | **Yes** | **Yes** |
+| Environments | No | **Yes** | **Yes** |
+| End user compute & IoT | No | No | **Yes** |
+| **3.4 Data View** | | | |
+| Data stores | **Yes** | **Yes** | **Yes** |
+| Data classification | **Yes** | **Yes** | **Yes** |
+| Data transfers | No | **Yes** | **Yes** |
+| Data lifecycle | No | No | **Yes** |
+| **3.5 Security View** | | | |
+| Business impact assessment | **Yes** | **Yes** | **Yes** |
+| Authentication | **Yes** | **Yes** | **Yes** |
+| Authorisation | **Yes** | **Yes** | **Yes** |
+| Encryption at rest | **Yes** | **Yes** | **Yes** |
+| Secret management | No | **Yes** | **Yes** |
+| Security monitoring | No | **Yes** | **Yes** |
+| Threat model | No | No | **Yes** |
+| Network security | No | **Yes** | **Yes** |
+| **3.6 Scenarios** | | | |
+| Key use cases | No | **Yes** | **Yes** |
+| Architecture decision records | No | **Yes** | **Yes** |
+| **4. Quality Attributes** | | | |
+| Operational excellence | No | **Yes** | **Yes** |
+| Reliability & resilience | No | **Yes** | **Yes** |
+| Performance efficiency | No | **Yes** | **Yes** |
+| Cost optimisation | No | **Yes** | **Yes** |
+| Sustainability | No | **Yes** | **Yes** |
+| Quality attribute tradeoffs | No | **Yes** | **Yes** |
+| **5. Lifecycle** | | | |
+| CI/CD & development | No | **Yes** | **Yes** |
+| Migration (if applicable) | No | **Yes** | **Yes** |
+| Test strategy | No | **Yes** | **Yes** |
+| Release management | No | **Yes** | **Yes** |
+| Operations & support | No | **Yes** | **Yes** |
+| Resourcing & skills | No | **Yes** | **Yes** |
+| Service start | No | No | **Yes** |
+| Maintainability | No | **Yes** | **Yes** |
+| Decommissioning | No | **Yes** | **Yes** |
+| Exit planning | No | **Yes** | **Yes** |
+| **6. Decision Making** | | | |
+| Constraints | **Yes** | **Yes** | **Yes** |
+| Assumptions | **Yes** | **Yes** | **Yes** |
+| Risks | **Yes** | **Yes** | **Yes** |
+| Dependencies | **Yes** | **Yes** | **Yes** |
+| Issues | No | **Yes** | **Yes** |
+| Technical debt register | No | **Yes** | **Yes** |
+| Guardrail exceptions | No | **Yes** | **Yes** |
+| Architectural decisions log | No | **Yes** | **Yes** |
+| Compliance traceability | No | No | **Yes** |
+| Approval sign-off | **Yes** | **Yes** | **Yes** |
+| **7. Appendices** | | | |
+| Glossary | No | **Yes** | **Yes** |
+| Reference documents | No | **Yes** | **Yes** |
+| Standards referenced | No | **Yes** | **Yes** |
+| **Compliance scoring** | No | **Yes** | **Yes** |
+
+### How to Use This Table
+
+1. **Choose your depth** based on your project's criticality and governance requirements
+2. **Fill in only the "Yes" rows** for your chosen depth
+3. **Skip everything else** — do not include empty sections
+
+| Depth | When to Use | Approx. Time | Typical Gate |
+|-------|-------------|:------------:|-------------|
+| **Minimum** | Early-stage designs, proofs of concept, dev/test reviews | 15-30 min | Development review |
+| **Recommended** | Production-bound designs, formal governance | 1-2 hours | Production approval |
+| **Comprehensive** | Critical, regulated, or enterprise-scale systems | 1-2 days | Enterprise architecture review |

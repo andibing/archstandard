@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="system-ui, -apple-system, sans-serif">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#1a202c"/>
+
+  <!-- Logo (three tiers) -->
+  <rect x="80" y="160" width="200" height="60" rx="8" fill="#2b6cb0"/>
+  <rect x="105" y="230" width="150" height="45" rx="8" fill="#d69e2e"/>
+  <rect x="125" y="285" width="110" height="45" rx="8" fill="#38a169"/>
+
+  <!-- White blocks on blue tier -->
+  <rect x="92" y="170" width="52" height="16" rx="4" fill="#fff" opacity="0.85"/>
+  <rect x="154" y="170" width="52" height="16" rx="4" fill="#fff" opacity="0.85"/>
+  <rect x="216" y="170" width="52" height="16" rx="4" fill="#fff" opacity="0.85"/>
+  <rect x="92" y="194" width="52" height="16" rx="4" fill="#fff" opacity="0.6"/>
+  <rect x="154" y="194" width="52" height="16" rx="4" fill="#fff" opacity="0.6"/>
+  <rect x="216" y="194" width="52" height="16" rx="4" fill="#fff" opacity="0.6"/>
+
+  <!-- White blocks on amber tier -->
+  <rect x="115" y="240" width="36" height="12" rx="3" fill="#fff" opacity="0.85"/>
+  <rect x="159" y="240" width="36" height="12" rx="3" fill="#fff" opacity="0.85"/>
+  <rect x="203" y="240" width="36" height="12" rx="3" fill="#fff" opacity="0.85"/>
+
+  <!-- White blocks on green tier -->
+  <rect x="137" y="296" width="40" height="12" rx="3" fill="#fff" opacity="0.85"/>
+  <rect x="187" y="296" width="40" height="12" rx="3" fill="#fff" opacity="0.85"/>
+
+  <!-- Title text -->
+  <text x="380" y="220" fill="#fff" font-size="56" font-weight="700">Architecture</text>
+  <text x="380" y="285" fill="#fff" font-size="56" font-weight="700">Description Standard</text>
+
+  <!-- Subtitle -->
+  <text x="380" y="340" fill="#a0aec0" font-size="24">A free, open-source standard for Solution Architecture Documents</text>
+
+  <!-- URL -->
+  <text x="380" y="400" fill="#718096" font-size="20">archstandard.org</text>
+
+  <!-- Author -->
+  <text x="380" y="440" fill="#718096" font-size="16">By Andi Chandler | CC BY 4.0</text>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="610" width="400" height="20" fill="#2b6cb0"/>
+  <rect x="400" y="610" width="400" height="20" fill="#d69e2e"/>
+  <rect x="800" y="610" width="400" height="20" fill="#38a169"/>
+</svg>

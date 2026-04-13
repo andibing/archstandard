@@ -1,0 +1,1431 @@
+# Solution Architecture Document — Customer API Platform
+
+> **Standard:** ADS v1.1.0 (Architecture Description Standard)
+> **Author:** Fred Bloggs, Lead Solution Architect
+> **Organisation:** Meridian Financial Services
+> **Status:** Approved
+> **Version:** 2.1
+
+---
+
+## 0. Document Control
+
+### Document Metadata
+
+| Field | Value |
+|-------|-------|
+| **Document Title** | Solution Architecture Document -- Customer API Platform |
+| **Application / Solution Name** | Customer API Platform (CAP) |
+| **Application ID** | APP-0472 |
+| **Author(s)** | Fred Bloggs (Lead Solution Architect) |
+| **Owner** | Fred Bloggs |
+| **Version** | 2.1 |
+| **Status** | Approved |
+| **Created Date** | 2024-09-15 |
+| **Last Updated** | 2025-11-20 |
+| **Classification** | Internal -- Restricted |
+
+### Change History
+
+| Version | Date | Author / Editor | Description of Change |
+|---------|------|-----------------|----------------------|
+| 0.1 | 2024-09-15 | Fred Bloggs | Initial draft with executive summary and logical view |
+| 0.2 | 2024-09-28 | Fred Bloggs | Added physical view, data view, security view |
+| 0.3 | 2024-10-10 | Joe Bloggs | Security review feedback incorporated |
+| 0.5 | 2024-10-22 | Fred Bloggs, Jane Doe | Added quality attributes, governance, lifecycle |
+| 1.0 | 2024-11-05 | Fred Bloggs | First approved version following ARB review |
+| 1.1 | 2025-01-15 | Fred Bloggs | Updated cost model following reserved instance purchase |
+| 1.2 | 2025-03-20 | Fred Bloggs | Added fraud detection integration (Phase 2) |
+| 2.0 | 2025-08-01 | Fred Bloggs | Major revision: EKS upgrade to 1.29, Graviton migration, updated capacity projections |
+| 2.1 | 2025-11-20 | Fred Bloggs | Updated DR testing results, refreshed cost analysis |
+
+### Contributors & Approvals
+
+| Name | Role | Contribution Type |
+|------|------|------------------|
+| Fred Bloggs | Lead Solution Architect | Author |
+| Joe Bloggs | Principal Security Architect | Reviewer |
+| Jane Doe | Data Architect | Reviewer |
+| Tom Bloggs | SRE Lead | Reviewer |
+| Dr. Helen Zhao | CTO | Approver |
+| Marcus Doe | CISO | Approver |
+| Alice Doe | Head of Compliance | Approver |
+| Dave Bloggs | ARB Chair | Approver |
+
+### Document Purpose & Scope
+
+This SAD describes the architecture of the Customer API Platform (CAP), Meridian Financial Services' Open Banking and partner API solution. It replaces the legacy SOAP-based Partner Integration Layer (PIL) and provides secure, high-performance RESTful APIs exposing account information and transaction data to authorised third-party providers (TPPs) and partner fintech applications.
+
+**In scope:**
+- API Gateway and all microservices (Account, Transaction, Auth, Notification)
+- AWS infrastructure across all environments (dev, test, staging, production, DR)
+- Integration with core banking system, fraud detection, and notification services
+- Security architecture including OAuth 2.0, mTLS, and encryption
+- Operational tooling (monitoring, alerting, logging, tracing)
+
+**Out of scope:**
+- Core banking system internals (documented in SAD APP-0102)
+- Mobile banking application (documented in SAD APP-0389)
+- Partner onboarding business processes (documented in OPS-0055)
+- Detailed API specification (maintained in Swagger/OpenAPI on internal developer portal)
+
+**Related documents:**
+- Core Banking Modernisation SAD (APP-0102)
+- MFS Information Security Policy (SEC-POL-001)
+- Open Banking Implementation Plan (PROG-0088)
+
+---
+
+## 1. Executive Summary
+
+### 1.1 Solution Overview
+
+The Customer API Platform (CAP) is a cloud-native, microservices-based REST API platform that exposes account information and transaction data to authorised partner fintech applications and third-party providers. It is Meridian Financial Services' primary channel for Open Banking compliance and strategic partner integrations.
+
+CAP replaces the legacy SOAP-based Partner Integration Layer, which suffered from poor scalability, high latency, and an inability to meet the performance and security requirements of the UK Open Banking standard. The new platform is built on AWS using containerised microservices orchestrated by Amazon EKS, fronted by AWS API Gateway, and secured with OAuth 2.0 and mutual TLS.
+
+### 1.2 Business Context & Drivers
+
+| Driver | Description | Priority |
+|--------|------------|----------|
+| Regulatory compliance (PSD2 / Open Banking) | UK Competition and Markets Authority (CMA) mandate to provide open APIs for account information and payment initiation to authorised TPPs | High |
+| Legacy platform end-of-life | The existing SOAP-based Partner Integration Layer is on unsupported middleware (Oracle SOA Suite 11g) with known security vulnerabilities | High |
+| Partner ecosystem growth | Strategic initiative to onboard 25+ fintech partners over the next 18 months, requiring a modern, scalable API platform | High |
+| Operational cost reduction | Current platform requires 3 FTEs for manual operational support; target is to reduce to 1 FTE with automation | Medium |
+| Developer experience | Partner developers report a 4-week average onboarding time with the SOAP platform; target is under 3 days with self-service APIs | Medium |
+
+### 1.3 Strategic Alignment
+
+#### Organisational Strategy Alignment
+
+| Question | Response |
+|----------|----------|
+| Which organisational strategy or initiative does this solution support? | MFS Digital Transformation Programme (DTP-2024), specifically Workstream 3: Open Banking & Partner Ecosystem |
+| Has this solution been reviewed against the organisation's capability model? | Yes -- mapped to API Management, Identity & Access Management, and Data Integration capabilities |
+| Does this solution duplicate any existing capability? | No -- replaces the legacy Partner Integration Layer (PIL) which will be decommissioned |
+
+#### Reuse of Shared Services & Platforms
+
+| Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
+|-----------|--------------------------|---------|------------------------------|
+| Identity & Access (Internal) | Okta (corporate SSO) | Yes | Used for internal admin and developer portal access |
+| Identity & Access (External) | ForgeRock Identity Gateway | No | Does not support the financial-grade OAuth 2.0 profile (FAPI) required for Open Banking; using AWS API Gateway with custom authoriser |
+| API Management | AWS API Gateway | Yes | Corporate-approved API management platform |
+| Monitoring & Logging | Splunk Enterprise | Yes | Corporate SIEM and log aggregation platform |
+| CI/CD | GitHub Actions | Yes | Corporate standard CI/CD platform |
+| Messaging / Notifications | Amazon SES | Yes | Corporate-approved email notification service |
+| Container Platform | Amazon EKS | Yes | Corporate-approved container orchestration platform |
+
+### 1.4 Scope
+
+#### In Scope
+
+- Customer API Platform microservices: API Gateway configuration, Account Service, Transaction Service, Auth Service, Notification Service
+- AWS infrastructure: EKS cluster, RDS PostgreSQL, ElastiCache Redis, S3, CloudFront, WAF, Shield
+- All environments: development, test, staging, production, DR
+- Integration with core banking (Oracle DB via Direct Connect), fraud detection (Featurespace ARIC), notification service (SES)
+- Partner authentication and authorisation (OAuth 2.0, mTLS)
+- Internal authentication (Okta SSO)
+- Operational tooling: Splunk, Grafana, PagerDuty, Jaeger
+
+#### Out of Scope
+
+- Core banking system modifications (separate project PROJ-0102)
+- Partner onboarding portal front-end (separate project PROJ-0115)
+- Payment initiation APIs (Phase 3, planned for 2026-Q2)
+- Mobile banking app integration (separate SAD APP-0389)
+
+### 1.5 Current State / As-Is Architecture
+
+The current Partner Integration Layer (PIL) was built in 2016 on Oracle SOA Suite 11g, hosted on-premises in MFS' Slough data centre. It provides SOAP/XML interfaces to 8 existing partner integrations.
+
+**Key limitations:**
+- **Performance:** Average response time of 1.2 seconds (P95: 3.8 seconds), far exceeding the Open Banking 1-second mandate
+- **Scalability:** Vertically scaled on two physical servers; cannot handle projected 5,000 req/s demand
+- **Security:** Does not support OAuth 2.0 or mTLS as required by Open Banking security profile
+- **Supportability:** Oracle SOA Suite 11g reached end-of-support in 2022; two critical CVEs remain unpatched
+- **Cost:** Annual licensing and support costs of GBP 280,000 plus 3 FTEs for manual operations
+- **Onboarding:** Partner onboarding requires 4 weeks of manual configuration and testing
+
+**What is being retained:** Core banking Oracle database (read replicas will be consumed via new integration layer)
+**What is being replaced:** Oracle SOA Suite middleware, SOAP/XML interfaces, on-premises hosting
+**What is being decommissioned:** PIL application servers (post 6-month parallel-run period)
+
+### 1.6 Key Decisions & Constraints
+
+| Decision / Constraint | Rationale | Impact |
+|----------------------|-----------|--------|
+| AWS as hosting platform | Corporate cloud-first strategy mandates AWS; existing enterprise agreement | All infrastructure on AWS |
+| EKS for container orchestration | Existing team skills in Kubernetes; corporate-approved platform | Microservices deployed as Kubernetes pods |
+| PostgreSQL over DynamoDB | Relational data model for financial data; strong consistency requirements; team expertise | RDS PostgreSQL for Account and Transaction data |
+| Event-driven notification pattern | Decouple notification logic from core API processing; support multiple channels | Amazon EventBridge + SQS for async notifications |
+| Data must remain in UK | FCA and data sovereignty requirements | eu-west-2 (London) primary; eu-west-1 (Ireland) DR only for non-PII data |
+
+### 1.7 Project Details
+
+| Field | Value |
+|-------|-------|
+| **Project Name** | Customer API Platform (Open Banking) |
+| **Project Code / ID** | PROJ-0098 |
+| **Project Manager** | Nelly Bloggs |
+| **Estimated Solution Cost (Capex)** | GBP 1,200,000 |
+| **Estimated Solution Cost (Opex)** | GBP 384,000 per annum |
+| **Target Go-Live Date** | 2025-03-01 (Phase 1 -- achieved); 2025-09-01 (Phase 2 -- achieved) |
+
+### 1.8 Business Criticality
+
+Selected criticality: **Tier 1: Critical**
+
+Justification: The Customer API Platform is a regulatory obligation under PSD2/Open Banking. Service failure would result in:
+- Breach of CMA Open Banking mandate, with potential regulatory fines
+- Disruption to 25+ partner fintech applications serving over 200,000 end customers
+- Reputational damage to MFS' position as a trusted Open Banking provider
+- Revenue loss from partner transaction fees (estimated GBP 45,000 per hour of downtime)
+
+---
+
+## 2. Stakeholders & Concerns
+
+### 2.1 Stakeholder Register
+
+| Stakeholder | Role / Group | Key Concerns | Relevant Views |
+|-------------|-------------|--------------|----------------|
+| Dr. Helen Zhao | CTO | Strategic alignment, technology direction, cost justification | Executive Summary, Cost |
+| Marcus Doe | CISO | Threat model, data protection, PCI-DSS compliance, incident response | Security View, Governance |
+| Alice Doe | Head of Compliance | Open Banking compliance, FCA regulations, audit trail, data sovereignty | Security View, Data View, Governance |
+| Fred Bloggs | Lead Solution Architect | Design integrity, standards compliance, technical debt, scalability | All views |
+| Joe Bloggs | Principal Security Architect | Authentication, encryption, network security, penetration testing | Security View, Physical View |
+| Jane Doe | Data Architect | Data classification, PII handling, data sovereignty, retention | Data View |
+| Tom Bloggs | SRE Lead | Observability, incident response, reliability, on-call | Quality Attributes, Lifecycle |
+| Amir Doe | Development Lead | Component design, API contracts, CI/CD, developer experience | Logical View, Integration & Data Flow, Lifecycle |
+| Nelly Bloggs | Project Manager | Delivery timeline, cost, dependencies, risks | Executive Summary, Governance |
+| Sally Doe | Partner Manager | Partner onboarding experience, API availability, SLA commitments | Integration & Data Flow, Reliability |
+| External API consumers | Partner fintech developers | API documentation, latency, uptime, versioning, error handling | Integration & Data Flow, Performance |
+| Dave Bloggs | ARB Chair | Architecture standards compliance, reuse assessment, governance | All views |
+| Finance team | Finance & Procurement | Cost forecasting, reserved instance optimisation, budget adherence | Cost Optimisation |
+
+### 2.2 Concerns Matrix
+
+| Concern | Stakeholder(s) | Addressed In |
+|---------|---------------|-------------|
+| Regulatory compliance (PSD2, Open Banking) | Alice Doe, Dr. Helen Zhao | 1. Executive Summary, 2.3 Compliance, 3.5 Security View, 6. Governance |
+| Data protection and PII handling | Marcus Doe, Jane Doe | 3.4 Data View, 3.5 Security View |
+| Platform availability and SLA | Tom Bloggs, Sally Doe, External API consumers | 4.2 Reliability, 5.5 Operations & Support |
+| API performance and latency | Amir Doe, External API consumers | 4.3 Performance, 3.2 Integration & Data Flow |
+| Cost-effectiveness and budget | Dr. Helen Zhao, Finance team, Nelly Bloggs | 4.4 Cost Optimisation |
+| Security posture and threat mitigation | Marcus Doe, Joe Bloggs | 3.5 Security View |
+| Partner onboarding and developer experience | Sally Doe, External API consumers | 3.2 Integration & Data Flow, 3.6 Scenarios |
+| Operational supportability | Tom Bloggs | 4.1 Operational Excellence, 5.5 Operations & Support |
+| Scalability for growth | Fred Bloggs, Dr. Helen Zhao | 4.2 Reliability, 4.3 Performance, 3.3 Physical View |
+| Migration from legacy PIL | Nelly Bloggs, Amir Doe | 1.5 Current State, 5.2 Service Transition |
+| Vendor lock-in | Fred Bloggs, Dave Bloggs | 3.1 Logical View, 5.10 Exit Planning |
+
+### 2.3 Compliance & Regulatory Context
+
+#### Regulatory Requirements
+
+| Regulation / Standard | Applicability | Impact on Design |
+|----------------------|--------------|-----------------|
+| PSD2 / Open Banking (UK) | Mandatory -- MFS is a CMA-designated bank | Must provide Open Banking APIs conforming to OBIE specifications; strong customer authentication (SCA) required |
+| PCI-DSS v4.0 | Applicable -- platform processes cardholder transaction data | Network segmentation, encryption, access controls, audit logging, vulnerability management |
+| UK GDPR / Data Protection Act 2018 | Applicable -- platform processes customer PII | Data minimisation, right to erasure support, DPIA completed, lawful basis documented |
+| FCA SYSC 13 (Operational Resilience) | Applicable -- platform supports important business service | RTO/RPO targets, impact tolerance testing, scenario-based resilience testing |
+| ISO 27001 | MFS is certified; platform must conform | Information security controls, risk assessment, access management |
+
+#### Regulated Activities
+
+- Yes -- the platform supports PSD2-regulated account information services (AIS) provided to authorised third-party providers.
+
+#### Compliance Standards
+
+| Standard | Version | Applicability |
+|----------|---------|--------------|
+| MFS Information Security Policy | 4.2 | All sections -- security controls, access management |
+| MFS Data Classification Standard | 2.0 | Data View -- classification of all data stores |
+| OBIE API Specification | 3.1.11 | Integration & Data Flow View -- API contracts |
+| MFS Cloud Security Standard | 1.3 | Physical View, Security View -- AWS security controls |
+| NIST Cybersecurity Framework | 2.0 | Security View -- threat model and controls mapping |
+
+---
+
+## 3. Architecture Views
+
+### 3.1 Logical View
+
+#### 3.1.1 Application Architecture
+
+**Diagram (text description):** Partner Apps and Internal Admins connect to API Gateway. API Gateway routes to Auth Service, Account Service, and Transaction Service. Account Service and Transaction Service connect to RDS PostgreSQL for data storage and ElastiCache Redis for caching. Both services publish events to EventBridge. EventBridge routes to Notification Service, which sends via Amazon SES and Amazon SNS. Account Service connects to Core Banking Oracle DB via Direct Connect. Transaction Service connects to Fraud Detection (Featurespace ARIC) via API.
+
+#### 3.1.2 Component Decomposition
+
+| Component | Type | Description | Technology | Owner |
+|-----------|------|-------------|------------|-------|
+| API Gateway | Managed Service | Entry point for all external API requests; handles rate limiting, request validation, API key management, and request routing | AWS API Gateway (REST) | Platform Team |
+| Auth Service | Microservice | Handles OAuth 2.0 token issuance, mTLS validation, scope enforcement, and consent management for TPPs | Java 21 (Spring Boot 3.3) on EKS | API Team |
+| Account Service | Microservice | Provides account information endpoints (balances, details, standing orders, direct debits) conforming to OBIE spec | Java 21 (Spring Boot 3.3) on EKS | API Team |
+| Transaction Service | Microservice | Provides transaction history endpoints with filtering, pagination, and enrichment | Java 21 (Spring Boot 3.3) on EKS | API Team |
+| Notification Service | Microservice | Processes event-driven notifications to partners (webhooks) and internal teams (email, Slack) | Node.js 20 (Express) on EKS | API Team |
+| PostgreSQL (Accounts DB) | Database | Stores account metadata, consent records, and partner registration data | Amazon RDS PostgreSQL 16 (Multi-AZ) | DBA Team |
+| PostgreSQL (Transactions DB) | Database | Stores transaction data replicated from core banking, plus API audit records | Amazon RDS PostgreSQL 16 (Multi-AZ) | DBA Team |
+| Redis Cache | Cache | Caches frequently accessed account data and rate limiting state; reduces load on core banking | Amazon ElastiCache Redis 7.x (cluster mode) | Platform Team |
+| Event Bus | Messaging | Decouples notification and audit event processing from synchronous API flows | Amazon EventBridge + SQS | Platform Team |
+| Audit Log Store | Object Storage | Long-term storage of API audit logs for compliance (7-year retention) | Amazon S3 (Glacier Deep Archive for aged data) | Platform Team |
+| Core Banking Adapter | Integration Component | Reads from core banking Oracle DB read replicas via JDBC; transforms data to platform domain model | Java 21 library within Account/Transaction Services | API Team |
+
+#### 3.1.3 Service & Capability Mapping
+
+| Service ID | Service Name | Capability ID | Capability Name |
+|-----------|-------------|--------------|----------------|
+| SVC-001 | Account Information Service | CAP-AIS | Open Banking Account Information |
+| SVC-002 | Transaction History Service | CAP-TXN | Transaction Data Retrieval |
+| SVC-003 | Partner Authentication | CAP-AUTH | TPP Authentication & Consent |
+| SVC-004 | Event Notification | CAP-NOTIFY | Partner Webhook Notifications |
+
+#### 3.1.4 Application Impact
+
+| Application Name | Application ID | Impact Type | Change Details | Comments |
+|-----------------|---------------|-------------|----------------|----------|
+| Core Banking System | APP-0102 | Use | Read-only access to Oracle DB read replicas via Direct Connect | No changes to core banking; new read replica provisioned |
+| Fraud Detection (Featurespace ARIC) | APP-0310 | Use | Consume fraud scoring API for high-value transaction requests | Existing API; new integration client |
+| Partner Onboarding Portal | APP-0456 | Create | New web portal for partner self-service registration and API key management | Dependent on CAP Auth Service APIs |
+| Legacy Partner Integration Layer | APP-0198 | Decommission | Will be retired after 6-month parallel run | Migration of 8 existing partners required |
+| Corporate Splunk Instance | APP-0067 | Use | All logs and security events forwarded to Splunk | Existing HEC endpoints used |
+| PagerDuty | APP-0089 | Use | Alerting integration for P1/P2 incidents | Existing service; new integration configured |
+
+#### 3.1.5 Key Design Patterns
+
+| Pattern | Where Applied | Rationale |
+|---------|--------------|-----------|
+| API Gateway | AWS API Gateway fronting all services | Centralised rate limiting, authentication, request validation, and API versioning; decouples clients from internal service topology |
+| Microservices | Account, Transaction, Auth, Notification Services | Independent scaling, deployment, and failure isolation for services with different performance profiles |
+| Event-Driven Architecture | Notification Service, audit logging | Decouples async processing (webhooks, emails, audit writes) from synchronous API response path; improves P95 latency |
+| CQRS (partial) | Transaction Service | Read-optimised query model populated from core banking CDC stream; separates read path from authoritative write path in core banking |
+| Circuit Breaker | Core Banking Adapter, Fraud Detection client | Prevents cascade failures when downstream dependencies are degraded; implemented via Resilience4j |
+| Strangler Fig | Migration from legacy PIL | Gradual migration of partner traffic from SOAP to REST APIs using API Gateway routing rules |
+| Sidecar | Envoy proxy on each pod | Consistent mTLS termination, observability, and traffic management across all services |
+| Cache-Aside | Account Service with Redis | Reduces latency and load on core banking for frequently accessed account data (balance lookups) |
+
+#### 3.1.6 Technology & Vendor Lock-in Assessment
+
+| Component / Service | Vendor / Technology | Lock-in Level | Mitigation | Portability Notes |
+|---|---|---|---|---|
+| API Gateway | AWS API Gateway | Moderate | OpenAPI specs are portable; routing logic is declarative | Could migrate to Kong or Apigee with moderate effort; API contracts remain unchanged |
+| EKS | AWS (Kubernetes) | Low | Standard Kubernetes manifests; Helm charts used | Portable to any Kubernetes cluster (AKS, GKE, self-hosted) |
+| RDS PostgreSQL | AWS (PostgreSQL) | Low | Standard PostgreSQL; no AWS-specific extensions used | Portable to any PostgreSQL host; pg_dump for migration |
+| ElastiCache Redis | AWS (Redis) | Low | Standard Redis protocol | Portable to any Redis deployment |
+| EventBridge | AWS EventBridge | Moderate | Event schema documented in JSON Schema; consumers use SQS | Would require replacement with another event bus (e.g., Azure Event Grid, Kafka) |
+| S3 | AWS S3 | Low | Standard object storage API | Portable to any S3-compatible storage (MinIO, Azure Blob with S3 gateway) |
+| IAM & KMS | AWS IAM / KMS | High | Core to security architecture; deeply integrated | Would require significant re-engineering for alternative cloud; mitigated by Terraform IaC |
+
+---
+
+### 3.2 Integration & Data Flow View
+
+#### 3.2.1 Data Flow Diagrams
+
+**Diagram (text description):** Partner App connects via TLS 1.3 + mTLS to API Gateway. API Gateway routes to Auth Service, which forwards to Account/Transaction Service. Services connect to Core Banking Adapter, which reads from Oracle DB Replica via Direct Connect. Services emit async events to EventBridge. EventBridge routes to SQS queues: one for Notification Service (which sends via SES/Webhooks), one for audit processing to S3 audit logs.
+
+#### 3.2.2 Internal Component Connectivity
+
+| Source Component | Destination Component | Protocol / Encryption | Authentication Method | Purpose |
+|-----------------|----------------------|----------------------|----------------------|---------|
+| API Gateway | Auth Service | HTTPS / TLS 1.3 | IAM (service-to-service) | Token validation and scope checking |
+| API Gateway | Account Service | HTTPS / TLS 1.3 | IAM (service-to-service) | Route authenticated account requests |
+| API Gateway | Transaction Service | HTTPS / TLS 1.3 | IAM (service-to-service) | Route authenticated transaction requests |
+| Account Service | PostgreSQL (Accounts DB) | JDBC / TLS 1.3 | IAM DB authentication | Read/write account metadata and consent records |
+| Transaction Service | PostgreSQL (Transactions DB) | JDBC / TLS 1.3 | IAM DB authentication | Read transaction data and audit records |
+| Account Service | ElastiCache Redis | Redis protocol / TLS 1.3 | AUTH token (rotated via Secrets Manager) | Cache-aside for account balance lookups |
+| Account Service | Core Banking Adapter | In-process (library) | N/A | Transform and proxy core banking data |
+| Transaction Service | Core Banking Adapter | In-process (library) | N/A | Transform and proxy core banking data |
+| Account Service | EventBridge | HTTPS / TLS 1.3 | IAM | Publish audit and notification events |
+| Transaction Service | EventBridge | HTTPS / TLS 1.3 | IAM | Publish audit and notification events |
+| EventBridge | SQS (Notification Queue) | AWS internal / encrypted | IAM | Route notification events to processing queue |
+| EventBridge | SQS (Audit Queue) | AWS internal / encrypted | IAM | Route audit events to audit processing |
+| Notification Service | SQS (Notification Queue) | HTTPS / TLS 1.3 | IAM | Consume notification events |
+| Notification Service | SES | HTTPS / TLS 1.3 | IAM | Send email notifications |
+
+#### 3.2.3 External Integration Architecture
+
+| Source Application | Destination Application | Protocol / Encryption | Authentication | Security Proxy | Purpose |
+|-------------------|------------------------|----------------------|---------------|---------------|---------|
+| Partner fintech apps | CAP API Gateway | HTTPS / TLS 1.3 + mTLS | OAuth 2.0 (FAPI profile) | AWS WAF, Shield Advanced | Account and transaction API requests |
+| CAP (Core Banking Adapter) | Core Banking Oracle DB | JDBC / TLS 1.2 | Oracle DB credentials (Secrets Manager) | N/A (Direct Connect private link) | Read account and transaction data from read replicas |
+| CAP (Transaction Service) | Featurespace ARIC | HTTPS / TLS 1.3 | API key + IP allowlist | NAT Gateway (fixed IP) | Fraud score requests for high-value transactions |
+| CAP (Notification Service) | Partner webhook endpoints | HTTPS / TLS 1.3 | HMAC-SHA256 signed payloads | NAT Gateway | Event notifications to partners |
+| Internal administrators | CAP admin APIs | HTTPS / TLS 1.3 | Okta SSO (OIDC) | Corporate VPN | Partner management, configuration, monitoring |
+
+##### End User Access
+
+| User Type | Access Method | Authentication | Protocol |
+|-----------|-------------|---------------|----------|
+| Partner fintech applications | REST API | OAuth 2.0 (client credentials with FAPI profile) + mTLS | HTTPS / TLS 1.3 |
+| Internal administrators | Web portal (React SPA) via corporate network | Okta SSO (OIDC) with MFA | HTTPS / TLS 1.3 |
+| SRE / Operations | kubectl, AWS Console, Grafana dashboards via VPN | Okta SSO + AWS IAM Identity Centre | HTTPS / TLS 1.3, SSH (bastion) |
+
+#### 3.2.4 API & Interface Contracts
+
+| API / Interface | Type | Direction | Format | Version | Documentation |
+|----------------|------|-----------|--------|---------|--------------|
+| Account Information API | REST | Exposed | JSON | v3.1 (OBIE compliant) | Internal developer portal (Swagger) |
+| Transaction History API | REST | Exposed | JSON | v3.1 (OBIE compliant) | Internal developer portal (Swagger) |
+| Consent Management API | REST | Exposed | JSON | v1.0 (internal) | Internal developer portal (Swagger) |
+| Partner Webhook Notifications | REST (callback) | Exposed (outbound) | JSON | v1.0 (internal) | Partner integration guide |
+| Core Banking Data API | JDBC | Consumed | SQL/ResultSet | N/A | DBA team wiki |
+| Featurespace ARIC Fraud API | REST | Consumed | JSON | v2.4 | Featurespace developer docs |
+| Splunk HTTP Event Collector | REST | Consumed | JSON | N/A | Splunk docs |
+| PagerDuty Events API | REST | Consumed | JSON | v2 | PagerDuty docs |
+
+---
+
+### 3.3 Physical View
+
+#### 3.3.1 Deployment Architecture
+
+**Diagram (text description):** Route 53 directs traffic to AWS WAF + Shield, then to CloudFront, then to API Gateway. In the primary region (eu-west-2 London, 2 AZs): Public subnets contain NLB and NAT Gateways. Private subnets contain EKS Node Groups, RDS PostgreSQL Multi-AZ, and ElastiCache Redis. Isolated subnets contain the Direct Connect Gateway connecting to on-premises Core Banking. API Gateway routes to NLB, which routes to EKS. EKS connects to RDS and ElastiCache. In the DR region (eu-west-1): an RDS replica receives cross-region replication from the primary RDS.
+
+#### 3.3.2 Hosting & Infrastructure
+
+##### Hosting Venues
+
+| Attribute | Selection |
+|-----------|----------|
+| **Hosting Venue Type** | Cloud (primary) with on-premises connectivity (core banking) |
+| **Hosting Region(s)** | UK (eu-west-2 London -- primary), Ireland (eu-west-1 -- DR) |
+| **Service Model** | PaaS (EKS, RDS, ElastiCache) and SaaS (API Gateway, EventBridge, S3) |
+| **Cloud Provider** | AWS |
+| **Account / Subscription Type** | MFS Production AWS Organisation -- Workload Account (cap-prod-001) |
+
+##### Compute -- Containers
+
+| Attribute | Detail |
+|-----------|--------|
+| **Container Platform** | Amazon EKS 1.29 |
+| **Base Image(s)** | amazoncorretto:21-alpine (Java services), node:20-alpine (Notification Service) |
+| **Cluster Size** | 3 managed node groups: system (3 nodes), application (6-12 nodes, auto-scaling), monitoring (2 nodes) |
+| **Node Instance Type** | m7g.xlarge (Graviton3, 4 vCPU, 16 GB RAM) for application nodes; m7g.large for system and monitoring |
+| **Pod Resource Limits** | Account Service: 1 vCPU / 2 GB RAM; Transaction Service: 1.5 vCPU / 3 GB RAM; Auth Service: 0.5 vCPU / 1 GB RAM; Notification Service: 0.5 vCPU / 1 GB RAM |
+| **Pod Replicas (Production)** | Account Service: 4-8 (HPA); Transaction Service: 4-10 (HPA); Auth Service: 3-6 (HPA); Notification Service: 2-4 (HPA) |
+
+##### Security Agents
+
+- [x] Anti-Malware -- Amazon GuardDuty (runtime monitoring on EKS)
+- [x] Endpoint Detection and Response (EDR) -- CrowdStrike Falcon sensor on EKS nodes
+- [x] Vulnerability Management -- Amazon Inspector (continuous scanning of container images and EKS nodes)
+- [x] Other: AWS Systems Manager Agent for patching and compliance
+
+#### 3.3.3 Network Topology & Connectivity
+
+##### Connectivity Summary
+
+| Question | Response |
+|----------|----------|
+| Is this an Internet-facing application? | Yes -- API Gateway is Internet-facing for partner access |
+| Outbound Internet connectivity required? | Yes -- for partner webhook delivery and Featurespace ARIC API calls (via NAT Gateway with fixed Elastic IPs) |
+| Cloud-to-on-premises connectivity required? | Yes -- AWS Direct Connect (1 Gbps dedicated, with VPN backup) to MFS Slough data centre for core banking Oracle DB access |
+| Wireless networking required? | No |
+| Third-party / co-location connectivity required? | No -- third-party integrations (Featurespace) are over public Internet via TLS |
+| Cloud network peering required? | Yes -- VPC peering to MFS Shared Services VPC (for Splunk forwarding, Okta agent) |
+
+##### User & Administrator Access
+
+| Attribute | Selection |
+|-----------|----------|
+| **User access method** | API (partner applications), Web (HTTPS) for internal admin portal |
+| **User locations** | End-customers (Internet, globally), Internal (UK offices, remote VPN) |
+| **Administrator access method** | Bastion Host (SSH), AWS Console (via IAM Identity Centre), kubectl (via EKS OIDC) |
+| **VPN required** | Yes -- for administrator access only (Cisco AnyConnect corporate VPN) |
+| **Direct Connect / ExpressRoute** | Yes -- AWS Direct Connect 1 Gbps to Slough data centre |
+
+##### Transport Protocols
+
+| Protocol | Used? | Purpose |
+|----------|-------|---------|
+| HTTPS (TLS 1.2+) | Yes | All API traffic (TLS 1.3 enforced where possible; TLS 1.2 minimum for legacy partners) |
+| SFTP | No | N/A |
+| ODBC / JDBC | Yes | Core banking Oracle DB connectivity via JDBC over TLS |
+| TCP (other) | Yes | Redis protocol (port 6379) within VPC, encrypted in transit |
+| gRPC | No | N/A |
+| WebSocket | No | N/A |
+
+##### Network Bandwidth
+
+| Metric | Value |
+|--------|-------|
+| Peak egress bandwidth to Internet | 500 Mb/s |
+| Peak ingress bandwidth from Internet | 200 Mb/s |
+| Peak bandwidth between on-prem and cloud | 800 Mb/s (over 1 Gbps Direct Connect) |
+| Traffic characteristics | Burst -- significant peaks during business hours (08:00-18:00 UK), month-end, and salary payment dates |
+| QoS requirements | API responses must not be queued or throttled below SLA thresholds |
+| Network performance expectations | < 5ms latency within VPC; < 10ms to core banking via Direct Connect |
+
+##### Internet Perimeter Protection
+
+| Control | Implemented | Detail |
+|---------|------------|--------|
+| DDoS Protection | Yes | AWS Shield Advanced on API Gateway, NLB, and CloudFront |
+| Rate Limiting | Yes | API Gateway: 100 req/s per partner (burst 200); global: 5,000 req/s |
+| Source IP Restrictions | Yes | mTLS required for all API access; optional IP allowlisting for partners who request it |
+| Web Application Firewall (WAF) | Yes | AWS WAF v2 with OWASP Top 10 managed rule group, rate-based rules, SQL injection and XSS rules |
+| Client Verification Controls | Yes | mTLS with partner-specific client certificates; FAPI-compliant OAuth 2.0 |
+| File Upload Protection | No | API does not accept file uploads |
+
+#### 3.3.4 Environments
+
+| Environment | Description | Count & Venue | Compute Solution |
+|------------|-------------|--------------|-----------------|
+| Development | Developer workstations and shared dev cluster | 1x AWS (eu-west-2) | EKS (2 nodes, m7g.large), RDS db.t4g.medium |
+| Test / QA | Automated integration and contract testing | 1x AWS (eu-west-2) | EKS (3 nodes, m7g.large), RDS db.t4g.large |
+| Staging / Pre-Production | Production-mirror for release validation and performance testing | 1x AWS (eu-west-2) | EKS (4 nodes, m7g.xlarge), RDS db.r7g.large |
+| Production | Live service environment | 1x AWS (eu-west-2), Multi-AZ | EKS (6-12 nodes, m7g.xlarge), RDS db.r7g.xlarge Multi-AZ |
+| DR | Disaster recovery (pilot light) | 1x AWS (eu-west-1) | EKS (2 nodes, scaled up during failover), RDS read replica |
+
+##### Connectivity Between Environments
+
+- No -- production and non-production environments are in separate AWS accounts with no direct connectivity. Data flows between environments only through the CI/CD pipeline (GitHub Actions deploying to each environment in sequence).
+
+#### 3.3.5 End User Compute & IoT
+
+Partner applications access the API programmatically; there are no end-user compute or BYOD requirements. Internal administrators use standard corporate Windows 11 laptops via VPN.
+
+Not applicable -- no IoT devices are part of this solution.
+
+---
+
+### 3.4 Data View
+
+#### 3.4.1 Data Architecture & Storage
+
+##### Data Footprint
+
+| Data Name | Store Technology | Authoritative? | Retention Period | Data Size | Classification | Personal Data? | Encryption Level | Key Management |
+|-----------|-----------------|---------------|-----------------|-----------|---------------|---------------|-----------------|---------------|
+| Account metadata | RDS PostgreSQL 16 | No (core banking is authoritative) | Refreshed daily; 90-day history | 50 GB | Restricted | Yes (name, sort code, account number) | Application (column-level for PII) + Storage (AES-256) | AWS KMS (CMK with auto-rotation) |
+| Transaction data | RDS PostgreSQL 16 | No (core banking is authoritative) | 2 years rolling | 500 GB (growing 15 GB/month) | Restricted | Yes (payee names, transaction descriptions) | Application (column-level for PII) + Storage (AES-256) | AWS KMS (CMK with auto-rotation) |
+| Consent records | RDS PostgreSQL 16 | Yes | 7 years from consent expiry | 10 GB | Restricted | Yes (customer ID, TPP ID, consent scope) | Application + Storage (AES-256) | AWS KMS (CMK with auto-rotation) |
+| Partner registration data | RDS PostgreSQL 16 | Yes | Life of partner + 3 years | 1 GB | Internal | No (organisation data only) | Storage (AES-256) | AWS KMS (CMK with auto-rotation) |
+| Cached account balances | ElastiCache Redis 7.x | No (cache, not authoritative) | TTL: 60 seconds | 2 GB (in-memory) | Restricted | Yes (account balances) | In-transit (TLS) + At-rest (encryption enabled) | AWS KMS (ElastiCache-managed) |
+| API audit logs | S3 (Standard, then Glacier) | Yes | 7 years | 200 GB/year | Restricted | Yes (customer IDs in request context) | Storage (SSE-S3 with bucket key) | AWS-managed keys (SSE-S3) |
+| Application logs | S3 via Fluent Bit | No (copy, forwarded to Splunk) | 90 days in S3; 1 year in Splunk | 50 GB/year | Internal | No (PII redacted in logging framework) | Storage (SSE-S3) | AWS-managed keys |
+| EKS cluster metrics | Amazon Managed Prometheus | No | 90 days | 20 GB | Internal | No | Storage (AWS-managed) | AWS-managed keys |
+
+##### Storage Systems
+
+| Attribute | Detail |
+|-----------|--------|
+| **Storage Product** | Amazon RDS (PostgreSQL), Amazon S3, Amazon ElastiCache |
+| **Storage Size** | RDS: 1 TB provisioned IOPS (gp3); S3: estimated 2 TB over 7 years; ElastiCache: 2 x cache.r7g.large (26 GB) |
+| **Storage Type** | Block (RDS EBS gp3), Object (S3), In-memory (ElastiCache) |
+| **Replication** | RDS: synchronous Multi-AZ standby + asynchronous cross-region read replica (DR); S3: cross-region replication for audit logs; ElastiCache: cluster mode with replicas |
+| **Minimum RPO** | 15 minutes (continuous backup with RDS point-in-time recovery) |
+
+#### 3.4.2 Data Classification
+
+| Classification Level | Data Types | Handling Requirements |
+|---------------------|------------|----------------------|
+| **Public** | API documentation, partner onboarding guides | Open access, no special controls |
+| **Internal** | Application logs (PII-redacted), partner registration data, infrastructure metrics | Internal access controls, standard encryption at rest |
+| **Restricted** | Account data, transaction data, consent records, audit logs | Encrypted at rest and in transit, field-level encryption for PII, access-controlled and audited, 7-year retention for consent/audit data |
+
+#### 3.4.3 Data Lifecycle
+
+| Stage | Description | Controls |
+|-------|-------------|----------|
+| **Creation / Ingestion** | Account and transaction data replicated from core banking Oracle DB via CDC (nightly batch + near-real-time CDC for balances); consent records created via Auth Service | Schema validation, data type enforcement, PII field identification and tagging at ingestion |
+| **Processing** | API requests query PostgreSQL; PII fields decrypted only at point of use within service; response payloads assembled and returned | Column-level decryption in application code; no PII in logs; request/response audit events emitted |
+| **Storage** | PostgreSQL (Multi-AZ, gp3 IOPS), Redis (in-memory with persistence), S3 (audit logs) | AES-256 encryption at rest (KMS CMK), TLS in transit, automated backups (daily full, continuous WAL archiving) |
+| **Sharing / Transfer** | API responses to authorised partners; audit logs to Splunk; notification events to partners via webhooks | TLS 1.3 in transit, OAuth 2.0 scope enforcement, HMAC-signed webhook payloads, PII minimisation in responses |
+| **Archival** | Audit logs transitioned from S3 Standard to S3 Glacier after 1 year, then Glacier Deep Archive after 3 years | S3 lifecycle policies, retrieval SLA: 12 hours from Glacier, 48 hours from Deep Archive |
+| **Deletion / Purging** | Transaction data purged after 2 years (rolling); consent records purged 7 years after expiry; Redis cache TTL-based eviction | PostgreSQL scheduled jobs (pg_cron); S3 lifecycle expiration rules; deletion logged in audit trail |
+
+#### 3.4.4 Data Privacy & Protection
+
+##### Privacy Assessments
+
+| Assessment Type | ID | Status | Link |
+|----------------|-----|--------|------|
+| DPIA | DPIA-2024-047 | Completed, approved by DPO | Confluence: /compliance/dpia-047 |
+| PIA | PIA-2024-031 | Completed | Confluence: /compliance/pia-031 |
+
+##### Use of Production Data for Testing
+
+| Approach | Selected |
+|----------|----------|
+| Sensitive data is masked (describe method below) | [x] |
+
+Production data used in staging environment only, with all PII fields masked using a deterministic tokenisation approach (Delphix DataVault). Account numbers, names, and addresses are replaced with realistic synthetic data. Test and development environments use entirely synthetic data generated by the API team.
+
+##### Data Integrity
+
+- Yes -- checksums (SHA-256) are computed for all data replicated from core banking and validated on ingestion. Transaction amounts are verified using double-entry accounting reconciliation jobs that run hourly, comparing aggregated balances against core banking source of truth.
+
+##### Data on End User Devices
+
+- No -- no data is stored on end-user devices. All data is served via API and is not cached client-side (Cache-Control: no-store headers applied to all API responses containing customer data).
+
+#### 3.4.5 Data Transfers & Sovereignty
+
+##### Data Transfers to Third Parties
+
+| Destination | Data Type | Classification | Transfer Method | Protection |
+|------------|-----------|---------------|----------------|------------|
+| Authorised TPPs (partner fintech apps) | Account balances, transaction history | Restricted | REST API over HTTPS / TLS 1.3 | OAuth 2.0 scope enforcement, mTLS, PII minimisation, consent-based access only |
+| Featurespace ARIC | Transaction metadata (no PII) | Internal | REST API over HTTPS / TLS 1.3 | API key authentication, IP allowlist, PII stripped before transmission |
+| Splunk (corporate instance) | Application and security logs | Internal | HTTPS (Splunk HEC) | PII redacted at source by logging framework; TLS 1.3 in transit |
+
+##### Data Sovereignty
+
+- Yes -- all customer data (PII and transaction data) must remain within the United Kingdom (eu-west-2 London region). The DR region (eu-west-1 Ireland) stores only non-PII operational data (metrics, redacted logs). Cross-region replication for RDS is configured to exclude PII columns (custom replication using CDC with PII filtering). Audit logs in S3 are replicated to eu-west-1 with PII fields encrypted using a region-specific KMS key that prevents decryption outside eu-west-2.
+
+---
+
+### 3.5 Security View
+
+#### 3.5.1 Security Overview & Threat Model
+
+##### Security Context
+
+| Question | Response |
+|----------|----------|
+| Does the solution support regulated activities? | Yes -- PSD2 Account Information Services (AIS) and PCI-DSS-scoped transaction data processing |
+| Is the solution SaaS or third-party hosted? | No -- self-managed on AWS (IaaS/PaaS) |
+| Has a third-party risk assessment been completed? | Yes -- AWS: MFS-TRA-2023-012 (approved); Featurespace: MFS-TRA-2024-008 (approved) |
+
+##### Business Impact Assessment
+
+| Impact Category | Business Impact if Compromised |
+|----------------|-------------------------------|
+| **Confidentiality** | Critical -- exposure of customer financial data would trigger mandatory FCA notification, potential regulatory fines (up to 4% of annual turnover under GDPR), and severe reputational damage |
+| **Integrity** | High -- manipulation of transaction or balance data could lead to incorrect financial reporting and partner disputes |
+| **Availability** | Critical -- outage breaches CMA Open Banking mandate and SLA commitments to 25+ partners; estimated GBP 45,000/hour revenue impact |
+| **Non-Repudiation** | High -- inability to prove API request/response authenticity could undermine dispute resolution with partners and regulators |
+
+##### Threat Model
+
+A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key threats:
+
+| Threat | Attack Vector | Likelihood | Impact | Mitigation |
+|--------|-------------|-----------|--------|------------|
+| Stolen OAuth token used by unauthorised party | Token theft via compromised partner application | Medium | High | Short-lived tokens (5 min expiry), token binding to mTLS certificate, refresh token rotation, token revocation endpoint |
+| API abuse / data scraping | Compromised partner credentials used for bulk data extraction | Medium | High | Rate limiting (100 req/s per partner), anomaly detection via WAF, consent-scoped data access, audit log monitoring |
+| SQL injection | Malformed API parameters targeting PostgreSQL | Low | Critical | Parameterised queries only (no dynamic SQL), WAF SQL injection rules, SAST scanning in CI/CD |
+| DDoS attack on API endpoint | Volumetric or application-layer DDoS | Medium | High | AWS Shield Advanced, WAF rate-based rules, API Gateway throttling, CloudFront edge absorption |
+| Insider threat (admin misuse) | Privileged administrator accesses customer data | Low | Critical | JIT access via CyberArk, all admin actions logged and alerted, segregation of duties, quarterly access reviews |
+| Man-in-the-middle on Direct Connect | Interception of core banking data in transit | Low | Critical | TLS 1.2 encryption on JDBC connections over Direct Connect; private VLAN; MACsec on Direct Connect |
+| Container escape | Compromised container breaks out to host | Low | High | Read-only root filesystem, non-root containers, Kubernetes pod security standards (restricted), Falco runtime detection |
+
+#### 3.5.2 Identity & Access Management
+
+##### Authentication Model -- Internal Users
+
+| Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
+|------------|---------|----------------|----------------------|----------------------|
+| Internal admin portal | Platform Admin, Partner Manager, Compliance Viewer | Admin API, Grafana, partner management UI | Okta SSO (OIDC) with MFA (FIDO2/push) | Okta credential policies (90-day rotation, 16-char min) |
+| SRE / Operations | SRE Engineer, DBA | EKS (kubectl), AWS Console, RDS, bastion host | Okta SSO via AWS IAM Identity Centre; SSH via bastion with short-lived certificates | CyberArk for privileged sessions; SSH certificates (8-hour validity) |
+| Service accounts | CI/CD pipeline, monitoring agents | EKS API, AWS services, Splunk | IAM roles (IRSA for EKS pods), GitHub OIDC for CI/CD | No long-lived credentials; IAM roles with least privilege |
+
+##### Authentication Model -- External Users
+
+| Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
+|------------|---------|----------------|----------------------|----------------------|
+| Partner applications | TPP (Third-Party Provider) | CAP API Gateway | OAuth 2.0 client credentials (FAPI profile) + mTLS | Client certificates issued by MFS PKI (2048-bit RSA, 1-year validity); client secrets stored in partner's own secret management |
+| Partner developers | Developer | Developer portal (documentation) | API key (read-only documentation access) | API keys rotated annually; rate-limited to 10 req/s |
+
+##### Authentication Details
+
+| Control | Response |
+|---------|----------|
+| Does the application use SSO or group-wide authentication? | Yes -- Okta SSO for all internal access; OAuth 2.0 for external partner access |
+| What is the unique identifier for user accounts? | Internal: Okta user ID (email-based); External: TPP registration ID (OBIE-assigned) |
+| What is the authentication flow? | Internal: OIDC authorization code flow with PKCE; External: OAuth 2.0 client credentials with FAPI-compliant token request over mTLS |
+| How are credentials issued to users? | Internal: Okta provisioning from Active Directory; External: client certificate and secret issued during partner onboarding |
+| What are the credential complexity rules? | Internal: Okta policy (16-char min, complexity required); External: 2048-bit RSA certificates, 256-bit client secrets |
+| What are the credential rotation rules? | Internal: 90-day password rotation; External: annual certificate renewal, client secret rotation supported |
+| What are the account lockout rules? | Internal: 5 failed attempts, 30-minute lockout; External: 10 failed auth attempts, automatic partner notification and 1-hour lockout |
+| How can users reset forgotten credentials? | Internal: Okta self-service with MFA verification; External: partner contacts MFS API Support team |
+
+##### Session Management
+
+| Control | Response |
+|---------|----------|
+| How are sessions established after authentication? | Internal: OIDC session cookie (HttpOnly, Secure, SameSite=Strict), 8-hour max session; External: OAuth 2.0 access tokens (JWT, 5-minute expiry) with refresh tokens (24-hour expiry) |
+| How are session tokens protected against misuse? | JWTs are signed (RS256) and optionally encrypted (A256GCM); token binding to mTLS certificate thumbprint prevents token replay; refresh tokens are single-use with rotation |
+| What are the session timeout and concurrency limits? | Internal: 30-minute idle timeout, 8-hour absolute; External: access tokens 5-minute absolute, no concurrency limits on stateless API access |
+
+##### Authorisation Model
+
+| Access Type | Role / Scope | Entitlement Store | Provisioning Process |
+|------------|-------------|-------------------|---------------------|
+| Business Users (internal admin) | Platform Admin, Partner Manager, Compliance Viewer, Read-Only | Okta groups mapped to Kubernetes RBAC and application roles | Okta group membership managed by line managers via ServiceNow request |
+| Technology Users (SRE) | SRE Engineer (full), DBA (database only), Developer (non-prod only) | AWS IAM Identity Centre permission sets + Kubernetes RBAC | IAM Identity Centre permission sets assigned via Terraform; JIT elevation via CyberArk |
+| Service Accounts | Scoped IAM roles per service (least privilege) | AWS IAM policies attached to IRSA roles | Terraform-managed; reviewed quarterly |
+| External Partners | OAuth 2.0 scopes: accounts:read, transactions:read, consent:manage | OAuth 2.0 token claims, enforced by Auth Service | Scopes assigned during partner onboarding; consent per customer |
+
+##### Authorisation Details
+
+| Control | Response |
+|---------|----------|
+| Account re-certification process | Quarterly access review by Platform Admin; annual review by CISO office for all privileged accounts |
+| Segregation of duties controls | Developers cannot deploy to production (CI/CD pipeline enforces); DBAs cannot modify application code; Compliance Viewers have read-only access |
+| Delegated authorisation capabilities | Partner access is consent-based: customers authorise specific TPPs to access their data via the consent flow; consent is time-limited and revocable |
+
+##### Privileged Access
+
+| Account Type | Management Approach |
+|-------------|-------------------|
+| OS privileged accounts (root/admin) | EKS managed nodes: no SSH access by default; SSM Session Manager for emergency access with audit trail; root disabled |
+| Infrastructure / platform admin | AWS IAM Identity Centre with JIT privilege elevation via CyberArk; 4-hour maximum session; all actions CloudTrail-logged |
+| Application admin | Admin API protected by Okta SSO + MFA; admin actions audited; no direct database access (all operations via admin API) |
+
+#### 3.5.3 Network Security & Perimeter Protection
+
+| Control | Implementation |
+|---------|---------------|
+| Network segmentation | VPC with public, private, and isolated subnets across 2 AZs; security groups per service (allow only required ports/protocols); NACLs as secondary layer; EKS pods use Calico network policies for pod-to-pod segmentation |
+| Ingress filtering | AWS WAF v2 (OWASP Top 10 rules, rate limiting, geo-restriction to permitted countries), Shield Advanced, API Gateway throttling; NLB in public subnet routes to API Gateway |
+| Egress filtering | NAT Gateway with fixed Elastic IPs for outbound (partner webhooks, Featurespace); egress security groups restrict destinations to known endpoints; VPC Flow Logs for monitoring |
+| Encryption in transit | TLS 1.3 enforced for partner API traffic; TLS 1.2 minimum for all other connections; certificates managed by AWS Certificate Manager (ACM) for public endpoints; private CA for internal mTLS |
+
+#### 3.5.4 Data Protection
+
+##### Encryption at Rest
+
+| Attribute | Detail |
+|-----------|--------|
+| Encryption deployment level | Storage (all data stores) + Application (field-level for PII columns) |
+| Key type | Symmetric (AES-256 for storage and field-level encryption) |
+| Algorithm / cipher / key length | AES-256-GCM (field-level), AES-256 (RDS, S3, ElastiCache) |
+| Key generation method | AWS KMS (HSM-backed, FIPS 140-2 Level 3) |
+| Key storage | AWS KMS (customer-managed keys per data classification) |
+| Key rotation schedule | Annual automatic rotation (KMS-managed); field-level encryption keys rotated semi-annually with re-encryption job |
+
+##### Secret & Password Protection
+
+| Attribute | Detail |
+|-----------|--------|
+| Secret store | AWS Secrets Manager (database credentials, API keys); Kubernetes Secrets (encrypted with KMS via EKS envelope encryption) for pod configuration |
+| Secret distribution | Retrieved on-demand by services at runtime via Secrets Manager SDK; Kubernetes Secrets mounted as volumes (not environment variables) |
+| Secret protection on host | Memory only -- secrets are never written to disk; Kubernetes Secrets encrypted at rest in etcd via KMS |
+| Secret rotation | Automatic -- Secrets Manager Lambda rotation for RDS credentials (30-day cycle); partner API keys rotated annually via partner onboarding portal |
+
+#### 3.5.5 Security Monitoring & Threat Detection
+
+| Capability | Implementation |
+|-----------|---------------|
+| Security event logging | All API requests logged with partner ID, IP, timestamp, requested scopes, response status; authentication events (success/failure); authorisation decisions; admin actions. Logs forwarded to Splunk via Fluent Bit |
+| SIEM integration | Splunk Enterprise (corporate instance) -- all security events forwarded via HTTP Event Collector (HEC); custom Splunk correlation rules for anomaly detection |
+| Infrastructure event detection | AWS GuardDuty (EKS runtime monitoring, S3 protection, malware scanning); AWS CloudTrail (all API calls); VPC Flow Logs (network anomaly detection); Falco (container runtime security) |
+| Security alerting | Splunk alerts for: failed authentication spikes (>10 in 5 min per partner), unusual data access patterns, privilege escalation attempts, WAF rule triggers. Alerts routed to PagerDuty (P1: immediate page; P2: 15-min response) |
+
+---
+
+### 3.6 Scenarios
+
+#### 3.6.1 Key Use Cases
+
+**UC-01: Partner Retrieves Account Balance**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Partner fintech application (authorised TPP) |
+| **Trigger** | Partner app sends GET /accounts/{accountId}/balance request |
+| **Pre-conditions** | Partner has valid OAuth 2.0 access token with accounts:read scope; customer has granted consent to this TPP for this account |
+| **Main Flow** | 1. Partner sends HTTPS request with Bearer token and mTLS client certificate to API Gateway. 2. API Gateway validates request structure and routes to Auth Service. 3. Auth Service validates OAuth token, verifies mTLS certificate binding, checks consent record in PostgreSQL. 4. Auth Service returns authorisation decision to API Gateway. 5. API Gateway routes to Account Service. 6. Account Service checks Redis cache for balance (60s TTL). 7. Cache hit: return cached balance. Cache miss: Account Service queries core banking read replica via JDBC, caches result, returns balance. 8. API Gateway returns JSON response to partner. 9. Audit event emitted to EventBridge. |
+| **Post-conditions** | Partner receives account balance; audit log records the access; cache updated if miss occurred |
+| **Views Involved** | Logical (services), Integration & Data Flow (API flow), Physical (EKS, RDS, Redis, Direct Connect), Data (account data, cache), Security (OAuth, mTLS, consent, audit) |
+
+**UC-02: Rate Limit Exceeded**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Partner fintech application |
+| **Trigger** | Partner exceeds 100 req/s rate limit |
+| **Pre-conditions** | Partner is authenticated and making valid requests |
+| **Main Flow** | 1. Partner sends request to API Gateway. 2. API Gateway rate-limiting check identifies partner has exceeded 100 req/s quota. 3. API Gateway returns HTTP 429 Too Many Requests with Retry-After header. 4. Rate limit event logged and counted. 5. If sustained (>5 min), Splunk alert triggers notification to Partner Manager. 6. Notification Service sends email to partner's registered technical contact. |
+| **Post-conditions** | Partner receives 429 response; partner is notified; rate limit event logged for analysis |
+| **Views Involved** | Logical (API Gateway, Notification Service), Integration & Data Flow (rate limiting flow), Security (abuse detection), Operational Excellence (alerting) |
+
+**UC-03: Fraud Alert Triggered During Transaction Retrieval**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Partner fintech application, Featurespace ARIC |
+| **Trigger** | Partner requests transaction history for an account flagged for suspected fraud |
+| **Pre-conditions** | Partner has valid token with transactions:read scope; account has active fraud flag in Featurespace |
+| **Main Flow** | 1. Partner sends GET /accounts/{accountId}/transactions. 2. Request authenticated and authorised as per UC-01 flow. 3. Transaction Service queries Featurespace ARIC fraud scoring API for account risk score. 4. ARIC returns high-risk score (>0.85). 5. Transaction Service applies fraud response policy: returns limited transaction data (last 30 days only, no pending transactions), adds X-Fraud-Review: true header. 6. High-priority security event emitted to EventBridge. 7. Splunk alert fires immediately; PagerDuty pages on-call fraud analyst. 8. Notification Service sends webhook to MFS internal fraud team channel (Slack). |
+| **Post-conditions** | Partner receives restricted data set; fraud team alerted; full audit trail recorded; account flagged for manual review |
+| **Views Involved** | Logical (Transaction Service, Notification Service), Integration & Data Flow (Featurespace integration), Security (fraud detection, data restriction), Operational Excellence (alerting, escalation) |
+
+#### 3.6.2 Architecture Decision Records (ADRs)
+
+**ADR-001: EKS over ECS for Container Orchestration**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2024-10-01 |
+| **Context** | The platform requires a container orchestration solution to run microservices. Both Amazon EKS (managed Kubernetes) and Amazon ECS (AWS-native container service) were evaluated. |
+| **Decision** | Use Amazon EKS (Kubernetes). |
+| **Alternatives Considered** | **ECS Fargate:** Lower operational overhead, but limited pod-level networking control and no support for Envoy sidecar injection (Istio/Linkerd) needed for mTLS mesh. **ECS on EC2:** More control but still lacks Kubernetes ecosystem (Helm, Argo CD, Calico network policies). **Self-managed Kubernetes on EC2:** Maximum control but unacceptable operational burden for a 6-person platform team. |
+| **Consequences** | Positive: rich ecosystem (Helm, Argo CD, Calico, Prometheus), strong portability to other clouds, existing team Kubernetes skills. Negative: higher operational complexity than ECS Fargate, Kubernetes version upgrade overhead every 12-14 months. |
+| **Quality Attribute Tradeoffs** | Operational Excellence: increased complexity (negative) offset by richer observability tooling (positive). Reliability: Kubernetes self-healing (positive). Cost: slightly higher than ECS Fargate due to node management (negative). Portability: significantly better (positive). |
+
+**ADR-002: PostgreSQL over DynamoDB for Primary Data Store**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2024-10-05 |
+| **Context** | The platform needs a primary data store for account metadata, transaction data, and consent records. The data is relational (accounts have transactions, consent links customers to TPPs and accounts) and requires strong consistency for financial accuracy. |
+| **Decision** | Use Amazon RDS PostgreSQL 16. |
+| **Alternatives Considered** | **DynamoDB:** Excellent scalability and operational simplicity, but poor fit for relational queries (joins across accounts/transactions/consent), no native support for field-level encryption patterns used for PII, and team has limited DynamoDB experience. **Aurora PostgreSQL:** Considered, but standard RDS PostgreSQL meets performance requirements at lower cost; Aurora's distributed storage overhead is unnecessary at current data volumes. |
+| **Consequences** | Positive: strong relational model for financial data, excellent ecosystem (pg_cron, pgcrypto for field-level encryption), team expertise, straightforward backup/recovery. Negative: vertical scaling limits (mitigated by read replicas and Redis caching), operational overhead of PostgreSQL tuning. |
+| **Quality Attribute Tradeoffs** | Performance: adequate for 5,000 req/s with caching layer (neutral). Reliability: Multi-AZ provides HA (positive). Cost: lower than Aurora at current scale (positive). Portability: standard PostgreSQL, highly portable (positive). |
+
+**ADR-003: Event-Driven Architecture for Notifications and Audit**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2024-10-08 |
+| **Context** | The platform must send notifications (partner webhooks, internal alerts, compliance emails) and write audit logs. These operations must not increase API response latency. |
+| **Decision** | Use Amazon EventBridge with SQS for asynchronous notification and audit processing. |
+| **Alternatives Considered** | **Synchronous processing:** Simple but adds 50-100ms to every API response for audit writes and notification dispatch; unacceptable for P95 < 200ms target. **Amazon SNS + SQS:** Works but lacks EventBridge's content-based filtering and schema registry. **Apache Kafka (MSK):** Powerful but over-engineered for current throughput (5,000 events/s); operational overhead of Kafka cluster management not justified. |
+| **Consequences** | Positive: API response latency unaffected by notification/audit processing, natural decoupling enables independent scaling of Notification Service, EventBridge schema registry aids contract evolution. Negative: eventual consistency for audit logs (acceptable: audit logs are written within seconds), added infrastructure complexity. |
+| **Quality Attribute Tradeoffs** | Performance: significant improvement in P95 latency (positive). Reliability: event replay capability aids recovery (positive). Cost: EventBridge pricing is consumption-based, cost-effective at current volumes (positive). Operational Excellence: additional component to monitor (negative, mitigated by managed service). |
+
+---
+
+## 4. Quality Attributes
+
+### 4.1 Operational Excellence
+
+#### 4.1.1 Observability -- Logging
+
+| Log Type | Events Logged | Local Storage | Retention Period | Remote Services |
+|----------|--------------|--------------|-----------------|----------------|
+| Application logs | API request/response metadata (no PII), service errors, business events, performance metrics | stdout/stderr (container) | Ephemeral (container lifecycle) | Fluent Bit --> S3 (90 days) + Splunk (1 year) |
+| Data store logs | PostgreSQL slow queries (>100ms), connection events, error logs | RDS log files | 7 days (RDS) | CloudWatch Logs --> Splunk |
+| Infrastructure logs | EKS control plane logs, node-level system logs, VPC Flow Logs | CloudWatch Logs | 90 days (CloudWatch) | Splunk (security-relevant subset) |
+| Security event logs | Authentication success/failure, authorisation decisions, admin actions, WAF blocks, GuardDuty findings | CloudWatch Logs + S3 | 7 years (S3) + 1 year (Splunk) | Splunk (all security events), PagerDuty (critical alerts) |
+
+#### 4.1.2 Observability -- Monitoring & Alerting
+
+##### Operational Alerts
+
+| Alert Category | Trigger Condition | Notification Method | Recipient |
+|---------------|-------------------|-------------------|-----------|
+| API error rate (5xx) | > 1% of requests over 5 minutes | PagerDuty (P1) | SRE on-call |
+| API latency (P95) | > 500ms over 5 minutes | PagerDuty (P2) | SRE on-call |
+| Authentication failure spike | > 10 failures per partner in 5 minutes | PagerDuty (P2) + Slack | SRE on-call + Security team |
+| Database connection pool exhaustion | > 80% pool utilisation | PagerDuty (P2) | SRE on-call + DBA |
+| EKS node not ready | Any node NotReady for > 2 minutes | PagerDuty (P2) | SRE on-call |
+| Certificate expiry approaching | < 30 days to expiry | Slack + Email | Platform team |
+| Cost anomaly | > 20% increase in daily spend | Email | Platform team + Finance |
+| Partner rate limit sustained breach | Partner exceeds limit for > 5 minutes | Slack + Email | Partner Manager |
+| Disk utilisation (RDS) | > 80% storage used | PagerDuty (P3) + Slack | DBA + SRE |
+| Fraud alert (high-risk score) | ARIC score > 0.85 | PagerDuty (P1) + Slack | Fraud team + SRE |
+
+##### Monitoring Tools
+
+| Capability | Tool | Coverage |
+|-----------|------|----------|
+| Application Performance Monitoring | Grafana (with Prometheus data source) | All microservices (request rate, error rate, duration -- RED metrics) |
+| Infrastructure Monitoring | Amazon CloudWatch + Prometheus (via Amazon Managed Prometheus) | EKS cluster, RDS, ElastiCache, API Gateway, S3, VPC |
+| Log Aggregation | Splunk Enterprise (corporate) | All application, infrastructure, and security logs |
+| Distributed Tracing | Jaeger (deployed on EKS monitoring node group) | All microservices -- full request tracing from API Gateway to core banking |
+| Dashboards | Grafana (6 dashboards) | API overview, per-partner metrics, infrastructure health, cost, SLA compliance, security events |
+| Alerting & Incident Management | PagerDuty | All P1-P3 alerts; integrated with Splunk and CloudWatch |
+
+#### 4.1.3 Capacity Monitoring
+
+| Question | Response |
+|----------|----------|
+| What metrics are collected for capacity monitoring? | CPU utilisation, memory utilisation, pod count, HPA scaling events, RDS connections, RDS storage, Redis memory, API Gateway request count, EKS node count |
+| How are capacity trends analysed? | Weekly automated report from Grafana (30-day trend); monthly capacity review meeting with SRE and Platform team; quarterly projection against growth model |
+| Are capacity thresholds and alerts configured? | Yes -- alerts at 70% (warning) and 85% (critical) for CPU, memory, storage, and connection pools |
+| Is there a capacity planning process? | Yes -- annual capacity plan updated quarterly; aligned with partner onboarding forecast from business development team |
+
+#### 4.1.4 Operational Procedures
+
+| Procedure | Description | Owner | Documentation |
+|-----------|-------------|-------|--------------|
+| Incident response | P1: 15-min response, P2: 30-min response; follow ITIL incident management; post-incident review within 48 hours | SRE Lead (Tom Bloggs) | Confluence: /ops/runbooks/incident-response |
+| Change management | All changes via GitHub PR; production deploys require 2 approvals; change window: Tuesday-Thursday; emergency change process for P1 fixes | SRE Lead | Confluence: /ops/runbooks/change-management |
+| Escalation paths | L1: SRE on-call --> L2: SRE Lead --> L3: Solution Architect --> L4: CTO. Security incidents: CISO notified immediately for P1 | SRE Lead | Confluence: /ops/runbooks/escalation |
+| On-call rotation | 24x7, 1-week rotation across 6 SRE engineers; secondary on-call for DBA coverage | SRE Lead | PagerDuty schedule: cap-production |
+| Partner communication | Status page updates within 15 minutes of confirmed incident; post-incident report to affected partners within 5 business days | Partner Manager (Sally Doe) | Confluence: /ops/runbooks/partner-comms |
+| Database maintenance | Weekly vacuum/analyse (automated via pg_cron); monthly index review; quarterly RDS minor version assessment | DBA team | Confluence: /ops/runbooks/database-maintenance |
+
+---
+
+### 4.2 Reliability & Resilience
+
+#### 4.2.1 Geographic Footprint & Disaster Recovery
+
+| Question | Response |
+|----------|----------|
+| Is the application deployed across multiple hosting venues for continuity? | Yes -- primary in eu-west-2 (London) with DR in eu-west-1 (Ireland) using active-passive (pilot light) configuration |
+| What is the DR strategy? | Active-Passive (pilot light): DR region has EKS cluster with minimum nodes (2), RDS read replica (promoted during failover), and pre-configured EventBridge rules. Scaled up during failover. |
+| Are there data sovereignty requirements affecting geographic choices? | Yes -- PII must remain in UK (eu-west-2). DR region stores non-PII data only. Failover for PII-containing services requires manual approval from Compliance. |
+
+#### 4.2.2 Scalability
+
+##### Application Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Scaling capability** | Full auto-scaling (Horizontal Pod Autoscaler on all services; Karpenter for EKS node auto-scaling) |
+| **Scaling details** | HPA scales pods based on CPU (target 60%) and custom metrics (request queue depth). Karpenter provisions new Graviton nodes within 90 seconds. API Gateway has no scaling limits. RDS: read replicas can be added; vertical scaling requires brief downtime (planned maintenance window). ElastiCache: cluster mode with automatic resharding. |
+
+##### Dependency Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Dependencies adequately sized?** | Yes (confirmed) -- core banking read replicas tested at 3x current peak load; Featurespace ARIC SLA guarantees 10,000 req/s |
+| **Dependency details** | Core banking Oracle read replicas: 2 replicas in eu-west-2, confirmed to handle 15,000 queries/s. Direct Connect: 1 Gbps dedicated with VPN backup. Featurespace ARIC: SLA-backed at 10,000 req/s with <100ms P95. |
+
+#### 4.2.3 Fault Tolerance
+
+- [x] **Yes**
+  - **Component failures:** Each microservice runs 4+ replicas across 2 AZs; Kubernetes automatically reschedules failed pods. Pod disruption budgets ensure minimum 2 replicas during rolling updates.
+  - **Graceful degradation:** If core banking is unavailable, Account Service returns cached data from Redis (with staleness indicator). If Featurespace ARIC is unavailable, Transaction Service returns full data without fraud scoring (with logged exception).
+  - **Circuit breaker patterns:** Resilience4j circuit breakers on Core Banking Adapter (open after 5 consecutive failures, half-open after 30s) and Featurespace client (open after 3 failures, half-open after 15s).
+  - **Health checks:** Kubernetes liveness probes (HTTP /health/live, 10s interval), readiness probes (HTTP /health/ready, 5s interval, checks DB connectivity). Failed readiness removes pod from service.
+  - **Testing practices:** Monthly chaos testing with Gremlin (pod kill, AZ failure simulation, network latency injection). Quarterly DR failover drill. Annual game day exercise simulating multi-component failure.
+
+#### 4.2.4 Failure Modes & Recovery Behaviour
+
+| Component / Dependency | Failure Mode | Detection Method | Recovery Behaviour | User Impact |
+|----------------------|-------------|-----------------|-------------------|-------------|
+| Single EKS pod | Pod crash or OOM | Kubernetes liveness probe failure | Automatic restart (restartPolicy: Always); traffic redirected to healthy pods | Transparent (in-flight request may receive 503, retry expected) |
+| Entire Availability Zone | AZ outage | CloudWatch AZ health checks, EKS node status | Karpenter launches replacement nodes in healthy AZ within 90 seconds; pods rescheduled automatically | Brief degraded performance (30-90 seconds) while pods reschedule |
+| RDS primary instance | Database failure | RDS Multi-AZ automatic health check | Automatic failover to standby (60-120 seconds); application reconnects via DNS endpoint | 60-120 second interruption; connection pool recovers automatically |
+| ElastiCache Redis | Cache node failure | Redis cluster health check | Automatic failover to replica; cluster mode redistributes slots | Brief cache miss spike; requests fall through to database (increased latency for 30-60 seconds) |
+| Core Banking (Oracle DB) | Read replica unavailable | JDBC connection timeout (5s), circuit breaker | Circuit breaker opens; Account Service returns cached data from Redis with X-Data-Freshness: stale header | Degraded: stale data returned (up to 60s old); partners notified via status page |
+| Featurespace ARIC | API timeout or error | HTTP timeout (2s), circuit breaker | Circuit breaker opens; Transaction Service returns unscored data with X-Fraud-Check: bypassed header; security alert raised | Degraded: full data returned without fraud filtering; manual fraud review triggered |
+| Direct Connect | Link failure | CloudWatch Direct Connect metrics, BGP session monitoring | Automatic failover to site-to-site VPN backup (pre-configured, 30s convergence) | Increased latency to core banking (5-15ms additional); throughput reduced |
+| API Gateway | Service disruption | Route 53 health checks | DNS failover to DR region (if activated); CloudFront serves cached error page during brief disruption | Potential 1-5 minute disruption during regional failover |
+
+#### 4.2.5 Backup & Recovery
+
+##### Backup Design
+
+| Attribute | Detail |
+|-----------|--------|
+| Backup strategy | RDS: automated snapshots + continuous WAL archiving (point-in-time recovery); S3: versioning enabled on all buckets; EKS: Velero backup of Kubernetes resources and persistent volumes |
+| Backup product/service | AWS RDS Automated Backups, AWS Backup (for cross-account/cross-region copies), Velero (EKS) |
+| Backup type | Full (daily RDS snapshot) + Incremental (continuous WAL/transaction log) |
+| Backup frequency | RDS: daily automated snapshot at 03:00 UTC + continuous WAL archiving; S3: real-time versioning; EKS (Velero): daily at 04:00 UTC |
+| Backup retention | RDS snapshots: 35 days; WAL archive: 35 days; S3 versions: 90 days; Velero: 30 days; cross-region backup copies: 7 days |
+
+##### Backup Protection
+
+| Control | Detail |
+|---------|--------|
+| Immutability | RDS snapshots: locked via AWS Backup Vault Lock (compliance mode, 35-day retention); S3: Object Lock (governance mode) on audit log bucket |
+| Encryption | All backups encrypted with AWS KMS CMK (same key as source data); cross-region copies re-encrypted with region-specific CMK |
+| Access control | Backup operations restricted to DBA IAM role and AWS Backup service role; snapshot sharing disabled; cross-account backup vault in isolated security account |
+
+#### 4.2.6 Recovery Scenarios
+
+| # | Scenario | Recovery Approach | RTO | RPO |
+|---|----------|------------------|-----|-----|
+| 1 | Primary AZ failure | Automatic: Karpenter reschedules pods to surviving AZ; RDS Multi-AZ failover | 5 minutes | 0 (synchronous replication) |
+| 2 | Primary region failure (eu-west-2) | Manual DR activation: promote RDS read replica in eu-west-1, scale up EKS cluster, update Route 53 DNS | 1 hour | 15 minutes (async replication lag) |
+| 3 | Critical software component failure (e.g., Account Service crash loop) | Automatic: Kubernetes rolls back to last known good deployment (revision history); manual: Argo CD rollback via Git revert | 10 minutes (auto) / 30 minutes (manual) | 0 |
+| 4 | Direct Connect failure | Automatic: BGP failover to site-to-site VPN (30s convergence) | 30 seconds | 0 |
+| 5 | External connectivity failure (Internet) | AWS Shield Advanced DDoS mitigation; CloudFront absorbs volumetric attacks; status page updated | 15 minutes (mitigation) | 0 |
+| 6 | Ransomware / cyber-attack | Isolate affected components (security group lockdown); restore from immutable backups (AWS Backup Vault Lock); forensic investigation using preserved snapshots | 4 hours | 15 minutes (point-in-time recovery) |
+| 7 | Accidental data corruption / deletion | RDS point-in-time recovery to moment before corruption; S3 version restore for objects; Velero restore for Kubernetes resources | 1 hour | 1 minute (continuous WAL) |
+
+---
+
+### 4.3 Performance Efficiency
+
+#### 4.3.1 Performance Requirements
+
+##### Key Performance Indicators
+
+| Metric | Target | Measurement Method |
+|--------|--------|-------------------|
+| Response time (P50) | < 80ms | Jaeger trace duration, API Gateway CloudWatch metrics |
+| Response time (P95) | < 200ms | Jaeger trace duration, Grafana dashboard |
+| Response time (P99) | < 500ms | Jaeger trace duration, Grafana dashboard |
+| Throughput | 5,000 req/s sustained, 8,000 req/s burst | API Gateway request count metrics, load test validation |
+| Error rate (5xx) | < 0.01% | API Gateway 5xx count / total count |
+| Partner-specific rate limit | 100 req/s per partner (burst: 200 req/s) | API Gateway usage plan metrics |
+| Cache hit ratio (Redis) | > 85% | ElastiCache CloudWatch metrics |
+| Core banking query latency | < 50ms (P95) | Jaeger span duration for JDBC calls |
+
+##### Performance Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| Performance testing approach | Load testing (sustained 5,000 req/s for 1 hour), stress testing (ramp to 15,000 req/s), soak testing (3,000 req/s for 24 hours), spike testing (0 to 8,000 req/s in 30 seconds) |
+| Testing tools | k6 (Grafana Labs) for load generation; Grafana for real-time monitoring during tests |
+| Testing environment | Staging environment (production-mirror sizing); quarterly test in production (read-only traffic, off-peak) |
+| Testing frequency | Every release in staging (automated in CI/CD via k6 Cloud); quarterly production validation; ad hoc before major partner onboarding |
+
+##### Capacity & Growth Projections
+
+| Metric | Current | 1 Year | 3 Years | 5 Years |
+|--------|---------|--------|---------|---------|
+| Partner applications (total) | 25 | 50 | 80 | 120 |
+| Peak requests per second | 2,500 | 5,000 | 8,000 | 15,000 |
+| Data volume (PostgreSQL) | 560 GB | 740 GB | 1.2 TB | 2.0 TB |
+| Transaction volume (per day) | 12M | 25M | 45M | 80M |
+| Storage requirement (total incl. audit) | 800 GB | 1.2 TB | 2.5 TB | 5.0 TB |
+
+| Question | Response |
+|----------|----------|
+| Will the current design scale to accommodate projected growth? | Yes for 3-year horizon. At the 5-year mark, PostgreSQL vertical scaling may reach limits; migration to Aurora PostgreSQL or introduction of read replica sharding will be evaluated at the 3-year review. |
+| Are there known seasonal or cyclical demand patterns? | Yes -- 30% traffic increase on salary payment dates (25th-28th of month), 50% increase in January (financial year activities), and 20% reduction during UK bank holidays. Auto-scaling handles these patterns. |
+
+#### 4.3.2 Resource Optimisation
+
+| Strategy | Implementation |
+|----------|---------------|
+| Right-sizing | Graviton3 instances (m7g.xlarge) selected for best price-performance; pod resource requests set based on 6 months of production metrics; quarterly rightsizing review using AWS Compute Optimizer |
+| Caching | Redis cache-aside pattern for account balances (60s TTL); API Gateway response caching for partner metadata (5-min TTL); DNS caching for internal service discovery (30s TTL) |
+| Connection pooling | HikariCP connection pools per service: Account Service (max 20), Transaction Service (max 30); PgBouncer considered but not needed at current scale |
+| Asynchronous processing | Audit logging and notifications fully asynchronous via EventBridge + SQS; no synchronous writes in API response path except primary query |
+| Database optimisation | Composite indexes on frequently queried columns (account_id + date range); partitioned transaction table by month; EXPLAIN ANALYSE review for all new queries; pg_stat_statements monitoring for slow queries |
+
+#### 4.3.3 Network Performance
+
+| Attribute | Detail |
+|-----------|--------|
+| Latency requirements | < 5ms within VPC (pod-to-pod); < 10ms to core banking (Direct Connect); < 30ms to partner applications (Internet, UK-based) |
+| Bandwidth requirements | 500 Mb/s peak egress; 200 Mb/s peak ingress; 800 Mb/s Direct Connect |
+| Network optimisation | HTTP/2 enabled on API Gateway; gzip compression for responses > 1 KB; connection keep-alive (60s timeout); TCP Fast Open enabled on NLB |
+
+---
+
+### 4.4 Cost Optimisation
+
+#### 4.4.1 Cost Influence & Analysis
+
+##### Design Cost Decisions
+
+| Posture | Selected | Detail |
+|---------|----------|--------|
+| Most cost-effective options intentionally not selected | [x] | Graviton instances are more cost-effective than x86 equivalents (20% saving); however, Multi-AZ RDS and Redis cluster mode were chosen for reliability over single-AZ (30% cost premium justified by Tier 1 criticality) |
+
+##### Cost Analysis
+
+- Yes -- detailed cost modelling performed using AWS Pricing Calculator and validated against 6 months of production billing data. TCO comparison conducted against legacy PIL (on-premises Oracle SOA Suite) showing 45% reduction in total annual operating cost.
+
+##### Monthly Cost Breakdown (Production)
+
+| Component | Monthly Cost (GBP) | Notes |
+|-----------|-------------------|-------|
+| EKS cluster (control plane + nodes) | 8,200 | 1 cluster, 8 m7g.xlarge nodes (average), Graviton pricing |
+| RDS PostgreSQL (Multi-AZ) | 4,800 | 2x db.r7g.xlarge, Multi-AZ, 1 TB gp3 storage, reserved instance (1-year) |
+| ElastiCache Redis (cluster mode) | 1,600 | 2x cache.r7g.large with replicas, reserved instance |
+| API Gateway | 2,100 | 5,000 req/s average, REST API pricing |
+| S3 (audit logs + application logs) | 400 | Standard + lifecycle to Glacier; growing 15 GB/month |
+| Direct Connect | 1,200 | 1 Gbps dedicated connection + data transfer |
+| CloudFront + WAF + Shield Advanced | 3,200 | Shield Advanced: GBP 2,400/month; WAF: GBP 300/month; CloudFront: GBP 500/month |
+| EventBridge + SQS | 300 | Consumption-based pricing |
+| Monitoring (Prometheus, Grafana) | 600 | Amazon Managed Prometheus + Grafana |
+| Secrets Manager + KMS | 200 | Per-secret and per-API-call pricing |
+| NAT Gateway + data transfer | 900 | 2 NAT Gateways (Multi-AZ) + data processing |
+| Other (Route 53, CloudWatch, etc.) | 500 | DNS, CloudWatch Logs, AWS Backup |
+| **Total monthly (production)** | **24,000** | |
+| **Total annual (production)** | **288,000** | |
+| Non-production environments | 8,000/month | Dev + Test + Staging (smaller sizing, no reserved instances) |
+| **Total annual (all environments)** | **384,000** | |
+
+#### 4.4.2 Cost Implications
+
+- No -- the design fully meets all requirements. The primary cost decision was reserving capacity (1-year reserved instances for RDS and ElastiCache) which reduced annual cost by GBP 38,000 compared to on-demand pricing.
+
+#### 4.4.3 FinOps Practices
+
+| Practice | Implementation |
+|----------|---------------|
+| Cost monitoring | CloudHealth (VMware Aria Cost) for daily cost tracking and anomaly detection; Grafana cost dashboard; weekly cost report to Platform team |
+| Cost allocation | AWS resource tagging strategy: Project (CAP), Environment (prod/staging/test/dev), Service (account-svc/txn-svc/auth-svc/notify-svc), CostCentre (CC-4720) |
+| Reserved capacity | 1-year reserved instances for RDS (db.r7g.xlarge) and ElastiCache (cache.r7g.large); EKS nodes use Savings Plans (1-year, partial upfront) |
+| Rightsizing reviews | Monthly review of AWS Compute Optimizer recommendations; quarterly review of pod resource requests vs actual utilisation |
+| Waste elimination | Automated shutdown of dev and test EKS clusters at 19:00 weekdays and all weekend (Lambda-based scheduler); Spot instances for non-production node groups |
+| Budget governance | AWS Budget alerts at 80% and 100% of monthly forecast; approval required from Platform Lead for any change > GBP 500/month |
+
+---
+
+### 4.5 Sustainability
+
+#### 4.5.1 Hosting Efficiency
+
+##### Hosting Location
+
+| Question | Response |
+|----------|----------|
+| Has the hosting location been chosen to reduce environmental impact? | Partially -- eu-west-2 (London) was chosen primarily for data sovereignty, but AWS London region operates at a lower carbon intensity than some other European regions. AWS is committed to 100% renewable energy by 2025 for all regions. |
+| What is the expected workload demand pattern? | Variable -- significant peaks during UK business hours (08:00-18:00) and month-end; lower demand evenings and weekends |
+
+##### On-Demand Availability
+
+| Question | Response |
+|----------|----------|
+| Must the application be available continuously? | Yes -- regulatory obligation for 24x7 availability (Open Banking). However, traffic drops significantly outside UK business hours. |
+| Can the solution be shut down or scaled down during off-peak hours? | Partially -- auto-scaling reduces pod count during off-peak (minimum 2 replicas maintained for HA); EKS nodes scale down from 8 to 4 overnight |
+| Are non-production environments configured to downscale or shut down when not in use? | Yes -- dev and test clusters shut down at 19:00 weekdays and fully off at weekends (saves approximately GBP 3,000/month); staging runs 24x7 only during release weeks |
+
+##### Resource Efficiency
+
+| Question | Response |
+|----------|----------|
+| Are resources rightsized to avoid overprovisioning? | Yes -- pod resource requests based on P95 utilisation data; Karpenter consolidates pods onto fewer nodes during low-demand periods |
+| Is vCPU utilisation monitored? | Yes -- target 40-60% average utilisation during business hours; alerts if sustained below 20% (rightsizing trigger) or above 80% (scaling trigger) |
+| Are the highest performance-per-watt hardware options used? | Yes -- Graviton3 (ARM-based) instances provide up to 60% better energy efficiency than comparable x86 instances (AWS published benchmarks) |
+
+#### 4.5.2 Code Efficiency
+
+| Question | Response |
+|----------|----------|
+| How do the language and framework choices contribute to efficiency? | Java 21 with virtual threads (Project Loom) reduces memory overhead for concurrent request handling; GraalVM Native Image evaluated but deferred due to reflection-heavy Spring Boot framework |
+| Has the code been optimised for the target platform and workload? | Yes -- connection pooling (HikariCP), efficient JSON serialisation (Jackson with afterburner module), lazy database fetching to avoid unnecessary data transfer |
+| Are efficient algorithms and data structures used? | Yes -- database queries use indexed lookups; pagination enforced on all list endpoints to prevent unbounded result sets; Redis cache reduces redundant core banking queries by 85% |
+| Is the number of vCPU hours per job/request minimised? | Yes -- average request processing time is 15ms CPU time; async offloading of audit/notification reduces per-request compute by approximately 40% compared to synchronous design |
+
+#### 4.5.3 Data Efficiency
+
+| Question | Response |
+|----------|----------|
+| Is data held close to compute to reduce network transfer? | Yes -- Redis cache co-located in same VPC/AZ as application pods; PostgreSQL in same region; core banking read replicas in same AWS region connected via Direct Connect |
+| Are data replicas minimised? | Replicas are justified: RDS Multi-AZ (HA requirement), Redis replicas (HA), DR read replica (regulatory DR requirement). No unnecessary copies. |
+| Is old or unused data removed to reduce storage? | Yes -- S3 lifecycle policies transition audit logs to Glacier (1 year) then Deep Archive (3 years); transaction data purged after 2 years; Redis TTL evicts stale cache entries |
+| Are efficient data formats and compression used? | Yes -- gzip compression on API responses; PostgreSQL TOAST compression for large text fields; S3 objects compressed before archival |
+| Are jobs prioritised and distributed to optimise resource usage? | Yes -- nightly batch jobs (data replication from core banking) scheduled during off-peak hours (02:00-05:00 UTC) to use capacity freed by auto-scaling |
+| Are efficient networking patterns used? | Yes -- VPC endpoints for S3, SQS, EventBridge, and Secrets Manager to avoid NAT Gateway charges and Internet transit; Direct Connect for high-volume core banking traffic |
+
+---
+
+## 5. Lifecycle Management
+
+### 5.1 Software Development & CI/CD
+
+#### Development Practices
+
+- [x] Yes -- all microservices are developed internally by the API Team.
+
+| Attribute | Detail |
+|-----------|--------|
+| Source control platform | GitHub Enterprise (MFS organisation) |
+| CI/CD platform | GitHub Actions (corporate standard) |
+| Build automation | GitHub Actions workflows triggered on push and PR; Maven builds for Java services, npm for Node.js; Docker multi-stage builds for container images |
+| Deployment automation | Argo CD (GitOps) for Kubernetes deployments; Terraform for infrastructure changes; Helm charts for all services |
+| Test automation | Unit tests (JUnit 5, Jest), integration tests (Testcontainers), contract tests (Pact), security scanning, and container image scanning -- all in CI pipeline |
+
+#### Application Security in Development
+
+| Control | Implementation |
+|---------|---------------|
+| Security requirements identification | Threat model (SEC-TM-2024-019) reviewed at sprint planning; security stories in backlog; OWASP ASVS Level 2 as baseline |
+| Static Application Security Testing (SAST) | SonarQube (integrated in GitHub Actions; quality gate blocks merge on critical/high findings) |
+| Dynamic Application Security Testing (DAST) | Yes -- OWASP ZAP (weekly automated scan against staging environment) |
+| Software Composition Analysis (SCA) | Snyk (integrated in GitHub Actions; blocks merge on high/critical CVEs; daily monitoring of deployed images) |
+| Container image scanning | Snyk Container + Amazon Inspector (continuous scanning of ECR images; alerts on new CVEs) |
+| Secure coding practices | OWASP Secure Coding Guidelines; mandatory security training (annual); peer code review required for all PRs; security champion in API team |
+| Patch management | Critical CVEs: 24-hour SLA for mitigation plan, 7-day SLA for patch deployment. High: 30-day SLA. Medium/Low: next scheduled release. |
+
+### 5.2 Service Transition & Migration
+
+#### Migration Classification (6 R's)
+
+| Classification | Selected? | Description |
+|---------------|-----------|-------------|
+| **Replace** | [x] | The legacy SOAP-based Partner Integration Layer (PIL) is being replaced entirely with the new cloud-native Customer API Platform |
+
+#### Transition Plan
+
+| Attribute | Detail |
+|-----------|--------|
+| Deployment strategy | Strangler Fig -- partner traffic gradually migrated from legacy PIL to new CAP using API Gateway routing rules; both systems run in parallel during transition |
+| Data migration mode | Continuous Sync -- core banking data replicated to CAP's PostgreSQL via CDC; no bulk data migration required (CAP reads from core banking, not PIL) |
+| Data migration method | CDC (Change Data Capture) from Oracle GoldenGate to PostgreSQL via Debezium + Kafka Connect |
+| Data volume to migrate | 0 GB (no data migrated from PIL; CAP builds its own data store from core banking source) |
+| End-user cutover approach | Phased -- partners migrated individually over 3-month window; each partner given 4-week notice and 2-week parallel-run period |
+| External system cutover | Phased -- partners cut over individually; legacy PIL endpoints deprecated with 6-month sunset notice |
+| Maximum acceptable downtime | Zero -- parallel run ensures no downtime; partners switch DNS/config to new endpoints at their convenience during migration window |
+| Rollback plan | API Gateway routing rules can redirect traffic back to legacy PIL within 5 minutes; partner-specific rollback possible without affecting other partners |
+| Acceptance criteria | All 8 legacy partners migrated and confirmed; PIL traffic at zero for 30 consecutive days; PIL decommission approval from all stakeholders |
+| Transient infrastructure needed? | Yes -- Debezium + Kafka Connect cluster for initial CDC setup (decommissioned after steady-state CDC established via direct Oracle-to-PostgreSQL replication) |
+
+### 5.3 Test Strategy
+
+| Test Type | Scope | Approach | Environment | Automated? |
+|-----------|-------|----------|-------------|-----------|
+| Integration testing | All service-to-service interactions, database queries, external API calls | Testcontainers (PostgreSQL, Redis, LocalStack) in CI; full integration suite in staging | CI + Staging | Yes |
+| Contract testing | API contracts between CAP and partner applications; internal service contracts | Pact (consumer-driven contract tests); OBIE conformance test suite | CI + Staging | Yes |
+| Performance testing | Load, stress, soak, spike testing against production-equivalent environment | k6 load tests in CI/CD pipeline (smoke: every deploy; full: weekly) | Staging (production-mirror) | Yes |
+| Security testing | SAST, DAST, SCA, penetration testing | SAST/SCA: every PR; DAST: weekly; annual penetration test by NCC Group | CI + Staging + Production | Partially (pen test is manual) |
+| DR testing | Failover to eu-west-1, RDS promotion, DNS cutover | Quarterly automated failover drill; annual full DR exercise with SRE team | Production + DR | Partially (scripted but manually triggered) |
+
+### 5.4 Release Management
+
+| Attribute | Detail |
+|-----------|--------|
+| Release frequency | Weekly (every Tuesday); hotfixes as needed (emergency change process) |
+| Release process | Feature branch --> PR (automated tests + 2 approvals) --> merge to main --> automated deploy to staging --> manual approval gate --> blue-green deploy to production via Argo CD |
+| Release validation | Automated smoke tests post-deploy (5-minute suite); canary analysis (10% traffic for 15 minutes); automated rollback if error rate > 0.1% |
+| Feature flags / toggles | LaunchDarkly for feature flags; used for partner-specific feature rollouts and kill switches for new functionality |
+
+### 5.5 Operations & Support
+
+| Attribute | Detail |
+|-----------|--------|
+| Support model | L1: MFS Service Desk (basic triage); L2: SRE team (6 engineers, dedicated to CAP and 2 other platform services); L3: API development team; L4: Solution Architect / CTO |
+| Support hours | 24x7 (SRE on-call rotation); development team: UK business hours (09:00-17:30) with on-call for P1 escalations |
+| SLAs | External (partner-facing): 99.95% monthly availability, P95 response time < 200ms, incident notification within 15 minutes. Internal: P1 response < 15 min, P2 < 30 min, P3 < 4 hours |
+| Escalation paths | L1 --> L2 (15 min for P1, 1 hour for P2) --> L3 (30 min for P1, 4 hours for P2) --> L4 (1 hour for P1). Security incidents: immediate CISO notification. |
+
+### 5.6 Resourcing & Skills
+
+#### Team Capability Assessment
+
+| Skill Area | Current Level | Action Required |
+|-----------|--------------|-----------------|
+| AWS (EKS, RDS, networking) | High | Ongoing: 2 engineers pursuing AWS Solutions Architect Professional certification |
+| Infrastructure as Code (Terraform) | High | None -- team fully proficient |
+| CI/CD (GitHub Actions, Argo CD) | High | None -- team developed the pipeline |
+| Java / Spring Boot | High | Ongoing: Java 21 virtual threads training completed Q1 2025 |
+| Kubernetes operations | High | Ongoing: CKA certification for 2 junior engineers |
+| PostgreSQL DBA | Medium | Action: DBA team member allocated 50% to CAP; advanced PostgreSQL training planned for Q1 2026 |
+| Security & compliance | Medium | Action: Security champion training completed; annual OWASP training for all developers |
+
+#### Operational Readiness
+
+| Question | Response |
+|----------|----------|
+| Can the team fully operate and support this solution in production? | A: Fully capable |
+| If B, C, or D: what additional resources are required? | N/A |
+| Is a managed service being considered for ongoing operations? | No -- SRE team operates the platform; AWS managed services (RDS, EKS, ElastiCache) reduce operational burden |
+
+### 5.7 Service Start
+
+Application start-up sequence:
+1. EKS cluster and node groups are always running (managed by Karpenter auto-scaling).
+2. RDS PostgreSQL instances are always running (Multi-AZ).
+3. ElastiCache Redis cluster is always running (cluster mode).
+4. Kubernetes deployments are managed by Argo CD; pods start in order: Auth Service first (dependency for other services), then Account Service and Transaction Service (parallel), then Notification Service.
+5. Kubernetes readiness probes ensure services are only added to the load balancer after successful health checks (database connectivity, Redis connectivity, configuration loaded).
+6. API Gateway is always available (managed service); no start-up required.
+7. Full start-up from cold (e.g., after a DR failover scale-up) takes approximately 8 minutes.
+
+### 5.8 Maintainability
+
+| Concern | Approach |
+|---------|----------|
+| Keeping software versions current and supported | EKS: upgraded within 60 days of new minor release; RDS PostgreSQL: minor versions applied in monthly maintenance window; Java/Node.js: upgraded within 90 days of LTS release; all dependencies tracked by Snyk |
+| Hardware lifecycle management | N/A -- all cloud-managed; Graviton instance generations reviewed annually for cost/performance improvements |
+| Certificate management | Partner mTLS certificates: 1-year validity, automated renewal reminders at 60/30/7 days; internal TLS: AWS Certificate Manager (auto-renewal); KMS keys: annual automatic rotation |
+| Dependency management | Snyk monitors all dependencies continuously; Dependabot PRs for automated updates; quarterly dependency review meeting |
+
+### 5.9 End-of-Life & Decommissioning
+
+| Attribute | Detail |
+|-----------|--------|
+| Intended lifespan | 7-10 years; major architecture review planned at 5 years (2030) |
+| End-of-life triggers | Replacement by next-generation API platform; regulatory change removing Open Banking obligation (unlikely); AWS service deprecation |
+| Decommissioning blockers | 25+ partner integrations dependent on the platform; 7-year audit log retention obligation |
+| Data disposal | Customer data: secure deletion from RDS (NIST 800-88 compliant); audit logs: retained in S3 Glacier until 7-year obligation met, then lifecycle-expired; encryption keys: scheduled for deletion after data disposal |
+| Infrastructure disposal | Terraform destroy for all AWS resources; DNS records removed; IAM roles deleted; GitHub repositories archived (not deleted, for audit trail) |
+
+### 5.10 Exit Planning
+
+| Attribute | Detail |
+|-----------|--------|
+| Exit strategy | All microservices are containerised with standard Kubernetes manifests (Helm charts); PostgreSQL is standard (no AWS-specific extensions); data exportable via pg_dump; audit logs in S3 exportable via standard S3 API |
+| Data portability | PostgreSQL: pg_dump/pg_restore to any PostgreSQL host; S3 audit logs: standard object download; Redis: cache can be rebuilt from source data (no persistent data); EventBridge schemas documented in JSON Schema |
+| Vendor lock-in assessment | Overall: Low-Moderate. Primary lock-in is AWS IAM/KMS (High) and EventBridge (Moderate). All other components use standard, portable technologies. Estimated exit effort: 3-4 months for a 6-person team. |
+| Exit timeline estimate | 6 months (including 3 months infrastructure migration + 3 months partner migration and parallel run) |
+
+---
+
+## 6. Decision Making & Governance
+
+### 6.1 Constraints
+
+| ID | Constraint | Category | Impact on Design | Last Assessed |
+|----|-----------|----------|-----------------|---------------|
+| C-001 | Must comply with PCI-DSS v4.0 for transaction data handling | Regulatory | Network segmentation, encryption at rest and in transit, access controls, vulnerability management, audit logging -- all mandated by PCI-DSS | 2025-11-01 |
+| C-002 | All customer PII must reside within the UK (data sovereignty) | Regulatory | Primary region must be eu-west-2 (London); DR region (eu-west-1) restricted to non-PII data only; cross-region replication must filter PII | 2025-11-01 |
+| C-003 | Must integrate with existing core banking Oracle database via read replicas | Technical | Cannot replace core banking data source; must maintain JDBC connectivity via Direct Connect; data model constrained by Oracle schema | 2025-06-15 |
+| C-004 | 99.95% monthly availability SLA committed to partners | Commercial | Multi-AZ deployment mandatory; active-passive DR required; auto-scaling and fault tolerance must support SLA; monthly SLA reporting to partners | 2025-11-01 |
+
+### 6.2 Assumptions
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | Core banking Oracle read replicas will support 15,000 queries/s at peak | Platform cannot meet performance targets; would require caching redesign or additional read replicas | High | Closed | Jane Doe | Load test results (TEST-2025-031) confirmed 18,000 queries/s sustained |
+| A-002 | Featurespace ARIC API will maintain <100ms P95 latency under our projected load | Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently | Medium | Open | Fred Bloggs | Featurespace SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at our projected 3-year volume |
+| A-003 | Partner adoption will grow linearly to 80 partners over 3 years | Non-linear growth could exceed capacity plans; under-adoption would mean over-provisioned infrastructure (cost waste) | Medium | Open | Sally Doe | Business development pipeline shows 50 partners in negotiation; growth rate tracking to plan |
+
+### 6.3 Risks
+
+#### Risk Identification
+
+| ID | Risk Event | Category | Severity | Likelihood | Owner |
+|----|-----------|----------|----------|-----------|-------|
+| R-001 | Core banking Oracle DB upgrade causes schema changes that break data replication | Technical | High | Medium | Jane Doe |
+| R-002 | Partner onboarding volume exceeds forecast, overwhelming support capacity | Operational | Medium | Medium | Sally Doe |
+| R-003 | Critical vulnerability discovered in base container image requiring emergency patching across all services | Security | High | High | Joe Bloggs |
+| R-004 | AWS eu-west-2 region experiences prolonged outage exceeding DR activation threshold | Operational | Critical | Low | Tom Bloggs |
+
+#### Risk Response
+
+| ID | Mitigation Strategy | Mitigation Plan | Residual Risk | Last Assessed |
+|----|-------------------|-----------------|--------------|---------------|
+| R-001 | Mitigate | Contract testing against core banking schema (Pact); advance notification agreement with DBA team (60-day notice for schema changes); schema compatibility layer in Core Banking Adapter | Medium | 2025-11-01 |
+| R-002 | Mitigate | Self-service partner onboarding portal (Phase 2, delivered); automated API key provisioning; partner onboarding runbook; escalation to additional support resource if queue > 5 partners | Low | 2025-11-01 |
+| R-003 | Mitigate | Snyk continuous monitoring with P1 alert on critical CVEs; pre-built patched base images maintained in ECR; emergency deployment pipeline (bypasses staging for security patches); rollback capability | Medium | 2025-11-01 |
+| R-004 | Accept (with mitigation) | Active-passive DR in eu-west-1; quarterly DR drills; RTO 1 hour validated through testing; accept 15-minute RPO for async replication lag | Low | 2025-11-01 |
+
+### 6.4 Dependencies
+
+| ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
+|----|-----------|-----------|--------|-------|----------|---------------|
+| D-001 | Core banking Oracle DB read replicas provisioned in eu-west-2 via Direct Connect | Inbound | Resolved | DBA team | Direct Connect live; read replicas operational since 2025-01-15 | 2025-11-01 |
+| D-002 | Featurespace ARIC API available and contracted for CAP usage | Inbound | Committed | Procurement | Contract MFS-VENDOR-2024-089 signed; API access provisioned | 2025-09-01 |
+| D-003 | Partner Onboarding Portal (APP-0456) consuming Auth Service APIs for partner registration | Outbound | Resolved | Partner Portal team | Integration live since 2025-06-01 | 2025-11-01 |
+
+### 6.5 Issues
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | Redis cluster failover caused 45-second cache miss spike during October maintenance window | Operational | Low | Tom Bloggs | Updated maintenance procedure to pre-warm cache before failover; implemented dual-write to new primary during planned failover | Resolved | 2025-11-01 |
+| I-002 | Three partners have not completed mTLS certificate renewal (certificates expiring in 60 days) | Operational | Medium | Sally Doe | Automated renewal reminders sent at 90/60/30/7 days; partner manager directly contacting non-responsive partners; contingency: temporary API key fallback (with CISO approval) | In Progress | 2025-11-15 |
+
+### 6.6 Guardrail Exceptions
+
+#### Policy Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create any exception to current policies and standards? | No |
+| If yes, have exceptions been logged and accepted through the exceptions process? | N/A |
+
+#### Process Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create an issue against the process library? | No |
+| If yes, has this been acknowledged by the process owner? | N/A |
+
+#### Risk Profile Impact
+
+| Question | Response |
+|----------|----------|
+| Does the design materially change the organisation's technology risk profile? | No -- the design reduces risk by replacing unsupported legacy middleware with a modern, actively maintained platform. The introduction of cloud-hosted customer data is covered by the existing AWS risk assessment (MFS-TRA-2023-012). |
+| If yes, has this been evaluated with Risk and Controls teams? | N/A |
+
+### 6.7 Architectural Decisions Log
+
+| ADR # | Title | Status | Date | Impact |
+|-------|-------|--------|------|--------|
+| ADR-001 | EKS over ECS for container orchestration | Accepted | 2024-10-01 | Determines container platform and operational model for all microservices |
+| ADR-002 | PostgreSQL over DynamoDB for primary data store | Accepted | 2024-10-05 | Determines database technology, data model, and backup/recovery approach |
+| ADR-003 | Event-driven architecture for notifications and audit | Accepted | 2024-10-08 | Determines async processing pattern and notification architecture |
+
+### 6.8 Compliance Traceability
+
+| Standard / Principle | Requirement | How the Design Satisfies It | Evidence Section |
+|---------------------|-------------|---------------------------|-----------------|
+| PCI-DSS v4.0 Req 1 | Install and maintain network security controls | VPC segmentation, security groups, NACLs, WAF, Shield | 3.3 Physical View, 3.5 Security View |
+| PCI-DSS v4.0 Req 3 | Protect stored account data | AES-256 encryption at rest, field-level encryption for PII, KMS key management | 3.4 Data View, 3.5 Security View |
+| PCI-DSS v4.0 Req 4 | Protect cardholder data with strong cryptography during transmission | TLS 1.3 enforced for all external connections; TLS 1.2 minimum for all internal | 3.2 Integration & Data Flow, 3.5 Security View |
+| PCI-DSS v4.0 Req 7 | Restrict access to system components and cardholder data by business need to know | RBAC + ABAC via OAuth scopes, Kubernetes RBAC, IAM least privilege | 3.5 Security View |
+| PCI-DSS v4.0 Req 10 | Log and monitor all access to system components and cardholder data | Comprehensive audit logging, Splunk SIEM integration, 7-year retention | 4.1 Operational Excellence, 3.5 Security View |
+| OBIE Standard 3.1.11 | API conformance for Account Information Services | REST APIs conform to OBIE specification; contract tests validate compliance | 3.2 Integration & Data Flow, 3.6 Scenarios |
+| UK GDPR Art 5(1)(f) | Integrity and confidentiality of personal data | Field-level encryption, mTLS, access controls, audit trail, DPIA completed | 3.4 Data View, 3.5 Security View |
+| UK GDPR Art 17 | Right to erasure | Consent revocation endpoint; data deletion job for expired consents; audit trail of deletions | 3.4 Data View, 3.6 Scenarios |
+| FCA SYSC 13 | Operational resilience for important business services | Multi-AZ, DR strategy, impact tolerance testing, chaos testing, quarterly DR drills | 4.2 Reliability |
+| MFS Cloud Security Standard 1.3 | Encryption, access management, monitoring for cloud workloads | KMS encryption, IAM least privilege, GuardDuty, CloudTrail, Splunk integration | 3.3 Physical View, 3.5 Security View |
+
+---
+
+## 7. Appendices
+
+### 7.1 Glossary
+
+| Term | Definition |
+|------|-----------|
+| ARIC | Adaptive, Real-time, Individual, Contextual -- Featurespace's fraud detection platform |
+| CAP | Customer API Platform -- the solution described in this SAD |
+| CDC | Change Data Capture -- a pattern for capturing and replicating data changes |
+| CMA | Competition and Markets Authority -- UK regulator that mandated Open Banking |
+| EKS | Elastic Kubernetes Service -- AWS managed Kubernetes |
+| FAPI | Financial-grade API -- an OAuth 2.0 security profile for financial services |
+| HPA | Horizontal Pod Autoscaler -- Kubernetes auto-scaling mechanism |
+| IRSA | IAM Roles for Service Accounts -- EKS feature for pod-level IAM |
+| MFS | Meridian Financial Services -- the fictional organisation in this example |
+| mTLS | Mutual TLS -- two-way TLS authentication where both client and server present certificates |
+| OBIE | Open Banking Implementation Entity -- the UK body governing Open Banking standards |
+| PIL | Partner Integration Layer -- the legacy SOAP-based system being replaced |
+| PSD2 | Payment Services Directive 2 -- EU directive mandating open banking |
+| SCA | Strong Customer Authentication -- PSD2 requirement for multi-factor authentication |
+| TPP | Third-Party Provider -- an authorised fintech that accesses bank APIs under Open Banking |
+
+### 7.2 Reference Documents
+
+| Document | Version | Description | Location |
+|----------|---------|-------------|----------|
+| OBIE Account and Transaction API Specification | 3.1.11 | Open Banking UK API specification for AIS | https://openbankinguk.github.io/read-write-api-site3/ |
+| PCI-DSS | 4.0 | Payment Card Industry Data Security Standard | https://www.pcisecuritystandards.org/ |
+| MFS Information Security Policy | 4.2 | Corporate information security policy | Confluence: /security/policies/isp-v4.2 |
+| MFS Cloud Security Standard | 1.3 | Security controls for AWS workloads | Confluence: /security/standards/cloud-sec-v1.3 |
+| MFS Data Classification Standard | 2.0 | Data classification scheme and handling requirements | Confluence: /data/standards/classification-v2.0 |
+| AWS Well-Architected Framework | 2024 | AWS architecture best practices | https://aws.amazon.com/architecture/well-architected/ |
+| NIST Cybersecurity Framework | 2.0 | Cybersecurity risk management framework | https://www.nist.gov/cyberframework |
+| CAP Threat Model | SEC-TM-2024-019 | STRIDE-based threat model for the Customer API Platform | Confluence: /security/threat-models/cap-2024 |
+| DPIA - Customer API Platform | DPIA-2024-047 | Data Protection Impact Assessment | Confluence: /compliance/dpia-047 |
+
+### 7.3 Standards & Patterns Referenced
+
+| Standard / Pattern ID | Name | Version | Applicability |
+|----------------------|------|---------|--------------|
+| OBIE-AIS-3.1.11 | Open Banking Account Information API | 3.1.11 | 3.2 Integration & Data Flow |
+| PCI-DSS-4.0 | Payment Card Industry Data Security Standard | 4.0 | 3.5 Security View, 6.8 Compliance Traceability |
+| OWASP-ASVS-4.0 | Application Security Verification Standard | 4.0 | 5.1 Application Security in Development |
+| NIST-800-88 | Guidelines for Media Sanitization | Rev 1 | 5.9 End-of-Life |
+| C4-Model | C4 Model for Software Architecture | N/A | 3.1 Logical View (diagramming approach) |
+| 12-Factor | The Twelve-Factor App | N/A | 3.1 Logical View (microservice design principles) |
+
+### 7.4 Approval Sign-Off
+
+| Role | Name | Date | Signature / Approval Reference |
+|------|------|------|-------------------------------|
+| Lead Solution Architect | Fred Bloggs | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
+| Principal Security Architect | Joe Bloggs | 2025-11-18 | JIRA: CAP-SEC-2025-012 (approved) |
+| Data Architect | Jane Doe | 2025-11-15 | JIRA: CAP-DATA-2025-007 (approved) |
+| Head of Compliance | Alice Doe | 2025-11-19 | JIRA: CAP-COMP-2025-004 (approved) |
+| CISO | Marcus Doe | 2025-11-19 | JIRA: CAP-SEC-2025-013 (approved) |
+| CTO | Dr. Helen Zhao | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
+| ARB Chair | Dave Bloggs | 2025-11-20 | JIRA: CAP-ARB-2025-003 (approved) |
+
+---
+
+## Compliance Scoring
+
+| Section | Score (0-5) | Justification |
+|---------|:-----------:|---------------|
+| **0. Document Control** | 5 | Full version history, multiple contributors and approvers, clear scope, related documents referenced |
+| **1. Executive Summary** | 5 | Clear business drivers with priority, strategic alignment with reuse assessment, current-state architecture documented, business criticality justified with revenue impact |
+| **2. Stakeholders & Concerns** | 5 | Comprehensive stakeholder register including external parties, concerns matrix fully mapped to sections, regulatory context with five applicable regulations |
+| **3.1 Logical View** | 5 | Full component decomposition with technology choices, design patterns documented with rationale, vendor lock-in assessed for all components, service-to-capability mapping complete |
+| **3.2 Integration & Data Flow** | 5 | All internal and external integrations documented with protocols and authentication, API contracts versioned, end user access patterns documented, SLAs defined per interface |
+| **3.3 Physical View** | 5 | Deployment diagram described, compute fully specified (Graviton instances, pod sizing), full networking documented including Direct Connect, environments listed with sizing, security agents deployed |
+| **3.4 Data View** | 5 | All data stores classified with retention and encryption, field-level encryption for PII, data sovereignty addressed with cross-region filtering, DPIA completed, data integrity controls evidenced |
+| **3.5 Security View** | 5 | STRIDE threat model with 7 threats and mitigations, comprehensive IAM (internal + external + privileged), mTLS and OAuth 2.0 FAPI, HSM-backed encryption, SIEM integration with correlation rules |
+| **3.6 Scenarios** | 5 | Three architecturally significant use cases crossing all views, three ADRs with alternatives and quality attribute tradeoffs |
+| **4.1 Operational Excellence** | 5 | Centralised logging with Splunk, Grafana dashboards, PagerDuty alerting with escalation, Jaeger distributed tracing, comprehensive runbooks, capacity planning process |
+| **4.2 Reliability** | 5 | Multi-AZ with active-passive DR, RTO 1hr / RPO 15min validated through quarterly testing, chaos testing with Gremlin, fault tolerance with circuit breakers, immutable backups |
+| **4.3 Performance** | 5 | P50/P95/P99 targets defined, 5,000 req/s throughput target, automated performance testing with k6, caching strategy documented, 3-year growth projections |
+| **4.4 Cost** | 5 | Detailed monthly cost breakdown by component, reserved instance analysis, CloudHealth monitoring, FinOps practices documented, tagging strategy, rightsizing reviews |
+| **4.5 Sustainability** | 4 | Graviton instances for energy efficiency, non-prod auto-shutdown, auto-scaling for demand matching. Score reduced from 5: no carbon metrics baselined, no formal sustainability KPIs. |
+| **5. Lifecycle** | 5 | Full CI/CD with security scanning, Strangler Fig migration plan, test strategy covering all types, weekly releases with blue-green and canary, team skills assessed, exit plan documented |
+| **6. Governance** | 5 | 4 constraints, 3 assumptions (with evidence), 4 risks with mitigation plans, 3 dependencies tracked to resolution, 2 issues tracked, compliance traceability table mapping 10 requirements |
+| **7. Appendices** | 5 | Domain-specific glossary, 9 reference documents, 6 standards/patterns referenced, full approval sign-off with JIRA references |
+| **Overall** | **4.9** | **Comprehensive depth achieved across all sections. Exemplary documentation for a Tier 1 Critical regulated platform.** |

@@ -1,0 +1,9 @@
+# Cloudflare Pages redirects
+# Preserves old URLs from before the /v1/ base path migration
+
+/standard/*    /v1/standard/:splat    301
+/examples/*    /v1/examples/:splat    301
+/fr/*          /v1/fr/:splat          301
+/de/*          /v1/de/:splat          301
+/templates/*   /v1/templates/:splat   301
+/schema/*      /v1/schema/:splat      301

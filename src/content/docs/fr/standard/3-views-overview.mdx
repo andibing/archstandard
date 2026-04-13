@@ -1,0 +1,46 @@
+---
+title: "3. Vues architecturales"
+description: Aperçu des six points de vue architecturaux utilisés dans ce standard.
+---
+
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+<span class="framework-badge badge-4plus1">4+1 Views</span>
+
+## Modèle de vues
+
+ADS organise l'architecture de la solution en **vues complémentaires**, chacune répondant à un ensemble distinct de préoccupations des parties prenantes. Cette approche est alignée avec le modèle de vues architecturales 4+1 de Kruchten, étendu avec des vues dédiées Données et Sécurité.
+
+Aucune vue à elle seule ne fournit une image complète de l'architecture. Ensemble, les vues fournissent une description holistique compréhensible par toutes les parties prenantes.
+
+## Les vues
+
+| # | Vue | Basée sur | Parties prenantes principales | Décrit |
+|---|------|----------|---------------------|-----------|
+| 3.1 | **Vue logique** | 4+1 Logical | Architectes, Développeurs | Composants applicatifs, services, patterns |
+| 3.2 | **Vue intégration et flux de données** | 4+1 Process (adaptée) | Intégrateurs, Architectes | Flux de données, intégrations, interfaces |
+| 3.3 | **Vue physique** | 4+1 Physical | Infrastructure, DevOps, Cloud | Toute l'infrastructure de déploiement — physique, virtuelle, cloud et serverless |
+| 3.4 | **Vue données** | RM-ODP Information | Architectes données, DBA, Conformité | Stockages de données, classification, confidentialité, cycle de vie |
+| 3.5 | **Vue sécurité** | Étendue | Sécurité, RSSI, Conformité | IAM, chiffrement, surveillance, modélisation des menaces |
+| 3.6 | **Scénarios** | 4+1 +1 | Toutes les parties prenantes | Cas d'utilisation, enregistrements de décisions architecturales |
+
+## Correspondances entre les vues
+
+Les vues ne sont pas indépendantes — elles partagent des correspondances (relations entre éléments à travers les vues). Les correspondances clés incluent :
+
+- Les **composants logiques** (3.1) sont **déployés sur** l'infrastructure physique (3.3)
+- Les **stockages de données** (3.4) sont **hébergés dans** l'environnement physique (3.3)
+- Les **flux d'intégration** (3.2) traversent les **chemins réseau** définis dans la vue physique (3.3)
+- Les **contrôles de sécurité** (3.5) sont **appliqués aux** composants, données et infrastructure à travers toutes les vues
+- Les **scénarios** (3.6) **valident** la conception à travers toutes les vues
+
+Lors de la documentation d'une vue, référencez les éléments connexes dans les autres vues pour maintenir la traçabilité.
+
+## Conventions pour les diagrammes
+
+Chaque vue devrait inclure au moins un diagramme. Suivez ces conventions :
+
+- Utilisez une notation cohérente (par ex., UML, ArchiMate, C4 Model ou des diagrammes de blocs simples)
+- Étiquetez clairement tous les composants, connexions et limites
+- Montrez les limites de confiance dans les diagrammes pertinents pour la sécurité
+- Incluez une légende si la notation n'est pas évidente
+- Assurez-vous que les diagrammes sont à une résolution permettant la lecture du texte

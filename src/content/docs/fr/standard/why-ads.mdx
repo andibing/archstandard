@@ -1,0 +1,104 @@
+---
+title: Pourquoi ADS ?
+description: Comment ADS se compare aux cadres et modèles de documentation d'architecture existants.
+---
+
+import { Aside, Badge, Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Le problème
+
+La documentation d'architecture est incohérente dans l'industrie. Les équipes utilisent un patchwork de modèles — certains trop abstraits pour guider le travail réel, d'autres trop spécifiques à une plateforme pour être généralisables. Après avoir analysé huit cadres largement utilisés et des documents d'architecture réels, cinq lacunes apparaissent dans **chacun d'entre eux**.
+
+## Analyse du paysage
+
+Nous avons examiné des cadres de documentation d'architecture, des modèles et des exemples remplis accessibles publiquement, dans des contextes open-source, d'entreprise, gouvernementaux et de recherche européenne.
+
+### Cadres et modèles examinés
+
+| Cadre / Modèle | Origine | Forces | Lacunes principales |
+|---|---|---|---|
+| **arc42** | Open-source (Europe) | Modèle ouvert le plus complet ; 35+ exemples réels ; vues de blocs de construction multi-niveaux ; communauté solide | Pas de vue sécurité ; pas de vue données ; pas d'attributs de qualité alignés sur les WAF cloud ; pas de niveaux de profondeur |
+| **bflorat template** | Gouvernement / entreprise français | Séparation des vues par rôle ; structure cohérente Contraintes → NFR → Solution par vue ; vue sécurité dédiée | Pas de vue intégration ; pas de vue scénarios ; pas de cycle de vie ; pas de gouvernance des risques ; pas d'ADR |
+| **shekhargulati template** | GitHub (startups) | Calculs de dimensionnement approximatifs ; léger et accessible | Pas de vue physique, sécurité, données ou processus ; pas d'attributs de qualité ; pas de cycle de vie |
+| **ServiceNow SAD** | Spécifique plateforme (ITSM) | Gouvernance des données solide (classification, archivage, anonymisation) ; progression état actuel vers état futur | Spécifique plateforme ; structure monolithique ; pas de vues architecturales ; pas d'attributs de qualité |
+| **NHS England SAF** | Gouvernement UK (NHS) | Orienté gouvernance ; références aux WAF cloud ; suivi des risques basé sur RAID | Méta-cadre uniquement — décrit quoi faire mais ne fournit pas de modèle concret à remplir |
+| **HELMET D3.1 HLD** | EU Horizon 2020 (transport) | Vrai HLD rempli de 86 pages ; multi-domaine (ferroviaire, automobile, UAV) ; orienté intégrité de sécurité | Organisé par segment de domaine et non par points de vue ; pas de vue sécurité ; pas d'attributs de qualité |
+| **ALMBoK SAD** | Méthodologie d'entreprise | 13 points de vue — la couverture la plus large trouvée ; cycle de vie complet As-Is vers To-Be | 13 points de vue sans indication sur lesquels ignorer ; pas de niveaux de profondeur ; pas de schéma ; pas de champs atomiques |
+| **nocomplexity Playbook** | Open-source | Traite de manière unique les relations entre les vues | Trop abstrait — ne prescrit pas les vues à inclure ; pas d'attributs de qualité ; squelettique |
+
+### Les cinq lacunes universelles
+
+Chaque cadre analysé manquait au minimum cinq de ces capacités :
+
+<CardGrid>
+  <Card title="Niveaux de profondeur de documentation" icon="bars-2">
+    Aucun modèle existant ne fournit de guidance sur le niveau de détail nécessaire pour différentes échelles de projet. ADS définit trois niveaux (**Minimum**, **Recommandé**, **Complet**) avec des mots-clés RFC 2119 (SHALL / SHOULD / MAY) pour que les équipes calibrent leur effort.
+  </Card>
+  <Card title="Schéma lisible par machine" icon="seti:json">
+    Tous les modèles examinés sont uniquement en prose. ADS fournit un JSON Schema avec des champs atomiques et énumérés — permettant des vérifications automatisées de complétude, des comparaisons inter-SAD et la génération multi-format (Markdown, Word, web).
+  </Card>
+  <Card title="Vue sécurité dédiée" icon="warning">
+    6 cadres sur 8 n'ont pas de vue sécurité dédiée. La sécurité est soit enfouie dans les « concepts transversaux » soit totalement absente. ADS traite la sécurité comme une vue architecturale de première classe (Section 3.5).
+  </Card>
+  <Card title="Vue données dédiée" icon="open-book">
+    6 cadres sur 8 manquent d'une vue données structurée. L'architecture des données est dispersée dans d'autres vues ou absente. ADS fournit une vue données dédiée (Section 3.4) couvrant les modèles de données, les flux, la classification, la rétention et la souveraineté.
+  </Card>
+  <Card title="Attributs de qualité alignés sur les WAF cloud" icon="star">
+    7 cadres sur 8 n'ont pas d'attributs de qualité alignés sur les frameworks Well-Architected AWS, Azure, GCP, Oracle ou IBM. ADS associe cinq attributs de qualité transversaux (Section 4) aux cinq fournisseurs cloud.
+  </Card>
+</CardGrid>
+
+## Comparaison des fonctionnalités
+
+Comment ADS se compare fonctionnalité par fonctionnalité aux cadres les plus largement utilisés :
+
+| Fonctionnalité | ADS | arc42 | bflorat | ALMBoK | NHS SAF |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **Vues architecturales (alignées 4+1)** | 6 vues | 4 vues | 5 vues | 13 vues | Guidance uniquement |
+| **Vue sécurité dédiée** | ✅ | ❌ | ✅ | ✅ | Guidance uniquement |
+| **Vue données dédiée** | ✅ | ❌ | ❌ | ✅ | Guidance uniquement |
+| **Vue intégration et flux de données** | ✅ | Partiel | ❌ | ✅ | Guidance uniquement |
+| **Attributs de qualité WAF cloud** | ✅ 5 fournisseurs | ❌ | ❌ | ❌ | Références uniquement |
+| **Niveaux de profondeur de documentation** | ✅ 3 niveaux | ❌ | ❌ | ❌ | Informel |
+| **Mots-clés RFC 2119** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **JSON Schema / validation** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Champs atomiques énumérés** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Gestion du cycle de vie** | ✅ | ❌ | ❌ | ✅ | ❌ |
+| **Prise de décision et gouvernance** | ✅ | Partiel | ❌ | ❌ | ✅ |
+| **Modèles téléchargeables** | ✅ MD/YAML/JSON | ❌ | ✅ AsciiDoc | ❌ | ❌ |
+| **Génération multi-format** | ✅ | ❌ | ✅ | ❌ | ❌ |
+| **Agnostique de la plateforme** | ✅ | ✅ | ✅ | ✅ | Spécifique NHS |
+| **Open-source / gratuit** | ✅ | ✅ | ✅ | Partiel | ✅ |
+
+## En quoi ADS diffère d'ISO 42010
+
+ADS est *aligné* avec ISO/IEC/IEEE 42010:2022 mais va considérablement au-delà :
+
+- **Attributs de qualité** — ISO 42010 définit des points de vue et des vues mais ne prescrit pas d'évaluation de qualité. ADS intègre l'excellence opérationnelle, la fiabilité, l'efficacité des performances, l'optimisation des coûts et la durabilité comme attributs de qualité transversaux associés aux frameworks Well-Architected AWS, Azure, GCP, Oracle et IBM.
+- **Niveaux de profondeur de documentation** — ISO 42010 ne traite pas du niveau de détail nécessaire. ADS définit trois niveaux (Minimum / Recommandé / Complet) avec des mots-clés d'exigence RFC 2119 (SHALL / SHOULD / MAY).
+- **La sécurité comme vue de première classe** — ISO 42010 ne prescrit pas de point de vue sécurité. ADS inclut une vue sécurité dédiée (Section 3.5) couvrant la modélisation des menaces, l'identité, la sécurité réseau, la protection des données et la conformité.
+- **Gestion du cycle de vie** — ISO 42010 se concentre sur la description d'architecture elle-même, pas sur le cycle de vie de la solution. ADS inclut la conception de pipelines CI/CD, les runbooks opérationnels et la planification de sortie/décommissionnement.
+- **Prise de décision et gouvernance** — ISO 42010 ne traite pas des registres de risques, de la traçabilité de la conformité ou des enregistrements de décisions architecturales. ADS inclut les trois.
+- **JSON Schema** — ISO 42010 est un standard en prose. ADS fournit un JSON Schema lisible par machine avec des champs atomiques pour la validation automatisée et la génération multi-format.
+- **Modèles téléchargeables** — ISO 42010 ne fournit pas de modèles. ADS inclut des modèles prêts à l'emploi en Markdown, YAML et JSON.
+
+## Qui en bénéficie
+
+<CardGrid>
+  <Card title="Architectes de solution" icon="pencil">
+    Un modèle structuré à remplir qui élimine le problème de la page blanche. Les champs atomiques réduisent l'ambiguïté. Les niveaux de profondeur vous permettent de n'écrire que ce qui est nécessaire.
+  </Card>
+  <Card title="Gouvernance architecturale" icon="approve-check-circle">
+    Un standard cohérent pour évaluer les SAD. Un schéma lisible par machine permet des vérifications automatisées de complétude à travers un portefeuille de descriptions d'architecture.
+  </Card>
+  <Card title="Équipes de livraison" icon="rocket">
+    Une documentation d'architecture claire et structurée, navigable par rôle — les ingénieurs infrastructure lisent la vue physique, les équipes sécurité lisent la vue sécurité.
+  </Card>
+  <Card title="Organisations" icon="setting">
+    Des descriptions d'architecture comparables entre les projets. Analyse au niveau du portefeuille des attributs de qualité, de la posture de risque et de la couverture de conformité.
+  </Card>
+</CardGrid>
+
+<Aside type="tip" title="Pour commencer">
+  Téléchargez un [modèle](/fr/standard/templates/) et commencez à le remplir. Les niveaux de profondeur de documentation vous indiquent exactement quels champs sont requis pour l'échelle de votre projet.
+</Aside>

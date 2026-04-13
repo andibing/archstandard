@@ -1,0 +1,975 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document -- Employee Directory",
+      "solutionName": "Employee Directory",
+      "applicationId": "APP-0347",
+      "authors": ["Fred Bloggs, Solution Architect"],
+      "owner": "Fred Bloggs, Solution Architect",
+      "version": "1.0",
+      "status": "approved",
+      "createdDate": "2025-09-15",
+      "lastUpdated": "2025-11-20",
+      "classification": "internal"
+    },
+    "changeHistory": [
+      {
+        "version": "0.1",
+        "date": "2025-09-15",
+        "author": "Fred Bloggs",
+        "changeType": "initial-draft",
+        "description": "Initial draft"
+      },
+      {
+        "version": "0.2",
+        "date": "2025-10-01",
+        "author": "Fred Bloggs",
+        "changeType": "review-revision",
+        "description": "Incorporated feedback from security review"
+      },
+      {
+        "version": "0.3",
+        "date": "2025-10-22",
+        "author": "Fred Bloggs",
+        "changeType": "major-update",
+        "description": "Added data view and integration details following HR team workshop"
+      },
+      {
+        "version": "1.0",
+        "date": "2025-11-20",
+        "author": "Fred Bloggs",
+        "changeType": "approval",
+        "description": "Approved by Architecture Review Board"
+      }
+    ],
+    "contributors": [
+      {
+        "name": "Fred Bloggs",
+        "role": "Solution Architect",
+        "contributionType": "author"
+      },
+      {
+        "name": "Dave Bloggs",
+        "role": "IT Operations Lead",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Jane Doe",
+        "role": "HR Systems Manager",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Joe Bloggs",
+        "role": "Information Security Analyst",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Architecture Review Board",
+        "role": "Governance",
+        "contributionType": "approver"
+      }
+    ],
+    "purpose": "This SAD describes the architecture of the Employee Directory application, a simple internal web application that allows Meridian Financial Services staff to look up colleague contact details and organisational information.",
+    "scope": "The Employee Directory application, its API, database, and integration with the corporate HR system and Entra ID. Out of scope: the HR system itself (APP-0112), corporate network infrastructure, and the Entra ID tenant configuration."
+  },
+  "executiveSummary": {
+    "solutionOverview": "The Employee Directory is an internal web application that enables Meridian Financial Services employees to search for and view colleague contact information, including name, department, job title, telephone number, email address, office location, and photograph. It replaces a manually maintained Excel spreadsheet that has become unreliable, difficult to search, and frequently out of date. The application uses a React single-page application frontend served from Azure App Service, backed by a Node.js REST API and an Azure SQL database. Employee records are synchronised nightly from the corporate HR system via an automated CSV import.",
+    "businessContext": [
+      {
+        "driver": "Data accuracy",
+        "driverType": "risk-mitigation",
+        "description": "The current spreadsheet is frequently out of date; leavers remain listed and new starters are missing for weeks",
+        "priority": "high"
+      },
+      {
+        "driver": "Searchability",
+        "driverType": "new-capability",
+        "description": "Finding colleagues across 450 staff using a spreadsheet is slow and frustrating",
+        "priority": "high"
+      },
+      {
+        "driver": "Self-service",
+        "driverType": "cost-reduction",
+        "description": "HR spend approximately 3 hours per week answering basic \"who is...\" queries",
+        "priority": "medium"
+      },
+      {
+        "driver": "Compliance",
+        "driverType": "risk-mitigation",
+        "description": "The spreadsheet lacks access controls and audit logging; this is a minor data protection concern",
+        "priority": "medium"
+      }
+    ],
+    "strategicAlignment": {
+      "organisationStrategySupported": "Cloud-first strategy and digital workplace programme",
+      "reviewedAgainstCapabilityModel": "yes",
+      "duplicatesExistingCapability": "no",
+      "duplicatesJustification": "The SharePoint spreadsheet is being retired, not duplicated",
+      "sharedServiceReuse": [
+        {
+          "capability": "Identity & Access",
+          "sharedService": "Entra ID (corporate tenant)",
+          "reused": true
+        },
+        {
+          "capability": "Messaging / Notifications",
+          "sharedService": "N/A",
+          "reused": false,
+          "justification": "No notification capability required"
+        },
+        {
+          "capability": "API Management",
+          "sharedService": "N/A",
+          "reused": false,
+          "justification": "Single internal API; API gateway unnecessary at this scale"
+        },
+        {
+          "capability": "Monitoring & Logging",
+          "sharedService": "Azure Monitor + Log Analytics",
+          "reused": true
+        },
+        {
+          "capability": "Data & Analytics",
+          "sharedService": "N/A",
+          "reused": false,
+          "justification": "No analytics requirements"
+        },
+        {
+          "capability": "CI/CD",
+          "sharedService": "GitHub Actions (corporate organisation)",
+          "reused": true
+        }
+      ]
+    },
+    "inScope": [
+      "Employee Directory web application (frontend and API)",
+      "Azure SQL database for employee records",
+      "Nightly data feed from the Meridian HR system (PeopleSync)",
+      "Entra ID integration for single sign-on",
+      "Production and development environments",
+      "All internal employees as end users"
+    ],
+    "outOfScope": [
+      "Changes to the HR system (PeopleSync) itself",
+      "Organisational chart or reporting-line visualisation (potential future phase)",
+      "Mobile-native application (the web application is responsive and works on mobile browsers)",
+      "External access (VPN required for remote workers; this is existing infrastructure)",
+      "Self-service profile editing by employees (all changes are made by HR in the source system)"
+    ],
+    "currentState": "The current employee directory is a shared Excel spreadsheet stored on a SharePoint Online site within the HR team's document library. Key limitations: manual updates (HR staff manually edit the spreadsheet when employees join, leave, or change roles, often delayed by days or weeks), no access control (all employees with access to the HR SharePoint site can view and edit the spreadsheet), poor searchability (users must open the file and use Excel's find function), no audit trail (changes are not logged beyond SharePoint's basic version history), and no photographs. The new application will completely replace this spreadsheet, which will be archived and removed from active use after a 4-week parallel running period.",
+    "keyDecisions": [
+      {
+        "decision": "Azure App Service (PaaS) over on-premises IIS",
+        "constraintType": "organisational",
+        "rationale": "Aligns with cloud-first strategy; reduces operational overhead; eliminates need for server patching",
+        "reversibility": "reversible-with-effort"
+      },
+      {
+        "decision": "Azure SQL over Cosmos DB",
+        "constraintType": "technical",
+        "rationale": "Relational data model suits structured employee records; team has strong SQL skills; Cosmos DB's global distribution is unnecessary for a single-region internal app",
+        "reversibility": "reversible-with-effort"
+      },
+      {
+        "decision": "Nightly CSV import over real-time API integration",
+        "constraintType": "technical",
+        "rationale": "PeopleSync (HR system) does not expose a real-time API; CSV export is the only supported integration method",
+        "reversibility": "easily-reversible"
+      },
+      {
+        "decision": "Must use Azure",
+        "constraintType": "organisational",
+        "rationale": "Organisational constraint: all new applications must be hosted on the Meridian Azure tenant",
+        "reversibility": "difficult-to-reverse"
+      }
+    ],
+    "projectDetails": {
+      "projectName": "Employee Directory Replacement",
+      "projectCode": "PRJ-2025-089",
+      "projectManager": "Raj Doe",
+      "estimatedCapex": 18000,
+      "estimatedOpex": 2400,
+      "currency": "GBP",
+      "targetGoLive": "2026-02-01"
+    },
+    "businessCriticality": "tier-4-low"
+  },
+  "stakeholders": {
+    "register": [
+      {
+        "stakeholder": "Jane Doe",
+        "roleType": "business-owner",
+        "concerns": ["Data accuracy", "Ease of use", "Reduction in manual queries"],
+        "relevantViews": ["data"]
+      },
+      {
+        "stakeholder": "Fred Bloggs",
+        "roleType": "solution-architect",
+        "concerns": ["Design integrity", "Standards compliance", "Maintainability"],
+        "relevantViews": ["logical", "integration", "physical", "data", "security", "scenarios"]
+      },
+      {
+        "stakeholder": "Joe Bloggs",
+        "roleType": "security-architect",
+        "concerns": ["Data protection", "Access control", "Authentication"],
+        "relevantViews": ["security", "data"]
+      },
+      {
+        "stakeholder": "Dave Bloggs",
+        "roleType": "operations-sre",
+        "concerns": ["Deployment", "Monitoring", "Support burden"],
+        "relevantViews": ["physical"]
+      },
+      {
+        "stakeholder": "Tom Bloggs",
+        "roleType": "developer",
+        "concerns": ["Technology stack", "Build pipeline", "Code maintainability"],
+        "relevantViews": ["logical"]
+      },
+      {
+        "stakeholder": "All Employees (c.450)",
+        "roleType": "end-user",
+        "concerns": ["Fast search", "Up-to-date information", "Usability"],
+        "relevantViews": ["scenarios"]
+      },
+      {
+        "stakeholder": "HR Team (8 staff)",
+        "roleType": "end-user",
+        "concerns": ["Admin interface for corrections", "Photo uploads"],
+        "relevantViews": ["scenarios", "logical"]
+      }
+    ],
+    "compliance": {
+      "supportsRegulatedActivities": "no",
+      "regulatoryRequirements": [
+        {
+          "regulation": "UK GDPR",
+          "regulationType": "data-protection",
+          "applicability": "Employee personal data (names, contact details, photographs) is processed",
+          "designImpact": "Data classification, retention policy, access controls, and privacy notice required"
+        },
+        {
+          "regulation": "Data Protection Act 2018",
+          "regulationType": "data-protection",
+          "applicability": "UK domestic implementation of GDPR",
+          "designImpact": "Covered by GDPR controls above"
+        },
+        {
+          "regulation": "Meridian Information Security Policy (POL-0008)",
+          "regulationType": "internal-policy",
+          "applicability": "Authentication, access control, encryption, logging",
+          "designImpact": "All security controls aligned to POL-0008 v3.1"
+        },
+        {
+          "regulation": "Meridian Cloud Platform Standards (STD-0023)",
+          "regulationType": "internal-policy",
+          "applicability": "Azure resource naming, tagging, region selection",
+          "designImpact": "All Azure resources follow STD-0023 v2.0 conventions"
+        }
+      ]
+    }
+  },
+  "architecturalViews": {
+    "logicalView": {
+      "components": [
+        {
+          "name": "Employee Directory Frontend",
+          "componentType": "web-application",
+          "description": "Single-page application providing search, browse, and admin UI",
+          "technology": "React 18, TypeScript, Vite",
+          "owner": "Development Team",
+          "status": "new"
+        },
+        {
+          "name": "Employee Directory API",
+          "componentType": "api-service",
+          "description": "REST API serving employee data and handling admin operations",
+          "technology": "Node.js 20 LTS, Express, TypeScript",
+          "owner": "Development Team",
+          "status": "new"
+        },
+        {
+          "name": "Employee Database",
+          "componentType": "database",
+          "description": "Relational store for employee records and photographs",
+          "technology": "Azure SQL Database (Basic tier, 5 DTU)",
+          "owner": "IT Operations",
+          "status": "new"
+        },
+        {
+          "name": "CSV Staging Store",
+          "componentType": "file-storage",
+          "description": "Blob container receiving nightly HR export files",
+          "technology": "Azure Blob Storage",
+          "owner": "IT Operations",
+          "status": "new"
+        },
+        {
+          "name": "CSV Import Job",
+          "componentType": "batch-job",
+          "description": "Scheduled function that processes staged CSV files into the database",
+          "technology": "Node.js script triggered by Azure Functions timer",
+          "owner": "Development Team",
+          "status": "new"
+        }
+      ],
+      "designPatterns": [
+        {
+          "pattern": "monolith",
+          "whereApplied": "Entire application (SPA + API deployed together on App Service)",
+          "rationale": "Simple application with no need for microservices decomposition"
+        },
+        {
+          "pattern": "batch-processing",
+          "whereApplied": "CSV Import Job (Azure Functions timer trigger)",
+          "rationale": "PeopleSync only supports CSV export; nightly batch is the only integration option"
+        }
+      ]
+    },
+    "integrationView": {
+      "internalConnectivity": [
+        {
+          "source": "React SPA",
+          "destination": "Node.js API",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "jwt",
+          "direction": "unidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Employee search and admin operations"
+        },
+        {
+          "source": "Node.js API",
+          "destination": "Azure SQL Database",
+          "protocol": "tcp-tls",
+          "encrypted": true,
+          "authenticationMethod": "iam-role",
+          "direction": "bidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Read/write employee records"
+        },
+        {
+          "source": "CSV Import Job",
+          "destination": "Azure Blob Storage",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "iam-role",
+          "direction": "unidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Read staged CSV files"
+        },
+        {
+          "source": "CSV Import Job",
+          "destination": "Azure SQL Database",
+          "protocol": "tcp-tls",
+          "encrypted": true,
+          "authenticationMethod": "iam-role",
+          "direction": "unidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Upsert employee records"
+        }
+      ],
+      "externalIntegrations": [
+        {
+          "sourceApp": "PeopleSync (APP-0112)",
+          "destinationApp": "Azure Blob Storage (CSV staging)",
+          "integrationType": "internal-app",
+          "protocol": "sftp",
+          "encrypted": true,
+          "authenticationMethod": "certificate",
+          "purpose": "Nightly employee data export"
+        }
+      ],
+      "apis": [
+        {
+          "name": "Employee Directory API",
+          "apiType": "rest",
+          "direction": "exposed",
+          "dataFormat": "json",
+          "version": "1.0",
+          "authenticated": true,
+          "rateLimited": false
+        },
+        {
+          "name": "PeopleSync CSV Export",
+          "apiType": "file-transfer",
+          "direction": "consumed",
+          "dataFormat": "csv",
+          "version": "1.0",
+          "authenticated": true,
+          "rateLimited": false
+        }
+      ]
+    },
+    "physicalView": {
+      "hosting": {
+        "venueTypes": ["public-cloud"],
+        "regions": ["uk-south"],
+        "serviceModels": ["paas", "faas"],
+        "cloudProviders": ["azure"]
+      },
+      "compute": {
+        "computeTypes": ["serverless-function"],
+        "servers": [
+          {
+            "name": "Azure App Service",
+            "instanceType": "B1 Basic",
+            "vCpu": 1,
+            "memoryGb": 1.75,
+            "quantity": 1
+          }
+        ],
+        "serverless": {
+          "services": ["Azure Functions (Consumption plan)"],
+          "used": true
+        }
+      },
+      "networking": {
+        "internetFacing": false,
+        "outboundInternet": true,
+        "cloudToOnPrem": true,
+        "thirdPartyConnectivity": false,
+        "cloudPeering": false,
+        "wirelessRequired": false,
+        "trafficPattern": "constant",
+        "latencyRequirement": "standard-sub-1s"
+      },
+      "environments": [
+        {
+          "environmentType": "development",
+          "count": 1,
+          "venue": "Azure UK South",
+          "autoScaleDown": true
+        },
+        {
+          "environmentType": "production",
+          "count": 1,
+          "venue": "Azure UK South",
+          "autoScaleDown": false
+        }
+      ]
+    },
+    "dataView": {
+      "dataStores": [
+        {
+          "name": "Employee records",
+          "storeType": "relational-db",
+          "technology": "Azure SQL Database",
+          "authoritative": false,
+          "retentionPeriod": "5-10-years",
+          "dataSizeCategory": "under-1gb",
+          "classification": "internal",
+          "containsPersonalData": true,
+          "containsSensitivePersonalData": false,
+          "encryptionLevel": "storage-level",
+          "keyManagement": "provider-managed"
+        },
+        {
+          "name": "Employee photographs",
+          "storeType": "relational-db",
+          "technology": "Azure SQL Database (varbinary)",
+          "authoritative": true,
+          "retentionPeriod": "5-10-years",
+          "dataSizeCategory": "under-1gb",
+          "classification": "internal",
+          "containsPersonalData": true,
+          "containsSensitivePersonalData": false,
+          "encryptionLevel": "storage-level",
+          "keyManagement": "provider-managed"
+        },
+        {
+          "name": "CSV staging files",
+          "storeType": "object-storage",
+          "technology": "Azure Blob Storage",
+          "authoritative": false,
+          "retentionPeriod": "days",
+          "dataSizeCategory": "under-1gb",
+          "classification": "internal",
+          "containsPersonalData": true,
+          "containsSensitivePersonalData": false,
+          "encryptionLevel": "storage-level",
+          "keyManagement": "provider-managed"
+        },
+        {
+          "name": "Application logs",
+          "storeType": "other",
+          "technology": "Application Insights (Log Analytics)",
+          "authoritative": true,
+          "retentionPeriod": "months",
+          "dataSizeCategory": "under-1gb",
+          "classification": "internal",
+          "containsPersonalData": false,
+          "containsSensitivePersonalData": false,
+          "encryptionLevel": "storage-level",
+          "keyManagement": "provider-managed"
+        }
+      ],
+      "productionDataForTesting": "not-used",
+      "dataIntegrityControls": "no",
+      "dataOnEndUserDevices": "no",
+      "dataSovereigntyRequired": "yes",
+      "dataSovereigntyDetails": "All data is stored in the Azure UK South region (London). This satisfies Meridian's data residency policy requiring employee personal data to remain within the UK."
+    },
+    "securityView": {
+      "thirdPartyHosted": "no",
+      "thirdPartyRiskAssessed": "not-applicable",
+      "businessImpact": {
+        "confidentiality": "low",
+        "integrity": "low",
+        "availability": "low",
+        "nonRepudiation": "low"
+      },
+      "authentication": [
+        {
+          "accessType": "end-user-internal",
+          "method": "sso-oidc",
+          "usesGroupWideAuth": true
+        },
+        {
+          "accessType": "end-user-internal",
+          "method": "sso-oidc",
+          "usesGroupWideAuth": true
+        },
+        {
+          "accessType": "service-account",
+          "method": "passwordless",
+          "usesGroupWideAuth": false
+        }
+      ],
+      "authorisation": {
+        "model": "rbac",
+        "entitlementStore": "Entra ID security groups",
+        "provisioningProcess": "manual-request",
+        "recertificationEnabled": true,
+        "segregationOfDutiesEnforced": false
+      },
+      "privilegedAccess": {
+        "pamSolution": "Entra ID Privileged Identity Management (PIM)",
+        "justInTimeAccess": true,
+        "sessionRecording": false,
+        "breakGlassProcess": false
+      },
+      "encryptionAtRest": {
+        "implemented": true,
+        "level": "storage-level",
+        "keyType": "symmetric",
+        "algorithm": "AES-256",
+        "keyGeneration": "kms",
+        "keyStorage": "kms"
+      },
+      "secretManagement": {
+        "secretStore": "none",
+        "distribution": "other",
+        "rotation": "not-rotated"
+      },
+      "securityMonitoring": {
+        "siemIntegration": true,
+        "siemTool": "Microsoft Sentinel",
+        "securityEventLogging": true,
+        "intrusionDetection": false
+      }
+    },
+    "scenarios": {
+      "useCases": [
+        {
+          "id": "UC-01",
+          "name": "Search for an Employee",
+          "actors": ["Any authenticated Meridian employee (Viewer role)"],
+          "trigger": "User needs to find a colleague's contact details",
+          "mainFlow": "1. User navigates to the Employee Directory URL. 2. Browser completes OIDC authentication silently (or prompts for sign-in). 3. User types a name, department, or job title into the search box. 4. Frontend sends GET /api/employees?q={query} with bearer token. 5. API validates the token, queries Azure SQL using parameterised search. 6. API returns matching employee records as JSON. 7. Frontend displays results with name, photo, department, phone, and email. 8. User clicks an employee card to view full details.",
+          "viewsInvolved": ["logical", "integration", "physical", "security"]
+        },
+        {
+          "id": "UC-02",
+          "name": "HR Administrator Updates an Employee Record",
+          "actors": ["HR Administrator (Admin role)"],
+          "trigger": "An employee's photograph needs updating, or a correction is needed before the next nightly sync",
+          "mainFlow": "1. Admin navigates to the Employee Directory and authenticates. 2. Admin searches for the employee. 3. Admin clicks \"Edit\" on the employee record (button visible only to Admin role). 4. Admin updates the field(s) or uploads a new photograph. 5. Frontend sends PUT /api/employees/{id} with updated data and bearer token. 6. API verifies the user's Admin role claim in the JWT. 7. API validates the input and updates Azure SQL. 8. API returns the updated record. 9. Frontend confirms the update to the admin.",
+          "viewsInvolved": ["logical", "integration", "physical", "data", "security"]
+        }
+      ],
+      "adrs": [
+        {
+          "id": "ADR-001",
+          "title": "Use Azure SQL Database over Azure Cosmos DB",
+          "status": "accepted",
+          "date": "2025-09-22",
+          "context": "The application needs a database for structured employee records (approximately 500 rows, well-defined relational schema). Two Azure-native database options were considered.",
+          "decision": "Use Azure SQL Database (Basic tier, 5 DTU).",
+          "alternatives": "Azure Cosmos DB: Globally distributed NoSQL database. Offers high availability and horizontal scaling, but this application has a single-region, low-volume workload with a relational data model. Cosmos DB's minimum cost exceeds Azure SQL Basic for this use case, and the team has no Cosmos DB experience.",
+          "consequences": "Positive: Lower cost, simpler operations, team familiarity with T-SQL. Negative: Limited to single-region deployment (acceptable for Tier 4).",
+          "affectedAttributes": ["cost-optimisation", "operational-excellence"]
+        },
+        {
+          "id": "ADR-002",
+          "title": "Nightly CSV Batch Import over Real-Time Integration",
+          "status": "accepted",
+          "date": "2025-09-22",
+          "context": "Employee data originates in PeopleSync (the HR system). The directory needs to stay in sync with HR data. PeopleSync supports only CSV file export; it does not offer a real-time API or event-based integration.",
+          "decision": "Implement a nightly batch import of the full employee dataset via CSV file transfer to Azure Blob Storage, processed by an Azure Functions timer trigger.",
+          "alternatives": "Real-time API integration: Not available from PeopleSync. Would require a custom middleware layer or changes to the HR system, which is out of scope and budget. Manual data entry: Rejected as it replicates the existing problem of stale data and manual effort.",
+          "consequences": "Positive: Simple, reliable, uses existing PeopleSync capability. Negative: Data can be up to 24 hours stale. HR stakeholder has accepted this latency as sufficient for a directory.",
+          "affectedAttributes": ["cost-optimisation", "reliability"]
+        }
+      ]
+    }
+  },
+  "qualityAttributes": {
+    "operationalExcellence": {
+      "loggingCentralised": true,
+      "loggingTool": "Application Insights (Log Analytics workspace)",
+      "monitoringTool": "Azure Monitor",
+      "tracingEnabled": false,
+      "alertingConfigured": true,
+      "runbooksDocumented": false
+    },
+    "reliability": {
+      "drStrategy": "backup-restore",
+      "multiVenueDeployment": false,
+      "rtoTarget": "PT24H",
+      "rpoTarget": "PT10M",
+      "scalability": "no-dynamic-scaling",
+      "faultToleranceDesigned": false,
+      "chaosTestingPractised": false,
+      "backupEnabled": true,
+      "backupType": "full",
+      "backupFrequency": "daily",
+      "backupImmutable": true,
+      "backupEncrypted": true
+    },
+    "performance": {
+      "p95ResponseTimeMs": 500,
+      "targetConcurrentUsers": 50,
+      "performanceTestingApproach": "none",
+      "cachingUsed": false,
+      "cdnUsed": false,
+      "growthProjections": {
+        "currentUsers": 450,
+        "year1Users": 500,
+        "year3Users": 550,
+        "year5Users": 600,
+        "currentDataVolume": "200 MB",
+        "year1DataVolume": "250 MB",
+        "year3DataVolume": "350 MB",
+        "year5DataVolume": "500 MB",
+        "designScalesToProjectedGrowth": true,
+        "seasonalDemandPatterns": false
+      }
+    },
+    "costOptimisation": {
+      "costAnalysisPerformed": true,
+      "designConstrainedByCost": false,
+      "reservedCapacity": false,
+      "costMonitoringEnabled": true,
+      "taggingStrategy": true
+    },
+    "sustainability": {
+      "hostingLocationOptimisedForCarbon": false,
+      "nonProdAutoShutdown": true,
+      "resourcesRightsized": true,
+      "workloadPattern": "constant",
+      "continuousAvailabilityRequired": false
+    }
+  },
+  "lifecycleManagement": {
+    "internallyDeveloped": true,
+    "sourceControl": "github",
+    "cicdPlatform": "github-actions",
+    "sast": "other",
+    "dast": "no",
+    "sca": "dependabot",
+    "containerScanning": "not-applicable",
+    "migration": {
+      "classification": "replace",
+      "deploymentStrategy": "big-bang",
+      "dataMigrationMode": "one-off",
+      "dataMigrationMethod": "CSV import using the same nightly import job",
+      "dataVolume": "< 500 MB",
+      "endUserCutover": "one-off",
+      "externalSystemCutover": "not-applicable",
+      "maxAcceptableDowntime": "hours",
+      "rollbackPlan": "Revert to the SharePoint spreadsheet. HR retain it as a backup for 4 weeks post-go-live.",
+      "transientInfrastructureNeeded": false
+    },
+    "resourcing": {
+      "cloudPlatform": "medium",
+      "infrastructureAsCode": "low",
+      "cicdManagement": "high",
+      "applicationStack": "high",
+      "databaseAdministration": "medium",
+      "securityCompliance": "medium",
+      "operationalReadiness": "a-fully-capable"
+    },
+    "releaseFrequency": "monthly",
+    "supportModel": "internal-team",
+    "supportHours": "business-hours",
+    "exitPlanDocumented": true,
+    "vendorLockInLevel": "low"
+  },
+  "riskGovernance": {
+    "constraints": [
+      {
+        "id": "C-001",
+        "constraint": "All new applications must be hosted on the Meridian Azure tenant",
+        "category": "organisational",
+        "impactOnDesign": "Limits hosting to Azure services; all technology choices must be Azure-native or Azure-compatible",
+        "lastAssessed": "2025-09-15"
+      },
+      {
+        "id": "C-002",
+        "constraint": "Employee data must be sourced from PeopleSync via its existing CSV export capability",
+        "category": "technical",
+        "impactOnDesign": "Integration is batch-based (nightly CSV); real-time sync is not possible without changes to PeopleSync (out of scope)",
+        "lastAssessed": "2025-09-15"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "A-001",
+        "assumption": "PeopleSync CSV export format will remain stable and will not change without notice",
+        "impactIfFalse": "CSV import job would fail; data would become stale until the import is updated",
+        "certainty": "high",
+        "status": "closed",
+        "owner": "Jane Doe (HR Systems Manager)",
+        "evidence": "Confirmed with PeopleSync vendor that format is contractually stable through 2027"
+      },
+      {
+        "id": "A-002",
+        "assumption": "The existing ExpressRoute connection between Meridian data centre and Azure UK South has sufficient bandwidth for the nightly CSV upload (< 10 MB)",
+        "impactIfFalse": "CSV upload would fail or be slow",
+        "certainty": "high",
+        "status": "closed",
+        "owner": "Dave Bloggs (IT Operations Lead)",
+        "evidence": "Confirmed; ExpressRoute has 200 Mbps capacity with < 5% utilisation at 02:00 UTC"
+      }
+    ],
+    "risks": [
+      {
+        "id": "R-001",
+        "riskEvent": "PeopleSync is replaced or decommissioned, breaking the CSV integration",
+        "riskCategory": "technical",
+        "severity": "medium",
+        "likelihood": "low",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "The CSV import job is a modular component that can be adapted to a new data source. If PeopleSync is replaced, only the import job needs updating.",
+        "residualRisk": "low",
+        "owner": "Jane Doe",
+        "lastAssessed": "2025-10-01"
+      },
+      {
+        "id": "R-002",
+        "riskEvent": "Employee photograph storage exceeds Azure SQL Basic tier limits (2 GB)",
+        "riskCategory": "technical",
+        "severity": "low",
+        "likelihood": "low",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "Monitor database size via Azure Monitor alert. If approaching 2 GB, migrate photographs to Azure Blob Storage (estimated 2-day development effort).",
+        "residualRisk": "low",
+        "owner": "Tom Bloggs",
+        "lastAssessed": "2025-10-01"
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "D-001",
+        "dependency": "PeopleSync nightly CSV export must be enabled and running",
+        "direction": "inbound",
+        "status": "committed",
+        "owner": "Jane Doe",
+        "evidence": "PeopleSync export configured and tested in development",
+        "lastAssessed": "2025-10-15"
+      }
+    ],
+    "issues": [],
+    "policyExceptions": "no",
+    "processExceptions": "no",
+    "riskProfileImpact": "no"
+  },
+  "appendices": {
+    "glossary": [
+      { "term": "CSV", "definition": "Comma-Separated Values -- a plain-text file format for tabular data" },
+      { "term": "DTU", "definition": "Database Transaction Unit -- Azure SQL performance measurement unit" },
+      { "term": "Entra ID", "definition": "Microsoft Entra ID (formerly Azure Active Directory) -- cloud identity and access management service" },
+      { "term": "GAL", "definition": "Global Address List -- the Outlook/Exchange directory of email addresses" },
+      { "term": "JWT", "definition": "JSON Web Token -- a compact token format used in OIDC authentication" },
+      { "term": "Managed Identity", "definition": "An Azure feature that provides Azure services with an automatically managed identity in Entra ID, eliminating the need for credentials" },
+      { "term": "OIDC", "definition": "OpenID Connect -- an authentication protocol built on top of OAuth 2.0" },
+      { "term": "PeopleSync", "definition": "Meridian's corporate HR system (third-party SaaS product)" },
+      { "term": "PKCE", "definition": "Proof Key for Code Exchange -- a security extension to the OAuth 2.0 authorisation code flow, recommended for SPAs" },
+      { "term": "RBAC", "definition": "Role-Based Access Control -- a method of restricting access based on user roles" },
+      { "term": "SPA", "definition": "Single-Page Application -- a web application that loads a single HTML page and dynamically updates content" },
+      { "term": "TDE", "definition": "Transparent Data Encryption -- Azure SQL feature that encrypts database files at rest" }
+    ],
+    "references": [
+      {
+        "title": "HR System SAD (PeopleSync)",
+        "version": "2.1",
+        "description": "Architecture of the corporate HR system"
+      },
+      {
+        "title": "Meridian Cloud Platform Standards",
+        "version": "2.0",
+        "description": "Azure naming conventions, tagging, region policy"
+      },
+      {
+        "title": "Meridian Information Security Policy",
+        "version": "3.1",
+        "description": "Security controls, classification, encryption requirements"
+      },
+      {
+        "title": "DPIA -- Employee Directory",
+        "version": "1.0",
+        "description": "Data Protection Impact Assessment"
+      }
+    ],
+    "approvals": [
+      {
+        "role": "Solution Architect",
+        "name": "Fred Bloggs",
+        "date": "2025-11-18",
+        "decision": "approved"
+      },
+      {
+        "role": "Information Security",
+        "name": "Joe Bloggs",
+        "date": "2025-11-19",
+        "decision": "approved"
+      },
+      {
+        "role": "Architecture Review Board",
+        "name": "ARB Panel",
+        "date": "2025-11-20",
+        "decision": "approved"
+      }
+    ]
+  },
+  "organisationProfile": {
+    "organisationName": "Meridian Financial Services",
+    "internalStandards": [
+      {
+        "id": "POL-0008",
+        "name": "Meridian Information Security Policy",
+        "version": "3.1",
+        "mappedSections": ["3.5", "3.4"]
+      },
+      {
+        "id": "STD-0023",
+        "name": "Meridian Cloud Platform Standards",
+        "version": "2.0",
+        "mappedSections": ["3.3"]
+      }
+    ],
+    "tooling": {
+      "cicd": "GitHub Actions",
+      "monitoring": "Azure Monitor + Application Insights",
+      "siem": "Microsoft Sentinel"
+    }
+  },
+  "complianceScoring": {
+    "assessments": [
+      {
+        "section": "1. Executive Summary",
+        "score": 4,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Clear business context, scope well-defined, strategic alignment demonstrated, criticality justified"
+      },
+      {
+        "section": "3.1 Logical View",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Components documented with technology choices; vendor lock-in assessed. Design patterns section omitted (monolith -- no complex patterns to document)."
+      },
+      {
+        "section": "3.2 Integration & Data Flow",
+        "score": 4,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "All interfaces documented with protocols and authentication. API contracts not formally versioned (acceptable for single internal consumer)."
+      },
+      {
+        "section": "3.3 Physical View",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Deployment architecture complete, hosting documented. Bandwidth and latency not quantified (not required at this scale)."
+      },
+      {
+        "section": "3.4 Data View",
+        "score": 4,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "All data stores classified, retention defined, encryption specified, DPIA complete, sovereignty addressed."
+      },
+      {
+        "section": "3.5 Security View",
+        "score": 4,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Authentication and authorisation fully documented. Managed Identity eliminates secrets management risk. Formal threat model not produced (proportionate for Tier 4 and low business impact)."
+      },
+      {
+        "section": "3.6 Scenarios",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Two key use cases documented; two ADRs with rationale and alternatives. Additional use cases (e.g., failure scenario) would improve coverage."
+      },
+      {
+        "section": "4.1 Operational Excellence",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Centralised logging and alerting in place. No distributed tracing (not needed). No formal runbooks (proportionate)."
+      },
+      {
+        "section": "4.2 Reliability",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Backup configured, recovery scenarios documented. No DR or fault tolerance -- appropriate for Tier 4."
+      },
+      {
+        "section": "4.3 Performance",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Targets defined, growth projected. No formal performance testing -- acceptable given low concurrency and simple queries."
+      },
+      {
+        "section": "4.4 Cost Optimisation",
+        "score": 4,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Cost analysis performed, lowest-cost Azure tiers selected, proportionate to business value."
+      },
+      {
+        "section": "4.5 Sustainability",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Non-production auto-shutdown configured. Hosting region chosen for compliance, not carbon. Right-sized PaaS resources."
+      },
+      {
+        "section": "5. Lifecycle",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "CI/CD documented, migration plan in place, skills assessed. DAST and penetration testing omitted (proportionate)."
+      },
+      {
+        "section": "6. Decision Making",
+        "score": 3,
+        "assessor": "ARB Panel",
+        "date": "2025-11-20",
+        "notes": "Constraints, assumptions, risks, and dependencies documented with ownership. No open issues or guardrail exceptions."
+      }
+    ],
+    "overallScore": 3,
+    "overallAssessor": "ARB Panel",
+    "overallDate": "2025-11-20",
+    "overallNotes": "Solid, proportionate documentation for a Tier 4 internal application at Recommended depth. No critical gaps. Lowest section scores are 3 (meets the minimum for production approval)."
+  }
+}

@@ -1,0 +1,427 @@
+# Solution Architecture Document — archstandard.org
+
+> **Standard:** ADS v1.1.0 (Architecture Description Standard)
+> **Author:** Andi Chandler
+> **Organisation:** ArchStandard
+> **Status:** Approved
+> **Version:** 1.0
+
+---
+
+## 0. Document Control
+
+### Document Metadata
+
+| Field | Value |
+|-------|-------|
+| **Document Title** | Solution Architecture Document -- archstandard.org |
+| **Application / Solution Name** | archstandard.org |
+| **Application ID** | N/A (independent project) |
+| **Author(s)** | Andi Chandler |
+| **Owner** | Andi Chandler |
+| **Version** | 1.0 |
+| **Status** | Approved |
+| **Created Date** | 2025-05-01 |
+| **Last Updated** | 2025-06-15 |
+| **Classification** | Public |
+
+### Change History
+
+| Version | Date | Author / Editor | Description of Change |
+|---------|------|-----------------|----------------------|
+| 0.1 | 2025-05-01 | Andi Chandler | Initial draft |
+| 1.0 | 2025-06-15 | Andi Chandler | First approved version |
+
+### Contributors & Approvals
+
+| Name | Role | Contribution Type |
+|------|------|------------------|
+| Andi Chandler | Solution Architect / Owner | Author |
+
+### Document Purpose & Scope
+
+This SAD describes the architecture of **archstandard.org**, the website that publishes the Architecture Description Standard (ADS). It serves as both reference documentation and a meta-example of ADS applied at Minimum depth for a simple static site.
+
+---
+
+## 1. Executive Summary
+
+### Solution Overview
+
+archstandard.org is a static documentation website that publishes the Architecture Description Standard. It provides the full standard text, downloadable templates (Markdown, YAML, JSON, DOCX), a JSON Schema for validation, and worked examples -- all as a searchable, accessible website.
+
+The site is built with Astro and the Starlight documentation theme, compiled to static HTML at build time, and served globally via Cloudflare Pages. There is no backend, no database, and no user authentication.
+
+### Business Context & Drivers
+
+| Driver | Description | Priority |
+|--------|------------|----------|
+| Publish the standard | Make the ADS freely accessible as a modern, searchable website | High |
+| Provide templates | Offer downloadable SAD templates in multiple formats | Medium |
+| Multi-language support | Serve the standard in English, French, and German | Medium |
+
+### Strategic Alignment
+
+Not applicable. This is an independent open project, not part of a corporate strategy or capability model.
+
+### Scope
+
+**In scope:**
+- Standard pages (all ADS sections as MDX content)
+- Downloadable templates (Markdown, YAML, JSON, DOCX)
+- JSON Schema hosting and documentation
+- Worked examples (this document is one of them)
+- Multi-language support (EN, FR, DE)
+- Template generator script (Node.js build-time tool)
+
+**Out of scope:**
+- User accounts or authentication (beyond pre-launch Basic Auth)
+- SAD authoring tool or online editor
+- Discussion forum or comments
+- Analytics or tracking (no cookies, no PII collection)
+
+### Key Decisions & Constraints
+
+| Decision / Constraint | Rationale | Impact |
+|----------------------|-----------|--------|
+| Must be free or very low cost | Independent project with no budget | Drives choice of free-tier hosting |
+| Static site only | No runtime complexity needed for read-only content | Eliminates backend, database, and server management |
+| Chose Astro/Starlight | Purpose-built for documentation; fast, accessible, good i18n support | See ADR-001 |
+| Chose Cloudflare Pages | Free tier with global CDN, automatic SSL, and git-based deploys | See ADR-002 |
+
+### Business Criticality
+
+Selected criticality: **Tier 5 -- Minimal**
+
+Service failure has negligible business impact. The standard content exists in the git repository and can be rebuilt or served from an alternative host at any time. No business processes depend on the site's availability.
+
+---
+
+## 2. Stakeholders & Concerns
+
+### Stakeholder Register
+
+| Stakeholder | Role / Group | Key Concerns | Relevant Views |
+|-------------|-------------|--------------|----------------|
+| Andi Chandler | Author / Owner | Content accuracy, site reliability, cost | All |
+| Solution Architects | Primary readers | Standard clarity, template usability, searchability | Logical View, Scenarios |
+| Enterprise Architects | Readers / Adopters | Framework alignment, governance applicability | Executive Summary, Scenarios |
+| Governance Teams | Readers | Compliance scoring, template completeness | Scenarios, Appendices |
+
+---
+
+## 3. Architectural Views
+
+### 3.1 Logical View
+
+#### Application Architecture
+
+The solution is a static site with no runtime application logic. All processing occurs at build time.
+
+**Diagram (text description):** Build pipeline: MDX content (EN/FR/DE), JSON Schema, and Template Generator feed into Astro + Starlight SSG, producing static HTML/CSS/JS. The static output is deployed to Cloudflare Pages CDN, which serves it to end users.
+
+**Components:**
+
+| Component | Type | Description | Technology |
+|-----------|------|-------------|------------|
+| MDX Content | Static files | Standard pages, examples, guides | MDX (Markdown + JSX) |
+| Astro + Starlight | Static site generator | Builds HTML from MDX content | Astro 5.x, Starlight |
+| JSON Schema | Static file | Machine-readable SAD schema | JSON Schema Draft 2020-12 |
+| Template Generator | Build script | Generates templates from JSON Schema | Node.js |
+| Static output | HTML / CSS / JS | Compiled site served to users | HTML, CSS, JavaScript |
+
+### 3.2 Integration & Data Flow
+
+#### External Integration Architecture
+
+| Source | Destination | Protocol / Encryption | Authentication | Purpose |
+|--------|------------|----------------------|---------------|---------|
+| Developer (git push) | GitHub | HTTPS / TLS 1.3 | SSH key or PAT | Source control |
+| GitHub (webhook) | Cloudflare Pages | HTTPS / TLS 1.3 | Webhook secret | Trigger build and deploy |
+
+There are no runtime integrations. The site serves only static files; no APIs are called at request time.
+
+#### End User Access
+
+| User Type | Access Method | Authentication | Protocol |
+|-----------|-------------|---------------|----------|
+| All users (public) | Web browser | None required | HTTPS |
+| Pre-launch reviewers | Web browser | Basic Auth (Cloudflare middleware) | HTTPS |
+
+### 3.3 Physical View
+
+#### Deployment Architecture
+
+**Diagram (text description):** GitHub Repository triggers Cloudflare Pages via webhook. Cloudflare Pages runs the build environment (npm run build), producing output deployed to the Global CDN Edge (300+ locations). End users access the site at archstandard.org via HTTPS.
+
+#### Hosting & Infrastructure
+
+| Attribute | Selection |
+|-----------|----------|
+| **Hosting Venue Type** | Cloud (SaaS -- Cloudflare Pages) |
+| **Hosting Region(s)** | Global (Cloudflare edge network) |
+| **Service Model** | SaaS |
+| **Cloud Provider** | Cloudflare |
+| **Account Type** | Free tier |
+
+There are no servers, no containers, and no compute instances. The site is fully static and served from Cloudflare's CDN edge.
+
+#### Network Topology & Connectivity
+
+| Question | Response |
+|----------|----------|
+| Is this an Internet-facing application? | Yes -- public website |
+| Outbound Internet connectivity required? | No (static files only) |
+| Cloud-to-on-premises connectivity required? | No |
+| Wireless networking required? | No |
+| Third-party / co-location connectivity required? | No |
+| Cloud network peering required? | No |
+
+**Custom domain:** archstandard.org, managed via Cloudflare DNS.
+
+### 3.4 Data View
+
+#### Data Architecture & Storage
+
+There is no persistent data store. All content is static MDX files stored in the git repository. No database, no cache, no user data.
+
+| Data Name | Store Technology | Authoritative? | Retention Period | Classification | Personal Data? |
+|-----------|-----------------|---------------|-----------------|---------------|---------------|
+| Standard content | Git (MDX files) | Yes | Indefinite (version-controlled) | Public | No |
+| JSON Schema | Git (JSON file) | Yes | Indefinite (version-controlled) | Public | No |
+| Templates | Git (generated files) | Yes | Indefinite (version-controlled) | Public | No |
+
+No PII is collected, processed, or stored. No cookies are set. No analytics are captured.
+
+### 3.5 Security View
+
+#### Security Overview
+
+| Question | Response |
+|----------|----------|
+| Does the solution support regulated activities? | No |
+| Is the solution SaaS or third-party hosted? | Yes -- Cloudflare Pages (SaaS) |
+| Has a third-party risk assessment been completed? | No -- not required for a public, zero-PII static site |
+
+#### Business Impact Assessment
+
+| Impact Category | Business Impact if Compromised |
+|----------------|-------------------------------|
+| **Confidentiality** | Negligible -- all content is public |
+| **Integrity** | Low -- content defacement would be noticed and reverted from git |
+| **Availability** | Negligible -- Tier 5 criticality; content available in git |
+| **Non-Repudiation** | Not applicable |
+
+#### Authentication Model
+
+| Attribute | Detail |
+|-----------|--------|
+| **End-user authentication** | None -- public site |
+| **Pre-launch protection** | Basic Auth via Cloudflare Pages middleware |
+| **Admin authentication** | GitHub account (SSH key or PAT) for repository access |
+
+#### Secrets Management
+
+| Secret | Storage | Rotation |
+|--------|---------|----------|
+| SITE_PASSWORD (pre-launch Basic Auth) | Cloudflare Pages environment variable | Removed after public launch |
+
+No other secrets exist. No API keys, no database credentials, no service accounts.
+
+#### Transport Security
+
+HTTPS is enforced for all traffic. SSL/TLS certificates are automatically provisioned and renewed by Cloudflare. HTTP requests are redirected to HTTPS.
+
+#### DDoS & Edge Protection
+
+Cloudflare provides DDoS mitigation, rate limiting, and bot management as part of its standard service. No additional configuration is required for a static site on the free tier.
+
+### 3.6 Scenarios
+
+#### Key Use Cases
+
+**UC-01: Architect Reads the Standard**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Solution Architect |
+| **Trigger** | Navigates to archstandard.org |
+| **Pre-conditions** | Site is deployed and accessible |
+| **Main Flow** | 1. User opens browser and navigates to archstandard.org. 2. Cloudflare CDN serves static HTML. 3. User browses standard sections, uses search, and reads content. |
+| **Post-conditions** | User has read the relevant sections |
+| **Views Involved** | Logical, Physical |
+
+**UC-02: Architect Downloads a Template**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Solution Architect |
+| **Trigger** | Clicks a template download link |
+| **Pre-conditions** | Templates have been generated and deployed |
+| **Main Flow** | 1. User navigates to the Templates page. 2. User selects a format (Markdown, YAML, JSON, or DOCX). 3. Browser downloads the static file from Cloudflare CDN. |
+| **Post-conditions** | User has a local copy of the blank SAD template |
+| **Views Involved** | Logical, Physical |
+
+#### Architecture Decision Records
+
+**ADR-001: Chose Astro/Starlight over Docusaurus**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2025-04-15 |
+| **Context** | The project needs a static documentation framework with i18n support, MDX content, search, and strong accessibility. |
+| **Decision** | Use Astro with the Starlight documentation theme. |
+| **Alternatives Considered** | Docusaurus (React-based, heavier JS bundle, less flexible i18n), MkDocs (Python-based, limited component model), Hugo (Go-based, no native MDX support). |
+| **Consequences** | Fast build times, small JS payload, built-in i18n routing, built-in search. Requires Node.js for development. Astro ecosystem is newer and smaller than React/Docusaurus. |
+
+**ADR-002: Chose Cloudflare Pages over AWS S3 + CloudFront**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2025-04-15 |
+| **Context** | The site needs free or very low-cost static hosting with a global CDN, automatic SSL, and git-based deployment. |
+| **Decision** | Use Cloudflare Pages with GitHub integration. |
+| **Alternatives Considered** | AWS S3 + CloudFront (more complex setup, potential cost beyond free tier), GitHub Pages (limited build customisation, no edge functions for Basic Auth middleware), Netlify (comparable but Cloudflare offers better global edge coverage on free tier). |
+| **Consequences** | Zero-cost hosting with automatic builds on git push. Custom domain with automatic SSL. Basic Auth middleware possible via Cloudflare Pages Functions. Vendor dependency on Cloudflare, but site is fully portable static HTML. |
+
+---
+
+## 4. Quality Attributes
+
+### 4.1 Operational Excellence
+
+No application monitoring or alerting is required. Cloudflare Pages provides build status notifications via GitHub. If a build fails, the previous deployment remains live.
+
+Operational procedures are limited to: writing content in MDX, running `npm run build` locally to verify, and pushing to GitHub.
+
+### 4.2 Reliability & Resilience
+
+The site is served from Cloudflare's global CDN with automatic failover between edge locations. No custom DR strategy is needed -- the site can be rebuilt from the git repository and redeployed to any static hosting provider within minutes.
+
+| Attribute | Value |
+|-----------|-------|
+| **RTO** | Not formally defined -- minutes to redeploy |
+| **RPO** | Zero -- all content is in git |
+| **Backup strategy** | Git repository (GitHub) is the source of truth |
+
+### 4.3 Performance Efficiency
+
+The site is pre-rendered static HTML with minimal JavaScript. Cloudflare CDN caches all assets at the edge. No performance targets are defined beyond standard web performance best practices (fast load times, small bundle size).
+
+### 4.4 Cost Optimisation
+
+| Cost Item | Monthly Cost |
+|-----------|-------------|
+| Cloudflare Pages (free tier) | 0.00 |
+| Custom domain (archstandard.org) | ~1.00 (annual, amortised) |
+| **Total** | **~1.00** |
+
+No cost monitoring or FinOps practices are required at this scale.
+
+### 4.5 Sustainability
+
+The site is static HTML served from CDN edge caches. No always-on compute resources are consumed. Cloudflare operates carbon-neutral data centres. No further sustainability measures are warranted for a site of this scale.
+
+---
+
+## 5. Lifecycle Management
+
+### Software Development & CI/CD
+
+| Attribute | Detail |
+|-----------|--------|
+| Source control platform | GitHub |
+| CI/CD platform | Cloudflare Pages (built-in) |
+| Build automation | `git push` to `main` triggers Cloudflare build automatically |
+| Build command | `npm run build` (Astro build) |
+| Deployment automation | Cloudflare Pages deploys on successful build |
+| Test automation | None (static content; visual review via preview deployments) |
+
+**Template generation:** `npm run generate:templates` produces downloadable template files from the JSON Schema. This is run manually before committing updated templates.
+
+### Service Transition
+
+Not applicable. This is a greenfield project with no migration from an existing system.
+
+---
+
+## 6. Decision Making & Governance
+
+### 6.1 Constraints
+
+| ID | Constraint | Category | Impact on Design |
+|----|-----------|----------|-----------------|
+| C-001 | Must be free or very low cost | Commercial | Drives selection of free-tier hosting (Cloudflare Pages) and open-source tooling (Astro) |
+
+### 6.2 Assumptions
+
+| ID | Assumption | Impact if False | Certainty | Status |
+|----|-----------|----------------|-----------|--------|
+| A-001 | Cloudflare Pages free tier is sufficient for expected traffic | Would need to evaluate paid tier or alternative host | High | Open |
+
+### 6.3 Risks
+
+No material risks have been identified. The site is public, contains no sensitive data, and can be rebuilt from git at any time. Cloudflare service disruption would cause temporary unavailability with negligible business impact.
+
+### 6.4 Dependencies
+
+| ID | Dependency | Type | Impact if Unavailable |
+|----|-----------|------|----------------------|
+| D-001 | GitHub | External service | Cannot push updates; existing site remains live |
+
+### 6.5 Architecture Decision Records
+
+See ADR-001 and ADR-002 in Section 3.6.
+
+---
+
+## 7. Appendices
+
+### 7.1 Glossary
+
+| Term | Definition |
+|------|-----------|
+| ADS | Architecture Description Standard -- the standard published on this site |
+| Astro | A static site generator optimised for content-heavy websites |
+| CDN | Content Delivery Network |
+| MDX | Markdown with JSX -- allows components within Markdown content |
+| SAD | Solution Architecture Document |
+| Starlight | An Astro theme purpose-built for documentation websites |
+
+### 7.2 Reference Documents
+
+| Document | Version | Description | Location |
+|----------|---------|-------------|----------|
+| Architecture Description Standard | 1.0 | The standard this site publishes | https://archstandard.org/standard/overview/ |
+| Astro Documentation | 5.x | Framework documentation | https://docs.astro.build/ |
+| Starlight Documentation | Latest | Theme documentation | https://starlight.astro.build/ |
+
+### 7.3 Approval Sign-Off
+
+| Role | Name | Date | Signature / Approval Reference |
+|------|------|------|-------------------------------|
+| Solution Architect | Andi Chandler | 2025-06-15 | Approved |
+
+---
+
+## Compliance Scoring
+
+| Section | Score (0-5) | Notes |
+|---------|:-----------:|-------|
+| 1. Executive Summary | 4 | Clear drivers, scope well-defined, criticality stated. No current-state section needed (greenfield). |
+| 3.1 Logical View | 3 | Components documented with technology choices. No complex decomposition needed for a static site. |
+| 3.2 Integration & Data Flow | 3 | All integrations documented (there are only two). No runtime interfaces exist. |
+| 3.3 Physical View | 3 | Hosting fully documented. No compute, networking, or environments to specify beyond CDN. |
+| 3.4 Data View | 4 | Data footprint fully documented. Explicitly confirms no PII and no persistent storage. |
+| 3.5 Security View | 3 | Security context documented, BIA completed, transport security confirmed. No threat model needed at this criticality. |
+| 3.6 Scenarios | 3 | Two use cases and two ADRs -- proportionate to the solution's simplicity. |
+| 4.1 Operational Excellence | 3 | Appropriate for a static site -- no monitoring needed, build notifications sufficient. |
+| 4.2 Reliability | 3 | CDN resilience documented. Git-based recovery strategy clear. |
+| 4.3 Performance | 3 | Static site with CDN caching -- performance is inherent, not engineered. |
+| 4.4 Cost Optimisation | 4 | Cost is effectively zero. Fully documented. |
+| 4.5 Sustainability | 3 | Minimal footprint acknowledged. No further action needed. |
+| 5. Lifecycle | 3 | Build and deploy process documented. No migration or complex CI/CD needed. |
+| 6. Decision Making | 3 | Constraints, assumptions, and dependencies captured. No material risks. |
+| **Overall** | **3** | Appropriate for a Tier 5, Minimum-depth static site. All sections addressed proportionately. |

@@ -1,0 +1,90 @@
+---
+title: "4.1 Operational Excellence"
+description: Observability, logging, monitoring, alerting, and operational procedures.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+<span class="framework-badge badge-aws-waf">AWS Ops Excellence</span>
+<span class="framework-badge badge-azure-waf">Azure Ops Excellence</span>
+
+## Purpose
+
+Operational Excellence focuses on how the solution is monitored, operated, and improved over time. It covers observability (logging, metrics, tracing), alerting, capacity management, and operational procedures. Evaluate this quality attribute across all architectural views documented in Section 3.
+
+## 4.1.1 Observability - Logging
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Log Architecture
+
+| Log Type | Events Logged | Local Storage | Retention Period | Remote Services |
+|----------|--------------|--------------|-----------------|----------------|
+| Application logs | *[what is logged]* | *[file system, database]* | *[period]* | *[e.g., Datadog, CloudWatch]* |
+| Data store logs | *[what is logged]* | *[location]* | *[period]* | *[remote service]* |
+| Infrastructure logs | *[what is logged]* | *[location]* | *[period]* | *[remote service]* |
+| Security event logs | *[what is logged]* | *[location]* | *[period]* | *[SIEM service]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+For each log type, document:
+- What events are captured (application errors, access logs, audit events, etc.)
+- Where logs are stored locally within the application
+- How long logs are retained before rotation or deletion
+- Whether logs are forwarded to centralised logging or SIEM services
+</div>
+
+## 4.1.2 Observability - Monitoring & Alerting
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+### Operational Alerts
+
+Describe how operational alerts are implemented:
+
+| Alert Category | Trigger Condition | Notification Method | Recipient |
+|---------------|-------------------|-------------------|-----------|
+| *[e.g., Application error rate]* | *[threshold]* | *[email, PagerDuty, Slack]* | *[team/role]* |
+
+### Monitoring Tools
+
+| Capability | Tool | Coverage |
+|-----------|------|----------|
+| Application Performance Monitoring | *[e.g., Datadog, New Relic]* | *[which components]* |
+| Infrastructure Monitoring | *[e.g., CloudWatch, Prometheus]* | *[which resources]* |
+| Log Aggregation | *[e.g., ELK, Splunk, Datadog Logs]* | *[which log sources]* |
+| Distributed Tracing | *[e.g., Jaeger, X-Ray, Datadog APM]* | *[which services]* |
+
+## 4.1.3 Capacity Monitoring
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+| Question | Response |
+|----------|----------|
+| What metrics are collected for capacity monitoring? | *[CPU, memory, storage, network, queue depth]* |
+| How are capacity trends analysed? | *[tools, dashboards, reports]* |
+| Are capacity thresholds and alerts configured? | *[threshold details]* |
+| Is there a capacity planning process? | *[process description]* |
+
+## 4.1.4 Operational Procedures
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Document key operational procedures and runbooks:
+
+| Procedure | Description | Owner | Documentation |
+|-----------|-------------|-------|--------------|
+| Incident response | *[how incidents are detected and resolved]* | *[team]* | *[link]* |
+| Change management | *[how changes are approved and deployed]* | *[team]* | *[link]* |
+| Escalation paths | *[escalation procedures]* | *[team]* | *[link]* |
+| On-call rotation | *[on-call structure]* | *[team]* | *[link]* |
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | Monitoring tool identified but not configured |
+| **3** | Centralised logging, monitoring, and alerting in place; runbooks documented |
+| **5** | All of the above plus distributed tracing enabled, dashboards defined, incident response procedures tested |
+</div>

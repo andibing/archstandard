@@ -1,0 +1,137 @@
+---
+title: "4.2 Zuverlässigkeit & Resilienz"
+description: Geografischer Fussabdruck, Skalierbarkeit, Fehlertoleranz, Backup und Wiederherstellung.
+---
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+<span class="framework-badge badge-aws-waf">AWS Reliability</span>
+<span class="framework-badge badge-azure-waf">Azure Reliability</span>
+
+## Zweck
+
+Zuverlässigkeit & Resilienz konzentriert sich auf die Fähigkeit der Lösung, Ausfalle zu überstehen, sich von Storungen zu erholen und bei Bedarf zu skalieren. Dieses Qualitätsattribut ist eng mit der Physischen Ansicht (3.3) und der Datenansicht (3.4) für Infrastruktur- und Daten-Backup-Details verknupft.
+
+## 4.2.1 Geografischer Fussabdruck & Disaster Recovery
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+| Frage | Antwort |
+|-------|---------|
+| Ist die Anwendung für Kontinuitat über mehrere Hosting-Standorte bereitgestellt? | Ja / Nein — *[Details]* |
+| Wie lautet die DR-Strategie? | Active-Active / Active-Passive / Pilot Light / Backup & Restore |
+| Gibt es Datensouveranitatanforderungen, die die geografische Wahl beeinflussen? | Ja / Nein — *[Details]* |
+
+*[Geografisches Bereitstellungsdiagramm einfugen, falls zutreffend]*
+
+## 4.2.2 Skalierbarkeit
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+### Anwendungsskalierbarkeit
+
+| Attribut | Antwort |
+|----------|---------|
+| **Skalierungsfähigkeit** | Keine dynamische Skalierung (vordimensioniert) / Manuelle Skalierung / Teilweise Auto-Skalierung / Vollständige Auto-Skalierung |
+| **Skalierungsdetails** | *[beschreiben Sie, wie Skalierung funktioniert, Ausloser, Grenzen]* |
+
+### Abhängigkeitsskalierbarkeit
+
+| Attribut | Antwort |
+|----------|---------|
+| **Abhängigkeiten ausreichend dimensioniert?** | Ja (bestatigt) / Unbestatigt / Bekannt unzureichend |
+| **Abhängigkeitsdetails** | *[beschreiben Sie die Skalierungslage der Abhängigkeiten]* |
+
+## 4.2.3 Fehlertoleranz
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Wurde die Anwendung so entworfen, dass sie unerwartete Storungen wie Ausfall oder Verschlechterung interner Komponenten oder externer Abhängigkeiten toleriert?
+
+- [ ] **Ja** — *[beschreiben Sie das Fehlertolernzdesign, einschliesslich:]*
+  - Wie die Anwendung Komponentenausfalle behandelt
+  - Strategien für graduelle Funktionseinschrankung
+  - Circuit-Breaker- oder Retry-Muster
+  - Health-Check- und Selbstheilungsmechanismen
+  - Testpraktiken (Chaos Engineering, Game Days)
+- [ ] **Nein** — *[beschreiben Sie warum nicht]*
+
+## 4.2.4 Ausfallmodi & Wiederherstellungsverhalten
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Dokumentieren Sie, wie sich die Lösung verhalt, wenn einzelne Komponenten oder Abhängigkeiten ausfallen:
+
+| Komponente / Abhängigkeit | Ausfallmodus | Erkennungsmethode | Wiederherstellungsverhalten | Benutzerauswirkung |
+|--------------------------|-------------|-------------------|---------------------------|-------------------|
+| *[Komponente]* | *[wie sie ausfallt]* | *[wie erkannt: Health Check, Alarm, Timeout]* | *[Auto-Neustart, Failover, graduelle Einschrankung, manueller Eingriff]* | *[Vollausfall, eingeschrankter Dienst, transparent]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Berucksichtigen Sie für jede kritische Komponente:
+- **Was passiert, wenn sie nicht verfügbar wird?** Fallt die Lösung vollständig aus, wird sie graduell eingeschrankt oder lauft sie mit reduzierter Funktionalität weiter?
+- **Wie wird der Ausfall erkannt?** Health Checks, Heartbeats, Fehlerschwellenwerte, Timeouts?
+- **Wie wird wiederhergestellt?** Automatischer Neustart, Failover auf Sekundar, Circuit Breaker, manueller Eingriff?
+- **Was erleben die Benutzer?** Vollausfall, eingeschrankte Erfahrung, erhohte Latenz oder transparentes Failover?
+
+Dieser Abschnitt fehlt haufig in Architekturdokumenten, ist aber einer der wertvollsten für Betriebsteams und SREs.
+</div>
+
+## 4.2.5 Backup & Wiederherstellung
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+### Backup-Design
+
+| Attribut | Detail |
+|----------|--------|
+| Backup-Strategie | *[was wird gesichert und wie]* |
+| Backup-Produkt/-Dienst | *[verwendetes Werkzeug]* |
+| Backup-Typ | Voll / Inkrementell / Differentiell |
+| Backup-Frequenz | *[Zeitplan]* |
+| Backup-Aufbewahrung | *[Zeitraum]* |
+
+### Backup-Schutz
+
+| Kontrolle | Detail |
+|-----------|--------|
+| Unveranderlichkeit | *[wie Backups vor Anderung/Loschung geschutzt werden]* |
+| Verschlusselung | *[wie Backup-Daten verschlusselt werden]* |
+| Zugriffskontrolle | *[wer kann auf Backups zugreifen]* |
+
+## 4.2.6 Wiederherstellungsszenarien
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Dokumentieren Sie, wie die Lösung unter verschiedenen Ausfallszenarien wiederhergestellt wird:
+
+| # | Szenario | Wiederherstellungsansatz | RTO | RPO |
+|---|----------|-------------------------|-----|-----|
+| 1 | Ausfall des primaren Hosting-Standorts / AZ / Region | *[Ansatz]* | *[Zeit]* | *[Zeit]* |
+| 2 | Ausfall einer kritischen Softwarekomponente | *[Ansatz]* | *[Zeit]* | *[Zeit]* |
+| 3 | Ausfall wesentlicher Infrastruktur (Hardware, Storage, Netzwerk) | *[Ansatz]* | *[Zeit]* | *[Zeit]* |
+| 4 | Netzwerkverbindungsausfall zwischen Standorten | *[Ansatz]* | *[Zeit]* | *[Zeit]* |
+| 5 | Ausfall der externen Konnektivitat (kundenorientiert) | *[Ansatz]* | *[Zeit]* | *[Zeit]* |
+| 6 | Ransomware / Cyberangriff | *[Ansatz]* | *[Zeit]* | *[Zeit]* |
+| 7 | Versehentliche oder bosartige Datenverfaschung / -loschung | *[Ansatz]* | *[Zeit]* | *[Zeit]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Beschreiben Sie für jedes Szenario:
+- Wie der Ausfall erkannt wird
+- Automatische vs. manuelle Wiederherstellungsschritte
+- Erwartetes Recovery Time Objective (RTO) und Recovery Point Objective (RPO)
+- Abhängigkeiten von anderen Teams oder Systemen für die Wiederherstellung
+- Ob die Wiederherstellung getestet wurde und wann
+</div>
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | DR-Strategie identifiziert, aber RTO/RPO nicht definiert |
+| **3** | DR-Strategie mit RTO/RPO-Zielen dokumentiert, Backup konfiguriert, Skalierungsansatz definiert |
+| **5** | Alles oben Genannte plus Fehlertoleranz entworfen, Chaos-Tests praktiziert, Backup-Unveranderlichkeit und -Verschlusselung bestatigt, DR getestet |
+</div>

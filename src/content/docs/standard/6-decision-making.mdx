@@ -1,0 +1,270 @@
+---
+title: "6. Decision Making & Governance"
+description: Constraints, assumptions, risks, dependencies, issues, architectural decisions, and compliance traceability.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Purpose
+
+This section captures the decision-making context for the architecture:
+
+- **Constraints and assumptions** that shaped the design
+- **Risks and dependencies** that must be managed
+- **Key decisions** made and the rationale behind them
+- **Exceptions** to organisational standards
+- **Compliance evidence** demonstrating the design has been reviewed and approved
+
+| Sub-section | Focus | Depth |
+|------------|-------|-------|
+| 6.1 Constraints | Fixed limitations shaping the design | Minimum |
+| 6.2 Assumptions | Factors believed true but not verified | Minimum |
+| 6.3 Risks | Potential events that could affect the design | Minimum |
+| 6.4 Dependencies | External factors the design relies upon | Minimum |
+| 6.5 Issues | Problems that have already materialised | Recommended |
+| 6.6 Technical Debt Register | Debt introduced or inherited | Recommended |
+| 6.7 Guardrail Exceptions | Exceptions to policies and standards | Recommended |
+| 6.8 Architectural Decisions Log | Summary index of ADRs | Recommended |
+| 6.9 Compliance Traceability | Mapping to standards and principles | Comprehensive |
+| 6.10 Approval Sign-Off | Governance approval record | Minimum |
+
+Sections 6.1 through 6.5 collectively form the **RAID log** (Risks, Assumptions, Issues, Dependencies) — a standard project governance tool — extended with **Constraints** to capture fixed limitations. Each element has its own sub-section for clarity, but they should be maintained together as a single, living governance artefact.
+
+## 6.1 Constraints
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Constraints are fixed limitations that the design must work within. They are non-negotiable and shape the solution boundaries.
+
+| ID | Constraint | Category | Impact on Design | Last Assessed |
+|----|-----------|----------|-----------------|---------------|
+| C-001 | *[describe the constraint]* | Regulatory / Technical / Commercial / Organisational / Time | *[how this constrains the design]* | *[date]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Common constraints include:
+- **Regulatory** — Data residency, industry compliance (PCI-DSS, GDPR, FCA)
+- **Technical** — Must use existing platform, specific technology mandated, legacy integration
+- **Commercial** — Budget ceiling, existing licensing agreements, vendor contracts
+- **Organisational** — Team skills, organisational standards, governance processes
+- **Time** — Fixed delivery deadlines, regulatory compliance dates
+</div>
+
+## 6.2 Assumptions
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Assumptions are factors believed to be true but not yet verified. The assumption owner should validate each assumption and track it to closure. An assumption that proves false may become a risk or issue.
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | *[describe the assumption]* | *[impact on design if wrong]* | High / Medium / Low | Open / Closed | *[person]* | *[reference]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Capture assumptions about:
+- **Technical** — API availability, system capacity, technology compatibility
+- **Organisational** — Resource availability, team skills, process readiness
+- **Third-party** — Vendor timelines, SLA commitments, service availability
+- **Data** — Data quality, volumes, formats, migration feasibility
+- **Timeline** — Dependent delivery dates, approval timelines
+
+Open assumptions should be tracked actively. The owner is responsible for validating the assumption and providing evidence of closure.
+</div>
+
+## 6.3 Risks
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Risks are potential events that could negatively affect the design or its delivery. Each risk should have a mitigation strategy and clear ownership.
+
+**Risk identification:**
+
+| ID | Risk Event | Category | Severity | Likelihood | Owner |
+|----|-----------|----------|----------|-----------|-------|
+| R-001 | *[describe the risk]* | Technical / Security / Operational / Delivery / Commercial / Compliance | High / Medium / Low | High / Medium / Low | *[person]* |
+
+**Risk response:**
+
+| ID | Mitigation Strategy | Mitigation Plan | Residual Risk | Last Assessed |
+|----|-------------------|-----------------|--------------|---------------|
+| R-001 | Accept / Mitigate / Transfer / Avoid | *[details of the mitigation plan]* | High / Medium / Low | *[date]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Consider risks related to:
+- **Technical** — Technology choices, complexity, integration, performance
+- **Security** — Vulnerabilities, access control gaps, data exposure
+- **Operational** — Supportability, monitoring gaps, skill availability
+- **Delivery** — Timeline, dependencies, resource availability
+- **Commercial** — Vendor risk, licensing, cost overruns
+- **Compliance** — Regulatory gaps, standards non-conformance
+
+Mitigation strategies should be one of: **Accept** (business owner sign-off), **Mitigate** (reduce likelihood or impact), **Transfer** (insurance, contractual), or **Avoid** (change the design).
+</div>
+
+## 6.4 Dependencies
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Dependencies are external factors that the design relies upon or that rely upon this design. Track both inbound (this design depends on) and outbound (other designs depend on this).
+
+| ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
+|----|-----------|-----------|--------|-------|----------|---------------|
+| D-001 | *[describe the dependency]* | Inbound / Outbound | Committed / Not Committed / Resolved | *[person]* | *[reference]* | *[date]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Common dependencies include:
+- **Infrastructure** — Network connectivity, platform availability, shared services
+- **Application** — APIs, data feeds, upstream/downstream systems
+- **Team** — Other project deliverables, shared resources, specialist skills
+- **Vendor** — Third-party service readiness, contract completion
+- **Governance** — Approval gates, compliance sign-off, change advisory board
+</div>
+
+## 6.5 Issues
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Issues are problems that have already materialised and require resolution. Unlike risks (which are potential), issues are current and active.
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | *[describe the issue]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[person]* | *[resolution plan]* | Open / In Progress / Resolved | *[date]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Issues differ from risks:
+- A **risk** is something that *might* happen — it is potential
+- An **issue** is something that *has* happened — it is current and requires active resolution
+
+Common issues include:
+- **Technical** — A dependency API is not performing as expected; a security vulnerability has been discovered
+- **Delivery** — A key resource has left the team; a vendor has missed a delivery milestone
+- **Commercial** — A licence cost has increased beyond budget; a contract negotiation is stalled
+
+Issues should be escalated when they threaten the project timeline, cost, or quality. Track each issue to resolution and record the outcome.
+</div>
+
+## 6.6 Technical Debt Register
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document any technical debt introduced or inherited by this solution. Technical debt can arise at any stage — from initial design shortcuts to inherited legacy constraints — and requires governance tracking alongside risks and issues.
+
+| ID | Description | Category | Impact | Remediation Plan | Target Date | Owner |
+|----|-----------|----------|--------|-----------------|-------------|-------|
+| TD-001 | *[describe the debt]* | Design / Code / Infrastructure / Security / Operational | High / Medium / Low | *[plan to resolve]* | *[date]* | *[person]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Technical debt should be tracked when:
+- A shortcut is taken to meet a deadline (document what was deferred and when it will be addressed)
+- A legacy component is retained that does not meet current standards
+- A vendor dependency introduces a constraint that should eventually be removed
+- A security finding is accepted temporarily with a remediation plan
+
+Each item should have clear ownership and a target date for resolution. Unresolved technical debt often becomes a risk (Section 6.3) or an issue (Section 6.5).
+</div>
+
+## 6.7 Guardrail Exceptions
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Document any exceptions to organisational policies, standards, or guardrails:
+
+### Policy Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create any exception to current policies and standards? | Yes / No |
+| If yes, have exceptions been logged and accepted through the exceptions process? | Yes / No / N/A |
+
+### Process Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create an issue against the process library? | Yes / No |
+| If yes, has this been acknowledged by the process owner? | Yes / No / N/A |
+
+### Risk Profile Impact
+
+| Question | Response |
+|----------|----------|
+| Does the design materially change the organisation's technology risk profile? | Yes / No |
+| If yes, has this been evaluated with Risk and Controls teams? | Yes / No / N/A |
+
+## 6.8 Architectural Decisions Log
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+<div class="guidance-box">
+<h4>Note</h4>
+
+This section provides a governance summary index. The full Architecture Decision Records with context, alternatives, and consequences are documented in [Section 3.6.2 — Scenarios](/standard/3-6-scenarios/#362-architecture-decision-records-adrs).
+</div>
+
+| ADR # | Title | Status | Date | Impact |
+|-------|-------|--------|------|--------|
+| ADR-001 | *[title]* | Accepted / Proposed / Superseded | *[date]* | *[brief impact summary]* |
+
+## 6.9 Compliance Traceability
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+This table provides traceability between external standards/principles and the SAD content that demonstrates compliance. It enables reviewers and auditors to verify that all applicable requirements are addressed in the design.
+
+Organisations may use this section to map to their internal design principles, industry standards (e.g., PCI-DSS, ISO 27001), or regulatory requirements.
+</div>
+
+Map design elements to the standards and principles they satisfy:
+
+| Standard / Principle | Requirement | How the Design Satisfies It | Evidence Section |
+|---------------------|-------------|---------------------------|-----------------|
+| *[standard ID]* | *[requirement text]* | *[design approach]* | *[section reference]* |
+
+<div class="guidance-box">
+<h4>Scoring Guidance</h4>
+
+| Score | What This Looks Like |
+|:-----:|---------------------|
+| **1** | Some risks listed but no mitigation plans or ownership |
+| **3** | Constraints, assumptions, risks, and dependencies documented with ownership; key ADRs captured; guardrail exceptions logged |
+| **5** | All of the above plus all items have evidence and dates, compliance traceability complete, issues tracked to resolution |
+</div>
+
+## 6.10 Approval Sign-Off
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Record who reviewed and approved the architecture:
+
+| Role | Name | Date | Decision | Conditions |
+|------|------|------|----------|------------|
+| Solution Architect | *[name]* | *[date]* | Approved / Approved with Conditions / Rejected / Deferred | *[any conditions]* |
+| Security Architect | *[name]* | *[date]* | Approved / Approved with Conditions / Rejected / Deferred | *[any conditions]* |
+| ARB / Design Authority | *[name]* | *[date]* | Approved / Approved with Conditions / Rejected / Deferred | *[any conditions]* |
+| *[additional approvers]* | *[name]* | *[date]* | | |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+The approval sign-off records who reviewed and approved the architecture. Typical approvers include:
+- **Solution Architect** — the author, confirming the document is complete and accurate
+- **Security Architect** — confirming the Security View adequately addresses the threat landscape
+- **ARB / Design Authority** — the governance body confirming the design meets organisational standards
+- **Business Owner** — confirming the solution meets business requirements (optional but recommended)
+
+Record the approval decision and any conditions that must be met before implementation.
+</div>

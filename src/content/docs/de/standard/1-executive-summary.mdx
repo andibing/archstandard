@@ -1,0 +1,170 @@
+---
+title: "1. Zusammenfassung"
+description: Lösungsüberblick, Geschäftskontext, Geltungsbereich und wesentliche Entscheidungen.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-togaf">TOGAF</span>
+
+## Zweck
+
+Die Zusammenfassung bietet einen kompakten Überblick über die Lösung für alle Stakeholder, einschliesslich nichttechnischer Entscheidungstrager. Sie stellt den Geschäftskontext her und rahmt die nachfolgenden Architekturentscheidungen ein.
+
+## 1.1 Lösungsüberblick
+
+Geben Sie eine kurze (1-2 Absatze) Zusammenfassung der Lösung:
+
+- Was macht die Lösung?
+- Welches Geschäftsproblem lost sie?
+- Was ist der grundlegende Ansatz?
+
+*[...]*
+
+## 1.2 Geschäftskontext & Treiber
+
+Beschreiben Sie die Geschäftstreiber, die zu dieser Lösung gefuhrt haben:
+
+| Treiber | Beschreibung | Prioritat |
+|---------|-------------|----------|
+| *[Geschäftstreiber]* | *[Beschreibung]* | Hoch / Mittel / Niedrig |
+
+Berucksichtigen Sie:
+- Geschäftsanforderungen und -ziele
+- Regulatorische oder Compliance-Treiber
+- Ziele der Technologiemodernisierung
+- Kostensenkung oder Effizienzsteigerung
+- Markt- oder Wettbewerbsdruck
+
+## 1.3 Strategische Ausrichtung
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Zeigen Sie auf, wie diese Lösung mit der Organisationsstrategie übereinstimmt und eine Duplizierung bestehender Fähigkeiten vermeidet.
+
+### Ausrichtung an der Organisationsstrategie
+
+| Frage | Antwort |
+|-------|---------|
+| Welche Organisationsstrategie oder Initiative unterstutzt diese Lösung? | *[z.B. Programm zur digitalen Transformation, Cloud-First-Strategie]* |
+| Wurde diese Lösung gegen das Fähigkeitsmodell der Organisation gepruft? | Ja / Nein / N/A |
+| Dupliziert diese Lösung eine bestehende Fähigkeit? | Ja / Nein — *[falls ja, Begründung angeben]* |
+
+### Wiederverwendung gemeinsamer Dienste & Plattformen
+
+Dokumentieren Sie, welche bestehenden organisatorischen Plattformen, gemeinsamen Dienste oder Standardkomponenten wiederverwendet werden — und welche gepruft, aber nicht ausgewahlt wurden (mit Begründung).
+
+| Fähigkeit | Gemeinsamer Dienst / Plattform | Wiederverwendet? | Begründung (falls nicht wiederverwendet) |
+|-----------|-------------------------------|------------------|----------------------------------------|
+| Identity & Access | *[z.B. Entra ID, Okta]* | Ja / Nein | *[...]* |
+| Messaging / Benachrichtigungen | *[z.B. GOV.UK Notify, SES, SendGrid]* | Ja / Nein | *[...]* |
+| API Management | *[z.B. Apigee, AWS API Gateway, Kong]* | Ja / Nein | *[...]* |
+| Monitoring & Logging | *[z.B. Splunk, Datadog, Grafana]* | Ja / Nein | *[...]* |
+| Daten & Analytik | *[z.B. Snowflake, Databricks]* | Ja / Nein | *[...]* |
+| CI/CD | *[z.B. GitHub Actions, Jenkins, Azure DevOps]* | Ja / Nein | *[...]* |
+| Sonstige | *[...]* | Ja / Nein | *[...]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Die meisten Organisationen pflegen einen Katalog genehmigter Plattformen und gemeinsamer Dienste. Architekten sollten nachweisen, dass sie diese gepruft haben, bevor sie neue Technologie vorschlagen. Dies reduziert Kosten, Komplexitat und Betriebsaufwand. Wenn ein gemeinsamer Dienst nicht wiederverwendet wird, geben Sie eine klare Begründung an (z.B. Fähigkeitslucke, Leistungsanforderung, vertragliche Einschrankung).
+</div>
+
+## 1.4 Geltungsbereich
+
+### Im Geltungsbereich
+
+Definieren Sie, was dieses SAD abdeckt:
+
+- Welche Anwendungen, Dienste oder Komponenten?
+- Welche Umgebungen (Produktion, DR, Test)?
+- Welche Benutzergruppen oder Geschäftsfunktionen?
+
+### Ausserhalb des Geltungsbereichs
+
+Geben Sie explizit an, was ausgeschlossen ist. Beispiele konnen umfassen:
+
+- Verwandte Systeme, die anderswo dokumentiert sind
+- Zukunftige Phasen, die in diesem Design nicht abgedeckt sind
+- Detaildesigns (in separaten Dokumenten behandelt)
+- Infrastruktur, die von anderen Teams verwaltet wird
+- Drittsysteme ausserhalb der Lösungsgrenze
+
+## 1.5 Ist-Zustand / As-Is-Architektur
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Wenn die Lösung bestehende Systeme ersetzt, andert oder mit ihnen integriert, beschreiben Sie die aktuelle Architektur, die für die Anderung relevant ist:
+
+- Welche bestehenden Systeme oder Komponenten sind betroffen?
+- Was sind die wesentlichen Einschrankungen oder Schwachstellen des Ist-Zustands?
+- Was wird beibehalten, ersetzt oder geandert?
+
+*[Ist-Zustand-Architekturdiagramm einfugen, falls zutreffend]*
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Dieser Abschnitt ist besonders wertvoll für Migrations- und Modernisierungsprojekte. Für Greenfield-Lösungen ohne bestehende Landschaft SOLLTE (SHOULD) dieser Abschnitt weggelassen werden. Halten Sie die Beschreibung auf das direkt für den Übergang Relevante fokussiert — reproduzieren Sie nicht umfangreiche Legacy-Dokumentation, die anderswo existiert.
+</div>
+
+## 1.6 Wesentliche Entscheidungen & Einschrankungen
+
+Fassen Sie die bedeutendsten Architekturentscheidungen und alle Einschrankungen zusammen, die das Design gepragt haben:
+
+| Entscheidung / Einschrankung | Begründung | Auswirkung |
+|-----------------------------|-----------|-----------|
+| *[Entscheidung]* | *[Warum]* | *[Auswirkung auf das Design]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Einschrankungen konnen umfassen:
+- **Technisch** — Bestehende Technologie-Landschaft, Plattform-Vorgaben
+- **Organisatorisch** — Teamfähigkeiten, Lieferantenbeziehungen
+- **Finanziell** — Budgetgrenzen, Kostenziele
+- **Regulatorisch** — Compliance-Anforderungen, Datenresidenz
+- **Zeitlich** — Lieferfristen, phasenweise Einführungen
+</div>
+
+## 1.7 Projektdetails
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Wenn dieses SAD im Rahmen eines bestimmten Projekts oder einer Anderungsaktivitat erstellt wird:
+
+| Feld | Wert |
+|------|------|
+| **Projektname** | *[...]* |
+| **Projektcode / ID** | *[...]* |
+| **Projektleiter** | *[...]* |
+| **Geschatzte Lösungskosten (Capex)** | *[...]* |
+| **Geschatzte Lösungskosten (Opex)** | *[...]* |
+| **Ziel-Go-Live-Datum** | *[...]* |
+
+## 1.8 Geschäftskritikalitat
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Klassifizieren Sie die Geschäftskritikalitat der Lösung:
+
+| Stufe | Beschreibung |
+|-------|-------------|
+| **Stufe 1: Kritisch** | Dienstausfall verursacht sofortige, schwere Geschäftsauswirkung |
+| **Stufe 2: Hohe Auswirkung** | Dienstausfall beeintrachtigt den Geschäftsbetrieb erheblich |
+| **Stufe 3: Mittlere Auswirkung** | Dienstausfall beeintrachtigt den Betrieb, aber Behelfsmaßnahmen existieren |
+| **Stufe 4: Geringe Auswirkung** | Dienstausfall hat begrenzte Geschäftsauswirkung |
+| **Stufe 5: Minimal** | Dienstausfall hat vernachlassigbare Auswirkung |
+
+Gewahlte Kritikalitat: *[...]*
+
+Diese Klassifizierung bestimmt die Anforderungen an Resilienz, Wiederherstellungszeitziele und Governance-Grundlichkeit im gesamten Design.
+
+<div class="guidance-box">
+<h4>Bewertungsleitfaden</h4>
+
+| Bewertung | Was dies bedeutet |
+|:---------:|-------------------|
+| **1** | Geschäftskontext erwahnt, aber vage; Geltungsbereich undefiniert |
+| **3** | Klare Geschäftstreiber, Geltungsbereich definiert, strategische Ausrichtung dokumentiert |
+| **5** | Alles oben Genannte plus Ist-Zustand-Architektur dokumentiert, Wiederverwendungsbewertung abgeschlossen, Geschäftskritikalitat mit Nachweisen begrundet |
+</div>

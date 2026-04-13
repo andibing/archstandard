@@ -1,0 +1,91 @@
+---
+title: "4.3 Efficacité des performances"
+description: Exigences de performance, optimisation des ressources et performance réseau.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+<span class="framework-badge badge-aws-waf">AWS Performance</span>
+<span class="framework-badge badge-azure-waf">Azure Performance</span>
+
+## Objectif
+
+L'efficacité des performances se concentre sur l'utilisation efficace des ressources de calcul pour répondre aux exigences et le maintien de cette efficacité à mesure que la demande évolue et que les technologies progressent.
+
+## 4.3.1 Exigences de performance
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+### Indicateurs clés de performance
+
+| Métrique | Objectif | Méthode de mesure |
+|--------|--------|-------------------|
+| Temps de réponse (P50 / P95 / P99) | *[par ex., < 200ms / < 500ms / < 1s]* | *[comment mesuré]* |
+| Débit | *[par ex., 1000 requêtes/sec]* | *[comment mesuré]* |
+| Utilisateurs simultanés | *[par ex., 10 000 simultanés]* | *[comment mesuré]* |
+| Temps de traitement par lots | *[par ex., < 2 heures pour le lot quotidien]* | *[comment mesuré]* |
+| Latence de traitement des données | *[par ex., < 5 secondes de bout en bout]* | *[comment mesuré]* |
+
+### Tests de performance
+
+| Attribut | Détail |
+|-----------|--------|
+| Approche de test de performance | *[test de charge, test de stress, test d'endurance]* |
+| Outils de test | *[par ex., JMeter, Gatling, k6, Locust]* |
+| Environnement de test | *[quel environnement, comment il se compare à la production]* |
+| Fréquence des tests | *[quand les tests de performance sont exécutés]* |
+
+### Projections de capacité et de croissance
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+| Métrique | Actuel | 1 an | 3 ans | 5 ans |
+|--------|---------|--------|---------|---------|
+| Utilisateurs (total) | *[n]* | *[n]* | *[n]* | *[n]* |
+| Utilisateurs simultanés (pic) | *[n]* | *[n]* | *[n]* | *[n]* |
+| Volume de données | *[n Go/To]* | *[n Go/To]* | *[n Go/To]* | *[n Go/To]* |
+| Volume de transactions (par jour) | *[n]* | *[n]* | *[n]* | *[n]* |
+| Besoin en stockage | *[n Go/To]* | *[n Go/To]* | *[n Go/To]* | *[n Go/To]* |
+
+| Question | Réponse |
+|----------|----------|
+| La conception actuelle peut-elle monter en charge pour accommoder la croissance projetée ? | Yes / No — *[si non, décrire les changements nécessaires]* |
+| Existe-t-il des patterns de demande saisonniers ou cycliques connus ? | Yes / No — *[si oui, décrire les périodes de pic]* |
+
+## 4.3.2 Optimisation des ressources
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+Documentez comment la solution optimise l'utilisation des ressources :
+
+| Stratégie | Implémentation |
+|----------|---------------|
+| Dimensionnement optimal | *[comment les ressources de calcul sont dimensionnées de manière appropriée]* |
+| Mise en cache | *[couches et stratégies de cache]* |
+| Pool de connexions | *[gestion des connexions base de données et services]* |
+| Traitement asynchrone | *[utilisation de files d'attente, tâches en arrière-plan]* |
+| Diffusion de contenu | *[utilisation de CDN pour les ressources statiques]* |
+| Optimisation de base de données | *[stratégie d'indexation, optimisation des requêtes]* |
+
+## 4.3.3 Performance réseau
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+Référencez la Section 3.3.3 pour la topologie réseau. Cette section documente les considérations réseau spécifiques à la performance :
+
+| Attribut | Détail |
+|-----------|--------|
+| Exigences de latence | *[attentes de temps aller-retour]* |
+| Exigences de bande passante | *[volumes de transfert de données]* |
+| Exigences QoS | *[besoins en qualité de service]* |
+| Stratégie de diffusion de contenu | *[CDN, cache en périphérie, déploiement régional]* |
+| Optimisation réseau | *[compression, réutilisation des connexions, choix de protocole]* |
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | Attentes générales de performance énoncées mais pas d'objectifs |
+| **3** | Objectifs de temps de réponse, débit et concurrence définis ; projections de croissance documentées |
+| **5** | Tout ce qui précède plus les tests de performance automatisés, la stratégie de cache documentée, l'optimisation des ressources démontrée, les patterns saisonniers pris en compte |
+</div>

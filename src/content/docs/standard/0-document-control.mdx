@@ -1,0 +1,80 @@
+---
+title: "0. Document Control"
+description: Metadata, change history, contributors, and document purpose.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+
+## Purpose
+
+This section captures the administrative metadata for the Solution Architecture Document, ensuring it is versioned, traceable, and governed appropriately.
+
+## 0.1 Document Metadata
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+| Field | Description |
+|-------|-------------|
+| **Document Title** | The formal title of this Solution Architecture Document |
+| **Application / Solution Name** | The name of the system being documented |
+| **Application ID** | Unique identifier (e.g., from a CMDB or portfolio tool) |
+| **Author(s)** | Primary author(s) of the document |
+| **Owner** | The accountable architect for this document |
+| **Version** | Current document version (use [semantic versioning](https://semver.org/)) |
+| **Status** | Draft / In Review / Approved / Superseded |
+| **Created Date** | Date the document was first created |
+| **Last Updated** | Date of the most recent update |
+| **Classification** | Document security classification |
+
+## 0.2 Change History
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Track all significant changes to the document:
+
+| Version | Date | Author / Editor | Description of Change |
+|---------|------|-----------------|----------------------|
+| 0.1 | *[date]* | *[name]* | Initial draft |
+| ... | ... | ... | ... |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+- Use [semantic versioning](https://semver.org/): `MAJOR.MINOR` (e.g., 1.0 for first approved version, 1.1 for minor updates, 2.0 for significant redesign)
+- Record who made each change and why
+- This is a living document - it should be updated whenever architecturally significant changes are made to the solution
+</div>
+
+## 0.3 Contributors & Approvals
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Tracking contributors and their roles ensures accountability and provides an audit trail for governance.
+
+| Name | Role | Contribution Type |
+|------|------|------------------|
+| *[name]* | *[role]* | Author / Reviewer / Approver |
+
+## 0.4 Document Purpose & Scope
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Describe the purpose of this specific Solution Architecture Document:
+
+- State which solution or application this document describes.
+- Define the scope boundary.
+- What is explicitly out of scope?
+- What other documents does it relate to (e.g., detailed designs, operational runbooks)?
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+The Solution Architecture Document serves as:
+- A **reference document** describing the current-state solution architecture
+- **Evidence** that the solution is well-architected
+- **Input** to architecture governance and review processes
+- A **living artefact** that must be updated when architecturally significant changes are made
+
+It should contain design details that are relatively **static**. Dynamic or frequently changing information belongs in operational documentation.
+</div>

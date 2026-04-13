@@ -1,0 +1,81 @@
+---
+title: "2. Stakeholder & Anliegen"
+description: Stakeholder-Register, Anliegen-Matrix und Compliance-Kontext.
+---
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+<span class="framework-badge badge-iso42010">ISO 42010</span>
+<span class="framework-badge badge-togaf">TOGAF</span>
+
+## Zweck
+
+ISO/IEC 42010 verlangt, dass eine Architekturbeschreibung Stakeholder und deren Anliegen identifiziert. Dieser Abschnitt stellt sicher, dass das SAD die Bedurfnisse aller relevanten Parteien adressiert und den Compliance- und regulatorischen Kontext dokumentiert.
+
+## 2.1 Stakeholder-Register
+
+Identifizieren Sie alle Stakeholder mit einem Interesse an der Architektur der Lösung:
+
+| Stakeholder | Rolle / Gruppe | Zentrale Anliegen | Relevante Ansichten |
+|-------------|---------------|-------------------|---------------------|
+| Geschäftsverantwortlicher | Geschäft | Geschäftswert, Kosten, Zeitplan | Zusammenfassung, Kosten |
+| Solution Architect | Architektur | Designintegritat, Standardkonformität | Alle Ansichten |
+| Security Architect | Sicherheit | Bedrohungsmodell, Zugriffskontrolle, Datenschutz | Sicherheitsansicht |
+| Infrastruktur-Ingenieur | Betrieb | Bereitstellung, Skalierung, Netzwerk | Physische Ansicht |
+| Datenarchitekt | Datenmanagement | Datenspeicherung, Klassifizierung, Datenschutz | Datenansicht |
+| Entwicklungsleiter | Entwicklung | Komponentendesign, Integrationsmuster | Logische Ansicht, Integrations- & Datenflussansicht |
+| Operations / SRE | Betrieb | Beobachtbarkeit, Vorfallreaktion, Zuverlässigkeit | Qualitätsattribute |
+| Compliance-Beauftragter | Compliance | Regulatorische Einhaltung, Prüfungsnachweise | Governance |
+| *[weitere Stakeholder]* | *[Rolle]* | *[Anliegen]* | *[Ansichten]* |
+
+<div class="guidance-box">
+<h4>Leitfaden</h4>
+
+Berucksichtigen Sie Stakeholder aus:
+- **Geschaft** — Sponsoren, Product Owner, Endbenutzer
+- **Technologie** — Architekten, Ingenieure, Entwickler, DBAs
+- **Betrieb** — SRE, Support-Teams, NOC
+- **Sicherheit & Compliance** — CISO-Buro, Risiko, Audit
+- **Extern** — Lieferanten, Kunden, Regulierungsbehorden, Partner
+</div>
+
+## 2.2 Anliegen-Matrix
+
+Ordnen Sie Stakeholder-Anliegen den Ansichten und Abschnitten zu, die sie adressieren:
+
+| Anliegen | Stakeholder | Adressiert in |
+|----------|-------------|---------------|
+| Lösung erfullt Geschäftsanforderungen | Geschäftsverantwortlicher | 1. Zusammenfassung, 3.6 Szenarien |
+| Lösung ist sicher und konform | Security Architect, Compliance | 3.5 Sicherheitsansicht, 6. Governance |
+| Lösung ist zuverlässig und wiederherstellbar | Betrieb, Geschäft | 4.2 Zuverlässigkeit & Resilienz |
+| Lösung ist kosteneffektiv | Geschäftsverantwortlicher, Finanzen | 4.4 Kostenoptimierung |
+| Lösung kann betrieben und überwacht werden | Operations / SRE | 4.1 Betriebliche Exzellenz |
+| Daten werden ordnungsgemas verwaltet und geschutzt | Datenarchitekt, Compliance | 3.4 Datenansicht |
+| Lösung kann skalieren, um die Nachfrage zu erfullen | Infrastruktur-Ingenieur | 4.2 Zuverlässigkeit, 3.3 Physische Ansicht |
+| *[weitere Anliegen]* | *[Stakeholder]* | *[Abschnitte]* |
+
+## 2.3 Compliance- & regulatorischer Kontext
+
+<span class="maturity-indicator maturity-recommended">Empfohlen</span>
+
+Dokumentieren Sie die regulatorische und Compliance-Landschaft, die für diese Lösung gilt:
+
+### Regulatorische Anforderungen
+
+| Verordnung / Standard | Anwendbarkeit | Auswirkung auf das Design |
+|----------------------|---------------|--------------------------|
+| *[z.B. DSGVO, PCI-DSS, SOX, BaFin]* | *[wie es zutrifft]* | *[Design-Implikationen]* |
+
+### Regulierte Aktivitaten
+
+Unterstutzt die Lösung regulierte Aktivitaten?
+
+- [ ] Ja — *[beschreiben Sie welche regulierten Aktivitaten und Einheiten]*
+- [ ] Nein
+
+### Compliance-Standards
+
+Listen Sie alle internen oder externen Standards auf, denen das Design entsprechen muss:
+
+| Standard | Version | Anwendbarkeit |
+|----------|---------|---------------|
+| *[z.B. interner Sicherheitsstandard]* | *[Version]* | *[welche Abschnitte]* |

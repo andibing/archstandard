@@ -1,0 +1,636 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "",
+      "solutionName": "",
+      "applicationId": "",
+      "authors": [],
+      "owner": "",
+      "version": "",
+      "status": "draft",
+      "createdDate": "",
+      "lastUpdated": "",
+      "classification": "public"
+    },
+    "changeHistory": [
+      {
+        "version": "",
+        "date": "",
+        "author": "",
+        "changeType": "initial-draft",
+        "description": ""
+      }
+    ],
+    "contributors": [
+      {
+        "name": "",
+        "role": "",
+        "contributionType": "author"
+      }
+    ],
+    "purpose": "",
+    "scope": ""
+  },
+  "executiveSummary": {
+    "solutionOverview": "",
+    "businessContext": [
+      {
+        "driver": "",
+        "driverType": "regulatory",
+        "description": "",
+        "priority": "critical"
+      }
+    ],
+    "strategicAlignment": {
+      "organisationStrategySupported": "",
+      "reviewedAgainstCapabilityModel": "yes",
+      "duplicatesExistingCapability": "yes",
+      "duplicatesJustification": "",
+      "sharedServiceReuse": [
+        {
+          "capability": "",
+          "sharedService": "",
+          "reused": false,
+          "justification": ""
+        }
+      ]
+    },
+    "inScope": [],
+    "outOfScope": [],
+    "currentState": "",
+    "keyDecisions": [
+      {
+        "decision": "",
+        "constraintType": "technical",
+        "rationale": "",
+        "reversibility": "easily-reversible"
+      }
+    ],
+    "projectDetails": {
+      "projectName": "",
+      "projectCode": "",
+      "projectManager": "",
+      "estimatedCapex": 0,
+      "estimatedOpex": 0,
+      "currency": "",
+      "targetGoLive": ""
+    },
+    "businessCriticality": "tier-1-critical"
+  },
+  "stakeholders": {
+    "register": [
+      {
+        "stakeholder": "",
+        "roleType": "business-owner",
+        "concerns": [],
+        "relevantViews": []
+      }
+    ],
+    "compliance": {
+      "supportsRegulatedActivities": "yes",
+      "regulatedActivityDetails": "",
+      "regulatoryRequirements": [
+        {
+          "regulation": "",
+          "regulationType": "data-protection",
+          "applicability": "",
+          "designImpact": ""
+        }
+      ]
+    }
+  },
+  "architecturalViews": {
+    "logicalView": {
+      "diagrams": [],
+      "components": [
+        {
+          "name": "",
+          "componentType": "web-application",
+          "description": "",
+          "technology": "",
+          "owner": "",
+          "status": "new"
+        }
+      ],
+      "designPatterns": [
+        {
+          "pattern": "microservices",
+          "whereApplied": "",
+          "rationale": ""
+        }
+      ],
+      "qualityAttributeRefs": []
+    },
+    "integrationView": {
+      "diagrams": [],
+      "internalConnectivity": [
+        {
+          "source": "",
+          "destination": "",
+          "protocol": "https",
+          "encrypted": false,
+          "authenticationMethod": "mtls",
+          "direction": "unidirectional",
+          "synchronicity": "synchronous",
+          "purpose": ""
+        }
+      ],
+      "externalIntegrations": [
+        {
+          "sourceApp": "",
+          "destinationApp": "",
+          "integrationType": "internal-app",
+          "protocol": "https",
+          "encrypted": false,
+          "authenticationMethod": "mtls",
+          "purpose": ""
+        }
+      ],
+      "apis": [
+        {
+          "name": "",
+          "apiType": "rest",
+          "direction": "exposed",
+          "dataFormat": "json",
+          "version": "",
+          "authenticated": false,
+          "rateLimited": false
+        }
+      ],
+      "qualityAttributeRefs": []
+    },
+    "physicalView": {
+      "diagrams": [],
+      "hosting": {
+        "venueTypes": [],
+        "regions": [],
+        "serviceModels": [],
+        "cloudProviders": []
+      },
+      "compute": {
+        "computeTypes": [],
+        "servers": [
+          {
+            "name": "",
+            "instanceType": "",
+            "vCpu": 0,
+            "memoryGb": 0,
+            "storageTb": 0,
+            "quantity": 0,
+            "os": "rhel"
+          }
+        ],
+        "containers": {
+          "platform": "eks",
+          "baseImages": [],
+          "clusterSize": "1-10-nodes"
+        },
+        "serverless": {
+          "services": [],
+          "used": false
+        }
+      },
+      "networking": {
+        "internetFacing": false,
+        "outboundInternet": false,
+        "cloudToOnPrem": false,
+        "thirdPartyConnectivity": false,
+        "cloudPeering": false,
+        "wirelessRequired": false,
+        "peakEgressMbps": 0,
+        "peakIngressMbps": 0,
+        "trafficPattern": "constant",
+        "latencyRequirement": "ultra-low-sub-1ms",
+        "ddosProtection": "yes",
+        "ddosProvider": "aws-shield",
+        "wafEnabled": "yes",
+        "wafProvider": "aws-waf",
+        "rateLimiting": false
+      },
+      "environments": [
+        {
+          "environmentType": "development",
+          "count": 0,
+          "venue": "",
+          "autoScaleDown": false
+        }
+      ],
+      "securityAgents": [],
+      "qualityAttributeRefs": []
+    },
+    "dataView": {
+      "dataStores": [
+        {
+          "name": "",
+          "storeType": "relational-db",
+          "technology": "",
+          "authoritative": false,
+          "retentionPeriod": "transient",
+          "dataSizeCategory": "under-1gb",
+          "classification": "public",
+          "containsPersonalData": false,
+          "containsSensitivePersonalData": false,
+          "encryptionLevel": "none",
+          "keyManagement": "provider-managed"
+        }
+      ],
+      "productionDataForTesting": "not-used",
+      "dataIntegrityControls": "yes",
+      "dataOnEndUserDevices": "yes",
+      "dataSovereigntyRequired": "yes",
+      "dataSovereigntyDetails": "",
+      "dataTransfers": [
+        {
+          "destination": "",
+          "destinationType": "internal",
+          "classification": "public",
+          "transferMethod": "api",
+          "encrypted": false
+        }
+      ],
+      "qualityAttributeRefs": []
+    },
+    "securityView": {
+      "thirdPartyHosted": "yes",
+      "thirdPartyRiskAssessed": "yes",
+      "businessImpact": {
+        "confidentiality": "critical",
+        "integrity": "critical",
+        "availability": "critical",
+        "nonRepudiation": "critical"
+      },
+      "authentication": [
+        {
+          "accessType": "end-user-internal",
+          "method": "sso-saml",
+          "usesGroupWideAuth": false
+        }
+      ],
+      "authorisation": {
+        "model": "rbac",
+        "entitlementStore": "",
+        "provisioningProcess": "automated-idm",
+        "recertificationEnabled": false,
+        "segregationOfDutiesEnforced": false
+      },
+      "privilegedAccess": {
+        "pamSolution": "",
+        "justInTimeAccess": false,
+        "sessionRecording": false,
+        "breakGlassProcess": false
+      },
+      "encryptionAtRest": {
+        "implemented": false,
+        "level": "storage-level",
+        "keyType": "symmetric",
+        "algorithm": "",
+        "keyGeneration": "hsm-fips140-l3",
+        "keyStorage": "hsm",
+        "keyRotationDays": 0
+      },
+      "secretManagement": {
+        "secretStore": "hashicorp-vault",
+        "distribution": "runtime-retrieval",
+        "rotation": "automatic"
+      },
+      "securityMonitoring": {
+        "siemIntegration": false,
+        "siemTool": "",
+        "securityEventLogging": false,
+        "intrusionDetection": false
+      },
+      "qualityAttributeRefs": []
+    },
+    "scenarios": {
+      "useCases": [
+        {
+          "id": "",
+          "name": "",
+          "actors": [],
+          "trigger": "",
+          "mainFlow": "",
+          "viewsInvolved": []
+        }
+      ],
+      "adrs": [
+        {
+          "id": "",
+          "title": "",
+          "status": "proposed",
+          "date": "",
+          "context": "",
+          "decision": "",
+          "alternatives": "",
+          "consequences": "",
+          "affectedAttributes": []
+        }
+      ]
+    }
+  },
+  "qualityAttributes": {
+    "operationalExcellence": {
+      "loggingCentralised": false,
+      "loggingTool": "",
+      "monitoringTool": "",
+      "tracingEnabled": false,
+      "alertingConfigured": false,
+      "runbooksDocumented": false
+    },
+    "reliability": {
+      "drStrategy": "active-active",
+      "multiVenueDeployment": false,
+      "rtoTarget": "",
+      "rpoTarget": "",
+      "scalability": "no-dynamic-scaling",
+      "faultToleranceDesigned": false,
+      "chaosTestingPractised": false,
+      "backupEnabled": false,
+      "backupType": "full",
+      "backupFrequency": "real-time",
+      "backupImmutable": false,
+      "backupEncrypted": false
+    },
+    "performance": {
+      "p95ResponseTimeMs": 0,
+      "targetThroughputRps": 0,
+      "targetConcurrentUsers": 0,
+      "performanceTestingApproach": "load-testing",
+      "cachingUsed": false,
+      "cdnUsed": false,
+      "growthProjections": {
+        "currentUsers": 0,
+        "year1Users": 0,
+        "year3Users": 0,
+        "year5Users": 0,
+        "currentDataVolume": "",
+        "year1DataVolume": "",
+        "year3DataVolume": "",
+        "year5DataVolume": "",
+        "designScalesToProjectedGrowth": false,
+        "seasonalDemandPatterns": false,
+        "seasonalDetails": ""
+      }
+    },
+    "costOptimisation": {
+      "costAnalysisPerformed": false,
+      "designConstrainedByCost": false,
+      "reservedCapacity": false,
+      "costMonitoringEnabled": false,
+      "taggingStrategy": false
+    },
+    "sustainability": {
+      "hostingLocationOptimisedForCarbon": false,
+      "nonProdAutoShutdown": false,
+      "resourcesRightsized": false,
+      "workloadPattern": "constant",
+      "continuousAvailabilityRequired": false
+    },
+    "tradeoffs": [
+      {
+        "attributesInvolved": [],
+        "description": "",
+        "chosenPriority": "operational-excellence",
+        "rationale": ""
+      }
+    ]
+  },
+  "lifecycleManagement": {
+    "internallyDeveloped": false,
+    "sourceControl": "github",
+    "cicdPlatform": "github-actions",
+    "sast": "semgrep",
+    "dast": "yes",
+    "sca": "snyk",
+    "containerScanning": "yes",
+    "migration": {
+      "classification": "retain",
+      "deploymentStrategy": "big-bang",
+      "dataMigrationMode": "one-off",
+      "dataMigrationMethod": "",
+      "dataVolume": "",
+      "endUserCutover": "one-off",
+      "externalSystemCutover": "one-off",
+      "maxAcceptableDowntime": "zero",
+      "rollbackPlan": "",
+      "transientInfrastructureNeeded": false
+    },
+    "resourcing": {
+      "cloudPlatform": "high",
+      "infrastructureAsCode": "high",
+      "cicdManagement": "high",
+      "applicationStack": "high",
+      "databaseAdministration": "high",
+      "securityCompliance": "high",
+      "operationalReadiness": "a-fully-capable"
+    },
+    "releaseFrequency": "continuous",
+    "supportModel": "internal-team",
+    "supportHours": "24x7",
+    "intendedLifespan": "under-1-year",
+    "exitPlanDocumented": false,
+    "vendorLockInLevel": "none"
+  },
+  "riskGovernance": {
+    "constraints": [
+      {
+        "id": "",
+        "constraint": "",
+        "category": "regulatory",
+        "impactOnDesign": "",
+        "lastAssessed": ""
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "",
+        "assumption": "",
+        "impactIfFalse": "",
+        "certainty": "high",
+        "status": "open",
+        "owner": "",
+        "evidence": ""
+      }
+    ],
+    "risks": [
+      {
+        "id": "",
+        "riskEvent": "",
+        "riskCategory": "technical",
+        "severity": "critical",
+        "likelihood": "critical",
+        "mitigationStrategy": "accept",
+        "mitigationPlan": "",
+        "residualRisk": "critical",
+        "owner": "",
+        "lastAssessed": ""
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "",
+        "dependency": "",
+        "direction": "inbound",
+        "status": "committed",
+        "owner": "",
+        "evidence": "",
+        "lastAssessed": ""
+      }
+    ],
+    "issues": [
+      {
+        "id": "",
+        "issue": "",
+        "category": "technical",
+        "impact": "critical",
+        "owner": "",
+        "resolutionPlan": "",
+        "status": "open",
+        "lastAssessed": ""
+      }
+    ],
+    "policyExceptions": "yes",
+    "policyExceptionsAccepted": "yes",
+    "processExceptions": "yes",
+    "riskProfileImpact": "yes",
+    "complianceTraceability": [
+      {
+        "standard": "",
+        "requirement": "",
+        "howSatisfied": "",
+        "evidenceSection": "",
+        "complianceStatus": "compliant"
+      }
+    ]
+  },
+  "appendices": {
+    "glossary": [
+      {
+        "term": "",
+        "definition": ""
+      }
+    ],
+    "references": [
+      {
+        "title": "",
+        "version": "",
+        "url": "",
+        "description": ""
+      }
+    ],
+    "approvals": [
+      {
+        "role": "",
+        "name": "",
+        "date": "",
+        "decision": "approved"
+      }
+    ]
+  },
+  "complianceScoring": {
+    "assessments": [
+      {
+        "section": "1. Executive Summary",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "3.1 Logical View",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "3.2 Integration & Data Flow",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "3.3 Physical View",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "3.4 Data View",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "3.5 Security View",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "3.6 Scenarios",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "4.1 Operational Excellence",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "4.2 Reliability",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "4.3 Performance",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "4.4 Cost Optimisation",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "4.5 Sustainability",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "5. Lifecycle",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      },
+      {
+        "section": "6. Decision Making",
+        "score": 0,
+        "assessor": "",
+        "date": "",
+        "notes": ""
+      }
+    ],
+    "overallScore": 0,
+    "overallAssessor": "",
+    "overallDate": "",
+    "overallNotes": ""
+  }
+}

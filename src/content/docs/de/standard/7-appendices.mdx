@@ -1,0 +1,130 @@
+---
+title: "7. Anhänge"
+description: Glossar, Referenzen, Standards und Freigabe-Genehmigung.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+## 7.1 Glossar
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Definieren Sie Begriffe, Akronyme und Abkürzungen, die in diesem Dokument verwendet werden:
+
+| Begriff | Definition |
+|---------|-----------|
+| AD | Architecture Description — ISO 42010-Begriff für das Arbeitsprodukt, das eine Architektur ausdrückt |
+| ADS | Architecture Description Standard — dieser Standard |
+| ADR | Architecture Decision Record |
+| APM | Application Performance Monitoring |
+| ARB | Architecture Review Board — eine gängige Form eines Architektur-Governance-Gremiums |
+| AZ | Availability Zone |
+| BYOD | Bring Your Own Device |
+| CDC | Change Data Capture |
+| CDN | Content Delivery Network |
+| CI/CD | Continuous Integration / Continuous Deployment |
+| CISO | Chief Information Security Officer |
+| CMDB | Configuration Management Database |
+| CQRS | Command Query Responsibility Segregation |
+| DAST | Dynamic Application Security Testing |
+| DBA | Database Administrator |
+| DMS | Database Migration Service |
+| DPIA | Data Protection Impact Assessment |
+| DR | Disaster Recovery |
+| EDR | Endpoint Detection and Response |
+| ETL | Extract, Transform, Load |
+| EUC | End User Computing |
+| FaaS | Function as a Service |
+| FinOps | Cloud Financial Operations — eine Praxis zur Verwaltung von Cloud-Kosten |
+| HLD | High Level Design — der konzeptionelle Designinhalt innerhalb eines SAD (Abschnitte 3–4) |
+| HSM | Hardware Security Module |
+| IaaS | Infrastructure as a Service |
+| IAM | Identity and Access Management |
+| JDBC | Java Database Connectivity |
+| KMS | Key Management Service |
+| LIA | Legitimate Interests Assessment |
+| mTLS | Mutual Transport Layer Security |
+| NAS | Network Attached Storage |
+| NFR | Non-Functional Requirement |
+| NOC | Network Operations Centre |
+| ODBC | Open Database Connectivity |
+| OIDC | OpenID Connect |
+| PaaS | Platform as a Service |
+| PCI-DSS | Payment Card Industry Data Security Standard |
+| PIA | Privacy Impact Assessment |
+| PII | Personally Identifiable Information |
+| QoS | Quality of Service |
+| RAID | Risks, Assumptions, Issues, Dependencies — ein Projekt-Governance-Protokoll |
+| RDP | Remote Desktop Protocol |
+| REST | Representational State Transfer — ein Architekturstil für APIs |
+| RPO | Recovery Point Objective — maximal akzeptabler Datenverlust gemessen in Zeit |
+| RTO | Recovery Time Objective — maximal akzeptable Ausfallzeit nach einem Vorfall |
+| SaaS | Software as a Service |
+| SAD | Solution Architecture Document (ursprünglich „Software Architecture Document" in RUP) |
+| SAML | Security Assertion Markup Language |
+| SAN | Storage Area Network |
+| SAST | Static Application Security Testing |
+| SCA | Software Composition Analysis |
+| SDLC | Software Development Lifecycle |
+| SFTP | SSH File Transfer Protocol |
+| SIEM | Security Information and Event Management |
+| SLA | Service Level Agreement |
+| SPI | Sensitive Personal Information |
+| SRE | Site Reliability Engineering |
+| SSO | Single Sign-On |
+| TCO | Total Cost of Ownership |
+| TOGAF | The Open Group Architecture Framework |
+| VDI | Virtual Desktop Infrastructure |
+| VPN | Virtual Private Network |
+| WAF (Firewall) | Web Application Firewall — eine Netzwerksicherheitskontrolle |
+| WAF (Framework) | Well-Architected Framework — Architekturleitfaden von Cloud-Anbietern (AWS, Azure, GCP, Oracle, IBM) |
+| *[weitere Begriffe]* | *[Definitionen]* |
+
+> **Hinweis**
+>
+> Ein Glossar stellt ein gemeinsames Verständnis bei allen Lesern sicher. Nehmen Sie auf:
+> - Alle im Dokument verwendeten Akronyme (auch gängige — nicht jeder weiß, was RTO bedeutet)
+> - Organisationsspezifische Terminologie
+> - Technische Begriffe, die für nicht-technische Stakeholder unbekannt sein könnten
+> - Definieren Sie Begriffe bei der ersten Verwendung im Dokument und sammeln Sie sie hier als Referenz
+
+## 7.2 Referenzdokumente
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Listen Sie Dokumente auf, die von diesem SAD referenziert werden oder damit zusammenhängen:
+
+| Dokument | Version | Beschreibung | Speicherort |
+|----------|---------|-------------|------------|
+| *[Dokumentname]* | *[Version]* | *[was es abdeckt]* | *[Link oder Referenz]* |
+
+## 7.3 Referenzierte Standards & Muster
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Listen Sie die Standards, Entwurfsmuster und Prinzipien auf, die in diesem Dokument referenziert werden:
+
+| Standard / Muster-ID | Name | Version | Anwendbarkeit |
+|----------------------|------|---------|--------------|
+| *[ID]* | *[Name]* | *[Version]* | *[welche Abschnitte darauf verweisen]* |
+
+## 7.4 Freigabe-Genehmigung
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+| Rolle | Name | Datum | Signatur / Genehmigungsreferenz |
+|-------|------|-------|-------------------------------|
+| Solution Architect | *[Name]* | *[Datum]* | *[Referenz]* |
+| Security Architect | *[Name]* | *[Datum]* | *[Referenz]* |
+| ARB / Design Authority | *[Name]* | *[Datum]* | *[Referenz]* |
+| *[weitere Genehmiger]* | *[Name]* | *[Datum]* | *[Referenz]* |
+
+> **Hinweis**
+>
+> Die Freigabe-Genehmigung dokumentiert, wer die Architektur überprüft und genehmigt hat. Typische Genehmiger sind:
+> - **Solution Architect** — der Autor, der bestätigt, dass das Dokument vollständig und korrekt ist
+> - **Security Architect** — bestätigt, dass die Security View die Bedrohungslandschaft angemessen adressiert
+> - **ARB / Design Authority** — das Governance-Gremium, das bestätigt, dass das Design den Organisationsstandards entspricht
+> - **Business Owner** — bestätigt, dass die Lösung die Geschäftsanforderungen erfüllt (optional, aber empfohlen)
+>
+> Dokumentieren Sie die Genehmigungsentscheidung (Approved / Approved with Conditions / Rejected / Deferred) und alle Bedingungen, die vor der Implementierung erfüllt sein müssen.

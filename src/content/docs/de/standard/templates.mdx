@@ -1,0 +1,107 @@
+---
+title: "Vorlagen"
+description: "Laden Sie leere SAD-Vorlagen in verschiedenen Formaten herunter, um mit der Dokumentation Ihrer Lösungsarchitektur zu beginnen."
+---
+
+## Herunterladbare Vorlagen
+
+Laden Sie eine leere SAD-Vorlage gemäß ADS v1.1.0 in Ihrem bevorzugten Format herunter. Alle Vorlagen enthalten die vollständige Abschnittsstruktur mit Platzhalterfeldern, die ausgefüllt werden können.
+
+### Maschinenlesbare Formate
+
+#### Markdown-Vorlage
+
+Vollständige Vorlage im Markdown-Format. Ideal für Versionskontrolle neben Code in Git-Repositories.
+
+**[Download sad-template.md](/templates/sad-template.md)**
+
+#### YAML-Vorlage
+
+Strukturierte Vorlage im YAML-Format. Ideal für programmatische Verarbeitung, CI/CD-Integration und Tooling.
+
+**[Download sad-template.yaml](/templates/sad-template.yaml)**
+
+#### JSON-Vorlage
+
+Strukturierte Vorlage im JSON-Format. Validiert gegen das ADS JSON Schema.
+
+**[Download sad-template.json](/templates/sad-template.json)**
+
+### Vollständiger Standard zum Download
+
+#### Vollständiger Standard (DOCX)
+
+Der vollständige ADS-Standard als einzelnes Word-Dokument mit Inhaltsverzeichnis. Geeignet für Offline-Lektüre, Governance-Einreichungen und Druck.
+
+**[Download ads-standard-v1.docx](/ads-standard-v1.docx)**
+
+### Menschenlesbare Formate
+
+#### Word / DOCX
+
+Generieren Sie ein Word-Dokument aus der Markdown-Vorlage mit [Pandoc](https://pandoc.org/). Ideal für formale Governance-Einreichungen und Offline-Prüfung.
+
+Siehe den Pandoc-Befehl unten zur Generierung.
+
+#### Confluence / Wiki
+
+Kopieren Sie die Markdown-Vorlage in Ihre Zwischenablage und fügen Sie sie direkt in Confluence, Notion oder jedes Wiki ein, das Markdown unterstützt.
+
+Um die Markdown-Vorlage zu kopieren, laden Sie die Datei sad-template.md herunter und kopieren Sie den Inhalt.
+
+> **Tipp: Word / DOCX generieren**
+>
+> Konvertieren Sie die Markdown-Vorlage mit [Pandoc](https://pandoc.org/) in das Word-Format:
+>
+> ```bash
+> # Basic conversion
+> pandoc sad-template.md -o sad-template.docx
+>
+> # With a custom reference document for branding/styling
+> pandoc sad-template.md -o sad-template.docx --reference-doc=your-template.docx
+> ```
+>
+> Ein dedizierter Word-Vorlagengenerator ist für eine zukünftige Version des Standards geplant.
+
+## Vorlageninhalt
+
+Jede Vorlage enthält die vollständige ADS-Abschnittsstruktur:
+
+| Abschnitt | Enthalten | Documentation Depth |
+|-----------|----------|---------------|
+| 0. Dokumentenlenkung | Metadaten, Änderungshistorie, Mitwirkende | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 1. Zusammenfassung | Überblick, Kontext, Scope, Entscheidungen, Kritikalität | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 2. Stakeholder & Concerns | Register, Concerns-Matrix, Compliance | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 3.1 Logical View | Komponenten, Services, Muster | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 3.2 Integration & Data Flow View | Konnektivität, Integrationen, APIs | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 3.3 Physical View | Hosting, Compute, Netzwerk, Umgebungen | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 3.4 Data View | Datenspeicher, Klassifizierung, Datenschutz | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 3.5 Security View | IAM, Verschlüsselung, Überwachung | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 3.6 Scenarios | Anwendungsfälle, ADRs | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 4. Qualitätsattribute | Alle Qualitätsattribute + Kompromisse | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5. Lebenszyklusmanagement | SDLC, Betrieb, Exit-Planung | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 6. Entscheidungsfindung & Governance | Risiken, Ausnahmen, Compliance-Rückverfolgbarkeit | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 7. Anhänge | Glossar, Referenzen, Genehmigungen | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+
+## Validierung
+
+Die JSON- und YAML-Vorlagen können gegen das [ADS JSON Schema](/de/standard/schema/) validiert werden:
+
+```bash
+# Validate JSON template
+npx ajv validate -s schema/ads.schema.json -d my-sad.json
+
+# Validate YAML (convert to JSON first)
+npx js-yaml my-sad.yaml | npx ajv validate -s schema/ads.schema.json -d /dev/stdin
+```
+
+## Organisationsanpassung
+
+Um eine organisationsspezifische Vorlage zu erstellen:
+
+1. Laden Sie die YAML- oder JSON-Vorlage herunter
+2. Fügen Sie Ihren `organisationProfile`-Abschnitt mit internen Tool-Zuordnungen und Governance Gates hinzu
+3. Fügen Sie alle `customSections` hinzu, die Ihre Organisation benötigt
+4. Verteilen Sie die angepasste Vorlage an Ihre Architekturteams
+
+Siehe [Konformität und Nutzung](/de/standard/how-to-use/) für Anpassungsrichtlinien.

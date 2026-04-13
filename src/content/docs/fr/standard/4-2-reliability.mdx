@@ -1,0 +1,137 @@
+---
+title: "4.2 Fiabilité et résilience"
+description: Empreinte géographique, scalabilité, tolérance aux pannes, sauvegarde et restauration.
+---
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+<span class="framework-badge badge-aws-waf">AWS Reliability</span>
+<span class="framework-badge badge-azure-waf">Azure Reliability</span>
+
+## Objectif
+
+La fiabilité et la résilience se concentrent sur la capacité de la solution à résister aux défaillances, à se rétablir après des perturbations et à monter en charge pour répondre à la demande. Cet attribut de qualité est étroitement lié à la vue physique (3.3) et à la vue données (3.4) pour les détails d'infrastructure et de sauvegarde des données.
+
+## 4.2.1 Empreinte géographique et reprise après sinistre
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+| Question | Réponse |
+|----------|----------|
+| L'application est-elle déployée sur plusieurs sites d'hébergement pour la continuité ? | Yes / No — *[détails]* |
+| Quelle est la stratégie DR ? | Active-Active / Active-Passive / Pilot Light / Backup & Restore |
+| Existe-t-il des exigences de souveraineté des données affectant les choix géographiques ? | Yes / No — *[détails]* |
+
+*[Insérer le diagramme de déploiement géographique si applicable]*
+
+## 4.2.2 Scalabilité
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+### Scalabilité applicative
+
+| Attribut | Réponse |
+|-----------|----------|
+| **Capacité de mise à l'échelle** | No dynamic scaling (pre-sized) / Manual scaling / Partial auto-scaling / Full auto-scaling |
+| **Détails de la mise à l'échelle** | *[décrire comment la mise à l'échelle fonctionne, les déclencheurs, les limites]* |
+
+### Scalabilité des dépendances
+
+| Attribut | Réponse |
+|-----------|----------|
+| **Dépendances dimensionnées de manière adéquate ?** | Yes (confirmed) / Unconfirmed / Known insufficient |
+| **Détails des dépendances** | *[décrire la posture de mise à l'échelle des dépendances]* |
+
+## 4.2.3 Tolérance aux pannes
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+L'application a-t-elle été conçue pour tolérer des perturbations inattendues telles que la défaillance ou la dégradation de composants internes ou de dépendances externes ?
+
+- [ ] **Oui** — *[décrire la conception de tolérance aux pannes, incluant :]*
+  - Comment l'application gère les défaillances de composants
+  - Stratégies de dégradation gracieuse
+  - Patterns de circuit breaker ou de retry
+  - Mécanismes de health check et d'auto-réparation
+  - Pratiques de test (chaos engineering, game days)
+- [ ] **Non** — *[décrire pourquoi]*
+
+## 4.2.4 Modes de défaillance et comportement de restauration
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Documentez comment la solution se comporte lorsque des composants individuels ou des dépendances tombent en panne :
+
+| Composant / Dépendance | Mode de défaillance | Méthode de détection | Comportement de restauration | Impact utilisateur |
+|----------------------|-------------|-----------------|-------------------|-------------|
+| *[composant]* | *[comment il tombe en panne]* | *[comment détecté : health check, alerte, timeout]* | *[redémarrage auto, basculement, dégradation gracieuse, intervention manuelle]* | *[panne totale, service dégradé, transparent]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Pour chaque composant critique, considérez :
+- **Que se passe-t-il lorsqu'il devient indisponible ?** La solution tombe-t-elle entièrement en panne, se dégrade-t-elle gracieusement ou continue-t-elle avec des fonctionnalités réduites ?
+- **Comment la défaillance est-elle détectée ?** Health checks, heartbeats, seuils d'erreur, timeouts ?
+- **Comment la restauration s'effectue-t-elle ?** Redémarrage automatique, basculement vers le secondaire, circuit breaker, intervention manuelle ?
+- **Que vivent les utilisateurs ?** Panne totale, expérience dégradée, latence accrue ou basculement transparent ?
+
+Cette section est fréquemment absente des documents d'architecture mais est l'une des plus précieuses pour les équipes d'exploitation et les SRE.
+</div>
+
+## 4.2.5 Sauvegarde et restauration
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+### Conception de la sauvegarde
+
+| Attribut | Détail |
+|-----------|--------|
+| Stratégie de sauvegarde | *[ce qui est sauvegardé et comment]* |
+| Produit/service de sauvegarde | *[outil utilisé]* |
+| Type de sauvegarde | Full / Incremental / Differential |
+| Fréquence de sauvegarde | *[calendrier]* |
+| Rétention de sauvegarde | *[période]* |
+
+### Protection de la sauvegarde
+
+| Contrôle | Détail |
+|---------|--------|
+| Immutabilité | *[comment les sauvegardes sont protégées contre la modification/suppression]* |
+| Chiffrement | *[comment les données de sauvegarde sont chiffrées]* |
+| Contrôle d'accès | *[qui peut accéder aux sauvegardes]* |
+
+## 4.2.6 Scénarios de restauration
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Documentez comment la solution se restaure dans différents scénarios de défaillance :
+
+| # | Scénario | Approche de restauration | RTO | RPO |
+|---|----------|------------------|-----|-----|
+| 1 | Défaillance du site d'hébergement principal / AZ / région | *[approche]* | *[durée]* | *[durée]* |
+| 2 | Défaillance d'un composant logiciel critique | *[approche]* | *[durée]* | *[durée]* |
+| 3 | Défaillance d'infrastructure clé (matériel, stockage, réseau) | *[approche]* | *[durée]* | *[durée]* |
+| 4 | Défaillance de la connectivité réseau entre les sites | *[approche]* | *[durée]* | *[durée]* |
+| 5 | Défaillance de la connectivité externe (côté client) | *[approche]* | *[durée]* | *[durée]* |
+| 6 | Ransomware / cyber-attaque | *[approche]* | *[durée]* | *[durée]* |
+| 7 | Corruption / suppression accidentelle ou malveillante des données | *[approche]* | *[durée]* | *[durée]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Pour chaque scénario, décrivez :
+- Comment la défaillance est détectée
+- Les étapes de restauration automatiques vs. manuelles
+- L'objectif de temps de restauration (RTO) et l'objectif de point de restauration (RPO) attendus
+- Les dépendances éventuelles envers d'autres équipes ou systèmes pour la restauration
+- Si la restauration a été testée et quand
+</div>
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | Stratégie DR identifiée mais RTO/RPO non définis |
+| **3** | Stratégie DR documentée avec objectifs RTO/RPO, sauvegarde configurée, approche de scalabilité définie |
+| **5** | Tout ce qui précède plus la tolérance aux pannes conçue, le chaos testing pratiqué, l'immutabilité et le chiffrement des sauvegardes confirmés, la DR testée |
+</div>

@@ -1,0 +1,1275 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document — PayrollPro Azure Migration",
+      "solutionName": "PayrollPro",
+      "applicationId": "APP-0347",
+      "authors": ["Fred Bloggs, Lead Solution Architect"],
+      "owner": "Fred Bloggs",
+      "version": "1.0",
+      "status": "in-review",
+      "createdDate": "2026-01-15",
+      "lastUpdated": "2026-03-28",
+      "classification": "internal"
+    },
+    "changeHistory": [
+      {
+        "version": "0.1",
+        "date": "2026-01-15",
+        "author": "Fred Bloggs",
+        "changeType": "initial-draft",
+        "description": "Initial draft"
+      },
+      {
+        "version": "0.2",
+        "date": "2026-01-30",
+        "author": "Fred Bloggs",
+        "changeType": "major-update",
+        "description": "Added data view and security view following DBA and InfoSec review"
+      },
+      {
+        "version": "0.3",
+        "date": "2026-02-14",
+        "author": "Joe Bloggs",
+        "changeType": "major-update",
+        "description": "Incorporated infrastructure sizing and network topology"
+      },
+      {
+        "version": "0.4",
+        "date": "2026-02-28",
+        "author": "Fred Bloggs",
+        "changeType": "major-update",
+        "description": "Added migration plan and transition details following workshop"
+      },
+      {
+        "version": "0.5",
+        "date": "2026-03-10",
+        "author": "Fred Bloggs",
+        "changeType": "minor-update",
+        "description": "Updated cost analysis with Azure pricing calculator outputs"
+      },
+      {
+        "version": "1.0",
+        "date": "2026-03-28",
+        "author": "Fred Bloggs",
+        "changeType": "review-revision",
+        "description": "Submitted for ARB review"
+      }
+    ],
+    "contributors": [
+      {
+        "name": "Fred Bloggs",
+        "role": "Lead Solution Architect",
+        "contributionType": "author"
+      },
+      {
+        "name": "Joe Bloggs",
+        "role": "Infrastructure Architect",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Jane Doe",
+        "role": "Security Architect",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Claire Doe",
+        "role": "DBA Lead",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Betty Bloggs",
+        "role": "HR Director (Business Sponsor)",
+        "contributionType": "approver"
+      },
+      {
+        "name": "ARB",
+        "role": "Architecture Review Board",
+        "contributionType": "approver"
+      }
+    ],
+    "purpose": "This SAD describes the target-state architecture for migrating the PayrollPro application from on-premises hosting to Microsoft Azure. It covers the re-platforming of the web application tier, database tier, and document storage, alongside the transitional connectivity required during the migration period.",
+    "scope": "In scope: PayrollPro web application and database migration to Azure; Data migration strategy and cutover plan; Transitional VPN connectivity between on-premises and Azure; Integration continuity with BACS, pension provider, and HMRC. Out of scope: Citrix VDI replacement (deferred to Phase 2); Application refactoring to microservices (deferred to Phase 2); Other HR systems (recruitment portal, learning management); Detailed low-level database migration runbook (separate document)."
+  },
+  "executiveSummary": {
+    "solutionOverview": "PayrollPro is the primary payroll processing system for Meridian Financial Services, serving approximately 2,400 employees across six UK offices. The application processes monthly payroll runs, generates payslips, submits PAYE data to HMRC, and interfaces with the corporate pension provider and BACS payment gateway. The current on-premises hosting infrastructure is approaching end of life (Dell PowerEdge R630 servers purchased in 2017, Windows Server 2016 reaching end of extended support). This project migrates PayrollPro to Microsoft Azure using a Replatform strategy — upgrading the application runtime from .NET Framework 4.8 to .NET 6 and moving the database from SQL Server 2017 on bare metal to Azure SQL Database. This approach delivers improved reliability, disaster recovery, and operational efficiency whilst deferring a full architectural refactoring to a later phase.",
+    "businessContext": [
+      {
+        "driver": "Hardware end of life",
+        "driverType": "end-of-life",
+        "description": "Dell PowerEdge R630 servers are 9 years old; warranty expired 2024; replacement parts increasingly difficult to source",
+        "priority": "high"
+      },
+      {
+        "driver": "OS end of support",
+        "driverType": "end-of-life",
+        "description": "Windows Server 2016 extended support ends October 2027; migration must complete well before this date",
+        "priority": "high"
+      },
+      {
+        "driver": "No disaster recovery",
+        "driverType": "risk-mitigation",
+        "description": "Current single-site deployment has no DR capability; a hardware failure would cause total service loss",
+        "priority": "high"
+      },
+      {
+        "driver": "Cost reduction",
+        "driverType": "cost-reduction",
+        "description": "Annual on-premises hosting costs (hardware refresh, datacentre power, cooling, patching labour) exceed projected Azure OpEx",
+        "priority": "medium"
+      },
+      {
+        "driver": "Month-end performance",
+        "driverType": "performance",
+        "description": "Payroll batch runs at month-end take over 6 hours on current hardware, creating tight processing windows",
+        "priority": "medium"
+      },
+      {
+        "driver": "Modernisation",
+        "driverType": "modernisation",
+        "description": "Align with Meridian's cloud-first strategy and reduce technical debt in the .NET Framework codebase",
+        "priority": "medium"
+      },
+      {
+        "driver": "Manual patching",
+        "driverType": "cost-reduction",
+        "description": "All OS and SQL patching is manual, consuming approximately 3 days per month of DBA and infrastructure time",
+        "priority": "low"
+      }
+    ],
+    "strategicAlignment": {
+      "organisationStrategySupported": "Meridian Cloud-First Strategy 2025-2028; IT Modernisation Programme",
+      "reviewedAgainstCapabilityModel": "yes",
+      "duplicatesExistingCapability": "no",
+      "sharedServiceReuse": [
+        {
+          "capability": "Identity & Access",
+          "sharedService": "Entra ID (corporate tenant)",
+          "reused": true
+        },
+        {
+          "capability": "Monitoring & Logging",
+          "sharedService": "Azure Monitor + Log Analytics (corporate workspace)",
+          "reused": true
+        },
+        {
+          "capability": "CI/CD",
+          "sharedService": "Azure DevOps (corporate instance)",
+          "reused": true
+        },
+        {
+          "capability": "Networking",
+          "sharedService": "Azure Landing Zone (Hub-Spoke, UK South)",
+          "reused": true
+        },
+        {
+          "capability": "Secret Management",
+          "sharedService": "Azure Key Vault (per-workload vault)",
+          "reused": true
+        },
+        {
+          "capability": "API Management",
+          "sharedService": "Azure API Management",
+          "reused": false,
+          "justification": "Not required — PayrollPro is not API-first; external integrations use SFTP and point-to-point API calls"
+        },
+        {
+          "capability": "Data & Analytics",
+          "sharedService": "Snowflake (corporate data platform)",
+          "reused": false,
+          "justification": "Payroll data feeds to Snowflake are out of scope for this phase; existing nightly CSV extract to finance is retained"
+        }
+      ]
+    },
+    "inScope": [
+      "PayrollPro web application (all modules: payroll processing, payslip generation, reporting, employee self-service)",
+      "PayrollPro SQL Server database (schema, data, stored procedures, SSIS packages)",
+      "Document storage (payslips, P60s, P45s) — currently on a Windows file share",
+      "Integration with BACS, pension provider API, and HMRC API",
+      "Development, staging, and production environments on Azure",
+      "Disaster recovery to UK West region",
+      "Transitional VPN connectivity from Azure to on-premises (for Citrix and AD)"
+    ],
+    "outOfScope": [
+      "Citrix VDI infrastructure (users will continue to access PayrollPro via Citrix until Phase 2 migrates to Azure Virtual Desktop)",
+      "Application refactoring to microservices architecture (Phase 2)",
+      "Recruitment Portal (APP-0215) and Learning Management System (APP-0389)",
+      "Corporate Snowflake data pipeline changes",
+      "End-user device refresh"
+    ],
+    "currentState": "PayrollPro was originally developed in 2014 as an ASP.NET Web Forms application on .NET Framework 4.5, subsequently upgraded to .NET Framework 4.8 in 2020. It is deployed on-premises in the Meridian London datacentre (Docklands). Current infrastructure: 2x Dell PowerEdge R630 application servers (Windows Server 2016, IIS 10 with NLB, 16 vCPU, 64 GB RAM each); 1x Dell PowerEdge R730 database server (SQL Server 2017 Enterprise, 24 vCPU, 128 GB RAM, 2 TB SAN); Windows file share on NetApp FAS2750 (~180 GB payslip PDFs); on-premises Windows Server AD (meridian.local); Citrix XenApp 7.15 for user access; flat VLAN networking; Veeam Backup to local NAS (daily, 30-day retention, no off-site); basic SCOM 2016 monitoring. Current pain points: no disaster recovery (24-48 hour RTO from backup), month-end batch takes 5-7 hours, manual patching (~3 days/month), hardware risk (9-year-old servers, no warranty), no network segmentation, limited monitoring.",
+    "keyDecisions": [
+      {
+        "decision": "Replatform (not lift-and-shift)",
+        "constraintType": "technical",
+        "rationale": "Enables use of Azure PaaS services (App Service, Azure SQL) for reduced operational overhead. Lift-and-shift to IaaS would perpetuate patching burden. Requires .NET 6 upgrade; adds development effort but reduces long-term OpEx.",
+        "reversibility": "difficult-to-reverse"
+      },
+      {
+        "decision": "Replatform (not refactor)",
+        "constraintType": "time",
+        "rationale": "Full microservices refactoring would extend timeline beyond hardware EOL. Monolithic architecture is retained for Phase 1. Limits scalability benefits; accepted as Phase 1 constraint.",
+        "reversibility": "reversible-with-effort"
+      },
+      {
+        "decision": "Azure SQL Database (not SQL Server on VM)",
+        "constraintType": "technical",
+        "rationale": "Managed service eliminates OS and SQL patching, provides built-in geo-replication and automated backups. Some T-SQL features may need reworking; SQL Agent jobs replaced by Azure Data Factory.",
+        "reversibility": "reversible-with-effort"
+      },
+      {
+        "decision": "Retain Citrix for Phase 1",
+        "constraintType": "organisational",
+        "rationale": "Replacing Citrix VDI simultaneously would increase project risk and delay delivery. Requires transitional VPN from Azure to on-premises Citrix infrastructure.",
+        "reversibility": "easily-reversible"
+      },
+      {
+        "decision": "UK data residency",
+        "constraintType": "regulatory",
+        "rationale": "Payroll data includes NI numbers, salary, and bank details — must remain in UK datacentres. Constrains deployment to Azure UK South and UK West regions only.",
+        "reversibility": "irreversible"
+      },
+      {
+        "decision": "Must complete before Dec 2026",
+        "constraintType": "time",
+        "rationale": "Hardware failure risk is increasing; Windows Server 2016 extended support ends Oct 2027. Drives phased approach with firm migration window.",
+        "reversibility": "irreversible"
+      }
+    ],
+    "projectDetails": {
+      "projectName": "PayrollPro Cloud Migration",
+      "projectCode": "PRJ-2026-017",
+      "projectManager": "Polly Doe",
+      "estimatedCapex": 185000,
+      "estimatedOpex": 50400,
+      "currency": "GBP",
+      "targetGoLive": "2026-11-01"
+    },
+    "businessCriticality": "tier-2-high"
+  },
+  "stakeholders": {
+    "register": [
+      {
+        "stakeholder": "Betty Bloggs — HR Director (Business Sponsor)",
+        "roleType": "business-owner",
+        "concerns": ["Payroll continuity", "Zero missed payments", "Minimal user disruption during cutover"],
+        "relevantViews": ["scenarios"]
+      },
+      {
+        "stakeholder": "Mary Bloggs — Payroll Team Lead",
+        "roleType": "end-user",
+        "concerns": ["System performance at month-end", "Training on any UI changes", "Data accuracy after migration"],
+        "relevantViews": ["scenarios"]
+      },
+      {
+        "stakeholder": "Fred Bloggs — Lead Solution Architect",
+        "roleType": "solution-architect",
+        "concerns": ["Design integrity", "Standards compliance", "Migration risk"],
+        "relevantViews": ["logical", "integration", "physical", "data", "security", "scenarios"]
+      },
+      {
+        "stakeholder": "Joe Bloggs — Infrastructure Architect",
+        "roleType": "infrastructure-engineer",
+        "concerns": ["Azure infrastructure", "Networking", "VPN", "Environments"],
+        "relevantViews": ["physical"]
+      },
+      {
+        "stakeholder": "Jane Doe — Security Architect",
+        "roleType": "security-architect",
+        "concerns": ["Data protection (PII/SPI)", "Access controls", "Encryption", "SIEM integration"],
+        "relevantViews": ["security", "data"]
+      },
+      {
+        "stakeholder": "Claire Doe — DBA Lead",
+        "roleType": "data-architect",
+        "concerns": ["Database migration", "Azure SQL compatibility", "Stored procedure rework", "Data integrity"],
+        "relevantViews": ["data", "logical"]
+      },
+      {
+        "stakeholder": "Polly Doe — Project Manager",
+        "roleType": "project-manager",
+        "concerns": ["Timeline", "Budget", "Resource availability", "Dependencies"],
+        "relevantViews": []
+      },
+      {
+        "stakeholder": "Sarah Bloggs — Change Manager",
+        "roleType": "other",
+        "concerns": ["End-user communications", "Training plan", "Go/no-go criteria"],
+        "relevantViews": ["scenarios"]
+      },
+      {
+        "stakeholder": "IT Operations — Infrastructure & Support",
+        "roleType": "operations-sre",
+        "concerns": ["Ongoing monitoring", "Incident management", "On-call support"],
+        "relevantViews": []
+      }
+    ],
+    "compliance": {
+      "supportsRegulatedActivities": "yes",
+      "regulatedActivityDetails": "Payroll processing for an FCA-regulated firm; subject to UK GDPR, employment law",
+      "regulatoryRequirements": [
+        {
+          "regulation": "UK GDPR / Data Protection Act 2018",
+          "regulationType": "data-protection",
+          "applicability": "Payroll data contains PII and SPI (salary, NI numbers, bank details)",
+          "designImpact": "Field-level encryption for SPI; DPIA required; data residency in UK"
+        },
+        {
+          "regulation": "HMRC PAYE regulations",
+          "regulationType": "other",
+          "applicability": "Statutory obligation to report payroll via Real Time Information (RTI)",
+          "designImpact": "HMRC API integration must be maintained throughout migration"
+        },
+        {
+          "regulation": "Employment Rights Act 1996",
+          "regulationType": "other",
+          "applicability": "Statutory obligation to pay employees on time",
+          "designImpact": "Drives Tier 2 criticality and RTO requirements"
+        },
+        {
+          "regulation": "FCA operational resilience (indirect)",
+          "regulationType": "financial-services",
+          "applicability": "Meridian is FCA-regulated; critical internal systems must demonstrate resilience",
+          "designImpact": "DR capability required; documented RTO/RPO"
+        }
+      ]
+    }
+  },
+  "architecturalViews": {
+    "logicalView": {
+      "components": [
+        {
+          "name": "PayrollPro Web Application",
+          "componentType": "web-application",
+          "description": "Monolithic web application handling payroll processing, employee self-service, reporting, and payslip generation",
+          "technology": "ASP.NET Core (.NET 6), hosted on Azure App Service (P2v3)",
+          "owner": "Payroll Development Team",
+          "status": "existing-modified"
+        },
+        {
+          "name": "PayrollPro Database",
+          "componentType": "database",
+          "description": "Relational database storing employee records, payroll calculations, tax codes, and historical payroll data",
+          "technology": "Azure SQL Database (Business Critical, Gen5, 8 vCores)",
+          "owner": "DBA Team",
+          "status": "existing-modified"
+        },
+        {
+          "name": "Payslip Document Store",
+          "componentType": "file-storage",
+          "description": "PDF storage for payslips, P60s, P45s, and other statutory documents",
+          "technology": "Azure Blob Storage (Hot tier, LRS)",
+          "owner": "Payroll Development Team",
+          "status": "new"
+        },
+        {
+          "name": "BACS Payment File Generator",
+          "componentType": "other",
+          "description": "Generates Standard 18 format payment files for BACS submission. Replaces legacy SSIS package.",
+          "technology": "Component within PayrollPro",
+          "owner": "Payroll Development Team",
+          "status": "existing-modified"
+        },
+        {
+          "name": "Payroll Batch Processor",
+          "componentType": "batch-job",
+          "description": "Executes monthly payroll calculations, tax deductions, and NI contributions. Scheduled via Azure WebJobs.",
+          "technology": "Component within PayrollPro (Azure WebJobs)",
+          "owner": "Payroll Development Team",
+          "status": "existing-modified"
+        },
+        {
+          "name": "HMRC RTI Submission Module",
+          "componentType": "other",
+          "description": "Submits Full Payment Submission (FPS) and Employer Payment Summary (EPS) to HMRC via Government Gateway API",
+          "technology": "Component within PayrollPro",
+          "owner": "Payroll Development Team",
+          "status": "existing-modified"
+        },
+        {
+          "name": "Pension Contribution Module",
+          "componentType": "other",
+          "description": "Calculates and submits pension contributions to Crestfield via REST API",
+          "technology": "Component within PayrollPro",
+          "owner": "Payroll Development Team",
+          "status": "existing-modified"
+        },
+        {
+          "name": "Finance Export Job",
+          "componentType": "batch-job",
+          "description": "Nightly CSV export of payroll journal entries to SAP finance shared folder. Replaces legacy SQL Agent job.",
+          "technology": "Azure Data Factory pipeline",
+          "owner": "DBA Team",
+          "status": "existing-modified"
+        }
+      ],
+      "designPatterns": [
+        {
+          "pattern": "monolith",
+          "whereApplied": "PayrollPro Web Application — retained as monolithic architecture for Phase 1",
+          "rationale": "Full microservices refactoring deferred to Phase 2 due to timeline constraints (hardware EOL deadline)"
+        },
+        {
+          "pattern": "batch-processing",
+          "whereApplied": "Payroll Batch Processor — monthly payroll calculation executed as Azure WebJob",
+          "rationale": "Payroll calculation is an inherently batch-oriented workload processing all 2,400 employees in sequence"
+        }
+      ]
+    },
+    "integrationView": {
+      "internalConnectivity": [
+        {
+          "source": "PayrollPro Web App",
+          "destination": "Azure SQL Database",
+          "protocol": "tcp-tls",
+          "encrypted": true,
+          "authenticationMethod": "iam-role",
+          "direction": "bidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Application data access"
+        },
+        {
+          "source": "PayrollPro Web App",
+          "destination": "Azure Blob Storage",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "iam-role",
+          "direction": "bidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Payslip PDF storage and retrieval"
+        },
+        {
+          "source": "PayrollPro Web App",
+          "destination": "Azure Key Vault",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "iam-role",
+          "direction": "unidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Retrieve secrets (API keys, connection strings)"
+        },
+        {
+          "source": "Azure Data Factory",
+          "destination": "Azure SQL Database",
+          "protocol": "tcp-tls",
+          "encrypted": true,
+          "authenticationMethod": "iam-role",
+          "direction": "unidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Finance export pipeline reads payroll journal data"
+        },
+        {
+          "source": "Azure Data Factory",
+          "destination": "Azure Blob Storage",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "iam-role",
+          "direction": "unidirectional",
+          "synchronicity": "synchronous",
+          "purpose": "Writes finance CSV to blob for SAP pickup"
+        }
+      ],
+      "externalIntegrations": [
+        {
+          "sourceApp": "PayrollPro",
+          "destinationApp": "BACS Payment Gateway",
+          "integrationType": "partner",
+          "protocol": "sftp",
+          "encrypted": true,
+          "authenticationMethod": "certificate",
+          "purpose": "Monthly salary payment file submission"
+        },
+        {
+          "sourceApp": "PayrollPro",
+          "destinationApp": "Crestfield Pension API",
+          "integrationType": "partner",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "oauth2",
+          "purpose": "Monthly pension contribution submission"
+        },
+        {
+          "sourceApp": "PayrollPro",
+          "destinationApp": "HMRC Government Gateway",
+          "integrationType": "external-service",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "oauth2",
+          "purpose": "PAYE RTI submission (FPS, EPS, P60)"
+        },
+        {
+          "sourceApp": "PayrollPro",
+          "destinationApp": "On-premises AD (via VPN)",
+          "integrationType": "internal-app",
+          "protocol": "other",
+          "encrypted": true,
+          "authenticationMethod": "other",
+          "purpose": "Transitional — user directory lookup during Entra ID sync period"
+        },
+        {
+          "sourceApp": "Azure Data Factory",
+          "destinationApp": "SAP Finance (on-prem)",
+          "integrationType": "internal-app",
+          "protocol": "https",
+          "encrypted": true,
+          "authenticationMethod": "other",
+          "purpose": "Nightly finance journal CSV delivery via Self-hosted Integration Runtime"
+        }
+      ],
+      "apis": [
+        {
+          "name": "HMRC Government Gateway API",
+          "apiType": "rest",
+          "direction": "consumed",
+          "dataFormat": "xml",
+          "authenticated": true,
+          "rateLimited": true
+        },
+        {
+          "name": "Crestfield Pension REST API",
+          "apiType": "rest",
+          "direction": "consumed",
+          "dataFormat": "json",
+          "authenticated": true,
+          "rateLimited": true
+        }
+      ]
+    },
+    "physicalView": {
+      "hosting": {
+        "venueTypes": ["public-cloud"],
+        "regions": ["UK South", "UK West"],
+        "serviceModels": ["paas"],
+        "cloudProviders": ["azure"]
+      },
+      "compute": {
+        "computeTypes": ["paas-app-service"],
+        "servers": [
+          {
+            "name": "App Service Plan (Production)",
+            "instanceType": "P2v3 (Premium v3)",
+            "vCpu": 4,
+            "memoryGb": 16,
+            "quantity": 2
+          },
+          {
+            "name": "Azure SQL Database (Production)",
+            "instanceType": "Business Critical, Gen5",
+            "vCpu": 8,
+            "memoryGb": 0,
+            "storageTb": 0.5,
+            "quantity": 1
+          }
+        ]
+      },
+      "networking": {
+        "internetFacing": false,
+        "outboundInternet": true,
+        "cloudToOnPrem": true,
+        "thirdPartyConnectivity": false,
+        "cloudPeering": true,
+        "wirelessRequired": false,
+        "trafficPattern": "periodic",
+        "latencyRequirement": "standard-sub-1s",
+        "ddosProtection": "yes",
+        "ddosProvider": "azure-ddos",
+        "wafEnabled": "no",
+        "rateLimiting": false
+      },
+      "environments": [
+        {
+          "environmentType": "development",
+          "count": 1,
+          "venue": "Azure (Non-Production Subscription, UK South)",
+          "autoScaleDown": true
+        },
+        {
+          "environmentType": "staging",
+          "count": 1,
+          "venue": "Azure (Non-Production Subscription, UK South)",
+          "autoScaleDown": true
+        },
+        {
+          "environmentType": "production",
+          "count": 1,
+          "venue": "Azure (Production Subscription, UK South)",
+          "autoScaleDown": false
+        },
+        {
+          "environmentType": "dr",
+          "count": 1,
+          "venue": "Azure (Production Subscription, UK West)",
+          "autoScaleDown": false
+        }
+      ],
+      "securityAgents": ["anti-malware", "edr", "vulnerability-management"]
+    },
+    "dataView": {
+      "dataStores": [
+        {
+          "name": "Employee records",
+          "storeType": "relational-db",
+          "technology": "Azure SQL Database",
+          "authoritative": true,
+          "retentionPeriod": "5-10-years",
+          "dataSizeCategory": "1-100gb",
+          "classification": "restricted",
+          "containsPersonalData": true,
+          "containsSensitivePersonalData": true,
+          "encryptionLevel": "field-level",
+          "keyManagement": "customer-managed-kms"
+        },
+        {
+          "name": "Payroll calculations",
+          "storeType": "relational-db",
+          "technology": "Azure SQL Database",
+          "authoritative": true,
+          "retentionPeriod": "5-10-years",
+          "dataSizeCategory": "1-100gb",
+          "classification": "restricted",
+          "containsPersonalData": true,
+          "containsSensitivePersonalData": true,
+          "encryptionLevel": "field-level",
+          "keyManagement": "customer-managed-kms"
+        },
+        {
+          "name": "Payslip PDFs",
+          "storeType": "object-storage",
+          "technology": "Azure Blob Storage",
+          "authoritative": true,
+          "retentionPeriod": "5-10-years",
+          "dataSizeCategory": "100gb-1tb",
+          "classification": "restricted",
+          "containsPersonalData": true,
+          "containsSensitivePersonalData": true,
+          "encryptionLevel": "storage-level",
+          "keyManagement": "customer-managed-kms"
+        },
+        {
+          "name": "Audit logs",
+          "storeType": "relational-db",
+          "technology": "Azure SQL Database + Log Analytics",
+          "authoritative": true,
+          "retentionPeriod": "2-5-years",
+          "dataSizeCategory": "1-100gb",
+          "classification": "internal",
+          "containsPersonalData": true,
+          "containsSensitivePersonalData": false,
+          "encryptionLevel": "storage-level",
+          "keyManagement": "provider-managed"
+        },
+        {
+          "name": "Application logs",
+          "storeType": "other",
+          "technology": "Log Analytics",
+          "authoritative": false,
+          "retentionPeriod": "months",
+          "dataSizeCategory": "1-100gb",
+          "classification": "internal",
+          "containsPersonalData": false,
+          "containsSensitivePersonalData": false,
+          "encryptionLevel": "storage-level",
+          "keyManagement": "provider-managed"
+        }
+      ],
+      "productionDataForTesting": "masked",
+      "dataIntegrityControls": "yes",
+      "dataOnEndUserDevices": "yes",
+      "dataSovereigntyRequired": "yes",
+      "dataSovereigntyDetails": "All payroll data must reside within the United Kingdom. Azure SQL Database and Blob Storage are deployed in UK South (London) and UK West (Cardiff) regions only. Geo-replication is restricted to UK regions. Azure backup vaults are configured for UK geo-redundancy only.",
+      "dataTransfers": [
+        {
+          "destination": "BACS (Vocalink)",
+          "destinationType": "third-party",
+          "classification": "restricted",
+          "transferMethod": "sftp",
+          "encrypted": true
+        },
+        {
+          "destination": "Crestfield (pension provider)",
+          "destinationType": "third-party",
+          "classification": "restricted",
+          "transferMethod": "api",
+          "encrypted": true
+        },
+        {
+          "destination": "HMRC",
+          "destinationType": "regulator",
+          "classification": "restricted",
+          "transferMethod": "api",
+          "encrypted": true
+        }
+      ]
+    },
+    "securityView": {
+      "thirdPartyHosted": "no",
+      "thirdPartyRiskAssessed": "not-applicable",
+      "businessImpact": {
+        "confidentiality": "high",
+        "integrity": "high",
+        "availability": "high",
+        "nonRepudiation": "medium"
+      },
+      "authentication": [
+        {
+          "accessType": "end-user-internal",
+          "method": "sso-oidc",
+          "usesGroupWideAuth": true
+        },
+        {
+          "accessType": "it-operations",
+          "method": "mfa",
+          "usesGroupWideAuth": true
+        },
+        {
+          "accessType": "service-account",
+          "method": "certificate",
+          "usesGroupWideAuth": false
+        }
+      ],
+      "authorisation": {
+        "model": "rbac",
+        "entitlementStore": "Entra ID security groups + PayrollPro role table",
+        "provisioningProcess": "manual-request",
+        "recertificationEnabled": true,
+        "segregationOfDutiesEnforced": true
+      },
+      "privilegedAccess": {
+        "pamSolution": "Entra ID Privileged Identity Management (PIM)",
+        "justInTimeAccess": true,
+        "sessionRecording": false,
+        "breakGlassProcess": true
+      },
+      "encryptionAtRest": {
+        "implemented": true,
+        "level": "field-level",
+        "keyType": "symmetric",
+        "algorithm": "AES-256 (TDE, SSE); AES-256-GCM (field-level application encryption)",
+        "keyGeneration": "kms",
+        "keyStorage": "kms",
+        "keyRotationDays": 365
+      },
+      "secretManagement": {
+        "secretStore": "azure-key-vault",
+        "distribution": "runtime-retrieval",
+        "rotation": "manual-scheduled"
+      },
+      "securityMonitoring": {
+        "siemIntegration": true,
+        "siemTool": "Microsoft Sentinel (Meridian corporate instance)",
+        "securityEventLogging": true,
+        "intrusionDetection": true
+      }
+    },
+    "scenarios": {
+      "useCases": [
+        {
+          "id": "UC-01",
+          "name": "Monthly Payroll Run",
+          "actors": ["Payroll Operator (Mary Bloggs or team member)"],
+          "trigger": "Scheduled monthly payroll processing date (typically day 22 of each month)",
+          "mainFlow": "1. Payroll Operator logs in via Citrix, authenticated by Entra ID (MFA). 2. Operator initiates payroll run via PayrollPro UI. 3. Payroll Batch Processor (Azure WebJob) executes on App Service, reading employee and configuration data from Azure SQL. 4. Batch calculates gross pay, tax deductions (PAYE), NI contributions, pension deductions, student loan repayments for all 2,400 employees. 5. Payslip PDFs are generated and stored in Azure Blob Storage. 6. BACS Standard 18 payment file is generated. 7. Operator reviews summary report and approves. 8. BACS file is submitted via SFTP. 9. HMRC FPS is submitted via Government Gateway API. 10. Pension contributions are submitted to Crestfield via REST API.",
+          "viewsInvolved": ["logical", "integration", "physical", "data", "security"]
+        },
+        {
+          "id": "UC-02",
+          "name": "New Starter Onboarding",
+          "actors": ["HR Administrator"],
+          "trigger": "New employee joining Meridian",
+          "mainFlow": "1. HR Administrator logs in via Citrix, authenticated by Entra ID (MFA). 2. Administrator creates new employee record in PayrollPro: personal details, contract terms, salary, tax code, bank details, pension opt-in. 3. Bank details and NI number are encrypted at field level before storage (AES-256-GCM via Key Vault). 4. Employee is included in the next payroll run. 5. Employee gains access to self-service portal via Entra ID group membership.",
+          "viewsInvolved": ["logical", "data", "security"]
+        }
+      ],
+      "adrs": [
+        {
+          "id": "ADR-001",
+          "title": "Replatform over Rehost",
+          "status": "accepted",
+          "date": "2026-01-20",
+          "context": "PayrollPro must be migrated from on-premises to Azure before hardware end of life (Dec 2026). The team evaluated Rehost (lift-and-shift to Azure VMs) versus Replatform (upgrade to .NET 6, deploy to App Service and Azure SQL).",
+          "decision": "Replatform — upgrade the application to .NET 6 and deploy to Azure PaaS services (App Service + Azure SQL Database).",
+          "alternatives": "(1) Rehost to Azure VMs: Lower initial effort but perpetuates manual patching burden, does not address performance issues, and incurs higher ongoing IaaS costs. (2) Refactor to microservices: Best long-term architecture but timeline exceeds hardware EOL deadline; estimated 18+ months vs. 10 months for replatform. (3) Replace with SaaS payroll: Evaluated Workday and ADP; neither met Meridian's bespoke BACS and pension integration requirements without significant customisation and data migration risk.",
+          "consequences": "Positive: Managed patching, built-in geo-replication, auto-scaling, reduced OpEx. Negative: .NET 6 upgrade requires development effort (~6 weeks); some legacy stored procedures must be reworked for Azure SQL compatibility.",
+          "affectedAttributes": ["reliability", "operational-excellence", "performance", "cost-optimisation"]
+        },
+        {
+          "id": "ADR-002",
+          "title": "Azure SQL Database over SQL Server on VM",
+          "status": "accepted",
+          "date": "2026-01-25",
+          "context": "The database tier could be deployed as SQL Server on an Azure VM (IaaS) or as Azure SQL Database (PaaS). The DBA team raised concerns about Azure SQL compatibility with existing T-SQL features.",
+          "decision": "Use Azure SQL Database (Business Critical tier) as the primary data store.",
+          "alternatives": "(1) SQL Server on Azure VM: Full SQL Server feature parity but requires manual patching, backup configuration, and HA setup (Always On Availability Groups). (2) Azure SQL Managed Instance: Closer to on-prem feature parity than Azure SQL DB but higher cost and slower provisioning; features not needed by PayrollPro.",
+          "consequences": "Positive: Built-in automated backups (PITR 35 days), geo-replication, automatic patching, zone redundancy. Negative: SQL Agent jobs must be replaced with Azure Data Factory or WebJobs; some cross-database queries must be refactored; DBA team requires Azure SQL training.",
+          "affectedAttributes": ["reliability", "operational-excellence", "cost-optimisation"]
+        },
+        {
+          "id": "ADR-003",
+          "title": "Retain Citrix in Phase 1",
+          "status": "accepted",
+          "date": "2026-02-05",
+          "context": "PayrollPro is currently accessed exclusively via Citrix XenApp. Migrating both the application and the access method simultaneously increases risk and extends the timeline.",
+          "decision": "Retain Citrix access for Phase 1. Users will access the Azure-hosted PayrollPro via Citrix, routed through a site-to-site VPN. Phase 2 will replace Citrix with direct browser access or Azure Virtual Desktop.",
+          "alternatives": "(1) Direct browser access from Phase 1: Eliminates Citrix dependency but requires WAF deployment, public endpoint exposure, and additional security review — adding 6-8 weeks. (2) Azure Virtual Desktop from Phase 1: Replaces Citrix but is a separate infrastructure project with its own timeline and budget.",
+          "consequences": "Positive: Reduces migration scope and risk; maintains familiar user experience. Negative: Requires transitional VPN; Citrix becomes a dependency and single point of access; VPN adds latency for Azure-hosted application.",
+          "affectedAttributes": ["performance", "reliability", "cost-optimisation"]
+        }
+      ]
+    }
+  },
+  "qualityAttributes": {
+    "operationalExcellence": {
+      "loggingCentralised": true,
+      "loggingTool": "Azure Log Analytics (Meridian corporate workspace)",
+      "monitoringTool": "Azure Monitor + Azure Application Insights",
+      "tracingEnabled": true,
+      "alertingConfigured": true,
+      "runbooksDocumented": false
+    },
+    "reliability": {
+      "drStrategy": "warm-standby",
+      "multiVenueDeployment": true,
+      "rtoTarget": "PT4H",
+      "rpoTarget": "PT1H",
+      "scalability": "partial-auto-scaling",
+      "faultToleranceDesigned": true,
+      "chaosTestingPractised": false,
+      "backupEnabled": true,
+      "backupType": "continuous",
+      "backupFrequency": "real-time",
+      "backupImmutable": true,
+      "backupEncrypted": true
+    },
+    "performance": {
+      "p95ResponseTimeMs": 2000,
+      "targetThroughputRps": 0,
+      "targetConcurrentUsers": 150,
+      "performanceTestingApproach": "load-testing",
+      "cachingUsed": false,
+      "cdnUsed": false,
+      "growthProjections": {
+        "currentUsers": 2400,
+        "year1Users": 2600,
+        "year3Users": 3000,
+        "year5Users": 3500,
+        "currentDataVolume": "280 GB (100 GB database + 180 GB blob)",
+        "year1DataVolume": "315 GB",
+        "year3DataVolume": "395 GB",
+        "year5DataVolume": "500 GB",
+        "designScalesToProjectedGrowth": true,
+        "seasonalDemandPatterns": true,
+        "seasonalDetails": "Significant peak during monthly payroll window (days 22-25). Additional peaks at tax year end (April) for P60 generation."
+      }
+    },
+    "costOptimisation": {
+      "costAnalysisPerformed": true,
+      "designConstrainedByCost": false,
+      "reservedCapacity": false,
+      "costMonitoringEnabled": true,
+      "taggingStrategy": false
+    },
+    "sustainability": {
+      "hostingLocationOptimisedForCarbon": false,
+      "nonProdAutoShutdown": true,
+      "resourcesRightsized": true,
+      "workloadPattern": "variable-predictable",
+      "continuousAvailabilityRequired": true
+    },
+    "tradeoffs": [
+      {
+        "attributesInvolved": ["reliability", "cost-optimisation"],
+        "description": "Azure SQL Business Critical tier selected for built-in HA and zone redundancy, despite being more expensive than General Purpose. This decision is driven by the Tier 2 reliability requirement.",
+        "chosenPriority": "reliability",
+        "rationale": "Payroll processing is a statutory obligation; the additional cost of Business Critical tier is justified by the need for sub-30-second failover and zone redundancy."
+      },
+      {
+        "attributesInvolved": ["performance", "cost-optimisation"],
+        "description": "Azure SQL Serverless evaluated for production but rejected due to cold-start latency incompatible with payroll batch SLA. Used for dev environment only.",
+        "chosenPriority": "performance",
+        "rationale": "Payroll batch must complete within 2 hours; cold-start latency of serverless tier would add unpredictable delays."
+      }
+    ]
+  },
+  "lifecycleManagement": {
+    "internallyDeveloped": true,
+    "sourceControl": "azure-devops",
+    "cicdPlatform": "azure-pipelines",
+    "sast": "sonarqube",
+    "dast": "yes",
+    "sca": "other",
+    "containerScanning": "not-applicable",
+    "migration": {
+      "classification": "replatform",
+      "deploymentStrategy": "blue-green",
+      "dataMigrationMode": "phased",
+      "dataMigrationMethod": "Azure Database Migration Service (DMS) for online migration with continuous sync. Initial full backup restore, then continuous replication of transaction log changes until cutover. Payslip files migrated via AzCopy from on-premises file share to Azure Blob Storage.",
+      "dataVolume": "Database: ~100 GB. Blob (payslips): ~180 GB.",
+      "endUserCutover": "one-off",
+      "externalSystemCutover": "one-off",
+      "maxAcceptableDowntime": "hours",
+      "rollbackPlan": "On-premises servers retained for 30 days post-cutover. If critical issues found within rollback window: (1) Stop DMS continuous sync. (2) Revert Citrix published app to on-premises endpoint. (3) Apply any transactions from Azure SQL back to on-premises SQL Server via DMS reverse sync. Rollback tested during rehearsal.",
+      "transientInfrastructureNeeded": true
+    },
+    "resourcing": {
+      "cloudPlatform": "medium",
+      "infrastructureAsCode": "low",
+      "cicdManagement": "high",
+      "applicationStack": "medium",
+      "databaseAdministration": "medium",
+      "securityCompliance": "high",
+      "operationalReadiness": "b-partially-capable"
+    },
+    "releaseFrequency": "monthly",
+    "supportModel": "internal-team",
+    "supportHours": "extended-hours",
+    "intendedLifespan": "3-5-years",
+    "exitPlanDocumented": true,
+    "vendorLockInLevel": "moderate"
+  },
+  "riskGovernance": {
+    "constraints": [
+      {
+        "id": "C-001",
+        "constraint": "Migration must complete before December 2026",
+        "category": "time",
+        "impactOnDesign": "Drives phased migration approach and rules out full refactoring",
+        "lastAssessed": "2026-01-15"
+      },
+      {
+        "id": "C-002",
+        "constraint": "All payroll data must reside in UK datacentres",
+        "category": "regulatory",
+        "impactOnDesign": "Limits Azure deployment to UK South and UK West regions",
+        "lastAssessed": "2026-01-15"
+      },
+      {
+        "id": "C-003",
+        "constraint": "Must maintain BACS Standard 18 file format for payment submissions",
+        "category": "technical",
+        "impactOnDesign": "Payment file generation module must produce identical output format",
+        "lastAssessed": "2026-01-20"
+      },
+      {
+        "id": "C-004",
+        "constraint": "Budget ceiling of £200,000 capex",
+        "category": "commercial",
+        "impactOnDesign": "Limits scope of Phase 1; defers refactoring and Citrix replacement",
+        "lastAssessed": "2026-01-20"
+      },
+      {
+        "id": "C-005",
+        "constraint": "Must use Meridian Azure Landing Zone (hub-spoke topology)",
+        "category": "organisational",
+        "impactOnDesign": "Network design must conform to existing hub-spoke architecture; VPN Gateway deployed in hub",
+        "lastAssessed": "2026-02-01"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "A-001",
+        "assumption": "Entra ID Connect will be deployed and syncing on-premises AD by June 2026",
+        "impactIfFalse": "PayrollPro authentication cannot work without Entra ID; migration would be blocked",
+        "certainty": "high",
+        "status": "open",
+        "owner": "Joe Bloggs",
+        "evidence": "IAM project plan (IAM-PRJ-0042) confirmed for Q2 2026 delivery"
+      },
+      {
+        "id": "A-002",
+        "assumption": "Citrix XenApp can connect to Azure App Service via site-to-site VPN with acceptable latency (< 50ms round trip)",
+        "impactIfFalse": "Users would experience unacceptable performance; alternative access method needed",
+        "certainty": "high",
+        "status": "closed",
+        "owner": "Joe Bloggs",
+        "evidence": "VPN latency tested at 18ms round trip (test report TR-2026-003)"
+      },
+      {
+        "id": "A-003",
+        "assumption": "Existing .NET Framework 4.8 code can be upgraded to .NET 6 within 8 weeks",
+        "impactIfFalse": "Timeline overrun; potential delay to cutover window",
+        "certainty": "medium",
+        "status": "closed",
+        "owner": "Claire Doe",
+        "evidence": ".NET Upgrade Assistant analysis completed; 14 breaking changes identified, all resolvable (DEV-2026-017)"
+      },
+      {
+        "id": "A-004",
+        "assumption": "Azure SQL Database supports all T-SQL features used by PayrollPro stored procedures",
+        "impactIfFalse": "Stored procedures would need rework, potentially delaying migration",
+        "certainty": "medium",
+        "status": "closed",
+        "owner": "Claire Doe",
+        "evidence": "Compatibility assessment completed; 3 procedures require rework (linked user queries, cross-database joins); estimated 2 weeks effort"
+      },
+      {
+        "id": "A-005",
+        "assumption": "BACS, HMRC, and Crestfield integrations will function from Azure without changes to their end",
+        "impactIfFalse": "Integration reconfiguration needed; potential re-certification with providers",
+        "certainty": "high",
+        "status": "open",
+        "owner": "Fred Bloggs",
+        "evidence": "HMRC and Crestfield confirmed no IP allowlisting required. BACS gateway requires new SSH key registration (in progress)."
+      }
+    ],
+    "risks": [
+      {
+        "id": "R-001",
+        "riskEvent": ".NET 6 upgrade introduces regression bugs affecting payroll calculations",
+        "riskCategory": "technical",
+        "severity": "high",
+        "likelihood": "medium",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "Parallel payroll run in staging with reconciliation against on-premises results for 2 months before cutover; comprehensive unit and integration tests for calculation engine",
+        "residualRisk": "low",
+        "owner": "Fred Bloggs",
+        "lastAssessed": "2026-03-15"
+      },
+      {
+        "id": "R-002",
+        "riskEvent": "Data migration via DMS causes data loss or corruption",
+        "riskCategory": "technical",
+        "severity": "high",
+        "likelihood": "low",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "DMS migration rehearsal with full data reconciliation (row counts, checksums, sample verification); rehearsal scheduled for Aug 2026",
+        "residualRisk": "low",
+        "owner": "Claire Doe",
+        "lastAssessed": "2026-03-15"
+      },
+      {
+        "id": "R-003",
+        "riskEvent": "Azure SQL performance for payroll batch is worse than on-premises SQL Server",
+        "riskCategory": "technical",
+        "severity": "medium",
+        "likelihood": "low",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "Performance testing on Azure SQL with production-scale data; Azure SQL can be scaled up (8 -> 16 vCores) within minutes if needed",
+        "residualRisk": "low",
+        "owner": "Claire Doe",
+        "lastAssessed": "2026-03-15"
+      },
+      {
+        "id": "R-004",
+        "riskEvent": "DBA resource availability — Claire Doe is single point of expertise for PayrollPro database",
+        "riskCategory": "delivery",
+        "severity": "high",
+        "likelihood": "medium",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "Cross-train second DBA (Amir Patel) on PayrollPro database; document all migration procedures in runbook",
+        "residualRisk": "medium",
+        "owner": "Polly Doe",
+        "lastAssessed": "2026-03-15"
+      },
+      {
+        "id": "R-005",
+        "riskEvent": "VPN connectivity instability between Azure and on-premises during Citrix access",
+        "riskCategory": "technical",
+        "severity": "medium",
+        "likelihood": "low",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "VPN tested and proven stable (A-002). Monitoring and auto-reconnect configured. Emergency fallback: enable temporary public access to App Service with IP restrictions.",
+        "residualRisk": "low",
+        "owner": "Joe Bloggs",
+        "lastAssessed": "2026-03-15"
+      },
+      {
+        "id": "R-006",
+        "riskEvent": "Entra ID Connect deployment delayed beyond June 2026",
+        "riskCategory": "delivery",
+        "severity": "high",
+        "likelihood": "low",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "PayrollPro migration plan has Entra ID Connect as a dependency; regular check-ins with IAM project team; fallback: temporary Azure AD-only authentication without on-prem sync",
+        "residualRisk": "low",
+        "owner": "Joe Bloggs",
+        "lastAssessed": "2026-03-15"
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "D-001",
+        "dependency": "Entra ID Connect deployment (IAM-PRJ-0042) must be complete before PayrollPro cutover",
+        "direction": "inbound",
+        "status": "committed",
+        "owner": "Joe Bloggs",
+        "evidence": "IAM project plan confirms Q2 2026 delivery",
+        "lastAssessed": "2026-03-01"
+      },
+      {
+        "id": "D-002",
+        "dependency": "Azure Landing Zone hub VNet and VPN Gateway must be provisioned",
+        "direction": "inbound",
+        "status": "resolved",
+        "owner": "Joe Bloggs",
+        "evidence": "Landing zone deployed Feb 2026 (INFRA-CR-2026-008)",
+        "lastAssessed": "2026-02-28"
+      },
+      {
+        "id": "D-003",
+        "dependency": "BACS gateway must register new SSH public key for Azure-originated connections",
+        "direction": "inbound",
+        "status": "committed",
+        "owner": "Fred Bloggs",
+        "evidence": "BACS support ticket raised; confirmation pending",
+        "lastAssessed": "2026-03-10"
+      },
+      {
+        "id": "D-004",
+        "dependency": "SAP Finance team must update CSV import job to read from Azure Blob Storage (via ADF)",
+        "direction": "outbound",
+        "status": "not-committed",
+        "owner": "Polly Doe",
+        "evidence": "Meeting scheduled with SAP team for April 2026",
+        "lastAssessed": "2026-03-15"
+      }
+    ],
+    "issues": [
+      {
+        "id": "I-001",
+        "issue": "DBA resource conflict — Claire Doe is also committed to the SAP upgrade project (PRJ-2026-012) for April-May 2026",
+        "category": "delivery",
+        "impact": "medium",
+        "owner": "Polly Doe",
+        "resolutionPlan": "Escalated to IT Director; agreed Claire will prioritise PayrollPro migration; SAP project to use contractor DBA for overlap period",
+        "status": "in-progress",
+        "lastAssessed": "2026-03-20"
+      },
+      {
+        "id": "I-002",
+        "issue": "Three stored procedures use cross-database queries not supported by Azure SQL",
+        "category": "technical",
+        "impact": "low",
+        "owner": "Claire Doe",
+        "resolutionPlan": "Procedures rewritten to use single-database approach; two completed, one in progress",
+        "status": "in-progress",
+        "lastAssessed": "2026-03-25"
+      }
+    ],
+    "policyExceptions": "no",
+    "policyExceptionsAccepted": "not-applicable",
+    "processExceptions": "no",
+    "riskProfileImpact": "no"
+  },
+  "appendices": {
+    "glossary": [
+      { "term": "6 R's", "definition": "Six common migration strategies: Retain, Retire, Rehost, Replatform, Refactor, Replace" },
+      { "term": "BACS", "definition": "Bankers' Automated Clearing Services — the UK electronic payment system used for salary payments" },
+      { "term": "Bicep", "definition": "A domain-specific language for deploying Azure resources declaratively (Infrastructure as Code)" },
+      { "term": "Blue-Green Deployment", "definition": "A release strategy using two identical environments; traffic is switched from the old (blue) to the new (green) after validation" },
+      { "term": "DMS", "definition": "Azure Database Migration Service — a managed service for migrating databases to Azure" },
+      { "term": "Entra ID", "definition": "Microsoft Entra ID (formerly Azure Active Directory) — cloud-based identity and access management service" },
+      { "term": "Entra ID Connect", "definition": "A tool that synchronises on-premises Active Directory identities to Entra ID" },
+      { "term": "FPS", "definition": "Full Payment Submission — the HMRC Real Time Information submission made each time employees are paid" },
+      { "term": "NI Number", "definition": "National Insurance Number — a unique identifier used in the UK tax and benefits system (Sensitive Personal Information)" },
+      { "term": "PAYE", "definition": "Pay As You Earn — the UK system for collecting income tax and National Insurance from employment" },
+      { "term": "PIM", "definition": "Privileged Identity Management — Entra ID feature providing just-in-time privileged access" },
+      { "term": "PITR", "definition": "Point-In-Time Restore — Azure SQL feature allowing database restoration to any point within the retention period" },
+      { "term": "Replatform", "definition": "A migration strategy that moves a workload to a new platform with targeted optimisations (e.g., adopting managed database services) without re-architecting the application" },
+      { "term": "RTI", "definition": "Real Time Information — HMRC system requiring employers to report payroll data in real time" },
+      { "term": "Standard 18", "definition": "The BACS file format specification for payment instruction files" },
+      { "term": "TDE", "definition": "Transparent Data Encryption — SQL Server and Azure SQL feature that encrypts data at rest" }
+    ],
+    "references": [
+      {
+        "title": "PayrollPro Database Migration Runbook",
+        "version": "0.3",
+        "description": "Step-by-step DMS migration procedures"
+      },
+      {
+        "title": "Meridian Azure Landing Zone SAD",
+        "version": "1.2",
+        "description": "Hub-spoke network architecture and shared services"
+      },
+      {
+        "title": "Meridian Entra ID Connect Deployment Plan",
+        "version": "1.0",
+        "description": "Identity synchronisation project plan and design"
+      },
+      {
+        "title": "DPIA — PayrollPro Cloud Migration",
+        "version": "1.0",
+        "description": "Data Protection Impact Assessment"
+      },
+      {
+        "title": "Azure SQL Compatibility Assessment",
+        "version": "1.0",
+        "description": "T-SQL compatibility analysis results"
+      }
+    ],
+    "approvals": [
+      {
+        "role": "Lead Solution Architect",
+        "name": "Fred Bloggs",
+        "date": "2026-03-28"
+      },
+      {
+        "role": "Security Architect",
+        "name": "Jane Doe"
+      },
+      {
+        "role": "DBA Lead",
+        "name": "Claire Doe"
+      },
+      {
+        "role": "ARB / Design Authority",
+        "name": "Architecture Review Board"
+      },
+      {
+        "role": "Business Sponsor",
+        "name": "Betty Bloggs"
+      }
+    ]
+  },
+  "organisationProfile": {
+    "organisationName": "Meridian Financial Services",
+    "internalStandards": [
+      {
+        "id": "MSIS-3.2",
+        "name": "Meridian Information Security Standard",
+        "version": "3.2",
+        "mappedSections": ["3.4", "3.5"]
+      },
+      {
+        "id": "MCSB-1.0",
+        "name": "Meridian Cloud Security Baseline",
+        "version": "1.0",
+        "mappedSections": ["3.3", "3.5"]
+      },
+      {
+        "id": "MDCP-2.1",
+        "name": "Meridian Data Classification Policy",
+        "version": "2.1",
+        "mappedSections": ["3.4"]
+      }
+    ],
+    "tooling": {
+      "secretStore": "Azure Key Vault",
+      "cicd": "Azure DevOps Pipelines",
+      "monitoring": "Azure Monitor + Application Insights",
+      "siem": "Microsoft Sentinel"
+    }
+  },
+  "complianceScoring": {
+    "assessments": [
+      { "section": "1. Executive Summary", "score": 4, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Strong business context, current state well-documented, strategic alignment demonstrated. Scored 4 not 5: reuse assessment could include more detail on rejected platforms." },
+      { "section": "3.1 Logical View", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Components documented with technology choices; vendor lock-in assessed. Scored 3 not 4: component interactions could be more formally specified. Monolithic architecture limits decomposition detail." },
+      { "section": "3.2 Integration & Data Flow", "score": 4, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "All internal and external integrations documented with protocols and authentication. End user access documented." },
+      { "section": "3.3 Physical View", "score": 4, "assessor": "Joe Bloggs", "date": "2026-03-28", "notes": "Deployment architecture complete, compute sized, networking documented, environments listed. Connectivity protocols specified." },
+      { "section": "3.4 Data View", "score": 4, "assessor": "Jane Doe", "date": "2026-03-28", "notes": "All data stores classified, retention and encryption specified, PII/SPI identified, data sovereignty addressed, data transfers documented." },
+      { "section": "3.5 Security View", "score": 4, "assessor": "Jane Doe", "date": "2026-03-28", "notes": "Business impact assessed, authentication and authorisation fully documented, encryption at rest and in transit specified, secrets management documented, SIEM integration confirmed. Scored 4 not 5: formal threat model (STRIDE) not yet completed." },
+      { "section": "3.6 Scenarios", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Key use cases documented with flows; ADRs capture significant decisions with rationale and alternatives. Scored 3 not 4: use cases could cross-reference views more explicitly." },
+      { "section": "4.1 Operational Excellence", "score": 3, "assessor": "Joe Bloggs", "date": "2026-03-28", "notes": "Centralised logging, monitoring, and alerting in place. Scored 3 not 4: operational runbooks not yet fully documented (in progress)." },
+      { "section": "4.2 Reliability", "score": 4, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "DR strategy documented with RTO/RPO targets, backup configured with immutability, auto-scaling defined, fault tolerance designed with failure modes." },
+      { "section": "4.3 Performance", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Targets defined, growth projected. Scored 3 not 4: performance testing not yet executed (planned for May-Jun 2026)." },
+      { "section": "4.4 Cost Optimisation", "score": 3, "assessor": "Polly Doe", "date": "2026-03-28", "notes": "Cost analysis performed using Azure Pricing Calculator, TCO comparison documented. Scored 3 not 4: FinOps practices (tagging, rightsizing reviews) not yet formalised." },
+      { "section": "4.5 Sustainability", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Non-production auto-shutdown enabled, resources right-sized, demand patterns documented." },
+      { "section": "5. Lifecycle", "score": 4, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "CI/CD documented, migration plan detailed with 6 R's classification, phased timeline, rollback plan, skills assessment with training plan. Strong migration section." },
+      { "section": "6. Decision Making", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Constraints, assumptions, risks, and dependencies documented with ownership. ADRs captured. Scored 3 not 4: some assumptions still open; compliance traceability not yet complete." }
+    ],
+    "overallScore": 3,
+    "overallAssessor": "Fred Bloggs",
+    "overallDate": "2026-03-28",
+    "overallNotes": "Weakest-link scoring. Multiple sections at 3 reflect the pre-go-live state: operational runbooks, performance testing, and FinOps practices are in progress and will improve scores to 4 before production approval."
+  }
+}

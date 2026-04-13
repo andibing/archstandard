@@ -1,0 +1,70 @@
+---
+title: "ADS: The Architecture Description Standard"
+description: "ADS: Architecture Description Standard — a free, open-source standard for Solution Architecture Documents (SADs) and High Level Design (HLD). Schema-driven, AI-ready, with templates in Markdown, YAML, and JSON."
+template: splash
+hero:
+  tagline: "A free, open-source standard for writing clear, consistent architecture documents. Schema-driven. AI-ready. Adoptable today."
+  actions:
+    - text: Quickstart
+      link: /standard/quickstart/
+      icon: right-arrow
+    - text: Read the Standard
+      link: /standard/overview/
+      variant: minimal
+      icon: document
+    - text: Download Templates
+      link: /standard/templates/
+      variant: minimal
+      icon: document
+---
+
+import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
+
+<div class="ads-hero-title">
+  <img src="/v1/ads-logo-256.png" alt="ADS logo" class="ads-hero-logo" />
+  <div class="ads-hero-text">
+    <span class="ads-hero-name">ADS</span>
+    <span class="ads-hero-subtitle">The Architecture Description Standard</span>
+  </div>
+</div>
+
+*For solution architects, enterprise architects, and architecture governance teams.*
+
+## The Problem
+
+Architecture documentation is inconsistent. Every organisation, team, and architect produces Solution Architecture Documents in a different format — with gaps in security, no quality assessment, and no way to compare one design against another. There is no widely-adopted standard that tells architects exactly what to include, how to structure it, and what "good" looks like.
+
+## The Solution
+
+ADS defines exactly what sections, content, and quality criteria a Solution Architecture Document (SAD) shall contain. It is built upon practical experience and established frameworks including ISO 42010, the cloud Well-Architected Frameworks, TOGAF, and the 4+1 View Model.
+
+<CardGrid>
+	<Card title="Architectural Views" icon="open-book">
+		Views describing the solution from distinct stakeholder perspectives: Logical, Integration & Data Flow, Physical, Data, Security, and Scenarios.
+	</Card>
+	<Card title="Quality Attributes" icon="approve-check-circle">
+		Cross-cutting evaluation lenses — Operational Excellence, Reliability, Performance, Cost, and Sustainability — applied across all views.
+	</Card>
+	<Card title="Lifecycle & Governance" icon="setting">
+		Development lifecycle, operational procedures, risk management, decision records, and compliance traceability.
+	</Card>
+	<Card title="AI and Machine-Ready" icon="puzzle">
+		A formal JSON Schema with atomic fields. Designed for both AI-assisted authoring (generate first drafts from a brief) and programmatic analysis (parse, compare, audit, and report on SADs at portfolio scale).
+	</Card>
+</CardGrid>
+
+**Key features:**
+- **Schema-driven** — JSON Schema enables validation, multi-format generation, AI-assisted authoring, and programmatic analysis
+- **Documentation depths** — every section is tagged SHALL / SHOULD / MAY (RFC 2119) for progressive adoption
+- **Compliance scoring** — 0–5 scale per section for governance review
+- **Templates** — ready-to-use in Markdown, YAML, and JSON — importable into LLMs, wikis, editors, or analysis tooling
+- **Open** — [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to use, adapt, and redistribute
+
+For a detailed comparison with other frameworks, see [Why ADS?](/standard/why-ads/) and [Framework Alignment](/standard/framework-alignment/).
+
+<Aside type="note" title="Standard Identifier">
+**ADS v1.1.0** | Author: **[Andi Chandler](https://andi.me/)** | Published by: **ArchStandard** | Licence: **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)** | [Contribute on GitHub](https://github.com/andibing/archstandard)
+</Aside>
+
+---
+

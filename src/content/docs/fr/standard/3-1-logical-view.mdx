@@ -1,0 +1,114 @@
+---
+title: "3.1 Vue logique"
+description: Architecture applicative, décomposition des composants, cartographie des services et patterns de conception.
+---
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+<span class="framework-badge badge-4plus1">4+1 Logical</span>
+<span class="framework-badge badge-togaf">TOGAF Application</span>
+
+## Objectif
+
+La vue logique décrit la structure fonctionnelle de la solution — les composants applicatifs, leurs relations mutuelles et leur correspondance avec les services et capacités métier. Elle répond aux préoccupations des architectes de solution et des développeurs.
+
+## 3.1.1 Diagramme d'architecture applicative
+
+<span class="maturity-indicator maturity-minimum">Minimum</span>
+
+Fournissez un diagramme de blocs montrant les composants logiciels utilisés dans la solution (applications, middleware, bases de données, API, etc.), leurs interactions et leur intégration avec les plateformes externes.
+
+*[Insérer le diagramme d'architecture applicative]*
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Le diagramme devrait montrer :
+- Tous les composants applicatifs majeurs et leurs rôles
+- Les interactions et flux de données entre les composants
+- Les points d'intégration avec les systèmes externes
+- Les limites claires entre la solution et son environnement
+- Envisagez d'utiliser le C4 Model (niveaux Context, Container, Component) pour un détail progressif
+</div>
+
+## 3.1.2 Décomposition des composants
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Décrivez chaque composant majeur de la solution :
+
+| Composant | Type | Description | Technologie | Propriétaire |
+|-----------|------|-------------|------------|-------|
+| *[nom]* | Application / Service / API / Base de données / File d'attente / etc. | *[ce qu'il fait]* | *[stack technologique]* | *[équipe]* |
+
+## 3.1.3 Cartographie des services et capacités
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Associez la solution aux services et capacités métier qu'elle soutient :
+
+| ID du service | Nom du service | ID de la capacité | Nom de la capacité |
+|-----------|-------------|--------------|----------------|
+| *[...]* | *[...]* | *[...]* | *[...]* |
+
+## 3.1.4 Impact sur les applications
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Identifiez les autres applications impactées par cette solution :
+
+| Nom de l'application | ID de l'application | Type d'impact | Détails du changement | Commentaires |
+|-----------------|---------------|-------------|----------------|----------|
+| *[nom]* | *[id]* | Use / Change / Create | *[détails]* | *[notes]* |
+
+## 3.1.5 Patterns de conception clés
+
+<span class="maturity-indicator maturity-comprehensive">Complet</span>
+
+Documentez les patterns architecturaux et de conception appliqués dans cette solution :
+
+| Pattern | Où appliqué | Justification |
+|---------|--------------|-----------|
+| *[par ex., Microservices, Event-Driven, CQRS, Strangler Fig]* | *[quels composants]* | *[pourquoi ce pattern a été choisi]* |
+
+## 3.1.6 Évaluation de la dépendance technologique et fournisseur
+
+<span class="maturity-indicator maturity-recommended">Recommandé</span>
+
+Évaluez le degré de dépendance fournisseur ou technologique pour les composants clés :
+
+| Composant / Service | Fournisseur / Technologie | Niveau de dépendance | Atténuation | Notes de portabilité |
+|---|---|---|---|---|
+| *[composant]* | *[fournisseur/technologie]* | None / Low / Moderate / High / Critical | *[comment la dépendance est atténuée]* | *[quelle est la portabilité de ce composant ?]* |
+
+<div class="guidance-box">
+<h4>Recommandations</h4>
+
+Considérez la dépendance selon plusieurs dimensions :
+- **API propriétaires** — La solution utilise-t-elle des API spécifiques au fournisseur sans équivalent ouvert ?
+- **Formats de données** — Les données peuvent-elles être exportées dans des formats standards et ouverts ?
+- **Contractuelle** — Y a-t-il des périodes d'engagement minimum ou des pénalités de sortie ?
+- **Opérationnelle** — L'équipe a-t-elle les compétences pour opérer sur une plateforme alternative ?
+- **Effort de migration** — Quel volume de réingénierie serait nécessaire pour migrer vers une alternative ?
+
+Cette évaluation devrait alimenter la section Planification de sortie (5.10) et l'attribut de qualité Optimisation des coûts (4.4).
+</div>
+
+<div class="guidance-box">
+<h4>Guide de scoring</h4>
+
+| Score | À quoi cela ressemble |
+|:-----:|---------------------|
+| **1** | Un diagramme de haut niveau existe mais les composants ne sont pas décomposés |
+| **3** | Composants documentés avec les choix technologiques, patterns de conception justifiés |
+| **5** | Tout ce qui précède plus la dépendance fournisseur évaluée, les interactions entre composants entièrement spécifiées, tous les statuts (nouveau/existant/décommissionné) documentés |
+</div>
+
+<div class="quality-attribute-ref">
+
+**Références croisées aux attributs de qualité :**
+- **4.3 Efficacité des performances** — La conception des composants affecte les caractéristiques de performance
+- **4.2 Fiabilité** — La décomposition des composants influence l'isolation des pannes et la résilience
+- **4.4 Optimisation des coûts** — La dépendance fournisseur affecte la flexibilité des coûts à long terme
+- **4.5 Durabilité** — L'architecture des composants affecte l'utilisation des ressources
+
+</div>
