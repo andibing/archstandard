@@ -3,7 +3,7 @@
 **Author:** Andi Chandler
 **Version:** 0.1 (Draft)
 **Date:** 2026-04-05
-**Related:** ADS v1.1.0 (archstandard.org)
+**Related:** ADS v1.3.0 (archstandard.org)
 
 ---
 

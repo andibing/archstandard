@@ -239,7 +239,7 @@ function generateYamlLines(schema, node, key, indent, lines) {
 
 function generateYamlTemplate(schema) {
   const lines = [
-    '# ADS v1.0.0 — Solution Architecture Document Template',
+    '# ADS v1.3.0 — Solution Architecture Document Template',
     '# Author: Andi Chandler',
     '# Published by: ArchStandard (archstandard.org)',
     '# Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
@@ -364,7 +364,7 @@ function generateMarkdownTemplate(schema) {
   const lines = [
     '# Solution Architecture Document',
     '',
-    '> **Standard:** ADS v1.0.0 (Architecture Description Standard)',
+    '> **Standard:** ADS v1.3.0 (Architecture Description Standard)',
     '> **Author:** Andi Chandler',
     '> **Published by:** ArchStandard (archstandard.org)',
     '> **Licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',

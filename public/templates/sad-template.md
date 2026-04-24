@@ -1,6 +1,6 @@
 # Solution Architecture Document
 
-> **Standard:** ADS v1.0.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.0 (Architecture Description Standard)
 > **Author:** Andi Chandler
 > **Published by:** ArchStandard (archstandard.org)
 > **Licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
