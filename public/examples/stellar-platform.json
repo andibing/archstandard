@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document — Stellar Platform",
+      "solutionName": "Stellar Platform (Internal Developer Platform)",
+      "applicationId": "SE-IDP-001",
+      "authors": ["Tom Bloggs, Principal Platform Engineer"],
+      "owner": "Tom Bloggs",
+      "version": "1.0",
+      "status": "approved",
+      "createdDate": "2026-03-12",
+      "lastUpdated": "2026-04-18",
+      "classification": "internal"
+    },
+    "purpose": "Describe the architecture of Stellar Platform, the Internal Developer Platform (IDP) replacing fragmented tooling and manual processes for 400 engineers across 60 product teams at Stellar Engineering Ltd.",
+    "scope": "Self-service IDP portal, golden paths, multi-cloud Kubernetes control plane, developer-facing tooling. Covers the platform itself and the migration of existing Jenkins-based CI to the new platform."
+  },
+  "executiveSummary": {
+    "solutionOverview": "Stellar Platform is an Internal Developer Platform providing golden paths for service creation, deployment, and observability to 400 engineers across 60 product teams. The portal is Backstage-based; infrastructure provisioning is via Crossplane and Terraform; GitOps deployment is via ArgoCD; observability is federated across Datadog (paid tier) and self-hosted Prometheus+Grafana. The platform is multi-cloud: primary on GKE (europe-west2), secondary on EKS (eu-west-2) with active-passive DR. Target is a 40% reduction in lead time (DORA metric) within 12 months of go-live. Platform-as-a-product team operates on Team Topologies lines with a clear Stream-Aligned customer relationship with product teams.",
+    "businessCriticality": "tier-3-medium",
+    "projectDetails": {
+      "projectName": "Stellar Platform Phase 1",
+      "projectCode": "SE-PRJ-2026-PLAT-001",
+      "estimatedCapex": 1200000,
+      "estimatedOpex": 350000,
+      "currency": "GBP",
+      "targetGoLive": "2026-11-01"
+    }
+  },
+  "_note": "This is a summary JSON stub. See the full Recommended-depth example at https://archstandard.org/v1/examples/stellar-platform/ or the Markdown version at /v1/examples/stellar-platform.md"
+}

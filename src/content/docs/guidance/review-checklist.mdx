@@ -1,0 +1,176 @@
+---
+title: "Review Checklist"
+description: "A printable one-pager for architecture review boards and design authorities assessing a SAD."
+---
+
+A concise checklist for reviewers. Print it, copy it into your review template, or hand it to newer reviewers as a primer.
+
+<style>{`
+@media print {
+  .sl-container { padding: 0 !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+  table { page-break-inside: avoid; }
+  .print-break { page-break-before: always; }
+}
+`}</style>
+
+## Pre-review (2 minutes)
+
+Confirm the document is worth reviewing before you start:
+
+- [ ] The document is at a declared Documentation Depth (Minimum / Recommended / Comprehensive)
+- [ ] The declared depth matches the Business Criticality tier (Tier 1/2 → Comprehensive; Tier 3/4 → Recommended; Tier 5 → Minimum)
+- [ ] The author, owner, version, and status are populated
+- [ ] There is a named business owner in Section 2 Stakeholders
+- [ ] No sections are left as placeholder text (`[...]`, `TBD`)
+
+If any of these fail: send back to the author before spending more time on review.
+
+---
+
+## Section 0 — Document Control
+
+- [ ] Version and change history show active maintenance
+- [ ] Authors and contributors are named
+- [ ] Classification is set and appropriate to the content
+
+## Section 1 — Executive Summary
+
+- [ ] The Solution Overview is understandable to a non-technical reader
+- [ ] Business drivers are specific (what, when, consequence of inaction)
+- [ ] Strategic alignment is credible — not boilerplate
+- [ ] Shared services reuse has been considered
+- [ ] Scope boundaries are clear (in / out / related)
+- [ ] Criticality tier is justified, not defaulted
+
+## Section 2 — Stakeholders & Concerns
+
+- [ ] Business owner is named
+- [ ] Security Architect / CISO office is listed for Tier 1-3 solutions
+- [ ] Data owner / DPO is listed if personal data is in scope
+- [ ] Operations / SRE lead is listed for production-bound solutions
+- [ ] Regulatory context is declared (UK GDPR, PCI-DSS, DSPT, etc.)
+
+## Section 3 — Architectural Views
+
+### 3.1 Logical
+- [ ] Components are decomposed meaningfully (not "backend" and "frontend")
+- [ ] Each component has a named owner
+- [ ] Technology choices are specific (name + version where relevant)
+- [ ] Design patterns, where used, have rationale
+
+### 3.2 Integration & Data Flow
+- [ ] Every internal interface is documented (protocol, auth, direction, encryption)
+- [ ] Every external integration is documented
+- [ ] Synchronous vs asynchronous is explicit
+- [ ] Error handling and retry behaviour is covered for critical paths
+
+### 3.3 Physical
+- [ ] Hosting venue, region, and service models are stated
+- [ ] Environments are listed (dev / test / staging / prod / DR)
+- [ ] Network connectivity is documented (internet-facing? VPN? peering?)
+- [ ] Perimeter protection is addressed (WAF, DDoS) where relevant
+
+### 3.4 Data
+- [ ] Every data store is classified (Public / Internal / Confidential / Restricted)
+- [ ] PII and sensitive personal data are explicitly identified
+- [ ] Retention periods are stated
+- [ ] Encryption at rest is documented with key management choice
+- [ ] Data sovereignty is addressed where relevant
+
+### 3.5 Security
+- [ ] Business impact assessment (CIA) is populated
+- [ ] Authentication model is documented for each access type
+- [ ] Authorisation model is documented (RBAC / ABAC etc.)
+- [ ] Encryption at rest AND in transit are addressed
+- [ ] Secret management is documented (never hardcoded)
+- [ ] Security monitoring and SIEM integration are addressed
+- [ ] Threat model is present for Comprehensive-depth documents
+
+### 3.6 Scenarios
+- [ ] Key use cases are documented
+- [ ] Architecture Decision Records are captured with alternatives
+- [ ] Decisions reflect the design in the other views
+
+## Section 4 — Quality Attributes
+
+- [ ] Operational Excellence: logging, monitoring, alerting, runbooks
+- [ ] Reliability: RTO/RPO targets with justification; DR strategy; backup
+- [ ] Performance: targets with measurement method; growth projections for Tier 1-2
+- [ ] Cost: analysis performed; capex/opex; monitoring enabled
+- [ ] Sustainability: at least acknowledged; carbon metrics for Comprehensive depth
+
+## Section 5 — Lifecycle
+
+- [ ] CI/CD pipeline is documented (SAST, DAST, SCA, container scanning as appropriate)
+- [ ] Migration plan is documented (if applicable)
+- [ ] Test strategy covers unit, integration, performance, security
+- [ ] Release management: cadence, approval, rollback
+- [ ] Operations and support: hours, model, escalation
+- [ ] Resourcing: skills assessed, gaps addressed
+- [ ] Exit planning: for cloud and third-party dependencies
+
+## Section 6 — Decision Making & Governance
+
+- [ ] Constraints are documented with category (regulatory, technical, commercial, time, organisational)
+- [ ] Assumptions have named owners and closure evidence
+- [ ] Risks have severity, likelihood, owner, mitigation, residual risk
+- [ ] Dependencies are tracked with status
+- [ ] Issues (if any) have resolution plans
+- [ ] Guardrail exceptions are declared and justified
+- [ ] Architecture Decision Log is maintained
+- [ ] Compliance traceability is populated for Comprehensive depth
+
+## Section 7 — Appendices
+
+- [ ] Glossary covers all acronyms used in the document
+- [ ] Reference documents are listed with URLs
+- [ ] Approval sign-off has named approvers with dates
+
+---
+
+## Cross-cutting checks
+
+### Consistency
+- [ ] Logical View components appear in Integration, Physical, Data, and Security
+- [ ] Technology choices are consistent across views
+- [ ] ADRs reflect the design shown in the views
+- [ ] Business criticality tier matches quality attribute targets
+- [ ] Compliance traceability references regulations mentioned in Section 2
+
+### Clarity
+- [ ] Can a reviewer read this without asking the author questions?
+- [ ] Are acronyms defined in the glossary?
+- [ ] Are tables meaningful (not boilerplate)?
+- [ ] Are diagrams present where the standard expects them?
+
+### Credibility
+- [ ] Risk mitigations actually mitigate the risks
+- [ ] Assumptions have owners and target closure dates
+- [ ] Non-functional targets are grounded in business needs
+- [ ] Cost estimates show their workings
+- [ ] Self-assessed compliance scores look plausible given the content
+
+---
+
+## Decision
+
+After completing the checklist, record your decision:
+
+- [ ] **Approved** — ready to proceed
+- [ ] **Approved with conditions** — conditions listed in the governance record
+- [ ] **Deferred** — more information required (specify what)
+- [ ] **Rejected** — fundamental issues to resolve
+
+Record your decision in Section 7.4 Approval Sign-Off with date and any conditions.
+
+---
+
+## Tips for reviewers
+
+1. **Start with Section 1**. If the Solution Overview doesn't make sense, stop — send back to the author.
+2. **Check the tier first**. If it's mismatched with the depth, much of your review time is wasted.
+3. **Spot-check three random tables**. If they're boilerplate, the rest likely is too.
+4. **Look for the named owner**. Accountability follows names. Unnamed = unaccountable.
+5. **Demand evidence for scores of 4-5**. Aspirational self-scoring is common; evidence is rare.
+6. **Don't re-do other reviewers' work**. Security, privacy, finance all have specialist reviewers — note their involvement rather than replicating their review.

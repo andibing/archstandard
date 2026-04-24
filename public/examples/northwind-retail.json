@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document — NorthWind Online",
+      "solutionName": "NorthWind Online",
+      "applicationId": "NW-ECOM-001",
+      "authors": ["Priya Doe, Solution Architect"],
+      "owner": "Priya Doe",
+      "version": "1.0",
+      "status": "approved",
+      "createdDate": "2026-01-20",
+      "lastUpdated": "2026-03-18",
+      "classification": "internal"
+    },
+    "purpose": "Describe the architecture of the NorthWind Online e-commerce platform replacing the legacy Umbraco storefront before PCI-DSS end-of-support deadline.",
+    "scope": "Customer-facing web and mobile commerce platform, associated microservices, data stores, and third-party integrations."
+  },
+  "executiveSummary": {
+    "solutionOverview": "NorthWind Online is the customer-facing e-commerce platform for NorthWind Retail, serving approximately 2.3 million active monthly customers across the UK. It replaces the legacy Umbraco-based storefront (deployed 2017, end-of-support 2026) with a microservices architecture running on AWS EKS in eu-west-2. The solution comprises a Next.js storefront, 14 Node.js microservices organised by bounded context, Aurora PostgreSQL for transactional data, OpenSearch for product discovery, and Redis for session state. Payments are processed via Stripe; fulfilment integrates with the existing Manhattan WMS. Peak capacity target is £30M of transactions per day during Black Friday.",
+    "businessCriticality": "tier-2-high",
+    "projectDetails": {
+      "projectName": "Project Polaris",
+      "projectCode": "NW-PRJ-2026-003",
+      "estimatedCapex": 2000000,
+      "estimatedOpex": 800000,
+      "currency": "GBP",
+      "targetGoLive": "2026-09-15"
+    }
+  },
+  "_note": "This is a summary JSON stub. See the full example at https://archstandard.org/v1/examples/northwind-retail/ for comprehensive detail, or the Markdown version at /v1/examples/northwind-retail.md"
+}

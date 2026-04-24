@@ -1,0 +1,130 @@
+---
+title: "Reviewer Perspectives"
+description: "What different reviewers look for in a SAD — write for your audience."
+---
+
+A SAD is read by many people with different priorities. Write with their concerns in mind and you'll pass governance faster, with less rework.
+
+## The ARB Chair / Design Authority
+
+**What they look for:**
+- **Strategic fit** — does this align with the technology strategy and published roadmap?
+- **Reuse before build** — have existing shared services been considered?
+- **Appropriate rigour** — is the documentation depth proportionate to the criticality?
+- **Clear ownership** — who approves, who runs it, who retires it?
+- **Defensible decisions** — are key choices captured as ADRs with alternatives?
+
+**They skim for:** Section 1.3 (Strategic Alignment), Section 6.7 (ADR log), Section 6.2 (Guardrail Exceptions).
+
+**They look cynically for:** Gold-plating (over-documented), cargo-cult sections (filled-in template with no substance), rubber-stamp assumptions ("we assume all integrations will work").
+
+**Tip:** Lead with the business context. A clear "this is what we're doing, here's why, here's what it costs, here's what could go wrong" opens the review well.
+
+## The Security Architect / CISO Office
+
+**What they look for:**
+- **Threat model** for any non-trivial system
+- **Defence in depth** — multiple controls, not one critical control
+- **Least privilege** — in IAM, network, data access
+- **Monitoring and detection** — not just prevention
+- **Incident response** — ransomware resilience, immutable backups
+- **Regulatory compliance** — specific to the data and jurisdiction
+
+**They skim for:** Section 3.5 (Security View), Section 3.4 (Data View — classification), Section 4.2 (Reliability — backup immutability), Section 6.8 (Compliance Traceability).
+
+**They look cynically for:** "Encryption in transit" without detail, missing MFA on privileged paths, secrets in config, vague monitoring.
+
+**Tip:** Be specific. "Encryption in transit via TLS 1.3" is stronger than "encryption in transit". Name tools and policies.
+
+## The Data Architect / DPO
+
+**What they look for:**
+- **Data classification** — what sensitivity level, is it correctly applied?
+- **Legal basis** for personal data processing
+- **Data residency and sovereignty** — where does data live, can it cross borders?
+- **Retention and destruction** — how long, and how is it ended?
+- **Data flows to third parties** — contracts, safeguards
+- **Data Protection Impact Assessment** — referenced, and justified if not done
+
+**They skim for:** Section 3.4 (Data View), Section 2.3 (Compliance), Section 3.2 (Integration & Data Flow — external integrations).
+
+**They look cynically for:** Over-collection of personal data, retention longer than necessary, transfers to countries without adequacy decisions, implicit sharing with third parties.
+
+**Tip:** Document the journey of data, not just where it sits. A data flow diagram showing where PII enters, moves, and is destroyed is worth many tables.
+
+## The Site Reliability Engineer / Operations Lead
+
+**What they look for:**
+- **Operational readiness** — monitoring, alerting, runbooks
+- **SLOs and error budgets** — are the reliability targets realistic?
+- **Deployment model** — how do we release, roll back, test?
+- **DR strategy** — has it been exercised? Recently?
+- **Support model** — who's on-call, when?
+- **Observability** — can we diagnose problems without shipping new code?
+
+**They skim for:** Section 4.1 (Operational Excellence), Section 4.2 (Reliability — RTO, RPO, testing), Section 5.5 (Operations & Support), Section 5.7 (Service Start).
+
+**They look cynically for:** "Monitored via CloudWatch" without detail, RTO targets that imply never-tested failover, no owned runbooks, no pager rotation.
+
+**Tip:** Name the monitoring tool, the dashboards, the alerts that fire. "P95 latency alert at 500ms posts to #payments-oncall in Slack and pages the Orders SRE rota" is what a reviewer wants to see.
+
+## The Finance Partner / FinOps
+
+**What they look for:**
+- **Cost evidence** — not a number pulled from thin air
+- **Capex vs opex** — how the money flows, when
+- **Elasticity** — does cost scale with usage, or does it lock in fixed cost?
+- **Commitment discounts** — reserved instances, savings plans, committed use
+- **Unit economics** — cost per user, per transaction, per API call
+- **Exit costs** — if we walk away from a vendor, what does it cost?
+
+**They skim for:** Section 1.7 (Project Details — Capex/Opex), Section 4.4 (Cost Optimisation), Section 5.10 (Exit Planning).
+
+**They look cynically for:** Vendor marketing claims adopted as truth, no workings shown, no sensitivity analysis ("what if we get 3× the users?"), forgotten costs (egress, support plans, paid tiers).
+
+**Tip:** Show the workings. A table with service × quantity × unit rate × time adds credibility a single "£42k/year" figure cannot.
+
+## The Change Manager / PMO
+
+**What they look for:**
+- **Release plan** — cutover strategy, rollback plan
+- **Dependencies** — on other teams, vendors, change freezes
+- **Migration plan** (if applicable) — 6 R's classification, data migration, user cutover
+- **Testing strategy** — what's proven, what's hoped
+- **Stakeholder sign-off** — who approves, when
+
+**They skim for:** Section 5.2 (Service Transition & Migration), Section 5.4 (Release Management), Section 6.4 (Dependencies), Section 7.4 (Approval Sign-Off).
+
+**They look cynically for:** Missing rollback plans, missing cutover windows, dependencies on other teams without their sign-off, "we'll test after go-live".
+
+**Tip:** Name the change calendar window, the CAB you'll attend, the other teams whose work gates yours.
+
+## The Product Manager / Business Owner
+
+**What they look for:**
+- **Does this deliver what I asked for?**
+- **Does it scale if the business grows?**
+- **Can I experiment?** (Can we ship variations, feature flags, A/B tests?)
+- **What's the plan if we pivot?**
+- **What does it cost to run, in total?**
+
+**They skim for:** Section 1.1 (Solution Overview), Section 1.2 (Business Context), Section 3.6 (Scenarios).
+
+**They look cynically for:** Technical jargon without business translation, solutions that can't adapt, costs that keep growing with customers.
+
+**Tip:** In Section 1, write for the business reader. If they give up in the first page, they won't read the rest.
+
+---
+
+## Cross-reviewer tips
+
+Patterns that please everyone:
+
+1. **Executive Summary** that a non-technical reader can understand
+2. **Specific numbers** rather than qualitative claims
+3. **Named owners** on everything accountable
+4. **Dated commitments** rather than vague futures
+5. **Honest gaps** flagged as risks or assumptions
+6. **Decision records** for anything reversible only with effort
+
+Write once, read many. A SAD that answers these audiences without them needing to ask questions becomes the single source of truth for the solution.

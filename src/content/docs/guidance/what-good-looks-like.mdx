@@ -1,0 +1,118 @@
+---
+title: "What Good Looks Like"
+description: "Short worked excerpts showing high-quality content for each section of a SAD."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Short, realistic excerpts showing what high-quality content looks like for each section. These are drawn from the [worked examples](/v1/examples/). Pattern-match your own work against these — if your content is vaguer or less specific, tighten it up.
+
+<Aside type="note" title="Level of detail">
+These excerpts are at **Recommended** depth. Minimum depth is shorter and simpler; Comprehensive depth adds more detail (threat models, growth projections, compliance traceability). Use the [Depth Cheat Sheet](/v1/standard/cheat-sheet/) to see what's required at each depth.
+</Aside>
+
+---
+
+## Good: Solution Overview
+
+> NorthWind Online is the customer-facing e-commerce platform for NorthWind Retail, serving approximately 2.3 million active monthly customers across the UK. It replaces the legacy Umbraco-based storefront (deployed 2017, end-of-support 2026) with a microservices architecture running on AWS EKS in eu-west-2.
+>
+> The solution comprises a Next.js storefront, 14 Node.js microservices organised by bounded context (catalogue, cart, checkout, orders, returns), Aurora PostgreSQL for transactional data, OpenSearch for product discovery, and Redis for session state. Payments are processed via Stripe; fulfilment integrates with the existing Manhattan WMS via REST and event-driven messaging. Peak capacity target is £30M of transactions per day during Black Friday.
+
+**Why this works:** Concrete technologies, concrete numbers, clear scope, business context, capacity target. An architect from outside the team can understand the shape of the solution in 30 seconds.
+
+## Good: Business Driver
+
+> **Driver:** Replace end-of-support Umbraco 8 platform before June 2026 (vendor support ends May 2026).
+>
+> **Description:** The current storefront runs on Umbraco 8, which reaches end of support on 31 May 2026. Without replacement, NorthWind will run unsupported software processing card payments — a breach of PCI-DSS v4.0 Requirement 6.3.3 and an unacceptable business risk.
+>
+> **Priority:** Critical (regulatory deadline)
+
+**Why this works:** Specific regulation cited, specific date, specific consequence. Contrast with "We need to modernise the platform" — which fails because it doesn't explain why, when, or what happens if you don't.
+
+## Good: Logical View component entry
+
+> | Component | Type | Description | Technology | Owner | Status |
+> |-----------|------|-------------|------------|-------|--------|
+> | **Catalogue Service** | Backend Service | Serves product data to the storefront. Owns the product canonical model. Reads from the PIM via nightly batch and publishes product-updated events. | Node.js 22, Fastify, Aurora PostgreSQL read replica | Catalogue Team (Fred Bloggs) | New |
+
+**Why this works:** Type from the enum, concrete technology versions, named owner, clear responsibility, integration points referenced.
+
+**Poor equivalent:** "Catalogue Service — handles products. Node.js. To be built."
+
+## Good: Risk entry
+
+> | ID | Risk | Category | Severity | Likelihood | Owner | Mitigation |
+> |----|------|----------|----------|:---:|:---:|------------|
+> | R-003 | Peak Black Friday traffic (5-10× normal load) may exhaust Aurora read replicas, causing catalogue browse latency above 3 seconds | Performance | High | High | Jane Doe (SRE Lead) | Load test at 10× peak in October (booked for 2026-10-14). Pre-scale read replicas from 2 to 8 on 2026-11-20. ElastiCache read-through cache in front of Aurora for top 1000 SKUs deployed 2026-10-30. Auto-scaling policies tuned to pre-scale rather than reactive-scale during November campaign. |
+
+**Why this works:** Specific trigger, measurable consequence, named owner, dated and concrete mitigations. A reviewer can independently verify whether each mitigation is on track.
+
+**Poor equivalent:** "Site may be slow during Black Friday. Mitigation: scale up."
+
+## Good: ADR
+
+> ### ADR-002: Choose PostgreSQL (Aurora) over DynamoDB for transactional data
+>
+> **Status:** Accepted
+> **Date:** 2026-02-14
+> **Deciders:** Fred Bloggs (Solution Architect), Priya Doe (Data Lead), Jane Doe (SRE Lead)
+>
+> **Context:** The order service needs a transactional datastore supporting multi-row ACID transactions for checkout (inventory reservation, order creation, payment record) across approximately 30 orders per second peak. We evaluated DynamoDB, PostgreSQL (Aurora), and CockroachDB.
+>
+> **Decision:** Use Amazon Aurora PostgreSQL 16 with global replication to eu-west-1 for DR.
+>
+> **Alternatives considered:**
+> - **DynamoDB** — Ruled out due to limited transactional guarantees across items and our team's lack of DynamoDB operational experience. Checkout logic would have required custom saga orchestration.
+> - **CockroachDB** — Strong technical fit but introduces a new engine to the estate requiring platform-team upskilling, which increases operational risk during a time-sensitive migration.
+>
+> **Consequences:**
+> - Relational data model familiar to the team; faster delivery
+> - Vendor lock-in to AWS Aurora; exit via logical replication to Postgres on Kubernetes is feasible but untested (risk R-008)
+> - Aurora pricing is higher than DynamoDB at low load, cheaper at peak — expected annual cost £42k
+>
+> **Affected quality attributes:** Reliability (stronger), Cost (higher base, better peak), Performance (adequate at 30 orders/s with 2-node writer)
+
+**Why this works:** Alternatives considered, rationale for rejection, honest trade-offs, cost quantified, risks cross-referenced. A year from now a new architect can understand why this decision was made.
+
+## Good: Scoring self-assessment
+
+> | Section | Score | Notes |
+> |---------|:-----:|-------|
+> | 3.1 Logical View | 4 | All 14 services decomposed with clear responsibilities. Design patterns justified. Vendor lock-in assessed per component. To reach 5 would need a capability model mapping — not worth the effort for Recommended depth. |
+> | 3.5 Security View | 3 | Authentication, authorisation, encryption, and monitoring documented. Gap: session management details still referenced to Security Runbook (SR-042) rather than inline — see R-012. Will be fully inline before next release. |
+
+**Why this works:** Specific, honest. The author names the gap that caps the 3.5 score at 3 and what the plan is. Contrast with "Score 4 — all good" which tells a reviewer nothing.
+
+## Good: Glossary entry
+
+> | Term | Definition |
+> |------|-----------|
+> | **Bounded Context** | A Domain-Driven Design concept: an explicit boundary within which a particular domain model is defined and applicable. The NorthWind platform has 14 bounded contexts including Catalogue, Cart, Checkout, Orders, Returns. |
+
+**Why this works:** Defines the term, names the source framework, provides local context. The definition also signposts where it's used in the document.
+
+---
+
+## Pattern library
+
+Beyond the examples above, here are general patterns that appear in good SADs:
+
+- **Named people, not roles** — "Fred Bloggs (SRE Lead)" not just "SRE Lead". Accountability follows names.
+- **Dates on commitments** — "deployed 2026-10-30" not "will be deployed later"
+- **Specific technology and version** — "Node.js 22" not "Node.js"
+- **Cross-references, not repetition** — "see Risk R-012" not re-stating the risk
+- **Numbers, not adjectives** — "5 orders per second peak" not "high traffic"
+- **Honest gaps** — "will be added before production release (R-015 tracks this)" not silence
+
+## Practice exercise
+
+Look at the first section of your own SAD draft. For each table row:
+
+1. Is there a named owner?
+2. Is there a date or a dependency?
+3. Is there a specific technology or number, not a category?
+4. Can a reviewer verify it independently?
+
+If the answer to any of these is "no", rewrite that row.

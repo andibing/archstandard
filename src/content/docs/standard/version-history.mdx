@@ -18,7 +18,7 @@ Previous major versions are permanently available at versioned URLs. SADs refere
 | Version | URL | Status |
 |---------|-----|--------|
 | **Latest** | [archstandard.org](https://archstandard.org) | Current |
-| **v1** | [archstandard.org/v1/](https://archstandard.org/v1/) | Current (v1.2.0) |
+| **v1** | [archstandard.org/v1/](https://archstandard.org/v1/) | Current (v1.3.0) |
 | **v2** | [archstandard.org/v2/](https://archstandard.org/v2/) | In development |
 
 ## Releases
@@ -66,6 +66,45 @@ The first version of the Architecture Description Standard (ADS), synthesising y
 - Organisation customisation examples (YAML and JSON)
 - Full French and German translation parity (30 pages each)
 - Dual licence: CC BY 4.0 (content) + MIT (code)
+
+### v1.3.0 - Adoption Release
+
+**Date:** 2026-04-24
+
+Focus on making ADS easier to adopt, easier to review, and easier to teach.
+
+**New example SADs (four → seven):**
+- **NorthWind Retail** — Recommended depth, Tier 2, PCI-DSS regulated e-commerce on AWS
+- **Medwick Healthcare** — Comprehensive depth, Tier 1, NHS patient portal with DCB0129/DCB0160 clinical safety, NHS DSPT, FHIR R4
+- **Stellar Platform** — Recommended depth, Tier 3, multi-cloud Internal Developer Platform on Kubernetes with Backstage
+
+**AI Prompt Library (new):**
+- First-draft generator — produce a structured SAD from a brief
+- Validator — completeness, consistency, clarity, credibility
+- Scorer — apply the 0-5 compliance scale with justification
+- Improver — section-by-section suggestions for the next score level
+- Security review — CISO-office-style review
+- Governance review — ARB-style review
+
+**Guidance section (new):**
+- What Good Looks Like — worked excerpts showing high-quality content
+- Anti-Patterns — common mistakes with before-and-after examples
+- Decision Guides — flowcharts for depth, threat model, split SADs, ADRs, RAID classification
+- Reviewer Perspectives — what ARB chair, Security, Data, SRE, Finance, Change, Product look for
+- Starter Kits — pre-scoped guidance for new cloud apps, migrations, integrations, platforms
+- Review Checklist — printable one-pager for governance reviewers
+- Industry Mappings — GDS Service Standard, NIST CSF, PCI-DSS, ISO 27001, NHS DSPT, UK GDPR, FCA
+- Cheat Cards — one-page printable references
+- The 2-Minute Pitch — speaker notes for introducing ADS internally
+
+**Contribution infrastructure:**
+- CONTRIBUTING.md with style guide and contribution paths
+- CODE_OF_CONDUCT.md (principles-based)
+- GitHub issue templates for bug reports, feature requests, and example contributions
+
+**Other:**
+- FAQ page answering common adoption questions
+- Examples index expanded to show all seven examples with downloadable Markdown and JSON
 
 ## Roadmap
 

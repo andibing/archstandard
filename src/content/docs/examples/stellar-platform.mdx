@@ -1,0 +1,1295 @@
+---
+title: "Example: Stellar Platform (Internal Developer Platform)"
+description: "A completed SAD for an Internal Developer Platform at a 400-engineer SaaS company, demonstrating ADS at Recommended depth."
+---
+
+import Mermaid from '../../../components/Mermaid.astro';
+
+<div class="example-sad">
+
+
+<div class="guidance-box">
+<h4>About This Example</h4>
+
+This is a **fictional but realistic** Solution Architecture Document for **Stellar Platform**, an Internal Developer Platform (IDP) at Stellar Engineering Ltd -- a 400-engineer B2B SaaS company. It demonstrates the ADS standard at **Recommended** documentation depth, appropriate for a Tier 3 internal productivity platform with no direct customer impact.
+
+The example is written in the language of modern platform engineering: Team Topologies, cognitive load, golden paths, paved roads, platform-as-a-product, and DevEx. Use it as a reference when writing your own SAD for an internal platform or developer experience initiative.
+</div>
+
+---
+
+## 0. Document Control
+
+### 0.1 Document Metadata
+
+| Field | Value |
+|-------|-------|
+| **Document Title** | Solution Architecture Document -- Stellar Platform (Internal Developer Platform) |
+| **Application / Solution Name** | Stellar Platform |
+| **Application ID** | APP-1042 |
+| **Author(s)** | Tom Bloggs, Principal Platform Engineer |
+| **Owner** | Tom Bloggs, Principal Platform Engineer |
+| **Version** | 1.0 |
+| **Status** | Approved |
+| **Created Date** | 2026-01-14 |
+| **Last Updated** | 2026-04-18 |
+| **Classification** | Internal |
+
+### 0.2 Change History
+
+| Version | Date | Author / Editor | Description of Change |
+|---------|------|-----------------|----------------------|
+| 0.1 | 2026-01-14 | Tom Bloggs | Initial draft following platform strategy workshop |
+| 0.2 | 2026-02-05 | Claire Doe | Added developer journey scenarios and DevEx metrics |
+| 0.3 | 2026-02-27 | Amir Bloggs | Added SRE-facing sections: observability, reliability, on-call model |
+| 0.4 | 2026-03-20 | Tom Bloggs | Incorporated feedback from Platform Advisory Group; added ADR-003 (multi-cloud) |
+| 1.0 | 2026-04-18 | Tom Bloggs | Approved by Architecture Review Board |
+
+### 0.3 Contributors & Approvals
+
+| Name | Role | Contribution Type |
+|------|------|------------------|
+| Tom Bloggs | Principal Platform Engineer (Platform Lead) | Author |
+| Claire Doe | Developer Experience Lead | Author |
+| Amir Bloggs | Site Reliability Engineering Lead | Author |
+| Jane Doe | Product Manager (Stellar Platform) | Reviewer |
+| Priya Bloggs | Head of Engineering | Reviewer |
+| Joe Bloggs | Security Architect | Reviewer |
+| Sam Doe | FinOps Lead | Reviewer |
+| Architecture Review Board | Governance | Approver |
+
+### 0.4 Document Purpose & Scope
+
+This SAD describes the architecture of **Stellar Platform** -- a self-service Internal Developer Platform (IDP) that provides Stellar Engineering Ltd's 60 stream-aligned product teams with golden paths for service creation, deployment, observability, and day-2 operations.
+
+- **Scope boundary:** The Backstage developer portal, the platform control plane (Crossplane, Terraform), the delivery plane (ArgoCD, Tekton), the observability stack (Prometheus, Grafana, Datadog), and the golden-path templates they expose. Includes the GKE (primary) and EKS (secondary) Kubernetes fleets that host both the platform itself and its customer workloads.
+- **Out of scope:** The individual product-team services that run on the platform (documented by their owning teams), the corporate identity provider (Okta, documented under APP-0008), and the customer-facing Stellar SaaS product (documented under APP-0100).
+- **Related documents:** Stellar Engineering Platform Strategy 2026-2028 (STRAT-0004), Platform-as-a-Product Operating Model (POL-0031), Stellar Cloud Landing Zone Standards (STD-0012), Information Security Policy (POL-0001).
+
+---
+
+## 1. Executive Summary
+
+### 1.1 Solution Overview
+
+**Stellar Platform** is an Internal Developer Platform (IDP) built on Backstage that offers Stellar's 400 engineers a curated, self-service experience for the entire software delivery lifecycle. It exposes a small number of well-paved **golden paths** -- opinionated templates and automation -- that reduce the cognitive load on stream-aligned product teams and let them ship independently without having to reason about Kubernetes manifests, Terraform modules, IAM boundaries, or observability wiring.
+
+The platform is architected as three loosely-coupled planes:
+
+- **Portal plane:** A Backstage instance acting as the single pane of glass for discovery, self-service actions, software catalogue, TechDocs, and scorecards.
+- **Control plane:** Crossplane-managed infrastructure abstractions, Terraform for everything Crossplane cannot model yet, GitHub as the source of truth, and Dagger for reusable CI pipelines.
+- **Runtime plane:** A federated fleet of Kubernetes clusters (GKE as primary, EKS as secondary), delivered via ArgoCD (GitOps) and Tekton (for build and security pipelines), with observability provided by a Prometheus + Grafana stack and Datadog for cross-cloud APM and incident workflow.
+
+The platform is treated as a product. It has a product manager, a roadmap, user research cadence, and opt-in adoption -- teams can route around it, but we design the paved road to be the path of least resistance.
+
+### 1.2 Business Context & Drivers
+
+| Driver | Description | Priority |
+|--------|------------|----------|
+| Developer productivity | Lead time for changes has stretched from 2 days to 9 days as the estate has grown; new service bootstrapping takes 3-6 weeks of coordination across SRE, Security, and Platform | Critical |
+| Cognitive load | Product teams are carrying too many accidental responsibilities (clusters, pipelines, IAM, alerting) instead of focusing on customer value | High |
+| Fragmentation | 14 different CI patterns, 6 Terraform module styles, 4 Kubernetes deployment approaches, and 3 competing observability stacks across teams | High |
+| Reliability | Production incidents increasingly rooted in configuration drift, unclear ownership, and inconsistent runbooks; change failure rate at 18% (DORA high-performer threshold is 15%) | High |
+| Security | Inconsistent supply-chain controls and secret handling across teams; audit findings in SOC 2 Type II report | High |
+| Cost | Cloud spend grew 42% YoY against 18% revenue growth; no unified FinOps view across teams | Medium |
+
+### 1.3 Strategic Alignment
+
+#### Organisational Strategy Alignment
+
+| Question | Response |
+|----------|----------|
+| Which organisational strategy or initiative does this solution support? | Stellar Engineering Platform Strategy 2026-2028: pillar 2 ("reduce cognitive load on stream-aligned teams") and pillar 4 ("engineer productivity and DORA elite performance") |
+| Has this solution been reviewed against the organisation's capability model? | Yes -- reviewed by the Enterprise Architecture Council 2026-02-12 |
+| Does this solution duplicate any existing capability? | No -- it explicitly consolidates and retires fragmented capabilities (see Current State) |
+
+#### Reuse of Shared Services & Platforms
+
+| Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
+|-----------|--------------------------|---------|------------------------------|
+| Source control | GitHub Enterprise (corporate) | Yes | -- |
+| Identity & Access | Okta (corporate IdP) | Yes | SCIM-provisioned groups drive Backstage and Kubernetes RBAC |
+| APM & Incident Management | Datadog (existing enterprise contract) | Yes | Retained for APM, synthetics, and on-call workflow; avoids re-tooling cost |
+| Metrics & Dashboards | Prometheus + Grafana | Yes (new standard) | Self-hosted; integrates with Datadog for unified dashboards |
+| Secret Management | HashiCorp Vault (existing) | Yes | Workload Identity federated into Vault for short-lived credentials |
+| CI/CD | GitHub Actions (corporate) | Yes (partial) | Retained for source-repo-level checks; Tekton used for heavier build + signing pipelines |
+| Artefact Registry | GitHub Packages + Artifact Registry | Yes | Hybrid reflects multi-cloud choice |
+| Data & Analytics | Snowflake (corporate) | Yes | Backstage and DORA telemetry land in Snowflake via Fivetran |
+
+### 1.4 Scope
+
+#### In Scope
+
+- Backstage developer portal and all first-party plugins (catalogue, TechDocs, Scaffolder, scorecards, cost insights)
+- Platform control plane: Crossplane, Terraform modules, Dagger pipeline libraries
+- Delivery plane: ArgoCD control plane, Tekton pipelines, supply-chain tooling (Sigstore, SLSA attestations)
+- Runtime plane: GKE (primary) and EKS (secondary) fleet, including platform workloads and the multi-tenant application namespaces for product teams
+- Observability plane: Prometheus, Grafana, OpenTelemetry collectors, Datadog integration
+- Golden-path templates for: new Go service, new TypeScript service, new Python batch job, new frontend app, new ephemeral preview environment
+- Developer-facing CLI (`stellar`) wrapping portal and API actions
+- Documentation, enablement, and paved-road migration tooling
+
+#### Out of Scope
+
+- Individual product services that run on the platform (owned by stream-aligned teams)
+- The customer-facing Stellar SaaS product (APP-0100)
+- Corporate identity (Okta) and networking (ExpressRoute / Interconnect) -- platform consumes these
+- Data warehouse workloads (Snowflake; documented under APP-0070)
+- Third-party SaaS integrations not consumed directly by the platform
+
+### 1.5 Current State / As-Is Architecture
+
+Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 services) without a deliberate platform strategy. The result is a high-cognitive-load environment for stream-aligned teams:
+
+- **Manual service bootstrapping:** New services take 3-6 weeks. The process spans 9 Jira tickets across SRE, Security, Networking, Platform, and Finance. Engineers cite this as their top frustration in the 2025 DevEx survey (Net DevEx Score: -18).
+- **Jenkins monorepo:** A single 12-year-old Jenkins instance runs 2,400 jobs; >60% of incidents in the CI/CD domain originate here. The maintainer left in 2024 and no one fully understands the Groovy shared library.
+- **Terraform sprawl:** Each team maintains its own Terraform modules. Six competing approaches to VPC, IAM, and Kubernetes namespace provisioning exist.
+- **Kubernetes fragmentation:** Some teams deploy via Helm charts manually, some via ad hoc `kubectl apply`, a few via Flux. No consistent RBAC, no consistent resource-quota policy.
+- **Observability silos:** Three teams run their own Prometheus; others export straight to Datadog; some still use CloudWatch. Cross-service traces are unusable.
+- **Documentation decay:** Team wikis in Confluence are frequently out of date; new joiners spend their first 3-4 weeks "finding the right page".
+
+The DORA baseline (measured via manual sampling Q4 2025) sits in the **medium performer** band: deployment frequency weekly, lead time 9 days, change failure rate 18%, MTTR 8 hours.
+
+### 1.6 Key Decisions & Constraints
+
+| Decision / Constraint | Rationale | Impact |
+|----------------------|-----------|--------|
+| Backstage as the portal foundation | Industry standard for IDPs; active CNCF project; large plugin ecosystem; hiring signal | Commits to a Node.js/React stack and the ongoing cost of tracking upstream |
+| Multi-cloud from day one (GKE primary, EKS secondary) | Commercial risk mitigation; two of our largest customers require regional presence in GCP and AWS respectively | Higher platform engineering cost; requires cloud-agnostic abstractions (Crossplane) |
+| GitOps via ArgoCD | Declarative, auditable, and the dominant pattern for Kubernetes at our scale | Commits teams to writing manifests or using our Scaffolder to generate them |
+| Platform-as-a-product operating model | The platform only succeeds if adoption is voluntary; we measure ourselves on adoption, DORA, and DevEx survey scores | Requires a dedicated PM (Jane Doe) and ongoing user research |
+| Opinionated golden paths; opt-out allowed | The paved road should be the shortest path, but we do not forbid teams from leaving it | Slightly higher support burden; accepts some long-tail variance |
+
+### 1.7 Project Details
+
+| Field | Value |
+|-------|-------|
+| **Project Name** | Stellar Platform Programme |
+| **Project Code / ID** | PRJ-2026-004 |
+| **Project Manager** | Jane Doe (Product Manager, Platform) |
+| **Estimated Solution Cost (Capex)** | GBP 1,200,000 (build phase, 9 months, including cross-functional team of 12) |
+| **Estimated Solution Cost (Opex)** | GBP 350,000/year (run cost: cloud hosting, Datadog, Backstage maintenance, on-call) |
+| **Target Go-Live Date** | 2026-07-01 (MVP -- first 5 golden paths) |
+
+### 1.8 Business Criticality
+
+Selected criticality: **Tier 3: Medium Impact**
+
+The platform is an internal productivity tool with no direct customer-facing revenue impact. If the platform is unavailable:
+
+- In-flight product deployments are delayed (not blocked -- teams can deploy via emergency path using `kubectl` directly).
+- Customer-facing services continue to run; they are not in the request path of the platform.
+- Developer productivity is reduced; an all-day outage costs approximately 400 engineer-days of lost self-service capability.
+
+The impact of platform unavailability is internal productivity loss, not customer or regulatory harm. Tier 3 is appropriate.
+
+---
+
+## 2. Stakeholders & Concerns
+
+### 2.1 Stakeholder Register
+
+| Stakeholder | Role / Group | Key Concerns | Relevant Views |
+|-------------|-------------|--------------|----------------|
+| Priya Bloggs | Head of Engineering (Sponsor) | Engineer productivity, DORA metrics, cost, predictable delivery | Executive Summary, Scenarios |
+| Jane Doe | Product Manager (Stellar Platform) | Adoption, DevEx survey scores, paved-road-first narrative | All views |
+| Tom Bloggs | Principal Platform Engineer (Platform Lead) | Design integrity, platform reliability, long-term maintainability | All views |
+| Claire Doe | Developer Experience Lead | Onboarding time, cognitive load, documentation quality | Logical, Scenarios, Lifecycle |
+| Amir Bloggs | SRE Lead | Reliability of the platform itself, on-call burden, observability | Physical, Operational Excellence, Reliability |
+| Joe Bloggs | Security Architect | Supply chain, secrets, Kubernetes RBAC, audit | Security View, Data View |
+| Sam Doe | FinOps Lead | Multi-cloud cost attribution, showback, waste reduction | Cost Optimisation |
+| Product Team Tech Leads (c.60) | Stream-aligned teams (internal customers) | Autonomy, not being blocked, escape hatches when golden paths do not fit | Logical, Scenarios |
+| Engineering Directors (c.6) | Capability-aligned leaders | Team performance, morale, hiring signal | Executive Summary, Scenarios |
+| Enabling Teams (4 teams, c.18 engineers) | Data, ML, Frontend, Mobile enabling teams | Shared libraries integrate with golden paths; don't impose their own context | Logical, Integration |
+
+### 2.2 Concerns Matrix
+
+| Concern | Stakeholder(s) | Addressed In |
+|---------|---------------|-------------|
+| Lead time for changes falls below 2 days | Head of Engineering, Product Teams | 1.2 Drivers, 3.6 Scenarios, 4.3 Performance |
+| Cognitive load on product teams reduces | Product Teams, DevEx Lead | 3.1 Logical View (abstractions), 3.6 Scenarios |
+| Platform does not become a bottleneck | Product Teams, Head of Engineering | 6.3 Risks (R-001), 4.2 Reliability |
+| Golden paths do not become cages | Product Teams, Tech Leads | 6.3 Risks (R-002), 3.1 Design patterns |
+| Supply-chain integrity and SBOM generation | Security Architect | 3.5 Security View, 5.1 CI/CD |
+| Secrets never present on developer machines | Security Architect | 3.5 Security View |
+| Cross-cloud cost is attributable per team | FinOps Lead | 4.4 Cost Optimisation |
+| Platform SLIs/SLOs are visible and honoured | SRE Lead | 4.1 Operational Excellence, 4.2 Reliability |
+| Onboarding of a new team takes less than a day | DevEx Lead | 3.6 Scenarios |
+
+### 2.3 Compliance & Regulatory Context
+
+#### Regulatory Requirements
+
+| Regulation / Standard | Applicability | Impact on Design |
+|----------------------|--------------|-----------------|
+| UK GDPR & Data Protection Act 2018 | Platform processes engineer identity data (Okta sync) and may touch customer data indirectly via logs from product services | Access controls, audit logging, engineer consent for DevEx telemetry |
+| SOC 2 Type II | Stellar Engineering is SOC 2 Type II certified; the platform materially affects the control environment (change management, access, monitoring) | Platform controls are in scope; evidence automation required |
+
+#### Regulated Activities
+
+- No -- the platform itself does not process customer financial, health, or payment data. Product services running on the platform may, but they remain individually accountable for their regulatory posture.
+
+#### Compliance Standards
+
+| Standard | Version | Applicability |
+|----------|---------|--------------|
+| Stellar Information Security Policy (POL-0001) | 4.2 | All platform controls |
+| Stellar Cloud Landing Zone Standards (STD-0012) | 3.1 | GKE and EKS account/project layout |
+| SLSA Supply-chain Levels | v1.0 (target L3) | CI/CD supply-chain controls |
+| CIS Kubernetes Benchmark | v1.9 | Cluster hardening baseline |
+
+---
+
+## 3. Architectural Views
+
+### 3.1 Logical View
+
+#### 3.1.1 Application Architecture Diagram
+
+<Mermaid alt="Stellar Platform logical architecture. The Portal plane (Backstage, CLI, docs) sits above the Control plane (Crossplane, Terraform, Dagger, GitHub as source of truth), which sits above the Runtime plane (ArgoCD, Tekton, GKE and EKS clusters) and the Observability plane (Prometheus, Grafana, OpenTelemetry, Datadog)." chart={`graph TB
+    subgraph Portal[Portal Plane]
+        BS[Backstage Portal]
+        CLI[stellar CLI]
+        TD[TechDocs]
+    end
+    subgraph Control[Control Plane]
+        CP[Crossplane]
+        TF[Terraform Modules]
+        DG[Dagger Pipelines]
+        GH[GitHub - Source of Truth]
+    end
+    subgraph Delivery[Delivery Plane]
+        ARGO[ArgoCD]
+        TKN[Tekton]
+        SIG[Sigstore + SLSA]
+    end
+    subgraph Runtime[Runtime Plane]
+        GKE[GKE Fleet - Primary]
+        EKS[EKS Fleet - Secondary]
+    end
+    subgraph Obs[Observability Plane]
+        PROM[Prometheus]
+        GRAF[Grafana]
+        OTEL[OpenTelemetry]
+        DD[Datadog]
+    end
+    BS --> GH
+    CLI --> BS
+    GH --> CP
+    GH --> ARGO
+    CP --> GKE
+    CP --> EKS
+    TF --> GKE
+    TF --> EKS
+    DG --> TKN
+    TKN --> SIG
+    ARGO --> GKE
+    ARGO --> EKS
+    GKE --> OTEL
+    EKS --> OTEL
+    OTEL --> PROM
+    OTEL --> DD
+    PROM --> GRAF`} />
+
+#### 3.1.2 Component Decomposition
+
+| Component | Type | Description | Technology | Owner |
+|-----------|------|-------------|------------|-------|
+| Backstage Portal | Web Application | Single pane of glass: catalogue, Scaffolder, TechDocs, scorecards, cost insights | Backstage (Node.js, React, TypeScript) | Platform Team (Portal squad) |
+| stellar CLI | Application | Thin CLI wrapping Backstage APIs for terminal-first engineers | Go; distributed via Homebrew and `go install` | Platform Team (DevEx squad) |
+| Scaffolder Templates | Application Asset | Golden-path templates for new services, jobs, frontends, preview envs | Backstage Scaffolder, YAML, Cookiecutter | Platform Team (Portal squad) |
+| Software Catalogue | Service | Authoritative registry of services, APIs, resources, teams, and ownership | Backstage catalog-backend, PostgreSQL | Platform Team (Portal squad) |
+| Crossplane Control Plane | Service | Kubernetes-native API for cloud resources (buckets, databases, IAM) | Crossplane v1.15, provider-gcp, provider-aws | Platform Team (Control squad) |
+| Terraform Module Library | Application Asset | Audited modules for resources Crossplane does not yet model | Terraform 1.7, Terragrunt, Atlantis | Platform Team (Control squad) |
+| Dagger Pipeline Library | Application Asset | Reusable typed CI pipelines (build, test, SBOM, sign, publish) | Dagger (Go SDK) | Platform Team (Delivery squad) |
+| Tekton Pipelines | Service | Runs heavy, privileged pipeline work (signing, image promotion) | Tekton v0.56 on GKE | Platform Team (Delivery squad) |
+| ArgoCD Control Plane | Service | GitOps engine; reconciles target state for all tenant namespaces | ArgoCD v2.11 in HA mode | Platform Team (Runtime squad) |
+| GKE Fleet | Runtime | Primary Kubernetes fleet (3 regions: europe-west2, us-east4, asia-southeast1) | GKE Autopilot | Platform Team (Runtime squad) |
+| EKS Fleet | Runtime | Secondary Kubernetes fleet (eu-west-2, us-east-1) | EKS, Karpenter for node autoscaling | Platform Team (Runtime squad) |
+| Prometheus + Grafana | Service | Platform and tenant metrics; self-hosted, multi-tenant | Prometheus (Thanos for long-term), Grafana | Platform Team (Obs squad) |
+| Datadog | External SaaS | APM, RUM, synthetics, on-call paging; integrated via OpenTelemetry Collector | Datadog (enterprise contract) | Platform Team (Obs squad) |
+| DORA Telemetry Pipeline | Batch Job | Extracts deployment frequency, lead time, CFR, MTTR per team into Snowflake | Dagger + Snowflake | Platform Team (DevEx squad) |
+
+#### 3.1.3 Design Patterns
+
+| Pattern | Where Applied | Rationale |
+|---------|--------------|-----------|
+| Platform-as-a-Product | Overall operating model | Platform only succeeds through voluntary adoption; treat internal customers as customers |
+| Golden Paths (Paved Road) | Scaffolder templates, CI libraries, runtime conventions | Make the right thing the easy thing; avoid hard guardrails where possible |
+| GitOps | ArgoCD, Crossplane | Declarative, auditable, self-healing; Git is the source of truth |
+| Control-Plane / Data-Plane separation | Portal/Control vs. Runtime/Observability | Allows independent scaling and failure domains |
+| Sidecar | OpenTelemetry Collector, Istio envoy (phase 2) | Non-invasive telemetry and policy enforcement |
+| API Gateway | Backstage's backend-for-frontend | Single authenticated entry point for portal clients |
+| Strangler Fig | Jenkins to Tekton migration | Gradual retirement of Jenkins without a big-bang cutover |
+
+#### 3.1.4 Service & Capability Mapping
+
+| Service ID | Service Name | Capability ID | Capability Name |
+|-----------|-------------|--------------|----------------|
+| SVC-1042-01 | Developer Portal | CAP-ENG-010 | Developer Self-Service |
+| SVC-1042-02 | Platform Control Plane | CAP-ENG-011 | Infrastructure Provisioning |
+| SVC-1042-03 | Delivery Pipelines | CAP-ENG-012 | Build, Test, Deploy |
+| SVC-1042-04 | Kubernetes Runtime | CAP-ENG-013 | Application Runtime |
+| SVC-1042-05 | Observability | CAP-ENG-014 | Monitoring & Incident Response |
+
+#### 3.1.5 Application Impact
+
+| Application Name | Application ID | Impact Type | Change Details | Comments |
+|-----------------|---------------|-------------|----------------|----------|
+| Jenkins (legacy CI) | APP-0205 | Retire | Retire over 18 months via strangler-fig migration to Tekton | 2,400 jobs rehosted or refactored |
+| Confluence team spaces | N/A | Use (reduced) | TechDocs becomes primary engineering documentation surface | Confluence retained for non-technical content |
+| Okta | APP-0008 | Use | SCIM sync of groups drives Backstage and cluster RBAC | No change to Okta configuration |
+| HashiCorp Vault | APP-0015 | Use | Workload Identity federation; Vault Agent sidecar for non-Kubernetes workloads | Existing Vault retained |
+| Datadog | N/A (SaaS) | Use (expanded) | Expanded to multi-cloud APM and unified on-call | Existing enterprise contract |
+| Snowflake | APP-0070 | Use | DORA and DevEx telemetry land in Snowflake | Read-only access pattern |
+
+#### 3.1.6 Technology & Vendor Lock-in Assessment
+
+| Component / Service | Vendor / Technology | Lock-in Level | Mitigation | Portability Notes |
+|---|---|---|---|---|
+| Backstage | CNCF (Spotify-origin) | Moderate | Open-source, heavily extended internally; catalogue data portable | Plugin ecosystem is the main switching cost |
+| Crossplane | CNCF | Low | Kubernetes-native; Compositions are portable YAML | Compositions use Upbound providers (alternative providers exist) |
+| ArgoCD | CNCF | Low | GitOps manifests are portable; Flux is a drop-in alternative | -- |
+| Tekton | CNCF | Low | Pipelines are YAML; Dagger abstraction shields most pipeline logic | -- |
+| GKE | Google Cloud | Moderate | Autopilot is GKE-specific; workloads themselves are standard Kubernetes | Migrated workloads would require re-platforming cluster layer |
+| EKS | AWS | Moderate | Similar considerations to GKE; intentional redundancy reduces single-cloud lock-in | -- |
+| Datadog | Datadog Inc. | High | OpenTelemetry Collector shields application code; dashboards and monitors are Datadog-specific | Dashboards-as-code (Terraform provider) eases partial migration |
+| Backstage plugins (bespoke) | Stellar-internal | N/A (internal) | Built on stable Backstage APIs; versioned | -- |
+
+### 3.2 Integration & Data Flow View
+
+#### 3.2.1 Data Flow Diagrams
+
+**Primary developer journey -- "Create a new service":**
+
+<Mermaid alt="Developer journey for creating a new service. An engineer opens Backstage, picks a golden-path template, Backstage Scaffolder creates a GitHub repository with CI and infra as code. Crossplane provisions cloud resources. ArgoCD deploys the resulting container image. Datadog observability is auto-configured." chart={`sequenceDiagram
+    participant Dev as Engineer
+    participant BS as Backstage
+    participant GH as GitHub
+    participant TKN as Tekton
+    participant CP as Crossplane
+    participant ARGO as ArgoCD
+    participant GKE as GKE Cluster
+    participant DD as Datadog
+    Dev->>BS: Choose golden-path template
+    BS->>GH: Create repo (code + IaC)
+    GH->>TKN: Trigger pipeline (push)
+    TKN->>TKN: Build, SBOM, sign image
+    TKN->>GH: Publish manifests to infra repo
+    GH->>CP: Apply Crossplane claim
+    CP->>GKE: Provision namespace + secrets
+    GH->>ARGO: Sync new Application
+    ARGO->>GKE: Deploy workload
+    GKE->>DD: Emit metrics + traces
+    BS->>Dev: "Service ready - see scorecard"`} />
+
+**Secondary data flow -- DORA telemetry:**
+
+1. Each Tekton pipeline run emits a CloudEvents-formatted event to a Pub/Sub topic.
+2. A Dagger batch job (runs every 15 minutes) aggregates events into deployment, lead time, and CFR metrics per team.
+3. Metrics land in Snowflake (`PLATFORM.DORA` schema) and are surfaced back into Backstage scorecards.
+4. Weekly exec digest is generated from Snowflake via scheduled query.
+
+#### 3.2.2 Internal Component Connectivity
+
+| Source Component | Destination Component | Protocol / Encryption | Authentication Method | Purpose |
+|-----------------|----------------------|----------------------|----------------------|---------|
+| Engineer browser | Backstage Portal | HTTPS / TLS 1.3 | OIDC (Okta) | Portal access |
+| stellar CLI | Backstage backend | HTTPS / TLS 1.3 | OIDC device code flow | CLI self-service |
+| Backstage | GitHub Enterprise | HTTPS / TLS 1.3 | GitHub App (short-lived tokens) | Scaffolder, catalogue sync |
+| Backstage | PostgreSQL (catalogue) | TCP-TLS | mTLS + Workload Identity | Catalogue persistence |
+| Tekton | GitHub Enterprise | HTTPS / TLS 1.3 | GitHub App | Webhook-driven pipeline triggers |
+| Tekton | Artifact Registry / GHCR | HTTPS / TLS 1.3 | Workload Identity | Push container images |
+| ArgoCD | GKE / EKS API servers | HTTPS / TLS 1.3 | ServiceAccount + cluster RBAC | Reconcile desired state |
+| Crossplane | GCP / AWS APIs | HTTPS / TLS 1.3 | Workload Identity federation | Provision cloud resources |
+| OpenTelemetry Collector | Prometheus (remote write) | HTTPS / TLS 1.3 | mTLS | Metrics ingestion |
+| OpenTelemetry Collector | Datadog intake | HTTPS / TLS 1.3 | API key (from Vault) | APM and trace ingestion |
+| Platform workloads | HashiCorp Vault | HTTPS / TLS 1.3 | Workload Identity (JWT) | Short-lived dynamic secrets |
+
+#### 3.2.3 External Integration Architecture
+
+| Source Application | Destination Application | Protocol / Encryption | Authentication | Security Proxy | Purpose |
+|-------------------|------------------------|----------------------|---------------|---------------|---------|
+| Stellar Platform | Okta | HTTPS / TLS 1.3 | OIDC (server-to-server), SCIM | N/A | Authentication, group sync |
+| Stellar Platform | GitHub Enterprise Cloud | HTTPS / TLS 1.3 | GitHub App (private key in Vault) | N/A | Source of truth |
+| Stellar Platform | Datadog | HTTPS / TLS 1.3 | API key | N/A | APM, paging |
+| Stellar Platform | Snowflake | HTTPS / TLS 1.3 | Key-pair auth (rotated) | Private Link | DORA telemetry landing |
+
+##### End User Access
+
+| User Type | Access Method | Authentication | Protocol |
+|-----------|-------------|---------------|----------|
+| Engineers (400) | Web browser + `stellar` CLI | Okta SSO (OIDC) + MFA | HTTPS |
+| Platform admins (12) | Web + `kubectl` via IAP/SSM bastion | Okta SSO + Hardware key + PIM | HTTPS / SSH |
+| Break-glass / SRE | Emergency cluster-admin role via PIM | Okta SSO + Hardware key + manager approval + 2h TTL | HTTPS |
+
+#### 3.2.4 APIs Exposed
+
+| Name | Type | Direction | Data Format | Version | Authenticated | Rate Limited |
+|------|------|-----------|-------------|---------|---------------|--------------|
+| Backstage Backend API | REST | Exposed (internal) | JSON | v1 | Yes (OIDC) | Yes |
+| Scaffolder Templates Catalogue | REST | Exposed | JSON | v1 | Yes (OIDC) | Yes |
+| DORA Metrics API | REST | Exposed | JSON | v1 | Yes (OIDC + team scope) | Yes |
+| Crossplane API (Kubernetes CRDs) | Kubernetes API | Exposed (internal) | JSON/YAML | Crossplane v1 | Yes (ServiceAccount) | Yes (API priority & fairness) |
+
+### 3.3 Physical View
+
+#### 3.3.1 Deployment Architecture Diagram
+
+<Mermaid alt="Stellar Platform deployment. GKE is primary across three regions for the portal, control plane, ArgoCD, Tekton and observability. EKS is secondary across two regions, running ArgoCD satellites and tenant workloads. GitHub, Datadog, Okta, and Snowflake are SaaS. HashiCorp Vault is self-hosted on GKE." chart={`graph TB
+    subgraph GKE[GKE - Primary - 3 regions]
+        BSCluster[Portal + Backstage]
+        ArgoMain[ArgoCD HA]
+        TknMain[Tekton]
+        CPMain[Crossplane]
+        ObsMain[Prometheus + Grafana]
+        VaultMain[Vault]
+        TenantsG[Tenant Workloads]
+    end
+    subgraph EKS[EKS - Secondary - 2 regions]
+        ArgoSat[ArgoCD Satellite]
+        TenantsE[Tenant Workloads]
+    end
+    subgraph SaaS[External SaaS]
+        GH[GitHub Enterprise]
+        OK[Okta]
+        DD[Datadog]
+        SF[Snowflake]
+    end
+    BSCluster --> GH
+    BSCluster --> OK
+    ArgoMain --> GKE
+    ArgoMain --> EKS
+    ObsMain --> DD
+    TknMain --> DD
+    BSCluster --> SF`} />
+
+#### 3.3.2 Hosting & Infrastructure
+
+##### Hosting Venues
+
+| Attribute | Selection |
+|-----------|----------|
+| **Hosting Venue Type** | Public Cloud (multi-cloud) |
+| **Hosting Region(s)** | GCP: europe-west2 (London), us-east4, asia-southeast1. AWS: eu-west-2 (London), us-east-1. |
+| **Service Model** | PaaS + CaaS (GKE Autopilot, EKS + Karpenter) |
+| **Cloud Provider(s)** | GCP (primary), AWS (secondary) |
+| **Account / Subscription Type** | Stellar corporate landing zones (`stellar-platform-prod`, `stellar-platform-nonprod`, plus per-region tenant folders) |
+
+##### Compute
+
+| Compute Type | Technology | Details |
+|--------------|-----------|---------|
+| Container platform (primary) | GKE Autopilot | Multi-regional; platform + tenant workloads |
+| Container platform (secondary) | EKS + Karpenter | Regional; failover and multi-cloud tenant workloads |
+| Serverless | Cloud Run (occasional, for platform utility services) | Used for infrequent batch utilities |
+
+Platform control-plane footprint (steady state, production):
+
+| Workload | Cluster | Quantity | Notes |
+|----------|---------|----------|-------|
+| Backstage Portal | GKE (europe-west2) | 6 pods (HA) | 2 CPU / 4 GiB each |
+| PostgreSQL (Backstage catalogue) | Cloud SQL (regional) | 1 primary + 1 replica | db-custom-4-16 |
+| Crossplane controllers | GKE (europe-west2) | 3 pods | -- |
+| ArgoCD | GKE (europe-west2) | HA mode, 3 replicas | Application controller sharded by cluster |
+| Tekton pipelines | GKE (europe-west2) | Up to 200 concurrent pods | Autopilot-managed |
+| Prometheus | GKE (each region) | 2 replicas per region + Thanos | 14d hot, 1y cold in GCS/S3 |
+
+##### Security Agents
+
+| Agent | Coverage | Justification |
+|-------|----------|--------------|
+| GKE Security Posture / GuardDuty | All clusters | Runtime threat detection |
+| Falco | GKE, EKS | eBPF-based runtime anomaly detection on platform clusters |
+| Trivy Operator | All clusters | Continuous image & config scanning |
+
+#### 3.3.3 Network Topology & Connectivity
+
+##### Connectivity Summary
+
+| Question | Response |
+|----------|----------|
+| Is this an Internet-facing application? | Backstage portal is Internet-facing (behind corporate IdP); runtime planes are not directly Internet-facing |
+| Outbound Internet connectivity required? | Yes -- GitHub, Okta, Datadog, Snowflake, container registries |
+| Cloud-to-on-premises connectivity required? | Yes -- ExpressRoute to the London colo for Vault HSM root of trust and Okta connector |
+| Wireless networking required? | No |
+| Third-party / co-location connectivity required? | Yes -- Datadog (over PrivateLink / PSC where available), Snowflake (PrivateLink) |
+| Cloud network peering required? | Yes -- GCP and AWS VPCs peered to a central transit hub; multi-cloud connectivity via Megaport |
+
+##### User & Administrator Access
+
+| Attribute | Selection |
+|-----------|----------|
+| **User access method** | Web (HTTPS) + CLI |
+| **User locations** | Global (UK, US, APAC offices; remote workforce) |
+| **Administrator access method** | IAP-tunnelled `kubectl`; no public Kubernetes API endpoints |
+| **VPN required** | No (IAP + Okta context-aware access) |
+| **Direct Connect / ExpressRoute / Interconnect** | Yes |
+
+##### Transport Protocols
+
+| Protocol | Used? | Purpose |
+|----------|-------|---------|
+| HTTPS (TLS 1.3) | Yes | All portal, API, and inter-service traffic |
+| gRPC (mTLS) | Yes | Service-to-service on the runtime plane (Istio-enforced) |
+| TCP-TLS | Yes | Database and Vault traffic |
+| SFTP | No | -- |
+| Kafka | No (yet; planned Phase 2) | -- |
+
+#### 3.3.4 Environments
+
+| Environment | Description | Count & Venue | Compute Solution |
+|------------|-------------|--------------|-----------------|
+| Development (per engineer) | Ephemeral preview environments on merge | Up to 200 concurrent, GKE (europe-west2) | GKE Autopilot |
+| Integration Test | Continuous integration testing of the platform itself | 1x GKE (europe-west2) | GKE Autopilot |
+| Staging | Pre-production validation; mirrors production topology at reduced scale | 1x GKE + 1x EKS | GKE Autopilot + EKS |
+| Production | Live platform | 3x GKE regions + 2x EKS regions | GKE Autopilot + EKS |
+
+Dev and integration-test environments automatically scale to zero outside business hours.
+
+### 3.4 Data View
+
+#### 3.4.1 Data Architecture & Storage
+
+##### Data Footprint
+
+| Data Name | Store Technology | Authoritative? | Retention Period | Data Size | Classification | Personal Data? | Encryption Level | Key Management |
+|-----------|-----------------|---------------|-----------------|-----------|---------------|---------------|-----------------|---------------|
+| Software catalogue | Cloud SQL (PostgreSQL) | Yes | Indefinite | < 10 GB | Internal | Yes (engineer email, GitHub handle) | Storage + column-level for PII | Customer-managed KMS (GCP) |
+| TechDocs (built) | GCS / S3 | No (source is Git) | Indefinite | < 100 GB | Internal | No | Storage (CMEK) | Customer-managed KMS |
+| Metrics (hot) | Prometheus / Thanos | Yes | 14 days (hot), 1 year (cold) | ~2 TB hot; ~15 TB cold | Internal | No | Storage | Customer-managed KMS |
+| Logs | Datadog | No | 30 days | Variable; projected 8 TB/month | Internal | No (engineers redact) | In-transit + at-rest (Datadog-managed) | Datadog-managed |
+| DORA metrics | Snowflake | Yes | 7 years | < 50 GB | Internal | Yes (linked to team, not individual) | Storage | Customer-managed (Snowflake) |
+| Tekton pipeline artefacts | GCS / S3 | Yes | 90 days (SBOMs retained 2 years) | ~500 GB rolling | Internal | No | Storage | Customer-managed KMS |
+| Secrets | Vault + CSI provider | Yes | N/A (zero persistence on workload) | < 1 GB | Restricted | No | HSM-backed | HSM (FIPS 140-2 L3) |
+| Platform configuration | GitHub Enterprise | Yes | Indefinite | < 20 GB | Internal | No | GitHub-managed | GitHub-managed |
+
+#### 3.4.2 Data Classification
+
+| Classification Level | Data Types | Handling Requirements |
+|---------------------|------------|----------------------|
+| **Internal** | Service metadata, metrics, logs, TechDocs, DORA metrics | TLS in transit, CMEK at rest, access via Okta-authenticated portal |
+| **Restricted** | Secrets, signing keys | Never present on engineer machines; HSM-backed; short-lived delivery only |
+
+#### 3.4.3 Data Lifecycle
+
+| Stage | Description | Controls |
+|-------|-------------|----------|
+| **Creation / Ingestion** | Engineers emit events via pipelines, scaffolder, portal interactions; metrics scraped from workloads | Schema validation at ingest (OpenTelemetry, CloudEvents) |
+| **Processing** | Aggregation of DORA metrics; catalogue reconciliation | Runs on platform clusters with Workload Identity |
+| **Storage** | Regional PostgreSQL, Prometheus/Thanos, GCS/S3, Datadog SaaS, Snowflake | CMEK encryption; regional pinning where feasible |
+| **Sharing / Transfer** | Datadog and Snowflake SaaS boundary (see 3.4.5) | TLS 1.3, PrivateLink where available |
+| **Archival** | Metrics tiered to GCS/S3 via Thanos; pipeline artefacts tiered to archival storage class | Lifecycle policies |
+| **Deletion / Purging** | Catalog soft-deleted on service retirement; hard-delete after 30 days; DORA metrics retained 7 years then purged | Automated lifecycle jobs |
+
+#### 3.4.4 Data Privacy & Protection
+
+##### Privacy Assessments
+
+| Assessment Type | ID | Status | Link |
+|----------------|-----|--------|------|
+| Data Protection Impact Assessment (DPIA) | DPIA-2026-007 | Complete | Stellar SharePoint / Legal / DPIAs |
+
+The DPIA concluded that engineer telemetry (DORA, DevEx) is legitimate-interest processing of employee data. Engineers are informed via the engineering handbook; team-level aggregation is preferred over individual attribution.
+
+##### Use of Production Data for Testing
+
+| Approach | Selected |
+|----------|----------|
+| Production data is not used for testing | [x] |
+
+The platform does not process customer data. Platform-generated data (metrics, logs) in non-production is generated synthetically via load tests.
+
+##### Data Integrity
+
+- Yes -- Sigstore cosign signatures on every container image; SLSA provenance attestations stored alongside each build; Git commit signing enforced on infra repositories; Crossplane compositions reconciled continuously.
+
+##### Data on End User Devices
+
+- No -- no secrets, certificates, or customer data land on engineer workstations. The `stellar` CLI uses OIDC device-code flow with tokens in OS keychain (30-minute TTL).
+
+#### 3.4.5 Data Transfers & Sovereignty
+
+##### Data Transfers to Third Parties
+
+| Destination | Type | Data | Method | Encrypted |
+|-------------|------|------|--------|-----------|
+| Datadog | Third-party SaaS | Metrics, traces, logs (scrubbed) | API (TLS 1.3) | Yes |
+| Snowflake | Third-party SaaS (enterprise-contracted) | DORA metrics | API (PrivateLink) | Yes |
+| GitHub Enterprise Cloud | Third-party SaaS | Source, IaC, manifests | API (TLS 1.3) | Yes |
+
+##### Data Sovereignty
+
+- Yes -- UK customer-facing tenants' metadata remains in `europe-west2` / `eu-west-2`. Datadog data is routed to the EU site. Snowflake uses an EU deployment.
+
+### 3.5 Security View
+
+#### 3.5.1 Security Overview & Threat Model
+
+##### Security Context
+
+| Question | Response |
+|----------|----------|
+| Does the solution support regulated activities? | No directly; platform controls are in scope of SOC 2 |
+| Is the solution SaaS or third-party hosted? | Hybrid -- self-hosted Kubernetes + several SaaS dependencies (Datadog, Okta, Snowflake, GitHub) |
+| Has a third-party risk assessment been completed? | Yes -- all SaaS vendors have current TPRA records |
+
+A lightweight STRIDE threat model has been produced (THREAT-1042-01). Top threats: (1) compromised Backstage instance as a super-power surface, (2) supply-chain injection at Tekton, (3) Crossplane as blast-radius amplifier across clouds.
+
+##### Business Impact Assessment
+
+| Impact Category | Business Impact if Compromised |
+|----------------|-------------------------------|
+| **Confidentiality** | High -- platform telemetry includes engineer identity and deployment patterns; secrets for all internal systems pass through Vault |
+| **Integrity** | High -- a platform compromise could push malicious manifests to any tenant cluster |
+| **Availability** | Medium -- platform outage halts self-service but does not stop customer-facing services |
+| **Non-Repudiation** | Medium -- all platform actions signed and audit-logged; break-glass tracked with dual approval |
+
+#### 3.5.2 Identity & Access Management
+
+##### Authentication Model
+
+| Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
+|------------|---------|----------------|----------------------|----------------------|
+| Engineer | Developer | Backstage, CLI | Okta SSO (OIDC) + WebAuthn | Managed by Okta; hardware keys for privileged groups |
+| Platform Admin | Platform Engineer | Backstage admin, kubectl via IAP | Okta SSO + Hardware key + PIM | JIT elevation, 2h TTL |
+| SRE on-call | SRE | Kubectl (break-glass) | Okta SSO + Hardware key + manager approval + PIM | JIT elevation, 1h TTL, dual-approval |
+| Service Account | Platform workloads | Cloud APIs, Vault | Workload Identity Federation | No long-lived credentials |
+| CI runner | Tekton pipelines | Registries, Kubernetes | Workload Identity + signed SPIFFE SVIDs | Short-lived (< 15 min) |
+
+##### Authorisation Model
+
+| Access Type | Role / Scope | Entitlement Store | Provisioning Process |
+|------------|-------------|-------------------|---------------------|
+| Engineer (all) | Self-service on own team's services | Okta groups -> Backstage + Kubernetes RBAC | SCIM (automated) |
+| Engineering Director | View across their directorate | Okta group | SCIM |
+| Platform Engineer | Platform maintenance (non-production) | Okta group + JIT to production via PIM | SCIM + PIM |
+| Break-glass admin | Full cluster-admin | Okta group (empty steady-state) + PIM | Manual activation with dual approval |
+
+- RBAC model with ABAC attributes for team ownership
+- Quarterly access recertification enforced via Okta Lifecycle
+- Segregation of duties: no engineer has write-access to both code and signing keys for the same service
+
+##### Privileged Access
+
+| Account Type | Management Approach |
+|-------------|-------------------|
+| Production cluster-admin | Okta PIM; JIT 1h; hardware key; session recording via IAP; dual-approval for break-glass |
+| Crossplane provider credentials | Workload Identity only; no static credentials exist |
+| Vault root token | Sealed, sharded among 5 officers; never unsealed in steady-state |
+
+#### 3.5.3 Network Security & Perimeter Protection
+
+| Control | Implementation |
+|---------|---------------|
+| Network segmentation | Per-tenant Kubernetes namespaces; NetworkPolicies enforced; Istio planned for mTLS east-west (Phase 2) |
+| Ingress filtering | GCP Cloud Armor + AWS WAF on internet-facing portal; IAP context-aware access |
+| Egress filtering | Per-namespace egress policies via Cilium; default-deny |
+| Private cluster endpoints | Yes -- Kubernetes API servers are private-only; access via IAP |
+| Encryption in transit | TLS 1.3 enforced by Cloud Armor / ALB policies |
+
+#### 3.5.4 Data Protection
+
+##### Encryption at Rest
+
+| Attribute | Detail |
+|-----------|--------|
+| Encryption deployment level | Storage (platform default) + logical-container (KMS key per tenant) |
+| Key type | Symmetric |
+| Algorithm / cipher / key length | AES-256-GCM |
+| Key generation method | HSM (Cloud KMS, Cloud HSM where FIPS 140-2 L3 required) |
+| Key storage | Cloud KMS / HSM |
+| Key rotation schedule | Automatic, every 90 days |
+
+##### Secret & Password Protection
+
+| Attribute | Detail |
+|-----------|--------|
+| Secret store | HashiCorp Vault (self-hosted on GKE, HA) |
+| Secret distribution | CSI Secrets Store driver -> tmpfs volume in workload pod; never written to disk |
+| Secret protection on host | Short-lived (< 1 hour) dynamic secrets; no static credentials |
+| Secret rotation | Automatic (dynamic secrets have TTL-driven rotation) |
+
+#### 3.5.5 Security Monitoring & Threat Detection
+
+| Capability | Implementation |
+|-----------|---------------|
+| Security event logging | Falco + Kubernetes audit logs shipped to SIEM |
+| SIEM integration | Yes -- Splunk Enterprise (corporate SIEM); 1-year hot retention |
+| Infrastructure event detection | GuardDuty (AWS) + Security Command Center (GCP) |
+| Security alerting | Critical alerts page SRE + Security on-call; Sev-2 go to SOC queue |
+| Supply chain | Sigstore cosign verification on image admission; SLSA L3 targeted; SBOM generated per build and stored |
+
+### 3.6 Scenarios
+
+#### 3.6.1 Key Use Cases
+
+**UC-01: Engineer bootstraps a new service from a golden-path template**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Engineer on a stream-aligned product team |
+| **Trigger** | New service needed to deliver a product increment |
+| **Pre-conditions** | Engineer is authenticated; has membership of the owning team's Okta group |
+| **Main Flow** | 1. Open Backstage, choose "Create new Go service" template. 2. Fill 6 fields (name, team, description, tier, region, data classification). 3. Scaffolder creates GitHub repo + infra repo with sensible defaults. 4. Tekton pipeline runs on first commit -- builds, tests, generates SBOM, signs with cosign. 5. Crossplane provisions namespace, bucket, and service account. 6. ArgoCD deploys to staging automatically. 7. Datadog dashboard and SLO are auto-created. 8. Backstage scorecard shows green. |
+| **Post-conditions** | Service is in staging, discoverable in catalogue, observable; total elapsed time target < 30 minutes |
+| **Views Involved** | Logical, Integration & Data Flow, Physical, Security |
+
+**UC-02: Engineer deploys to production via GitOps**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Engineer (with write on the service repo) |
+| **Trigger** | Feature or fix ready for production |
+| **Pre-conditions** | PR passed CI (tests, SAST, SCA, image sign); peer review approved |
+| **Main Flow** | 1. PR merged to `main`. 2. Tekton builds new image and pushes signed artefact. 3. A bot PR is raised against the infra repo bumping the image tag in the prod overlay. 4. Once approved and merged, ArgoCD detects drift and syncs to the target cluster. 5. Progressive delivery (Argo Rollouts, canary) shifts traffic 10% -> 50% -> 100% with SLO-based gating. 6. If the SLO burn rate exceeds threshold, automatic rollback. |
+| **Post-conditions** | Change is live; DORA pipeline emits `deployment` event; scorecard updates |
+| **Views Involved** | Logical, Integration, Physical, Security |
+
+**UC-03: SRE responds to a platform incident (break-glass)**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | SRE on-call |
+| **Trigger** | Datadog paging event: ArgoCD sync failing cluster-wide |
+| **Pre-conditions** | SRE is enrolled in break-glass PIM role |
+| **Main Flow** | 1. Datadog pages via PagerDuty. 2. SRE acknowledges; opens incident bridge. 3. Requests PIM elevation (dual-approval by secondary on-call). 4. kubectl via IAP tunnel; session recording active. 5. Diagnoses repo sync misconfiguration; reverts offending commit. 6. ArgoCD recovers. 7. Post-incident: role automatically expires at T+1h; full audit trail exported to SIEM. |
+| **Post-conditions** | Platform restored; incident report and timeline logged |
+| **Views Involved** | Physical, Security |
+
+#### 3.6.2 Architecture Decision Records (ADRs)
+
+**ADR-001: Adopt Backstage rather than build an in-house portal**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2026-01-22 |
+| **Context** | The platform needs a unified front-door. We considered three directions: build a bespoke portal, adopt Backstage, or buy a commercial IDP (Port.io, Cortex, OpsLevel). Our ambition is a deeply integrated, opinionated IDP and we expect to run it for 5+ years. |
+| **Decision** | Adopt Backstage as the foundation of the portal plane. |
+| **Alternatives Considered** | **Build bespoke:** Full control and perfect fit, but requires 4-6 engineer-years to reach catalogue parity; hiring and retention signal is weaker. **Port.io / commercial IDP:** Fast to stand up, strong out-of-the-box experience, but ongoing per-user SaaS cost at 400 engineers is material (~GBP 200k/year) and customisation of core data model is limited. **Backstage:** CNCF incubating, large ecosystem (>300 plugins), portable catalogue model, healthy community, used by organisations at comparable scale (Spotify, American Airlines, Expedia). |
+| **Consequences** | Positive: strong hiring signal; community velocity; deep extension points; OSS means no per-seat cost. Negative: TypeScript/Node.js operational stack introduced; upstream velocity is high, we must track releases; initial plugin quality is variable. |
+| **Quality Attribute Tradeoffs** | Operational excellence and cost (positive) vs. initial delivery speed (slightly negative -- steeper initial curve than a SaaS IDP). |
+
+**ADR-002: ArgoCD for GitOps rather than Flux**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2026-02-09 |
+| **Context** | We need a GitOps engine to reconcile Kubernetes state across GKE and EKS. The two mature CNCF options are ArgoCD and Flux. |
+| **Decision** | Use ArgoCD in HA mode as the primary delivery-plane engine. |
+| **Alternatives Considered** | **Flux:** Lightweight, GitOps-toolkit-based, composable, lower resource footprint. Excellent for small deployments but the UX for 850+ applications across 5 regions is weaker. **ArgoCD:** Rich UI suited to a developer-facing portal experience, Argo Rollouts integration for progressive delivery, Application sets for template-driven fan-out, mature multi-cluster model. |
+| **Consequences** | Positive: excellent developer UX; first-class progressive delivery; strong RBAC model. Negative: heavier resource footprint; in-cluster UI is another attack surface (mitigated via IAP + OIDC). |
+| **Quality Attribute Tradeoffs** | Operational excellence (positive) over small efficiency gains from Flux (minor negative). |
+
+**ADR-003: Multi-cloud (GKE primary, EKS secondary) from day one**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2026-03-11 |
+| **Context** | Two of our five largest customers contractually require workloads to run in AWS regions they already operate in. A third (regulated) requires GCP. Consolidating onto a single cloud would force a painful customer-facing negotiation. The platform is the leverage point: if the platform is cloud-agnostic, product teams inherit multi-cloud capability without new cognitive load. |
+| **Decision** | Design Stellar Platform as multi-cloud from inception. GKE is the primary cloud for platform-plane workloads (lower operational cost for control plane at our scale, Autopilot maturity). EKS is a peer runtime for tenant workloads requiring AWS presence. Crossplane provides a uniform abstraction over cloud resources. |
+| **Alternatives Considered** | **Single-cloud (GCP only):** Simpler, cheaper to run, faster to deliver. Rejected because it forces commercial negotiation with AWS-bound customers. **Single-cloud (AWS only):** Similar trade-off in reverse. **Cloud-agnostic from day one, deploy later:** Architecturally tempting but creates a "second day" surprise; abstractions untested under load. |
+| **Consequences** | Positive: strategic flexibility, customer alignment, vendor-lock-in reduced. Negative: roughly 25% higher platform engineering cost; requires disciplined use of abstractions (no reaching directly for cloud-specific primitives outside agreed extension points). |
+| **Quality Attribute Tradeoffs** | Reliability and strategic flexibility (positive) over cost optimisation (negative in the short term). |
+
+---
+
+## 4. Quality Attributes
+
+### 4.1 Operational Excellence
+
+#### 4.1.1 Observability -- Logging
+
+| Log Type | Events Logged | Local Storage | Retention Period | Remote Services |
+|----------|--------------|--------------|-----------------|----------------|
+| Application logs | Backstage, ArgoCD, Tekton, Crossplane | Stdout (ephemeral) | 30 days hot (Datadog), 1 year cold (S3/GCS) | Datadog |
+| Audit logs | Kubernetes audit, Backstage audit, Vault audit | Stdout | 1 year hot in Splunk | Splunk SIEM |
+| Pipeline logs | Tekton run logs, Dagger logs | GCS | 90 days | Datadog (metadata only) |
+| Platform metrics | Prometheus remote-write | Local TSDB 14 days | 1 year in Thanos (GCS/S3) | Datadog (selected series) |
+
+#### 4.1.2 Observability -- Monitoring & Alerting
+
+##### Platform SLIs/SLOs
+
+| SLI | Objective | Measurement |
+|-----|-----------|-------------|
+| Portal availability | 99.5% monthly | Datadog synthetic |
+| `stellar new service` end-to-end success | 99% | Scaffolder telemetry |
+| ArgoCD sync success rate | 99.5% per cluster | Prometheus |
+| Median deployment latency (merge-to-prod) | < 15 minutes | DORA telemetry |
+| p99 Backstage API latency | < 800 ms | Prometheus |
+
+##### Operational Alerts
+
+| Alert Category | Trigger Condition | Notification Method | Recipient |
+|---------------|-------------------|-------------------|-----------|
+| Platform SLO burn | Fast-burn (1h) or slow-burn (6h) on any platform SLO | PagerDuty | Platform on-call |
+| Security event (Falco) | Priority >= critical | PagerDuty | Security on-call |
+| Cost anomaly | > 20% daily variance vs 28-day baseline | Slack + email | FinOps Lead |
+| ArgoCD sync failure (per tenant) | Any sync failure > 15 min | Slack (team-owned channel) | Tenant team |
+
+##### Monitoring Tools
+
+| Capability | Tool | Coverage |
+|-----------|------|----------|
+| Metrics | Prometheus / Thanos | Platform + tenants (self-service scraping) |
+| Dashboards | Grafana | Platform-owned + team-owned dashboards |
+| APM & traces | Datadog | All tenant services (via OTel) |
+| Logs (aggregation) | Datadog | All workloads |
+| SIEM | Splunk | Security-relevant events |
+| Incident management | Datadog + PagerDuty | On-call rotation, post-incident |
+| Runbooks | TechDocs (Backstage) | Every platform SLO has a linked runbook |
+
+### 4.2 Reliability & Resilience
+
+#### 4.2.1 Geographic Footprint & Disaster Recovery
+
+| Question | Response |
+|----------|----------|
+| Is the application deployed across multiple hosting venues for continuity? | Yes -- multi-region within GCP; EKS fleet adds cross-cloud capability for tenant workloads |
+| What is the DR strategy? | Warm-standby for the portal plane (europe-west2 primary, us-east4 warm); backup-restore for GitHub (self-hosted backup via GitHub Enterprise Importer) |
+| Are there data sovereignty requirements affecting geographic choices? | Yes -- UK data residency for some tenants; UK regions used for their metadata |
+
+#### 4.2.2 Scalability
+
+##### Application Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Scaling capability** | Full auto-scaling |
+| **Scaling details** | GKE Autopilot handles platform pods; Karpenter handles EKS; ArgoCD application controller sharded by cluster; Backstage horizontal pod autoscaling on CPU and request latency |
+
+##### Dependency Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Dependencies adequately sized?** | Yes |
+| **Dependency details** | GitHub Enterprise Cloud scales with enterprise contract; Datadog contract sized for 3x current ingest; Okta has room for 2x workforce; Vault HA cluster sized for 10x current QPS |
+
+#### 4.2.3 Fault Tolerance
+
+- Yes -- platform-plane components run in HA mode (>= 3 replicas across zones); ArgoCD and Crossplane reconcile continuously; circuit breakers on third-party calls (Datadog, GitHub); Backstage degrades gracefully if catalogue DB is read-only (serves cached data, self-service creation paused).
+
+#### 4.2.4 Failure Modes & Recovery Behaviour
+
+| Component / Dependency | Failure Mode | Detection Method | Recovery Behaviour | User Impact |
+|----------------------|-------------|-----------------|-------------------|-------------|
+| Backstage | Pod crashloop | Datadog APM + Prometheus | Pod rescheduled; HPA scales | Partial -- some requests retry |
+| PostgreSQL (catalogue) | Primary failure | Cloud SQL HA | Auto-failover to replica (< 60 s) | Brief read-only window |
+| ArgoCD | Application controller failure | Prometheus | Sharded replica continues; failed shard restarts | Deployment delays |
+| Crossplane | Provider crash | Prometheus | Provider restarts; state in etcd | Provisioning delayed |
+| GitHub | GitHub outage | External status + synthetic | Local mirror allows read; writes queue | Scaffolder paused |
+| Datadog | Datadog outage | Datadog multi-region + our synthetic | Metrics continue to Prometheus; paging falls back to backup PagerDuty route | Reduced observability |
+| GCP region outage | Regional failure | GCP status + Prometheus | Traffic shifts to secondary region (warm-standby) | Elevated latency, 15-20 min recovery |
+| Vault | Seal / outage | Prometheus | Standby unseal via Shamir; workload cached tokens valid for TTL | Secret refresh blocked; workloads run until token expiry |
+
+#### 4.2.5 Backup & Recovery
+
+##### Backup Design
+
+| Attribute | Detail |
+|-----------|--------|
+| Backup strategy | Per-component: Cloud SQL automated + exported; Vault Raft snapshots; GitHub Enterprise Importer for off-site mirror; ArgoCD state reconstructable from Git |
+| Backup product/service | Cloud SQL automated backups; Velero for Kubernetes resources; GCS/S3 for artefact snapshots |
+| Backup type | Mix: snapshot (Cloud SQL, Vault), continuous (Git) |
+| Backup frequency | Continuous (Git), daily snapshots (PostgreSQL, Vault) |
+| Backup retention | 35 days hot, 1 year cold |
+
+##### Backup Protection
+
+| Control | Detail |
+|---------|--------|
+| Immutability | GCS / S3 Object Lock on DR backups |
+| Encryption | CMEK, AES-256 |
+| Access control | Dedicated restoration role, PIM-gated |
+
+#### 4.2.6 Recovery Scenarios
+
+| # | Scenario | Recovery Approach | RTO | RPO |
+|---|----------|------------------|-----|-----|
+| 1 | GCP primary region failure | Cut over portal to warm-standby in us-east4; ArgoCD satellites continue | 30 min | 5 min |
+| 2 | PostgreSQL corruption | PITR from Cloud SQL backup | 1 h | 5 min |
+| 3 | ArgoCD misconfiguration | Revert Git commit; ArgoCD self-heals | 15 min | 0 |
+| 4 | Supply-chain compromise (signed image tampered) | Sigstore verification blocks admission; quarantine namespace; re-sign from source | 4 h | N/A |
+| 5 | Vault unseal loss (catastrophic) | Restore from Raft snapshot + Shamir key officers | 4 h | 24 h |
+
+### 4.3 Performance Efficiency
+
+#### 4.3.1 Performance Requirements
+
+##### Key Performance Indicators
+
+| Metric | Target | Measurement Method |
+|--------|--------|-------------------|
+| Backstage page load (p95) | < 2 s | Datadog RUM |
+| Backstage API (p99) | < 800 ms | Prometheus |
+| Scaffolder "new service" end-to-end | < 30 min (target), < 10 min (stretch) | Scaffolder telemetry |
+| `stellar` CLI cold-start | < 300 ms | CLI self-telemetry |
+| ArgoCD sync propagation (merge to pod ready, staging) | < 8 min (p90) | DORA pipeline |
+| DORA lead time (platform-using teams) | < 2 days (40% reduction from 9-day baseline) | DORA telemetry |
+| DORA change failure rate | < 10% | DORA telemetry |
+| DORA deployment frequency | Daily per team (up from weekly) | DORA telemetry |
+| DORA MTTR | < 1 h | Incident telemetry |
+
+Performance testing is continuous: k6 synthetic load against the portal nightly; chaos experiments monthly (Litmus) against the control plane.
+
+##### Capacity & Growth Projections
+
+| Metric | Current | 1 Year | 3 Years | 5 Years |
+|--------|---------|--------|---------|---------|
+| Engineers (users) | 400 | 550 | 800 | 1,000 |
+| Teams | 60 | 80 | 120 | 150 |
+| Services in catalogue | 850 | 1,100 | 1,600 | 2,200 |
+| Concurrent pipeline runs (peak) | 80 | 120 | 180 | 250 |
+| Metrics ingest | 2M series | 3M | 5M | 8M |
+
+| Question | Response |
+|----------|----------|
+| Will the current design scale to accommodate projected growth? | Yes -- tested to 3-year projection; revisit Thanos retention and Datadog contract at year 3 |
+| Are there known seasonal or cyclical demand patterns? | Yes -- quarterly OKR planning drives deployment spikes in weeks 2-4 of each quarter |
+
+### 4.4 Cost Optimisation
+
+#### 4.4.1 Cost Influence & Analysis
+
+##### Design Cost Decisions
+
+| Posture | Selected | Detail |
+|---------|----------|--------|
+| Cost deliberately balanced against strategic value | [x] | GKE Autopilot premium accepted in exchange for reduced SRE toil; Datadog retained (vs. full self-host) to avoid re-tooling cost; multi-cloud accepted as a strategic cost; spot/preemptible nodes for non-production; scale-to-zero in non-prod |
+
+##### Cost Analysis
+
+- Yes -- modelled in FinOps tooling (Cloudability). Run cost of approximately GBP 350k/year (hosting + Datadog + Okta increments + incidental) versus estimated opportunity cost of 15 engineer-years/year lost to platform-adjacent toil in the current state. Payback estimated at 11 months.
+
+##### Cost Monitoring and Attribution
+
+- Per-tenant cost attribution via labels propagated by Crossplane and the Scaffolder (`team`, `service`, `tier`, `environment`)
+- Showback dashboards rendered in Backstage per team
+- Monthly FinOps review with top-5 spending teams
+
+#### 4.4.2 Cost Implications
+
+- Partial -- multi-cloud (ADR-003) adds an estimated GBP 75k/year versus single-cloud. Accepted explicitly as a strategic cost.
+
+### 4.5 Sustainability
+
+#### 4.5.1 Hosting Efficiency
+
+| Question | Response |
+|----------|----------|
+| Has the hosting location been chosen to reduce environmental impact? | Partially -- europe-west2 (London), us-east4, and asia-southeast1 are all chosen for customer proximity; each region is on a carbon-neutral / renewable power commitment from its respective cloud provider |
+| What is the expected workload demand pattern? | Variable predictable -- heavier during engineering working hours across regions |
+
+##### On-Demand Availability
+
+| Question | Response |
+|----------|----------|
+| Must the application be available continuously? | Portal yes (engineers across time zones); ephemeral preview environments scale to zero |
+| Can the solution be shut down or scaled down during off-peak hours? | Non-production clusters scale to minimal nodes outside working hours; ephemeral previews auto-expire after 48 h idle |
+| Are non-production environments configured to downscale or shut down when not in use? | Yes -- enforced via Crossplane-managed schedule |
+
+### 4.6 Quality Attribute Tradeoffs
+
+| Attributes Involved | Description | Chosen Priority | Rationale |
+|---------------------|-------------|----------------|-----------|
+| Reliability vs. Cost | Multi-cloud (GKE + EKS) increases platform engineering cost | Reliability | Strategic customer commitments and reduced cloud-provider lock-in outweigh ~25% cost premium |
+| Performance vs. Operational Excellence | GKE Autopilot has slightly higher per-pod cost than standard mode but lower operational burden | Operational Excellence | Platform team of 12 is the binding constraint; SRE toil reduction compounds |
+| Flexibility vs. Cognitive Load | Golden paths reduce flexibility but lower cognitive load | Operational Excellence | Paved road with opt-out preserves autonomy while making the right path easy |
+
+---
+
+## 5. Lifecycle Management
+
+### 5.1 Software Development & CI/CD
+
+#### Development Practices
+
+The platform is built internally (open-source-first where appropriate).
+
+| Attribute | Detail |
+|-----------|--------|
+| Source control platform | GitHub Enterprise Cloud |
+| CI/CD platform | GitHub Actions for repo-level checks; Dagger for typed pipeline logic; Tekton for privileged tasks (image signing, promotion) |
+| Build automation | Every PR: lint, unit tests, SAST, SCA, SBOM, image build, cosign sign (Sigstore) |
+| Deployment automation | GitOps via ArgoCD; progressive delivery via Argo Rollouts with SLO gating |
+| Test automation | 80%+ unit coverage enforced; integration tests via kind clusters in CI; nightly k6 load; monthly chaos |
+
+#### Application Security in Development
+
+| Control | Implementation |
+|---------|---------------|
+| Security requirements identification | Threat model per subsystem; reviewed by Security Architect |
+| SAST | Semgrep + GitHub CodeQL |
+| DAST | OWASP ZAP against staging portal weekly |
+| SCA | Snyk + Dependabot |
+| Container image scanning | Trivy in pipeline + Trivy Operator at runtime |
+| Secure coding practices | Mandatory code review, two approvers for platform core |
+| Patch management | Snyk alerts triaged daily; critical within 24h |
+| Supply chain | SLSA L3 target; Sigstore signing; in-toto provenance attached |
+
+### 5.2 Service Transition & Migration
+
+#### Migration Classification (6 R's)
+
+| Classification | Applies to | Description |
+|---------------|------------|-------------|
+| **Replace** | Manual bootstrapping workflows, Jenkins Groovy shared libraries, team-specific Terraform modules | Replaced with golden-path templates, Dagger pipelines, and the audited Terraform Module Library |
+| **Rehost** | Jenkins jobs (~1,600 of the 2,400) | Rehost straightforward shell-script jobs onto Tekton with minimal changes |
+| **Replatform** | Jenkins jobs (~500) | Jobs moved to Dagger with light refactoring to idiomatic pipeline-as-code |
+| **Refactor** | Jenkins jobs (~300) | Complex Groovy logic rewritten as typed Dagger pipelines |
+| **Retire** | Remaining Jenkins jobs after audit (~200 found redundant) | Confirmed redundant with product team owners |
+
+#### Transition Plan
+
+| Attribute | Detail |
+|-----------|--------|
+| Deployment strategy | Strangler Fig -- platform stands up alongside existing estate; teams migrate in waves |
+| Migration waves | Wave 0: platform team dogfoods (months 0-3). Wave 1: 5 volunteer teams (months 4-6). Wave 2: remaining teams opted in by directorate (months 7-18). |
+| Data migration mode | Not applicable (no customer data in the platform); catalogue populated via GitHub scan |
+| End-user cutover | Phased by team; no forced cutover |
+| External system cutover | Phased -- Jenkins retired per directorate once last job migrates |
+| Maximum acceptable downtime | Hours (during migration windows), zero (steady state) |
+| Rollback plan | Teams can revert to prior CI or deployment pattern at any time during Wave 2; platform monitors adoption and DORA and escalates if rollback trend emerges |
+| Acceptance criteria (Wave 1) | 1. Five teams onboarded. 2. New-service lead time < 1 day. 3. Net DevEx score positive. 4. SLOs met. |
+
+### 5.3 Test Strategy
+
+| Test Type | Scope | Approach | Environment | Automated? |
+|-----------|-------|----------|-------------|-----------|
+| Unit | Every component | Go / TypeScript standard | CI | Yes |
+| Integration | Control plane, portal plugins | kind clusters + testcontainers | CI | Yes |
+| End-to-end | Scaffolder -> running service | Staging cluster; nightly | Staging | Yes |
+| Performance | Portal, Scaffolder throughput | k6 | Staging | Yes (nightly) |
+| Chaos | Control plane resilience | Litmus | Staging | Yes (monthly) |
+| Security | Penetration testing | Annual + on major changes | Staging | No |
+
+### 5.4 Release Management
+
+| Attribute | Detail |
+|-----------|--------|
+| Release frequency | Continuous (platform itself deploys multiple times a day) |
+| Release process | Trunk-based development; PR -> CI -> merge -> ArgoCD -> canary -> full |
+| Release validation | Automated smoke tests + synthetic after each deploy |
+| Feature flags | LaunchDarkly (shared service) for portal feature toggles |
+
+### 5.5 Operations & Support
+
+| Attribute | Detail |
+|-----------|--------|
+| Support model | Platform-as-a-product: #stellar-platform Slack for support; weekly office hours; consulting sessions for adopting teams |
+| Support hours | Business hours primary; 24x7 on-call for SLO-violating platform incidents |
+| SLAs | Portal 99.5% monthly; delivery plane 99.9% monthly |
+| Escalation paths | Slack -> Platform on-call -> Platform Lead -> Head of Engineering |
+| Team Topologies role | Platform team = Platform Team (per Skelton/Pais); stream-aligned teams are customers; enabling teams coach adoption |
+
+### 5.6 Resourcing & Skills
+
+#### Team Capability Assessment
+
+| Skill Area | Current Level | Action Required |
+|-----------|--------------|-----------------|
+| Cloud platform (GCP) | High | Continued |
+| Cloud platform (AWS) | Medium | Cross-training plan; hire 1 AWS-fluent SRE |
+| Kubernetes | High | -- |
+| Infrastructure as Code (Terraform, Crossplane) | Medium | Crossplane training rolled out Q2 |
+| CI/CD pipeline management | High | -- |
+| Backstage (TypeScript, React) | Medium | New hire completed; mentoring in progress |
+| Security & compliance | Medium | Embed security engineer in platform team (50% allocation) |
+| Product management for platforms | Medium | Jane Doe attends Platform Engineering conferences; internal PaaP community of practice |
+
+#### Operational Readiness
+
+| Question | Response |
+|----------|----------|
+| Can the team fully operate and support this solution in production? | B: Partially capable -- core runtime is in-hand; AWS depth and Backstage plugin velocity are the known gaps with mitigations in place |
+
+### 5.7 Maintainability
+
+| Concern | Approach |
+|---------|----------|
+| Keeping software versions current | Renovate for automated dependency PRs; Backstage version bumps on a monthly cadence |
+| Hardware lifecycle | N/A (fully cloud) |
+| Certificate management | cert-manager (Let's Encrypt for external; private CA for mTLS) |
+| Dependency management | Renovate + Snyk |
+| Platform deprecation policy | Breaking changes to templates announced N+2 minor versions in advance |
+
+### 5.8 Exit Planning
+
+| Attribute | Detail |
+|-----------|--------|
+| Exit strategy | Core platform components are CNCF / OSS; catalogue data is portable YAML; customer teams' services run on standard Kubernetes so are portable |
+| Data portability | Backstage catalogue exportable; DORA metrics in Snowflake exportable; manifests live in Git |
+| Vendor lock-in assessment | Moderate overall (see 3.1.6); Datadog is the highest-lock component |
+| Exit timeline estimate | 12-18 months to rehost on an alternative portal / IDP |
+
+---
+
+## 6. Decision Making & Governance
+
+### 6.1 Constraints
+
+| ID | Constraint | Category | Impact on Design | Last Assessed |
+|----|-----------|----------|-----------------|---------------|
+| C-001 | Must integrate with existing Okta, GitHub Enterprise, Datadog, Snowflake | Organisational | Reuse mandated; no parallel IdP or APM | 2026-01-14 |
+| C-002 | Multi-cloud required (GCP + AWS) | Commercial | Adds ~25% platform engineering cost | 2026-03-11 |
+| C-003 | SOC 2 Type II controls must not regress | Regulatory | Change management, access control, monitoring all in scope | 2026-02-05 |
+| C-004 | Platform team headcount capped at 12 for FY26 | Organisational | Forces ruthless prioritisation; reinforces platform-as-a-product discipline | 2026-01-14 |
+| C-005 | Budget cap GBP 1.2M capex + GBP 350k/yr opex | Financial | Commercial IDPs (Port.io, Cortex) are out-of-scope due to per-seat pricing at 400 engineers | 2026-01-14 |
+
+### 6.2 Assumptions
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | Adoption will grow organically given a high-quality paved road | Platform becomes a white elephant; adoption stalls | Medium | Open | Jane Doe | Evidenced by 2025 DevEx survey demand; tracked via quarterly adoption KPI |
+| A-002 | Stream-aligned teams can absorb the learning curve of GitOps and Kubernetes manifests with Scaffolder support | Higher-than-expected support burden | High | Closed | Claire Doe | Wave 0 + Wave 1 learning feedback positive |
+| A-003 | Datadog contract can scale to 3x current ingest without renegotiation | Cost surprise mid-year | High | Closed | Sam Doe | Confirmed with Datadog account team; signed addendum |
+| A-004 | GKE Autopilot pricing remains stable for 3 years | Run cost surprise | Medium | Open | Sam Doe | GCP price-hold provisions in enterprise agreement |
+
+### 6.3 Risks
+
+**Risk identification:**
+
+| ID | Risk Event | Category | Severity | Likelihood | Owner |
+|----|-----------|----------|----------|-----------|-------|
+| R-001 | Platform team becomes a bottleneck for feature requests from 60 teams | Operational | High | High | Jane Doe |
+| R-002 | Golden paths become too restrictive and teams lose autonomy ("paved road fatigue") | Operational | High | Medium | Claire Doe |
+| R-003 | Shadow platforms emerge -- teams route around Stellar Platform, rebuilding parallel stacks | Operational | High | Medium | Tom Bloggs |
+| R-004 | Backstage upstream velocity outpaces our ability to track; plugins break on version bumps | Technical | Medium | High | Tom Bloggs |
+| R-005 | Multi-cloud abstractions leak, producing unpredictable behaviour between GKE and EKS | Technical | High | Medium | Tom Bloggs |
+| R-006 | Compromise of the platform (ArgoCD, Crossplane) amplifies blast radius across all tenant workloads | Security | Critical | Low | Joe Bloggs |
+| R-007 | Jenkins migration drags beyond 18 months; carrying cost of two systems becomes unsustainable | Delivery | Medium | Medium | Tom Bloggs |
+| R-008 | Datadog vendor lock-in hardens as custom monitors proliferate | Commercial | Medium | Medium | Amir Bloggs |
+| R-009 | DORA metrics misinterpreted as individual performance rather than system health | Operational | Medium | Medium | Jane Doe |
+
+**Risk response:**
+
+| ID | Mitigation Strategy | Mitigation Plan | Residual Risk | Last Assessed |
+|----|-------------------|-----------------|--------------|---------------|
+| R-001 | Mitigate | Platform-as-a-product model with PM-owned roadmap; quarterly prioritisation with top-20 product teams; explicit "escape hatch" guidance so teams can self-serve outside the paved road; community-of-practice model for common contributions back into platform | Medium | 2026-04-10 |
+| R-002 | Mitigate | Paved-road-with-opt-out philosophy baked in; quarterly DevEx surveys specifically ask about fit; template versioning so teams can pin and diverge if needed | Medium | 2026-04-10 |
+| R-003 | Mitigate | Visibility through catalogue (anything in GitHub appears); Engineering Director engagement model to sponsor platform adoption; quarterly adoption review at senior leadership level | Medium | 2026-04-10 |
+| R-004 | Mitigate | Track Backstage upstream actively; contribute upstream where we depend on behaviour; plugin acceptance tests in CI; monthly Backstage upgrade cadence | Medium | 2026-04-10 |
+| R-005 | Mitigate | Clear composition contract per Crossplane resource; contract tests run on both clouds; ADR required before a new cloud-specific primitive is exposed; deliberate small exposure surface | Medium | 2026-04-10 |
+| R-006 | Mitigate | Defence in depth: Sigstore admission, Falco runtime, signed Git, no shared credentials, Crossplane workload identity, annual red-team engagement, zero-standing-privilege model | Low | 2026-04-10 |
+| R-007 | Mitigate | Migration wave plan with quarterly go/no-go; published Jenkins EOL date; clear "rehost first, refactor later" policy; dedicated migration squad | Medium | 2026-04-10 |
+| R-008 | Mitigate | OpenTelemetry Collector as abstraction; dashboards-as-code via Terraform provider (portable); quarterly review of Datadog-specific usage | Medium | 2026-04-10 |
+| R-009 | Mitigate | DORA only shown at team level; engineering handbook explicitly describes DORA as system-health signals; director-level coaching on psychologically safe use | Low | 2026-04-10 |
+
+### 6.4 Dependencies
+
+| ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
+|----|-----------|-----------|--------|-------|----------|---------------|
+| D-001 | Okta SCIM connectors stable | Inbound | Committed | Identity team | Existing | 2026-02-15 |
+| D-002 | GitHub Enterprise Cloud API rate limits adequate | Inbound | Committed | GitHub vendor | Enterprise contract | 2026-02-15 |
+| D-003 | Datadog multi-cloud private connectivity | Inbound | Committed | Datadog | PrivateLink enabled | 2026-03-01 |
+| D-004 | Megaport interconnect between GCP and AWS | Inbound | Resolved | Network team | Live since 2026-02 | 2026-02-20 |
+| D-005 | Product teams adopt golden paths (Wave 1 commitments) | Inbound | Committed | Engineering Directors | MoU signed 2026-03 | 2026-03-20 |
+
+### 6.5 Issues
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|-----------------|--------|---------------|
+| I-001 | Backstage `software-templates` plugin has a known memory leak at > 2,000 catalogue entities | Technical | Medium | Tom Bloggs | Upstream fix in v1.26; pinned our instance to v1.25 with workaround | In progress | 2026-04-05 |
+
+### 6.6 Guardrail Exceptions
+
+#### Policy Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create any exception to current policies and standards? | No |
+
+#### Process Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create an issue against the process library? | No |
+
+#### Risk Profile Impact
+
+| Question | Response |
+|----------|----------|
+| Does the design materially change the organisation's technology risk profile? | Yes -- the platform concentrates supply-chain risk but also concentrates supply-chain controls; net reduction in organisational risk |
+
+### 6.7 Architectural Decisions Log
+
+| ADR # | Title | Status | Date | Impact |
+|-------|-------|--------|------|--------|
+| ADR-001 | Adopt Backstage rather than build an in-house portal | Accepted | 2026-01-22 | Foundational portal choice |
+| ADR-002 | ArgoCD for GitOps rather than Flux | Accepted | 2026-02-09 | Delivery plane foundation |
+| ADR-003 | Multi-cloud (GKE primary, EKS secondary) from day one | Accepted | 2026-03-11 | Strategic cost + capability |
+
+---
+
+## 7. Appendices
+
+### 7.1 Glossary
+
+| Term | Definition |
+|------|-----------|
+| Backstage | CNCF-incubating developer portal framework originated by Spotify |
+| Cognitive Load | The total mental effort required of a team to do its work; a core Team Topologies concept |
+| Crossplane | Kubernetes-native control plane for provisioning cloud resources via Compositions |
+| Dagger | Programmable, portable CI engine with typed SDK |
+| DevEx | Developer Experience -- the quality of an engineer's end-to-end experience using internal tooling |
+| DORA | DevOps Research and Assessment metrics: deployment frequency, lead time, CFR, MTTR |
+| Enabling Team | A Team Topologies team that coaches stream-aligned teams without taking on delivery itself |
+| Golden Path | A pre-baked, opinionated route through the software lifecycle that most teams should take by default |
+| IDP | Internal Developer Platform |
+| Paved Road | Synonym for golden path; emphasises that teams can leave the road but it is the path of least resistance |
+| Platform-as-a-Product | Operating model where the platform is treated with product-management discipline |
+| PIM | Privileged Identity Management -- just-in-time elevation of access |
+| Scaffolder | Backstage plugin that turns templates into working repositories |
+| SLSA | Supply-chain Levels for Software Artefacts -- integrity framework |
+| Stream-aligned Team | A product team that delivers value to customers (Team Topologies) |
+| TechDocs | Backstage plugin for docs-as-code engineering documentation |
+| Workload Identity | Kubernetes-to-cloud identity federation avoiding long-lived credentials |
+
+### 7.2 Reference Documents
+
+| Document | Version | Description | Location |
+|----------|---------|-------------|----------|
+| Stellar Engineering Platform Strategy 2026-2028 | 1.0 | Strategic context for the platform | Confluence / Strategy / STRAT-0004 |
+| Platform-as-a-Product Operating Model | 1.0 | How the platform is run | Confluence / Standards / POL-0031 |
+| Stellar Cloud Landing Zone Standards | 3.1 | Account/project layout | Confluence / Standards / STD-0012 |
+| Information Security Policy | 4.2 | Security baseline | SharePoint / Policies / POL-0001 |
+| DPIA -- Engineer Telemetry | 1.0 | DPIA for DevEx telemetry | SharePoint / Legal / DPIA-2026-007 |
+| STRIDE Threat Model | 1.0 | Platform threat model | Confluence / Security / THREAT-1042-01 |
+| Team Topologies (Skelton & Pais) | -- | External reference | O'Reilly |
+
+### 7.3 Approval Sign-Off
+
+| Role | Name | Date | Signature / Approval Reference |
+|------|------|------|-------------------------------|
+| Principal Platform Engineer | Tom Bloggs | 2026-04-15 | ARB-2026-004-PPE |
+| Head of Engineering | Priya Bloggs | 2026-04-16 | ARB-2026-004-HOE |
+| Security Architect | Joe Bloggs | 2026-04-17 | ARB-2026-004-SEC |
+| Architecture Review Board | ARB Panel | 2026-04-18 | ARB-2026-004-APPROVED |
+
+---
+
+## Architecture Compliance Scoring
+
+| Section | Score (0-5) | Assessor | Date | Notes |
+|---------|:-----------:|----------|------|-------|
+| 1. Executive Summary | 4 | ARB Panel | 2026-04-18 | Strong business context; drivers, DORA baseline, and platform-as-a-product framing clear; strategic alignment to platform strategy is explicit |
+| 3.1 Logical View | 4 | ARB Panel | 2026-04-18 | Three-plane decomposition, component ownership, design patterns, and lock-in assessment all documented |
+| 3.2 Integration & Data Flow | 3 | ARB Panel | 2026-04-18 | All interfaces described with protocols and auth; developer-journey sequence diagram present; formal API contracts for DORA endpoint not yet published (tracked) |
+| 3.3 Physical View | 3 | ARB Panel | 2026-04-18 | Multi-cloud topology and environment list complete; cross-cloud failover drill scheduled but not yet executed end-to-end |
+| 3.4 Data View | 3 | ARB Panel | 2026-04-18 | Data stores classified, retention and encryption defined, DPIA complete; sovereignty addressed. Data-contract-style schemas between planes not formalised |
+| 3.5 Security View | 4 | ARB Panel | 2026-04-18 | Zero-standing-privilege model, workload identity, Sigstore, Vault all covered; threat model produced; annual red-team committed |
+| 3.6 Scenarios | 4 | ARB Panel | 2026-04-18 | Three strong use cases (bootstrap, deploy, break-glass); three ADRs with genuine alternatives and trade-offs |
+| 4.1 Operational Excellence | 4 | ARB Panel | 2026-04-18 | SLIs/SLOs, centralised logging, alert runbooks, DORA telemetry pipeline; mature observability posture |
+| 4.2 Reliability | 3 | ARB Panel | 2026-04-18 | HA, multi-region warm standby, chaos monthly; cross-cloud DR rehearsal outstanding |
+| 4.3 Performance | 3 | ARB Panel | 2026-04-18 | Targets explicit including DORA deltas; growth modelled to year 5; continuous synthetic load testing |
+| 4.4 Cost Optimisation | 3 | ARB Panel | 2026-04-18 | Showback per team, FinOps review cadence; multi-cloud premium explicitly accepted and tracked |
+| 4.5 Sustainability | 3 | ARB Panel | 2026-04-18 | Non-prod scale-to-zero; renewable-commitment regions; carbon dashboard planned for Phase 2 |
+| 5. Lifecycle | 4 | ARB Panel | 2026-04-18 | Mature CI/CD and supply-chain posture; migration plan with 6 Rs applied to Jenkins estate; skill gaps named and mitigated |
+| 6. Decision Making | 4 | ARB Panel | 2026-04-18 | Constraints, assumptions, and especially risks are well grounded in platform-engineering reality (bottleneck, paved-road fatigue, shadow IT, vendor lock-in) |
+| **Overall** | **3** | ARB Panel | 2026-04-18 | Solid Tier 3 platform SAD at Recommended depth. Genuine platform-engineering thinking throughout. Lowest-scoring sections (3) are all known gaps with owners and plans: cross-cloud DR rehearsal, data contracts between planes, Phase-2 carbon dashboard. |
+
+</div>

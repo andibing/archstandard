@@ -1,0 +1,189 @@
+---
+title: "Cheat Cards"
+description: "One-page printable references: views at a glance, quality attributes at a glance, RAID template, scoring scale."
+---
+
+One-page printables to keep alongside your workstation or pin to a team wall. Each card is designed to print at A4 portrait.
+
+Use your browser's **Print** or **Save as PDF** (Ctrl/Cmd+P) on each card individually for clean output — the print stylesheet hides the navigation, sidebar, and interactive elements automatically.
+
+---
+
+## Card 1 — The Views at a Glance
+
+<div class="cheat-card">
+
+### Tier 1: Architectural Views (Section 3)
+
+| # | View | What it describes | Primary audience |
+|---|------|-------------------|------------------|
+| **3.1** | **Logical View** | Components, services, patterns — *what the solution is* | Architects, Developers |
+| **3.2** | **Integration & Data Flow** | Data flows, APIs, integrations — *how components talk* | Integrators, Architects |
+| **3.3** | **Physical View** | Hosting, compute, networking, environments — *where it runs* | Infrastructure, DevOps |
+| **3.4** | **Data View** | Data stores, classification, retention — *what data it holds* | Data Architects, Compliance |
+| **3.5** | **Security View** | IAM, encryption, monitoring, threats — *how it's protected* | Security, CISO, Compliance |
+| **3.6** | **Scenarios** | Use cases, ADRs — *how it behaves and why* | All stakeholders |
+
+**Remember:** No single view tells the full story. Together, they answer every reasonable question from any reasonable reviewer.
+
+</div>
+
+---
+
+## Card 2 — Quality Attributes at a Glance
+
+<div class="cheat-card">
+
+### Tier 2: Quality Attributes (Section 4) — cross-cutting
+
+| # | Attribute | Assess across every view | Key questions |
+|---|-----------|--------------------------|---------------|
+| **4.1** | **Operational Excellence** | Can we operate it in production? | Observability, runbooks, alerts, incident response |
+| **4.2** | **Reliability & Resilience** | What happens when something fails? | RTO, RPO, DR strategy, backup, fault tolerance |
+| **4.3** | **Performance Efficiency** | Does it meet its targets at load? | P95/P99 latency, throughput, concurrency, growth |
+| **4.4** | **Cost Optimisation** | Is it priced to the value delivered? | Capex/opex, unit economics, commitment discounts, exit cost |
+| **4.5** | **Sustainability** | Is it environmentally responsible? | Carbon baseline, efficient resources, SCI metric |
+
+**Document tradeoffs explicitly** — when one quality attribute constrains another, name the trade-off and the rationale.
+
+**Security is a View (3.5)** — it's cross-cutting enough to warrant its own structure, so don't look for it here.
+
+</div>
+
+---
+
+## Card 3 — RAID Template
+
+<div class="cheat-card">
+
+### Section 6.1–6.5 Decision Making & Governance
+
+**Constraints (6.1)** — fixed limitations the design must work within
+
+| ID | Constraint | Category | Impact | Last Assessed |
+|----|-----------|----------|--------|---------------|
+| C-001 | | regulatory / technical / commercial / organisational / time | | |
+
+**Assumptions (6.2)** — things treated as true but not verified
+
+| ID | Assumption | Impact if false | Certainty | Status | Owner |
+|----|-----------|----------------|-----------|--------|-------|
+| A-001 | | | high / medium / low | open / closed | |
+
+**Risks (6.3)** — potential events with negative impact
+
+| ID | Risk | Severity | Likelihood | Owner | Mitigation | Residual |
+|----|------|:---:|:---:|:---:|-----------|:---:|
+| R-001 | | H/M/L | H/M/L | | | H/M/L |
+
+**Dependencies (6.4)** — external factors this design relies on
+
+| ID | Dependency | Direction | Status | Owner |
+|----|-----------|-----------|--------|-------|
+| D-001 | | inbound / outbound | committed / not-committed / resolved | |
+
+**Issues (6.5)** — problems that have already materialised
+
+| ID | Issue | Impact | Owner | Resolution Plan | Status |
+|----|------|:---:|:---:|-----------------|:---:|
+| I-001 | | H/M/L | | | open / in-progress / resolved |
+
+**Golden rule:** Every row needs an owner and a date. Anonymous = unaccountable.
+
+</div>
+
+---
+
+## Card 4 — Compliance Scoring Scale
+
+<div class="cheat-card">
+
+### 0–5 Compliance Scoring
+
+| Score | Level | What it means |
+|:-----:|-------|---------------|
+| **0** | Not Addressed | No evidence for this area |
+| **1** | Acknowledged | Concern recognised, no design or evidence |
+| **2** | Partial | Some requirements met, significant gaps |
+| **3** | Mostly Addressed | Most requirements met, minor gaps (passing grade) |
+| **4** | Fully Addressed | All requirements met with evidence |
+| **5** | Exemplary | Reference-quality — best practice |
+
+### Overall score
+
+The overall score is the **lowest individual section score**, not an average. A solution with 5 in Performance but 1 in Security is a "1", not a "3" — the Security gap is the concern.
+
+### What to score
+
+**14 sections:** 1, 3.1–3.6, 4.1–4.5, 5, 6 (Executive Summary, the six Views, the five Quality Attributes, Lifecycle, Decision Making).
+
+### Organisation thresholds (suggested defaults)
+
+- All sections ≥ 3 → production approval
+- All sections ≥ 4 → Tier 1/2 critical systems
+- Section = 0 or 1 → remediation plan required
+
+</div>
+
+---
+
+## Card 5 — Documentation Depth Chooser
+
+<div class="cheat-card">
+
+### Pick your depth
+
+| Depth | When to use | Typical effort | Governance gate |
+|-------|-------------|----------------|-----------------|
+| <span class="maturity-indicator maturity-minimum">Minimum</span> | PoC, dev/test systems, Tier 5 internal tools | 1–3 hours | Development review |
+| <span class="maturity-indicator maturity-recommended">Recommended</span> | Production-bound systems, Tier 3–4 | 1–2 days | Production approval |
+| <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | Regulated, Tier 1–2 critical | 1–2 weeks | Enterprise review |
+
+### Matching Business Criticality to Depth
+
+- **Tier 1 Critical** → Comprehensive
+- **Tier 2 High** → Comprehensive
+- **Tier 3 Medium** → Recommended
+- **Tier 4 Low** → Recommended
+- **Tier 5 Minimal** → Minimum
+
+### Rule of thumb
+
+Over-documenting a simple tool burns goodwill. Under-documenting a critical system hides risk. Calibrate to risk, not to tradition.
+
+</div>
+
+---
+
+<style>{`
+  .cheat-card {
+    break-after: page;
+    page-break-after: always;
+    padding: 1rem 0;
+  }
+  .cheat-card:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+  @media print {
+    .cheat-card h3 {
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
+    .cheat-card table {
+      font-size: 0.9rem;
+    }
+  }
+`}</style>
+
+---
+
+## Tips for printing
+
+- Use **Ctrl/Cmd+P** in your browser
+- Select "Save as PDF" or your preferred printer
+- Select "A4" paper size
+- The print stylesheet automatically hides navigation, sidebar, and theme controls
+- Each card above is designed to break to a new page, so one card per sheet
+
+These cards are designed to sit alongside the full standard — not to replace it. Use them for reference during drafting and review; read the full standard pages for detail and context.

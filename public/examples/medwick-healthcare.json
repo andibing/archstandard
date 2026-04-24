@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document — MyMedwick Patient Portal",
+      "solutionName": "MyMedwick Patient Portal",
+      "applicationId": "MHT-APP-142",
+      "authors": ["Dr Raj Doe, Solution Architect"],
+      "owner": "Dr Raj Doe",
+      "version": "1.0",
+      "status": "approved",
+      "createdDate": "2026-02-03",
+      "lastUpdated": "2026-04-20",
+      "classification": "restricted"
+    },
+    "purpose": "Describe the architecture of MyMedwick, the patient self-service portal for Medwick Healthcare Trust, providing outpatient appointment management, test results, and prescription management to 800,000 patients.",
+    "scope": "Patient-facing web and mobile portal, integration to NHS Spine and Trust clinical systems, information governance and clinical safety assurance."
+  },
+  "executiveSummary": {
+    "solutionOverview": "MyMedwick replaces the existing third-party PKB patient portal (end-of-life 2026-11) with an NHS-owned, FHIR-based patient portal hosted on Microsoft Azure UK South with DR in Azure UK West. It serves 800,000 patients and approximately 12,000 clinical staff. Patient identity is provided by Azure AD B2C integrated with NHS login; clinician identity by NHS CIS2. All clinical data access is audited to NHS DSPT standard with Azure Sentinel as the SIEM. Data residency is constrained to the UK. Clinical safety is assured under DCB0129 (manufacturer) and DCB0160 (Trust deployment) with Dr Amir Doe as Clinical Safety Officer.",
+    "businessCriticality": "tier-1-critical",
+    "projectDetails": {
+      "projectName": "MyMedwick",
+      "projectCode": "MHT-PRJ-2026-CLIN-007",
+      "estimatedCapex": 2800000,
+      "estimatedOpex": 1100000,
+      "currency": "GBP",
+      "targetGoLive": "2026-10-01"
+    }
+  },
+  "_note": "This is a summary JSON stub. See the full Comprehensive-depth example at https://archstandard.org/v1/examples/medwick-healthcare/ or the Markdown version at /v1/examples/medwick-healthcare.md"
+}

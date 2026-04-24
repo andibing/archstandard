@@ -1,0 +1,129 @@
+---
+title: "Decision Guides"
+description: "Short flowcharts for common decisions architects face when applying ADS."
+---
+
+import Mermaid from '../../../components/Mermaid.astro';
+
+Short guides for questions that come up again and again.
+
+## Which Documentation Depth do I need?
+
+<Mermaid alt="Flowchart for choosing documentation depth based on solution criticality and audience" chart={`flowchart TD
+    Start[Starting a new SAD] --> Q1{Does the solution<br/>handle customer data,<br/>financial transactions,<br/>or clinical data?}
+    Q1 -->|Yes| Q2{Tier 1 Critical<br/>or Tier 2 High?}
+    Q1 -->|No| Q3{Does it support<br/>business-critical<br/>operations or have<br/>regulatory scrutiny?}
+    Q2 -->|Yes| Comp[Comprehensive]
+    Q3 -->|Yes| Rec[Recommended]
+    Q3 -->|No| Q4{Is this a PoC,<br/>dev tool, or<br/>internal-only<br/>low-impact app?}
+    Q4 -->|Yes| Min[Minimum]
+    Q4 -->|No| Rec
+    Comp --> Note1[See the Depth Cheat Sheet<br/>for what to fill in]
+    Rec --> Note1
+    Min --> Note1`} />
+
+**Rule of thumb:** Documentation depth should match Business Criticality tier.
+- Tier 1 / 2 → Comprehensive
+- Tier 3 / 4 → Recommended
+- Tier 5 → Minimum
+
+Over-document a simple tool and authors resent the process. Under-document a critical system and the business takes on hidden risk.
+
+---
+
+## Do I need a threat model?
+
+<Mermaid alt="Flowchart for deciding whether a threat model is required" chart={`flowchart TD
+    Start[Considering a threat model?] --> Q1{Customer-facing,<br/>internet-exposed,<br/>or regulated?}
+    Q1 -->|Yes| Need[Threat model required<br/>STRIDE or equivalent]
+    Q1 -->|No| Q2{Handles personal,<br/>financial, or<br/>clinical data?}
+    Q2 -->|Yes| Need
+    Q2 -->|No| Q3{New technology<br/>or new integration<br/>pattern for the org?}
+    Q3 -->|Yes| Light[Lightweight threat model<br/>recommended]
+    Q3 -->|No| Skip[Threat model optional<br/>— describe key controls]
+    Need --> Note1[Cover at Comprehensive depth:<br/>threats, attack vectors,<br/>mitigations, residual risk]
+    Light --> Note2[Cover at Recommended depth:<br/>top 5 threats, mitigations]`} />
+
+**Frameworks to consider:** STRIDE (standard), PASTA (attacker-focused), LINDDUN (privacy-focused for GDPR/HIPAA contexts), OWASP Threat Dragon (tooling).
+
+---
+
+## Split into one SAD or many?
+
+<Mermaid alt="Flowchart for deciding whether to split a solution into multiple SADs" chart={`flowchart TD
+    Start[Considering one SAD or many?] --> Q1{Is this one<br/>cohesive solution<br/>with one owner?}
+    Q1 -->|Yes| One[One SAD]
+    Q1 -->|No| Q2{Are the parts<br/>deployed and<br/>operated<br/>independently?}
+    Q2 -->|Yes| Multi[Multiple SADs<br/>one per bounded context]
+    Q2 -->|No| Q3{Does one part<br/>have different<br/>criticality or<br/>regulatory regime?}
+    Q3 -->|Yes| Multi
+    Q3 -->|No| One
+    One --> Note1[Single document covers<br/>the whole solution]
+    Multi --> Note2[Each SAD references siblings<br/>via Dependencies 6.4<br/>and Integration View 3.2]`} />
+
+**Good split points:**
+- Different teams own the parts
+- Different deployment cadence
+- Different criticality tier
+- Different regulatory regime (regulated core vs unregulated periphery)
+
+**Poor split points:**
+- Splitting "frontend" and "backend" of one application — they deploy together, they're one solution
+- Splitting along team boundaries that will change — design by the architecture, not the org chart
+
+---
+
+## When is an ADR warranted?
+
+<Mermaid alt="Flowchart for deciding when a decision is significant enough to warrant an ADR" chart={`flowchart TD
+    Start[Made an architecture decision?] --> Q1{Would reversing<br/>this decision later<br/>cost more than<br/>one sprint?}
+    Q1 -->|Yes| Adr[Write an ADR]
+    Q1 -->|No| Q2{Does it cross<br/>team boundaries<br/>or introduce new<br/>technology?}
+    Q2 -->|Yes| Adr
+    Q2 -->|No| Q3{Did we consider<br/>viable alternatives?}
+    Q3 -->|Yes| Adr
+    Q3 -->|No| Skip[Not an ADR<br/>— just a choice]
+    Adr --> Note1[Document: context,<br/>decision, alternatives,<br/>consequences, affected<br/>quality attributes]`} />
+
+**Good ADR candidates:** Database choice, authentication model, deployment topology, API style (REST vs GraphQL vs gRPC), cloud provider, major third-party service.
+
+**Not ADRs:** Library versions, code formatting, naming conventions, day-to-day tactical choices.
+
+---
+
+## Should I list this as a risk, assumption, issue, or constraint?
+
+<Mermaid alt="Flowchart for classifying items into the RAID log categories" chart={`flowchart TD
+    Start[Have a concern to capture?] --> Q1{Has it<br/>already<br/>happened?}
+    Q1 -->|Yes| Issue[Issue<br/>Section 6.5]
+    Q1 -->|No| Q2{Is it<br/>something we<br/>must work<br/>within?}
+    Q2 -->|Yes| Con[Constraint<br/>Section 6.1]
+    Q2 -->|No| Q3{Is it<br/>something we're<br/>treating as true<br/>without proof?}
+    Q3 -->|Yes| Ass[Assumption<br/>Section 6.2]
+    Q3 -->|No| Q4{Does success<br/>depend on<br/>another party<br/>or team?}
+    Q4 -->|Yes| Dep[Dependency<br/>Section 6.4]
+    Q4 -->|No| Risk[Risk<br/>Section 6.3]`} />
+
+**Quick definitions:**
+- **Constraint** — an unchangeable boundary (budget, regulation, deadline, existing tech)
+- **Assumption** — something we're treating as true but haven't verified
+- **Risk** — something that might happen and would hurt us
+- **Dependency** — we need something from outside our control
+- **Issue** — something that's already happened that we need to deal with
+
+---
+
+## Do I need to update an existing SAD, or write a new one?
+
+<Mermaid alt="Flowchart for deciding whether a change needs a new SAD or an update" chart={`flowchart TD
+    Start[Making a change?] --> Q1{Is the solution<br/>fundamentally<br/>different?}
+    Q1 -->|Yes| New[Write a new SAD]
+    Q1 -->|No| Q2{Does it change<br/>Tier, regulatory<br/>regime, or<br/>hosting venue?}
+    Q2 -->|Yes| New
+    Q2 -->|No| Q3{Does it touch<br/>multiple views<br/>or affect<br/>quality attributes?}
+    Q3 -->|Yes| Major[Major update<br/>version 2.0]
+    Q3 -->|No| Q4{Is it a small<br/>fix or clarification?}
+    Q4 -->|Yes| Patch[Patch<br/>version 1.x.y]
+    Q4 -->|No| Minor[Minor update<br/>version 1.x]`} />
+
+Update the SAD's document metadata (version and change history in Section 0) every time. A current SAD is a living document, not a one-time artefact.

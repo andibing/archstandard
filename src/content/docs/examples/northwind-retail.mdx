@@ -1,0 +1,1376 @@
+---
+title: "Example: NorthWind Retail Online"
+description: "A completed SAD for a B2C e-commerce platform on AWS, demonstrating ADS at Recommended depth for a Tier 2 High Impact regulated system."
+---
+
+import Mermaid from '../../../components/Mermaid.astro';
+
+<div class="example-sad">
+
+
+<div class="guidance-box">
+<h4>About This Example</h4>
+
+This is a **fictional but realistic** Solution Architecture Document for NorthWind Retail Ltd's customer-facing e-commerce platform. It demonstrates the Architecture Description Standard at **Recommended** documentation depth -- the expected level for a Tier 2 High Impact system handling PCI-DSS regulated payment data and peak sales volumes of £30M/day.
+
+**Fictional company:** NorthWind Retail Ltd -- a UK-based B2C retailer with 450 stores and £2.8bn annual turnover.
+**Fictional solution:** NorthWind Online -- a customer-facing e-commerce platform (web and mobile app) migrating from a legacy .NET monolith to a microservices architecture on AWS.
+</div>
+
+---
+
+## 0. Document Control
+
+### 0.1 Document Metadata
+
+| Field | Value |
+|-------|-------|
+| **Document Title** | Solution Architecture Document -- NorthWind Online |
+| **Application / Solution Name** | NorthWind Online |
+| **Application ID** | APP-0821 |
+| **Author(s)** | Priya Doe (Solution Architect) |
+| **Owner** | Priya Doe |
+| **Version** | 1.2 |
+| **Status** | Approved |
+| **Created Date** | 2025-07-14 |
+| **Last Updated** | 2026-03-18 |
+| **Classification** | Internal -- Restricted |
+
+### 0.2 Change History
+
+| Version | Date | Author / Editor | Description of Change |
+|---------|------|-----------------|----------------------|
+| 0.1 | 2025-07-14 | Priya Doe | Initial draft covering executive summary and logical view |
+| 0.2 | 2025-08-21 | Priya Doe | Added physical, data and security views following architecture workshops |
+| 0.3 | 2025-09-30 | Priya Doe, Tom Bloggs | Security review incorporated; PCI-DSS scope narrowed via tokenisation decision |
+| 1.0 | 2025-11-10 | Priya Doe | First approved version following Design Authority review |
+| 1.1 | 2026-01-22 | Priya Doe | Updated cost model after Black Friday 2025 peak capacity validation |
+| 1.2 | 2026-03-18 | Priya Doe | Revised ADRs and risk register following mobile-app launch |
+
+### 0.3 Contributors & Approvals
+
+| Name | Role | Contribution Type |
+|------|------|------------------|
+| Priya Doe | Solution Architect | Author |
+| Fred Bloggs | Head of Digital Engineering | Reviewer |
+| Jane Doe | Principal Security Architect | Reviewer |
+| Tom Bloggs | Data Protection Officer | Reviewer |
+| Sally Doe | SRE Lead | Reviewer |
+| Raj Bloggs | Head of Digital Commerce (Business Owner) | Approver |
+| Helen Doe | CTO | Approver |
+| Design Authority | Governance | Approver |
+
+### 0.4 Document Purpose & Scope
+
+This SAD describes the architecture of NorthWind Online, the customer-facing e-commerce platform for NorthWind Retail Ltd. It replaces the legacy `NW-Commerce` .NET monolith with a cloud-native microservices platform hosted on AWS, supporting peak sales of £30M/day during seasonal events.
+
+- **Scope boundary:** Customer-facing web storefront (Next.js), mobile application back-end services, microservices domain (catalogue, basket, checkout, order, customer, search), data stores, payment integration, and supporting AWS infrastructure.
+- **Out of scope:** Warehouse management system (documented in APP-0214), in-store EPOS (APP-0088), marketing cloud platform (SaaS -- vendor-managed), and the corporate SAP ERP (APP-0001).
+- **Related documents:** NorthWind Cloud Landing Zone SAD (APP-0750), PCI-DSS Scope Document (SEC-PCI-2025-03), Data Protection Impact Assessment (DPIA-2025-091), Digital Channels Strategy (STRAT-DGT-2025).
+
+---
+
+## 1. Executive Summary
+
+### 1.1 Solution Overview
+
+NorthWind Online is the primary digital sales channel for NorthWind Retail Ltd, serving approximately 12 million active customers across the UK via responsive web (`www.northwind.co.uk`) and native mobile applications (iOS and Android). The new platform replaces the legacy `NW-Commerce` .NET monolith -- which has reached the limits of its scaling capacity and cannot reliably handle Black Friday and Boxing Day peaks -- with a cloud-native microservices architecture on AWS.
+
+The platform is built on Amazon EKS running Node.js microservices, fronted by a Next.js storefront (server-side rendered via Vercel-equivalent pattern on AWS), and backed by Amazon RDS Aurora PostgreSQL. Payments are processed via Stripe (tokenised at the browser via Stripe Elements), email via SendGrid, and customer behaviour events are captured via Segment CDP for downstream marketing analytics.
+
+### 1.2 Business Context & Drivers
+
+| Driver | Description | Priority |
+|--------|------------|----------|
+| Peak capacity failure | Legacy monolith failed twice in Black Friday 2024 peak, losing an estimated £8.2M in sales over 3 hours; board directive to remediate before Black Friday 2026 | Critical |
+| PCI-DSS compliance | Current platform is PCI-DSS v3.2.1 scoped at Level 1; v4.0 transition required by 31 March 2026 with tokenised payment flow to reduce scope | Critical |
+| Digital growth strategy | Board target of 40% of group revenue online by 2028 (currently 22%); requires platform able to deliver new customer experiences quickly | High |
+| Legacy end-of-life | .NET Framework 4.7.2 and Windows Server 2016 reach end of extended support in 2026; Oracle Commerce platform is unsupported since 2024 | High |
+| Mobile channel growth | Mobile traffic has grown from 48% to 71% of sessions in 2 years; current platform has no mobile-specific API surface, relying on scraped web views | High |
+| Personalisation & CDP | Marketing team requires real-time customer event stream for personalisation; legacy platform cannot emit structured events | Medium |
+
+### 1.3 Strategic Alignment
+
+#### Organisational Strategy Alignment
+
+| Question | Response |
+|----------|----------|
+| Which organisational strategy or initiative does this solution support? | Digital Channels Strategy 2025-2028 (STRAT-DGT-2025), specifically Workstream 1: Re-platforming NorthWind Online |
+| Has this solution been reviewed against the organisation's capability model? | Yes -- mapped to Digital Storefront, Order Management, Customer Identity, and Payment Processing capabilities |
+| Does this solution duplicate any existing capability? | No -- replaces the legacy NW-Commerce monolith which will be decommissioned |
+
+#### Reuse of Shared Services & Platforms
+
+| Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
+|-----------|--------------------------|---------|------------------------------|
+| Identity & Access (Customer) | AWS Cognito (customer tenant) | Yes | Corporate-approved customer IDP; replaces legacy custom auth |
+| Identity & Access (Colleague) | Okta (corporate SSO) | Yes | Used for admin portal and operations tooling access |
+| Payment Processing | Stripe | Yes | Existing group-wide contract; handles tokenisation to reduce PCI scope |
+| Email / Transactional Messaging | SendGrid | Yes | Corporate-approved email service; shared with loyalty programme |
+| CDN | Amazon CloudFront | Yes | Corporate landing zone standard |
+| Customer Data Platform | Segment | Yes | Existing enterprise contract; feeds Salesforce Marketing Cloud |
+| Monitoring & Logging | Datadog (corporate) | Yes | Corporate APM and log aggregation platform |
+| CI/CD | GitHub Actions (corporate organisation) | Yes | Corporate standard |
+| Container Platform | Amazon EKS | Yes | Corporate landing zone standard |
+
+### 1.4 Scope
+
+#### In Scope
+
+- Customer-facing web storefront (Next.js SSR) and native mobile applications (iOS, Android)
+- Back-end microservices: catalogue, search, basket, checkout, order, customer, promotion
+- Payment integration via Stripe (Stripe Elements client-side tokenisation)
+- Customer identity and account management via AWS Cognito
+- AWS infrastructure: EKS, RDS Aurora PostgreSQL, ElastiCache Redis, OpenSearch, S3, CloudFront, WAF, SQS
+- Integration with SAP ERP (inventory, pricing, order hand-off), warehouse management (APP-0214), and loyalty platform (APP-0417)
+- All environments: development, test, staging, production, and DR
+- Event capture for Segment CDP
+
+#### Out of Scope
+
+- Warehouse management system modifications (APP-0214)
+- In-store EPOS (APP-0088)
+- Marketing cloud platform configuration (Salesforce Marketing Cloud, vendor-managed)
+- Corporate finance reporting integrations (handled by ERP team)
+- Back-office merchandising tooling (Phase 2, planned 2027)
+
+### 1.5 Current State / As-Is Architecture
+
+The legacy `NW-Commerce` platform was built in 2016 on Oracle Commerce 11 and .NET Framework 4.7.2, hosted on Windows Server 2016 virtual machines in NorthWind's private data centre in Basingstoke. It serves the current £620M/year online turnover.
+
+**Key limitations:**
+
+- **Peak capacity:** Vertical scaling limits reached at approximately 1,800 orders/minute; Black Friday 2024 demand peaked at 2,400 orders/minute and the platform failed for 3 hours 12 minutes, losing an estimated £8.2M in sales.
+- **Release velocity:** Full-regression release cycle of 6 weeks; any code change requires full platform deployment.
+- **Mobile experience:** No mobile-specific APIs; the iOS and Android apps scrape the responsive website HTML, which is brittle and slow.
+- **Vendor support:** Oracle Commerce 11 is unsupported since 2024; there is no patch stream for security or functional issues.
+- **Operational cost:** Annual hosting, licensing and operational support totals £4.1M including 11 FTEs.
+- **PCI-DSS scope:** The entire application stack is in PCI-DSS scope because cardholder data enters the application server prior to tokenisation.
+
+**What is being retained:** SAP ERP (integration via APIs), warehouse management system (APP-0214), loyalty platform (APP-0417).
+**What is being replaced:** Oracle Commerce 11, .NET monolith, on-premises Windows Server hosting.
+**What is being decommissioned:** `NW-Commerce` application servers (post 3-month parallel-run period).
+
+### 1.6 Key Decisions & Constraints
+
+| Decision / Constraint | Rationale | Impact |
+|----------------------|-----------|--------|
+| AWS as hosting platform | Corporate Cloud Landing Zone is AWS-only; existing enterprise agreement | All infrastructure on AWS in eu-west-2 (London) |
+| EKS for container orchestration | Existing team skills; corporate standard; portability across clouds | Microservices deployed as Kubernetes pods |
+| Aurora PostgreSQL over MySQL | Superior JSONB support for product catalogues, stronger consistency model, better observability ecosystem | RDS Aurora PostgreSQL for all transactional data |
+| Next.js SSR over client-only SPA | SEO is critical for e-commerce discovery; SSR improves Core Web Vitals (LCP) substantially | Storefront rendered server-side on AWS |
+| Stripe for payments | Group-wide contract; Stripe Elements keeps cardholder data out of NorthWind systems, reducing PCI scope to SAQ A-EP | PCI-DSS scope reduced; dependency on Stripe for card payment flow |
+| Data residency: UK | UK GDPR and corporate data policy require customer PII in the UK | eu-west-2 (London) primary; non-PII operational data only in eu-west-1 (Ireland) DR |
+| Must deliver before Black Friday 2026 | Board directive following 2024 outage | Go-live milestone: 2026-10-01 (7 weeks prior to Black Friday) |
+
+### 1.7 Project Details
+
+| Field | Value |
+|-------|-------|
+| **Project Name** | NorthWind Online Re-platform |
+| **Project Code / ID** | PRJ-2025-112 |
+| **Project Manager** | Fiona Bloggs |
+| **Estimated Solution Cost (Capex)** | GBP 2,000,000 (delivery) |
+| **Estimated Solution Cost (Opex)** | GBP 800,000 per annum (AWS, SaaS, support) |
+| **Target Go-Live Date** | 2026-10-01 (full cut-over); phased roll-out from 2026-06-01 |
+
+### 1.8 Business Criticality
+
+Selected criticality: **Tier 2: High Impact**
+
+Justification: NorthWind Online is the primary digital sales channel, contributing £620M/year currently (projected £1.1bn by 2028). Failure during peak trading periods would cause:
+
+- Direct revenue loss of up to £30M per day during peak trading (Black Friday, Boxing Day, Cyber Week)
+- Breach of PCI-DSS obligations if security controls fail, with potential fines and card scheme sanctions
+- UK GDPR breach notification obligations if customer PII is exposed
+- Reputational damage in a competitive retail market
+- Failure is not immediately life-safety critical (Tier 1 reserved for in-store point-of-sale and safety systems)
+
+---
+
+## 2. Stakeholders & Concerns
+
+### 2.1 Stakeholder Register
+
+| Stakeholder | Role / Group | Key Concerns | Relevant Views |
+|-------------|-------------|--------------|----------------|
+| Raj Bloggs | Head of Digital Commerce (Business Owner) | Revenue, conversion rate, time-to-market for new features, peak resilience | Executive Summary, Scenarios, Performance |
+| Helen Doe | CTO | Strategic alignment, technology direction, cost | Executive Summary, Cost, Lifecycle |
+| Jane Doe | Principal Security Architect | PCI-DSS, threat model, customer PII protection | Security View, Data View |
+| Tom Bloggs | Data Protection Officer | UK GDPR, data sovereignty, DPIA, retention | Data View, Security View |
+| Priya Doe | Solution Architect | Design integrity, standards compliance, maintainability | All views |
+| Sally Doe | SRE Lead | Observability, incident response, on-call, peak readiness | Operational Excellence, Reliability |
+| Fred Bloggs | Head of Digital Engineering | Microservice design, developer experience, CI/CD | Logical View, Integration, Lifecycle |
+| Fiona Bloggs | Project Manager | Delivery milestones, budget, risks, dependencies | Executive Summary, Governance |
+| Harriet Doe | Head of Marketing | Personalisation, event capture, SEO | Integration View, Scenarios |
+| Dave Bloggs | Head of Customer Service | Order visibility, account self-service, refunds | Scenarios |
+| Customers (c.12M) | End Users | Speed, availability, security, trust | Executive Summary, Scenarios, Performance |
+| Retail merchandisers (c.80) | Internal admin users | Product-listing workflow, stock visibility | Scenarios, Logical View |
+
+### 2.2 Concerns Matrix
+
+| Concern | Stakeholder(s) | Addressed In |
+|---------|---------------|-------------|
+| Peak trading availability and performance | Raj Bloggs, Sally Doe, Customers | 4.2 Reliability, 4.3 Performance, 3.3 Physical View |
+| PCI-DSS compliance and card data protection | Jane Doe, Helen Doe | 3.5 Security View, 2.3 Compliance |
+| UK GDPR and customer data protection | Tom Bloggs, Jane Doe | 3.4 Data View, 3.5 Security View |
+| Revenue loss from downtime | Raj Bloggs, Helen Doe | 4.2 Reliability, 1.8 Business Criticality |
+| Speed of feature delivery | Fred Bloggs, Harriet Doe | 5.1 CI/CD, 5.4 Release Management |
+| Cost of AWS platform at peak | Helen Doe, Fiona Bloggs | 4.4 Cost Optimisation |
+| Vendor lock-in to Stripe | Priya Doe, Helen Doe | 3.1.6 Technology & Vendor Lock-in, 6.3 Risks |
+| Search quality and relevance | Harriet Doe, Raj Bloggs | 3.1 Logical View, 3.6 Scenarios |
+| Mobile app parity with web | Raj Bloggs, Customers | 3.1 Logical View, 3.2 Integration |
+
+### 2.3 Compliance & Regulatory Context
+
+#### Regulatory Requirements
+
+| Regulation / Standard | Applicability | Impact on Design |
+|----------------------|--------------|-----------------|
+| PCI-DSS v4.0 | Mandatory -- platform accepts card payments | Scope reduced to SAQ A-EP via Stripe Elements tokenisation; PAN never traverses NorthWind systems. Network segmentation, encryption, audit logging and quarterly ASV scans still required |
+| UK GDPR / Data Protection Act 2018 | Mandatory -- platform processes customer PII at scale | DPIA completed, lawful basis documented, right-to-erasure supported, retention policies enforced |
+| PSD2 / Strong Customer Authentication | Applicable -- card payments above £30 require 3-D Secure 2 | Stripe handles SCA challenge flow; checkout UX must accommodate challenge redirect |
+| Consumer Rights Act 2015 | Applicable -- digital B2C contracts | Cooling-off period support, refund handling, clear terms presentation |
+| WCAG 2.2 AA | Corporate accessibility policy | Storefront and mobile app must meet AA; automated accessibility testing in CI |
+
+#### Regulated Activities
+
+- No FCA-regulated activities. Payment regulation (PSD2 SCA) is satisfied by Stripe acting as the acquirer.
+
+#### Compliance Standards
+
+| Standard | Version | Applicability |
+|----------|---------|--------------|
+| NorthWind Information Security Standard | 3.4 | All sections -- security controls, access management |
+| NorthWind Cloud Landing Zone Standard | 2.1 | Physical View, Security View -- AWS controls, tagging |
+| NorthWind Data Classification Standard | 1.2 | Data View -- classification and handling |
+| PCI-DSS | 4.0 | Security View -- card data flow, segmentation |
+| OWASP ASVS | 4.0 L2 | Application security verification |
+
+---
+
+## 3. Architectural Views
+
+### 3.1 Logical View
+
+#### 3.1.1 Application Architecture Diagram
+
+<Mermaid alt="Application architecture: Customers access Next.js storefront and mobile apps via CloudFront. The API Gateway routes to Node.js microservices on EKS (catalogue, basket, checkout, order, customer, search). Microservices use Aurora PostgreSQL, OpenSearch and Redis. Payments go to Stripe, emails via SendGrid, events to Segment CDP." chart={`graph TD
+    Web[Customers: Web Browser] --> CF[CloudFront CDN + WAF]
+    Mob[Customers: Mobile App] --> CF
+    CF --> Next[Next.js Storefront SSR]
+    CF --> APIGW[API Gateway]
+    Next --> APIGW
+    APIGW --> Cat[Catalogue Service]
+    APIGW --> Bas[Basket Service]
+    APIGW --> Chk[Checkout Service]
+    APIGW --> Ord[Order Service]
+    APIGW --> Cus[Customer Service]
+    APIGW --> Sea[Search Service]
+    Cat --> Aur[(Aurora PostgreSQL)]
+    Bas --> Red[(ElastiCache Redis)]
+    Chk --> Aur
+    Chk --> Stripe[Stripe Payments]
+    Ord --> Aur
+    Ord --> SQS[SQS Order Queue]
+    Cus --> Cog[AWS Cognito]
+    Cus --> Aur
+    Sea --> OS[(OpenSearch)]
+    SQS --> SAP[SAP ERP / Warehouse]
+    Ord --> SG[SendGrid Email]
+    APIGW --> Seg[Segment CDP]`} />
+
+#### 3.1.2 Component Decomposition
+
+| Component | Type | Description | Technology | Owner |
+|-----------|------|-------------|------------|-------|
+| Storefront Web | Web Application | Server-side rendered customer-facing storefront for SEO and performance | Next.js 14, React 18, TypeScript | Digital Commerce team |
+| Mobile App (iOS, Android) | Web Application (native) | Native customer apps consuming platform APIs | Swift (iOS), Kotlin (Android) | Mobile team |
+| API Gateway | Gateway | Single ingress for all microservices; request validation, throttling, auth | AWS API Gateway (REST) | Platform team |
+| Catalogue Service | API Service | Product data, categories, pricing, availability | Node.js 20, NestJS, on EKS | Commerce team |
+| Search Service | API Service | Faceted search, autocomplete, type-ahead, relevance ranking | Node.js 20, NestJS, on EKS | Commerce team |
+| Basket Service | API Service | Customer basket state, promotion application | Node.js 20, NestJS, on EKS | Commerce team |
+| Checkout Service | API Service | Checkout orchestration, Stripe integration, 3-D Secure flow | Node.js 20, NestJS, on EKS | Commerce team |
+| Order Service | API Service | Order creation, hand-off to SAP, status tracking | Node.js 20, NestJS, on EKS | Commerce team |
+| Customer Service | API Service | Customer profile, address book, consent, order history | Node.js 20, NestJS, on EKS | Commerce team |
+| Promotion Service | API Service | Promotion rules engine, voucher validation | Node.js 20, NestJS, on EKS | Commerce team |
+| Transactional Database | Database | Authoritative store for catalogue, orders, customer, promotions | Amazon RDS Aurora PostgreSQL 15 (Multi-AZ) | DBA team |
+| Search Index | Search Engine | Product search index with synonyms and boosts | Amazon OpenSearch 2.x | Platform team |
+| Basket Cache | Cache | Session-scoped basket state and rate-limiting counters | Amazon ElastiCache Redis 7.x (cluster mode) | Platform team |
+| Order Queue | Queue | Decouples order hand-off to SAP from checkout response path | Amazon SQS (standard + DLQ) | Platform team |
+| Static Asset Store | File Storage | Product images, merchandising assets, app bundles | Amazon S3 + CloudFront | Platform team |
+| Customer Identity | Service | Customer sign-up, sign-in, MFA, password reset, social login | AWS Cognito (customer user pool) | Platform team |
+
+#### 3.1.3 Service & Capability Mapping
+
+| Service ID | Service Name | Capability ID | Capability Name |
+|-----------|-------------|--------------|----------------|
+| SVC-NWO-01 | Product Discovery | CAP-COMM-010 | Digital Storefront |
+| SVC-NWO-02 | Basket & Checkout | CAP-COMM-011 | Online Order Capture |
+| SVC-NWO-03 | Customer Account | CAP-CUS-004 | Customer Self-Service |
+| SVC-NWO-04 | Order Fulfilment Hand-off | CAP-OPS-007 | Order Orchestration |
+| SVC-NWO-05 | Payment Processing | CAP-FIN-003 | Card Payment Acceptance |
+
+#### 3.1.4 Application Impact
+
+| Application Name | Application ID | Impact Type | Change Details | Comments |
+|-----------------|---------------|-------------|----------------|----------|
+| Legacy NW-Commerce | APP-0412 | Decommission | Retired after 3-month parallel run | 2016 Oracle Commerce monolith |
+| SAP ERP | APP-0001 | Modify (consume) | New order hand-off queue integration | Existing APIs; no SAP-side changes |
+| Warehouse Management | APP-0214 | Use | Order events consumed via existing topic | No changes required |
+| Loyalty Platform | APP-0417 | Use | Customer identity linkage via shared Cognito attribute | Minor attribute mapping update |
+| Corporate Okta | APP-0099 | Use | Admin access for merchandisers and ops | Existing federation |
+| Salesforce Marketing Cloud | APP-0601 | Use (indirect) | Customer events flow via Segment CDP | No direct integration from NorthWind Online |
+
+#### 3.1.5 Key Design Patterns
+
+| Pattern | Where Applied | Rationale |
+|---------|--------------|-----------|
+| Microservices | Domain-aligned services (catalogue, basket, checkout, order, customer, search, promotion) | Independent scaling, deployment, fault isolation; smaller blast radius during peak |
+| API Gateway | AWS API Gateway fronting all services | Centralised throttling, WAF integration, auth enforcement, contract versioning |
+| Strangler Fig | Transition from legacy NW-Commerce | Traffic gradually shifted per domain (search first, checkout last) via CloudFront routing rules |
+| Backend-for-Frontend (BFF) | Mobile BFF service composing catalogue, basket and customer calls | Reduces round-trips for mobile clients on cellular networks; tailored payloads |
+| Event-Driven (Pub-Sub) | Order events to SAP and Segment | Decouples downstream systems from checkout latency path |
+| Cache-Aside | Catalogue and pricing reads via Redis | Reduces Aurora read load during peak; P95 latency improvement |
+| Circuit Breaker | Stripe and SAP integrations | Prevents cascading failure when a downstream dependency degrades |
+
+#### 3.1.6 Technology & Vendor Lock-in Assessment
+
+| Component / Service | Vendor / Technology | Lock-in Level | Mitigation | Portability Notes |
+|---|---|---|---|---|
+| AWS EKS | AWS (Kubernetes) | Low | Standard Kubernetes manifests; Helm charts | Portable to AKS, GKE, or self-managed |
+| RDS Aurora PostgreSQL | AWS (PostgreSQL-compatible) | Moderate | Aurora-specific features avoided where possible; standard PostgreSQL schema | Migratable to standard PostgreSQL with minor effort (pg_dump / logical replication) |
+| CloudFront + WAF | AWS | Low | Cache behaviours are declarative; rules documented | Replaceable with Cloudflare or Akamai |
+| AWS Cognito | AWS | Moderate | Standard OIDC claims; customer identity data exportable | Migration to alternative IDP (e.g. Auth0, Okta CIAM) would require password reset cycle |
+| Stripe | Stripe Inc. | **High** | Payment abstraction layer in Checkout Service isolates Stripe SDK; documented migration plan to alternative PSP | Migration would be a 6-9 month programme; vouchers/stored cards need reissue |
+| SendGrid | Twilio | Low | Standard SMTP / REST API; templates are HTML | Easily swapped with AWS SES, Mailgun, Postmark |
+| OpenSearch | AWS (Apache 2.0 fork) | Low | Standard Elasticsearch query DSL | Fully compatible with Elasticsearch 7.10 and OpenSearch self-hosted |
+| Segment CDP | Twilio | Moderate | Thin event emission layer; tracking plan documented | Migration to alternative CDP requires event replay |
+
+---
+
+### 3.2 Integration & Data Flow View
+
+#### 3.2.1 Data Flow Diagrams
+
+**Primary data flow -- Customer places an order:**
+
+1. Customer browses the storefront; Next.js SSR calls Catalogue and Search services via API Gateway for product listings.
+2. Customer adds items to basket; Basket Service persists state to Redis (keyed by basket ID).
+3. Customer proceeds to checkout; Checkout Service validates the basket, calculates shipping and applies promotions.
+4. Browser loads Stripe Elements iframe; customer enters card details directly into Stripe-hosted input fields. PAN never reaches NorthWind systems.
+5. Stripe returns a payment method token to the browser; browser forwards the token to Checkout Service.
+6. Checkout Service calls Stripe's `PaymentIntent` API with the token; Stripe performs 3-D Secure challenge if required.
+7. On successful authorisation, Order Service creates the order record in Aurora and emits an `OrderCreated` event to SQS.
+8. Order Service triggers a transactional email via SendGrid and a customer event to Segment CDP.
+9. A downstream consumer (SAP integration Lambda) processes the SQS queue and calls SAP's REST API to create the sales order.
+
+#### 3.2.2 Internal Component Connectivity
+
+| Source Component | Destination Component | Protocol / Encryption | Authentication Method | Purpose |
+|-----------------|----------------------|----------------------|----------------------|---------|
+| Next.js Storefront | API Gateway | HTTPS / TLS 1.3 | AWS SigV4 (server-side) | Render product and catalogue data server-side |
+| Mobile App | API Gateway | HTTPS / TLS 1.3 | OAuth 2.0 (Cognito) + API key | Mobile client API access |
+| API Gateway | Microservices (EKS) | HTTPS / TLS 1.2 within VPC | IAM (IRSA) | Route requests to service pods |
+| Microservices | Aurora PostgreSQL | TCP/TLS 1.2 (PostgreSQL protocol) | IAM database authentication | Read/write authoritative data |
+| Microservices | ElastiCache Redis | TLS 1.2 | AUTH token (Secrets Manager) | Cache and basket state |
+| Search Service | OpenSearch | HTTPS / TLS 1.2 | IAM with fine-grained access | Search queries and index updates |
+| Order Service | SQS | HTTPS / TLS 1.2 | IAM role | Publish order events |
+| SAP Integration Lambda | SQS | HTTPS / TLS 1.2 | IAM role | Consume order events |
+
+#### 3.2.3 External Integration Architecture
+
+| Source Application | Destination Application | Protocol / Encryption | Authentication | Security Proxy | Purpose |
+|-------------------|------------------------|----------------------|---------------|---------------|---------|
+| Customer browser / mobile app | CloudFront | HTTPS / TLS 1.3 | None (public) | AWS WAF, Shield Standard | Public storefront and API access |
+| Checkout Service | Stripe | HTTPS / TLS 1.3 | Stripe secret key (Secrets Manager) | NAT Gateway (fixed IP) | Payment authorisation and capture |
+| Customer browser | Stripe (direct) | HTTPS / TLS 1.3 | Stripe publishable key | N/A (client-side) | Card tokenisation via Stripe Elements |
+| Order Service | SendGrid | HTTPS / TLS 1.3 | API key (Secrets Manager) | NAT Gateway | Transactional email delivery |
+| SAP Integration Lambda | SAP ERP | HTTPS / TLS 1.2 | OAuth 2.0 client credentials | Site-to-Site VPN to on-prem | Sales order creation |
+| API Gateway / Storefront | Segment CDP | HTTPS / TLS 1.3 | Write key | N/A | Customer event capture |
+| Admin users | Admin portal (CloudFront origin) | HTTPS / TLS 1.3 | Okta SSO (OIDC) | VPN + WAF | Merchandiser and operations access |
+
+##### End User Access
+
+| User Type | Access Method | Authentication | Protocol |
+|-----------|-------------|---------------|----------|
+| Retail customers (web) | Web browser, public Internet | AWS Cognito (email + password, optional social, optional MFA) | HTTPS / TLS 1.3 |
+| Retail customers (mobile) | Native app (iOS / Android) | AWS Cognito (OAuth 2.0 authorisation code + PKCE) | HTTPS / TLS 1.3 |
+| Merchandisers | Admin web portal | Okta SSO + MFA | HTTPS / TLS 1.3 |
+| SRE / Operations | kubectl, AWS Console, Datadog | Okta SSO via AWS IAM Identity Centre | HTTPS / TLS 1.3 |
+
+#### 3.2.4 API & Interface Contracts
+
+| API / Interface | Type | Direction | Format | Version | Documentation |
+|----------------|------|-----------|--------|---------|--------------|
+| Catalogue API | REST | Exposed | JSON | v1 | Internal developer portal (Swagger) |
+| Basket API | REST | Exposed | JSON | v1 | Internal developer portal |
+| Checkout API | REST | Exposed | JSON | v1 | Internal developer portal |
+| Order API | REST | Exposed | JSON | v1 | Internal developer portal |
+| Customer API | REST | Exposed | JSON | v1 | Internal developer portal |
+| Stripe PaymentIntents | REST | Consumed | JSON | 2024-06-20 | Stripe API reference |
+| SendGrid Mail | REST | Consumed | JSON | v3 | SendGrid API reference |
+| SAP Sales Order API | REST | Consumed | JSON | v2 | SAP team wiki |
+| Segment Track | REST | Consumed | JSON | v1 | Segment API reference |
+
+---
+
+### 3.3 Physical View
+
+#### 3.3.1 Deployment Architecture Diagram
+
+<Mermaid alt="Deployment architecture: CloudFront fronts the platform with WAF and Shield. An Application Load Balancer distributes to EKS node groups across two Availability Zones in eu-west-2 (London). Aurora PostgreSQL, ElastiCache Redis, and OpenSearch are Multi-AZ. DR is a pilot-light deployment in eu-west-1 Ireland." chart={`graph TD
+    R53[Route 53] --> CF[CloudFront + WAF + Shield]
+    CF --> ALB[Application Load Balancer]
+    subgraph Primary[eu-west-2 London - 2 AZs]
+        subgraph Public[Public Subnets]
+            ALB
+            NAT[NAT Gateways]
+        end
+        subgraph Private[Private Subnets]
+            EKS[EKS Node Groups]
+            Aurora[Aurora PostgreSQL Multi-AZ]
+            Redis[ElastiCache Redis]
+            OS[OpenSearch]
+        end
+    end
+    ALB --> EKS
+    EKS --> Aurora
+    EKS --> Redis
+    EKS --> OS
+    EKS --> NAT
+    NAT --> Stripe[Stripe]
+    NAT --> SG[SendGrid]
+    subgraph DR[eu-west-1 Ireland - Pilot Light]
+        AuroraDR[Aurora Global Replica]
+        OSDR[OpenSearch Replica]
+    end
+    Aurora -- Global DB --> AuroraDR`} />
+
+#### 3.3.2 Hosting & Infrastructure
+
+##### Hosting Venues
+
+| Attribute | Selection |
+|-----------|----------|
+| **Hosting Venue Type** | Public Cloud |
+| **Hosting Region(s)** | UK (eu-west-2 London -- primary), Ireland (eu-west-1 -- DR, non-PII only) |
+| **Service Model** | PaaS (EKS, Aurora, ElastiCache, OpenSearch) and SaaS (Stripe, SendGrid, Segment) |
+| **Cloud Provider** | AWS |
+| **Account / Subscription Type** | NorthWind AWS Organisation -- `nwo-prod` workload account |
+
+##### Compute -- Containers
+
+| Attribute | Detail |
+|-----------|--------|
+| **Container Platform** | Amazon EKS 1.29 |
+| **Base Image(s)** | node:20-alpine (hardened and signed via corporate base image pipeline) |
+| **Cluster Size** | 2 managed node groups: application (4-24 nodes, auto-scaling via Karpenter) and platform (3 nodes) |
+| **Node Instance Type** | c7g.xlarge (Graviton3, 4 vCPU, 8 GB RAM) for application; m7g.large for platform |
+| **Pod Resource Limits** | Catalogue/Search: 1 vCPU / 1.5 GB; Basket/Checkout/Order: 750m vCPU / 1 GB; Customer/Promotion: 500m vCPU / 768 MB |
+| **Pod Replicas (steady state)** | Catalogue: 6-24 (HPA); Search: 4-16; Basket: 6-30; Checkout: 4-20; Order: 4-16; Customer: 3-10; Promotion: 2-8 |
+
+##### Security Agents
+
+- Anti-Malware -- Amazon GuardDuty (runtime protection on EKS)
+- EDR -- CrowdStrike Falcon container sensor on application nodes
+- Vulnerability Management -- Amazon Inspector (container images, EC2 nodes)
+
+#### 3.3.3 Network Topology & Connectivity
+
+##### Connectivity Summary
+
+| Question | Response |
+|----------|----------|
+| Is this an Internet-facing application? | Yes -- customer-facing web and mobile |
+| Outbound Internet connectivity required? | Yes -- Stripe, SendGrid, Segment (via NAT Gateway with fixed Elastic IPs allowlisted by partners) |
+| Cloud-to-on-premises connectivity required? | Yes -- SAP ERP is still on-premises; Site-to-Site VPN with IPsec (corporate Direct Connect planned for 2027) |
+| Wireless networking required? | No |
+| Third-party / co-location connectivity required? | No (all third parties over public Internet with TLS) |
+| Cloud network peering required? | Yes -- VPC peering to the NorthWind Shared Services VPC for Datadog, Secrets Manager reach and corporate DNS |
+
+##### User & Administrator Access
+
+| Attribute | Selection |
+|-----------|----------|
+| **User access method** | Web (HTTPS), Mobile native apps |
+| **User locations** | UK-predominant, Internet (global access permitted) |
+| **Administrator access method** | AWS Console via IAM Identity Centre; kubectl via EKS OIDC; bastion-less (SSM Session Manager for emergency OS access) |
+| **VPN required** | Yes -- for administrator access only (corporate VPN) |
+| **Direct Connect / ExpressRoute** | No (planned 2027); currently Site-to-Site VPN to Basingstoke data centre for SAP |
+
+##### Transport Protocols
+
+| Protocol | Used? | Purpose |
+|----------|-------|---------|
+| HTTPS (TLS 1.2+) | Yes | All customer and API traffic (TLS 1.3 on CloudFront; TLS 1.2 minimum internally) |
+| WebSocket | No | Not required for current use cases |
+| SFTP | No | -- |
+| JDBC | No | PostgreSQL protocol used instead of JDBC |
+| TCP (other) | Yes | PostgreSQL and Redis within VPC (TLS) |
+| gRPC | No | -- |
+
+##### Network Bandwidth
+
+| Metric | Value |
+|--------|-------|
+| Peak egress bandwidth to Internet | 1.5 Gb/s (Black Friday peak validated 2025) |
+| Peak ingress bandwidth from Internet | 400 Mb/s |
+| Peak bandwidth to on-premises (SAP VPN) | 150 Mb/s |
+| Traffic characteristics | **Seasonal** -- very significant peaks during Black Friday, Cyber Monday, Boxing Day and January sale |
+| Latency requirement | < 100ms P95 page load; < 200ms P95 API |
+
+##### Internet Perimeter Protection
+
+| Control | Implemented | Detail |
+|---------|------------|--------|
+| DDoS Protection | Yes | AWS Shield Advanced on CloudFront, ALB and Route 53 |
+| Rate Limiting | Yes | WAF rate-based rules (2000 req/min per source IP); API Gateway per-route throttling |
+| Web Application Firewall (WAF) | Yes | AWS WAF v2: AWS Managed Rules core set, OWASP Top 10, Known Bad Inputs, bot control |
+| Bot / scraping controls | Yes | AWS WAF Bot Control managed rule group; CAPTCHA challenge for suspicious patterns |
+
+#### 3.3.4 Environments
+
+| Environment | Description | Count & Venue | Compute Solution |
+|------------|-------------|--------------|-----------------|
+| Development | Shared dev cluster with preview environments per PR | 1x AWS (eu-west-2) | EKS (3 nodes, m7g.large), Aurora t4g.medium |
+| Test / QA | Automated integration and contract tests | 1x AWS (eu-west-2) | EKS (3 nodes, m7g.large), Aurora t4g.large |
+| Staging / Pre-Production | Production-mirror for release validation and load testing | 1x AWS (eu-west-2) | EKS (4-8 nodes, c7g.xlarge), Aurora r7g.large |
+| Production | Live service | 1x AWS (eu-west-2), Multi-AZ | EKS (4-24 nodes, c7g.xlarge), Aurora r7g.xlarge Multi-AZ |
+| DR | Pilot-light disaster recovery | 1x AWS (eu-west-1) | EKS (2 nodes, scaled up on failover), Aurora Global Database secondary |
+
+Non-production environments scale down outside business hours.
+
+---
+
+### 3.4 Data View
+
+#### 3.4.1 Data Architecture & Storage
+
+##### Data Footprint
+
+| Data Name | Store Technology | Authoritative? | Retention Period | Data Size | Classification | Personal Data? | Encryption Level | Key Management |
+|-----------|-----------------|---------------|-----------------|-----------|---------------|---------------|-----------------|---------------|
+| Product catalogue | Aurora PostgreSQL 15 | No (SAP is master) | Refreshed continuously | 8 GB | Internal | No | Storage (AES-256) | AWS KMS CMK |
+| Customer profile | Aurora PostgreSQL 15 | Yes | 7 years after last activity | 40 GB | Restricted | Yes (name, email, address, phone) | Storage + Application (field-level for sensitive attributes) | AWS KMS CMK (annual rotation) |
+| Order history | Aurora PostgreSQL 15 | Yes | 7 years (financial record) | 220 GB (growing 12 GB/month) | Restricted | Yes (delivery address, email) | Storage + Application (field-level) | AWS KMS CMK |
+| Basket state | ElastiCache Redis 7.x | Yes (transient) | TTL 24 hours (anonymous); 30 days (signed-in) | 4 GB in-memory | Internal | Yes (items, no card data) | In-transit (TLS) + At-rest | AWS KMS (ElastiCache-managed) |
+| Search index | OpenSearch 2.x | No (rebuilt from catalogue) | Continuous | 10 GB | Internal | No | Storage (AES-256) | AWS KMS |
+| Product images | S3 | Yes | Life of product + 3 years | 1.2 TB | Public | No | Storage (SSE-S3) | AWS-managed |
+| Stripe payment tokens | Aurora PostgreSQL 15 | No (Stripe is master) | Life of customer | 5 GB | Restricted | No (opaque tokens, not PAN) | Storage + Application (field-level) | AWS KMS CMK |
+| Application logs | Datadog + S3 archive | No | 15 months (Datadog), 7 years (S3 for audit events) | 80 GB/month | Internal (logs) / Restricted (audit) | PII redacted at source | Storage | AWS KMS / Datadog-managed |
+| Customer events | Segment CDP (SaaS) | Yes (streamed) | Governed by Segment contract (13 months) | ~500 GB/month | Internal | Yes (behavioural) | In-transit (TLS) | Segment-managed |
+
+##### Storage Systems
+
+| Attribute | Detail |
+|-----------|--------|
+| **Storage Product** | Amazon Aurora PostgreSQL (Multi-AZ + Global Database), ElastiCache Redis, OpenSearch, S3 |
+| **Storage Size** | Aurora: 300 GB (growing); Redis: 8 GB; OpenSearch: 10 GB; S3: 1.2 TB |
+| **Replication** | Aurora: 6-way replication across 3 AZs + cross-region replica (Global DB); Redis: primary + 1 replica per shard; OpenSearch: 3 data nodes across 3 AZs; S3: cross-region replication for audit data |
+| **Minimum RPO** | 1 minute (Aurora continuous backup) |
+
+#### 3.4.2 Data Classification
+
+| Classification Level | Data Types | Handling Requirements |
+|---------------------|------------|----------------------|
+| **Public** | Product catalogue, images, merchandising copy | Open access, CDN-cacheable, versioning |
+| **Internal** | Application logs (PII-redacted), infrastructure metrics, search index | Internal access only, standard encryption at rest, VPC-only reachability |
+| **Restricted** | Customer PII (profile, address, email), order history, payment tokens, audit logs | Encryption at rest (storage + field-level for selected columns), TLS in transit, access audited, 7-year retention |
+
+No cardholder primary account number (PAN) is stored. PAN is tokenised by Stripe Elements at the browser; NorthWind stores only the opaque Stripe payment method token. This keeps the platform out of full PCI-DSS scope (SAQ A-EP applies).
+
+#### 3.4.3 Data Lifecycle
+
+| Stage | Description | Controls |
+|-------|-------------|----------|
+| **Creation / Ingestion** | Customer data entered by customers at sign-up or during checkout; product data synchronised from SAP; events emitted to Segment | Input validation at API Gateway and service layer; PII fields tagged at schema level |
+| **Processing** | Services read customer and order data to fulfil requests; field-level decryption only at point of use | Column-level encryption for sensitive PII (Aurora client-side encryption); no PII in logs (structured logger strips marked fields) |
+| **Storage** | Aurora (Multi-AZ), Redis (in-memory with persistence disabled for basket), OpenSearch, S3 | AES-256 at rest via KMS CMK; TLS 1.2 minimum in transit; Aurora automated backups + continuous WAL |
+| **Sharing / Transfer** | Order data to SAP (internal); customer events to Segment (SaaS); transactional email via SendGrid; no data to marketing without consent | TLS in transit; API authentication; consent flags checked before event emission; data processing agreements with all third parties |
+| **Archival** | Audit logs move from Datadog to S3 after 15 months; S3 lifecycle transitions to Glacier Deep Archive after 1 year | S3 lifecycle policies; retrieval SLA 48 hours from Deep Archive |
+| **Deletion / Purging** | Customer erasure requests trigger an async purge job; order data retained 7 years for statutory reasons then deleted; basket data TTL-evicted | Right-to-erasure job logs action; retention job scheduled monthly; deletion certificate generated for DPO |
+
+#### 3.4.4 Data Privacy & Protection
+
+##### Privacy Assessments
+
+| Assessment Type | ID | Status | Link |
+|----------------|-----|--------|------|
+| Data Protection Impact Assessment (DPIA) | DPIA-2025-091 | Approved by DPO | Corporate Confluence / Compliance / DPIA |
+| Legitimate Interest Assessment (LIA) -- event analytics | LIA-2025-022 | Approved | Corporate Confluence / Compliance / LIA |
+
+The DPIA identified a medium-risk processing activity (behavioural event capture for personalisation) which is mitigated by consent-gated event emission and a public-facing privacy portal where customers can view and manage their data.
+
+##### Use of Production Data for Testing
+
+| Approach | Selected |
+|----------|----------|
+| Masked production data used in staging | [x] |
+
+Production customer data is tokenised into a masked dataset via a scheduled AWS Glue job for staging use. Names, addresses, emails and phone numbers are replaced with synthetic but realistic values derived from the Faker library. Test and dev environments use entirely synthetic data.
+
+##### Data Integrity
+
+- Yes -- Aurora provides ACID transactions and foreign-key constraints; orders are reconciled nightly against SAP via a scheduled integrity job; discrepancies alert to Finance operations.
+
+##### Data on End User Devices
+
+- Yes (limited) -- mobile apps cache the product catalogue and basket for offline browsing. No payment data or full PII (beyond display name) is cached. Mobile caches are encrypted at rest via platform keychain / keystore.
+
+#### 3.4.5 Data Transfers & Sovereignty
+
+##### Data Transfers to Third Parties
+
+| Destination | Data Type | Classification | Transfer Method | Protection |
+|------------|-----------|---------------|----------------|------------|
+| Stripe | Payment tokens and purchase amount | Restricted (tokens are non-PII; opaque) | REST API over HTTPS / TLS 1.3 | API key; IP allowlist; contractual DPA |
+| SendGrid | Customer email and order summary | Restricted | REST API over HTTPS / TLS 1.3 | API key; transactional-only templates; contractual DPA |
+| Segment CDP | Behavioural events with pseudonymous customer ID | Internal | REST API over HTTPS / TLS 1.3 | Write key; consent-gated emission; contractual DPA |
+| SAP ERP (internal) | Order and customer delivery data | Restricted | REST API over Site-to-Site VPN | OAuth 2.0; internal network path |
+| Datadog | Application logs (PII redacted) | Internal | TLS 1.3 | API key; redaction pipeline at source |
+
+##### Data Sovereignty
+
+- Yes -- customer PII and order data must remain in the UK (eu-west-2 London). The DR region (eu-west-1 Ireland) contains only operational telemetry. Aurora Global Database is configured to replicate non-PII schemas only; customer PII tables are replicated via a filtered logical replication stream terminated at a UK-only subsystem. Segment is configured to use its EU data plane; Stripe operates under UK and EU safeguards under standard contractual clauses.
+
+---
+
+### 3.5 Security View
+
+#### 3.5.1 Security Overview & Threat Model
+
+##### Security Context
+
+| Question | Response |
+|----------|----------|
+| Does the solution support regulated activities? | Yes -- accepts card payments under PCI-DSS v4.0 (scope reduced to SAQ A-EP via Stripe Elements) |
+| Is the solution SaaS or third-party hosted? | No -- self-managed on AWS; key SaaS dependencies: Stripe, SendGrid, Segment |
+| Has a third-party risk assessment been completed? | Yes -- AWS: TPRA-2024-001 (approved); Stripe: TPRA-2024-018 (approved); SendGrid: TPRA-2024-031 (approved); Segment: TPRA-2025-007 (approved) |
+
+##### Business Impact Assessment
+
+| Impact Category | Business Impact if Compromised |
+|----------------|-------------------------------|
+| **Confidentiality** | High -- exposure of 12M customer PII would trigger ICO notification, potential GDPR fines (up to 4% of turnover = £112M), and severe brand damage |
+| **Integrity** | High -- manipulated prices or promotions could cause direct financial loss and regulatory scrutiny under consumer protection law |
+| **Availability** | Critical -- revenue loss up to £30M/day during peak trading; board-level visibility |
+| **Non-Repudiation** | Medium -- order audit trail supports dispute resolution and card scheme chargeback defence |
+
+##### Threat Model Summary
+
+A STRIDE-based threat model was produced (SEC-TM-2025-044). Headline threats:
+
+| Threat | Attack Vector | Likelihood | Impact | Mitigation |
+|--------|-------------|-----------|--------|------------|
+| Credential stuffing on customer login | Bots replaying leaked credentials | High | High | WAF Bot Control, rate limiting, Have-I-Been-Pwned password check at sign-up, optional MFA, device-fingerprint anomaly detection |
+| Checkout injection / parameter tampering | Manipulated basket or promotion parameters | Medium | High | Server-side price recalculation, signed basket IDs, input validation, audit log of pricing decisions |
+| Card scraping via JavaScript injection (Magecart) | Malicious third-party script on storefront | Medium | Critical | Stripe Elements isolates card entry in Stripe-controlled iframe; Content Security Policy blocks unauthorised scripts; Subresource Integrity on third-party scripts |
+| DDoS on checkout path | Volumetric or application-layer attack | Medium | High | AWS Shield Advanced, WAF rate-based rules, CloudFront edge absorption |
+| API abuse by compromised mobile app | Reverse-engineered app making unauthorised calls | Medium | Medium | Cognito token binding, per-device rate limits, app attestation (iOS DeviceCheck, Android Play Integrity) |
+| Insider threat (admin misuse) | Privileged user exfiltrates customer data | Low | Critical | Just-in-time elevation via AWS IAM Identity Centre, session recording, alerting on bulk PII queries |
+
+#### 3.5.2 Identity & Access Management
+
+##### Authentication Model -- Customer Users
+
+| Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
+|------------|---------|----------------|----------------------|----------------------|
+| Customer sign-in (web) | Customer | Storefront, APIs | AWS Cognito (email + password, optional social, optional MFA) | Cognito-managed password policy (12 char min, complexity, breach detection); hashed in Cognito |
+| Customer sign-in (mobile) | Customer | APIs via mobile app | OAuth 2.0 authorisation code + PKCE | Refresh tokens stored in platform keychain / keystore |
+| Guest checkout | Guest | Checkout APIs | Anonymous session with signed basket token | Short-lived token (30 min), bound to IP and user-agent |
+
+##### Authentication Model -- Internal Users
+
+| Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
+|------------|---------|----------------|----------------------|----------------------|
+| Merchandisers | Catalogue Admin | Admin portal | Okta SSO + MFA (push / FIDO2) | Corporate password policy (90-day rotation) |
+| SRE / Operations | SRE Engineer | AWS Console, kubectl, Datadog | Okta SSO via IAM Identity Centre; kubectl via EKS OIDC | Short-lived session (8 hours); hardware MFA preferred |
+| Service accounts | Microservices, Lambda | AWS services, SaaS APIs | IAM roles (IRSA for pods); short-lived Secrets Manager retrieval for Stripe/SendGrid API keys | No long-lived AWS credentials |
+
+##### Authentication Details
+
+| Control | Response |
+|---------|----------|
+| Does the application use SSO or group-wide authentication? | Yes -- Okta for internal; Cognito for customer |
+| What is the unique identifier for user accounts? | Internal: Okta user ID; Customer: Cognito `sub` (UUID) |
+| What is the authentication flow? | Internal: OIDC Authorization Code + PKCE; Customer: Cognito hosted UI (web) or native OAuth flow (mobile) |
+| What are the credential complexity rules? | Customer: 12 char min, mixed case, number, symbol; Cognito breach detection; Internal: Okta policy |
+| What are the account lockout rules? | Customer: 5 failed attempts in 10 minutes -> 30-minute lockout + optional CAPTCHA; Internal: Okta policy |
+| How can users reset forgotten credentials? | Customer: self-service via email link with time-limited token; Internal: Okta self-service with MFA |
+
+##### Session Management
+
+| Control | Response |
+|---------|----------|
+| How are sessions established after authentication? | Customer: Cognito-issued JWT (ID, access, refresh); Internal: OIDC session cookie (HttpOnly, Secure, SameSite=Lax) |
+| How are session tokens protected against misuse? | Tokens signed by Cognito (RS256); access tokens 1-hour expiry; refresh rotation; bound to client IP for admin sessions |
+| What are the session timeout and concurrency limits? | Customer access token: 1 hour; refresh: 30 days rolling; Internal: 8 hour absolute |
+
+##### Authorisation Model
+
+| Access Type | Role / Scope | Entitlement Store | Provisioning Process |
+|------------|-------------|-------------------|---------------------|
+| Customers | Customer (owns own data only) | Cognito groups + enforced by API authorisation middleware | Self-service sign-up |
+| Merchandisers | Catalogue Admin, Promotion Admin | Okta groups mapped to Cognito admin claims | Request via ServiceNow; line-manager approval |
+| SRE / Operations | SRE Engineer (full), Read-Only Observer | AWS IAM Identity Centre permission sets + Kubernetes RBAC | Terraform-managed; quarterly recertification |
+| Service accounts | Service-specific least privilege | IAM policies attached to IRSA roles | Terraform; pre-commit policy check (tfsec) |
+
+#### 3.5.3 Network Security & Perimeter Protection
+
+| Control | Implementation |
+|---------|---------------|
+| Network segmentation | VPC with public, private and data subnets across 2 AZs; security groups per service; NACLs as secondary layer; Kubernetes network policies for pod-to-pod |
+| Ingress filtering | CloudFront -> AWS WAF v2 (managed rules, rate limits, bot control) -> ALB; Shield Advanced |
+| Egress filtering | NAT Gateways with fixed Elastic IPs for partner allowlisting; egress security groups restrict destinations; VPC Flow Logs |
+| Encryption in transit | TLS 1.3 enforced on CloudFront; TLS 1.2 minimum everywhere else; ACM-managed public certificates; private CA for internal mTLS on service mesh |
+
+#### 3.5.4 Data Protection
+
+##### Encryption at Rest
+
+| Attribute | Detail |
+|-----------|--------|
+| Encryption deployment level | Storage (all data stores) + Application (field-level for selected PII columns) |
+| Key type | Symmetric |
+| Algorithm / cipher / key length | AES-256-GCM (field-level); AES-256 (Aurora, Redis, OpenSearch, S3) |
+| Key generation method | AWS KMS (HSM-backed, FIPS 140-2 Level 3) |
+| Key storage | AWS KMS (customer-managed keys per data classification) |
+| Key rotation schedule | Annual automatic rotation (KMS); field-level encryption keys rotated every 12 months via re-encryption job |
+
+##### Secret & Password Protection
+
+| Attribute | Detail |
+|-----------|--------|
+| Secret store | AWS Secrets Manager (Stripe keys, SendGrid keys, Aurora credentials, Segment write keys) |
+| Secret distribution | Retrieved at runtime by services via AWS SDK + IRSA; never written to container images or environment variables at build time |
+| Secret rotation | Aurora credentials: automatic 30-day rotation via Lambda; SaaS API keys: manual 90-day rotation with calendar reminders to owning engineer |
+
+#### 3.5.5 Security Monitoring & Threat Detection
+
+| Capability | Implementation |
+|-----------|---------------|
+| Security event logging | All authentication events, authorisation failures, admin actions, WAF blocks, payment events, customer account changes. Logs forwarded to Datadog and archived to S3 |
+| SIEM integration | Datadog Cloud SIEM with custom detection rules; high-severity events mirrored to corporate Splunk for cross-platform correlation |
+| Infrastructure event detection | AWS GuardDuty (all accounts); CloudTrail (all API calls); VPC Flow Logs |
+| Security alerting | PagerDuty for P1/P2; Slack channel for P3; security operations on-call 24x7 during peak trading windows |
+
+---
+
+### 3.6 Scenarios
+
+#### 3.6.1 Key Use Cases
+
+**UC-01: Customer Places an Order (Card Payment)**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Retail customer (signed-in or guest) |
+| **Trigger** | Customer clicks "Pay now" at checkout |
+| **Pre-conditions** | Basket is valid; customer has provided delivery and billing details; Stripe Elements has loaded |
+| **Main Flow** | 1. Customer enters card details into Stripe Elements iframe; Stripe returns a payment method token to the browser. 2. Browser posts the token to Checkout Service. 3. Checkout Service revalidates basket and price server-side. 4. Checkout Service calls Stripe `PaymentIntent.confirm` with the token. 5. Stripe performs 3-D Secure challenge if required; customer completes in-browser. 6. On success, Checkout Service calls Order Service to create the order. 7. Order Service writes to Aurora and publishes `OrderCreated` to SQS. 8. Order Service triggers transactional email via SendGrid. 9. Customer redirected to order-confirmation page. 10. SAP integration Lambda consumes SQS and creates the sales order in SAP. |
+| **Post-conditions** | Customer sees confirmation; order visible in "My Orders"; SAP has sales order; email sent; event emitted to Segment |
+| **Views Involved** | Logical, Integration & Data Flow, Physical, Data, Security |
+
+**UC-02: Black Friday Traffic Surge**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Retail customers (aggregate); SRE on-call |
+| **Trigger** | 18:00 Black Friday launch; traffic surges from 200 to 2,400+ orders/min |
+| **Pre-conditions** | Platform warmed; capacity plan executed; "freeze" window in force (no deployments) |
+| **Main Flow** | 1. CloudFront absorbs cacheable product-detail traffic at the edge. 2. HPAs scale Catalogue and Search pods (6 to 24 pods within 90 seconds). 3. Karpenter provisions additional EKS nodes. 4. Aurora read-replica auto-scaling adds 2 replicas within 3 minutes. 5. WAF rate-based rules throttle abusive IPs. 6. P95 API latency rises to 240ms but remains within SLA; error rate held below 0.05%. 7. SRE on-call monitors Datadog dashboard; no manual intervention required. |
+| **Post-conditions** | Peak traffic absorbed without service degradation; post-event review captures metrics for next year |
+| **Views Involved** | Logical, Physical, Performance |
+
+**UC-03: Customer Requests Right-to-Erasure**
+
+| Attribute | Detail |
+|-----------|--------|
+| **Actor(s)** | Customer; DPO team |
+| **Trigger** | Customer submits erasure request via privacy portal |
+| **Pre-conditions** | Customer is authenticated; consent model supports erasure request |
+| **Main Flow** | 1. Customer submits request via Customer Service portal. 2. Customer Service queues an erasure job (SQS erasure queue). 3. Erasure Lambda anonymises PII in Aurora (customer record retained as pseudonymised placeholder for financial/order integrity); order records retain statutory minimum for 7 years. 4. Cognito account deleted. 5. Segment is sent a `user.delete` call to purge behavioural events. 6. SendGrid suppression list updated. 7. Customer receives confirmation email. 8. DPO notified via dashboard; audit record retained. |
+| **Post-conditions** | Customer PII removed within 30 days (UK GDPR statutory timeframe); audit trail preserved |
+| **Views Involved** | Logical, Data, Security |
+
+#### 3.6.2 Architecture Decision Records (ADRs)
+
+**ADR-001: PostgreSQL (Aurora) over MySQL for Transactional Store**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2025-08-05 |
+| **Context** | The platform requires a relational database for catalogue, customer, order and promotion data. Both Aurora PostgreSQL and Aurora MySQL are approved under the Cloud Landing Zone Standard. |
+| **Decision** | Use Amazon RDS Aurora PostgreSQL 15. |
+| **Alternatives Considered** | **Aurora MySQL:** Widely used at NorthWind but weaker JSONB support for semi-structured product attributes; the team found the MySQL JSON functions awkward for catalogue filtering. **DynamoDB:** Rejected because the data is strongly relational (customer -> orders -> order-lines) and multi-row ACID is a hard requirement for checkout. |
+| **Consequences** | Positive: rich JSONB for flexible catalogue attributes, stronger CTE and window function support for reporting, PostGIS available for store-locator if later needed, excellent observability via pg_stat_statements. Negative: less internal familiarity than MySQL; training investment needed for the ops team (closed via a 3-day workshop). |
+| **Quality Attribute Tradeoffs** | Performance: comparable (positive). Maintainability: PostgreSQL richer ecosystem for our data model (positive). Operational Excellence: increased training cost (negative, one-off). |
+
+**ADR-002: Next.js SSR over Client-Only SPA for the Storefront**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2025-08-12 |
+| **Context** | The storefront must be highly discoverable via search engines (organic search is 42% of customer acquisition) and must deliver first-paint quickly on cellular networks. |
+| **Decision** | Use Next.js 14 with server-side rendering (SSR) for category, product and landing pages; use incremental static regeneration (ISR) for campaign pages; use client-side rendering only for the account area. |
+| **Alternatives Considered** | **Client-only SPA (React + Vite):** Simpler operationally but poor SEO, slower first contentful paint, and heavy JavaScript bundle on mobile. **Static site (Gatsby / Astro):** Good for marketing pages but cannot handle the dynamic, personalised storefront. |
+| **Consequences** | Positive: strong SEO, improved Core Web Vitals (LCP improved from 3.1s to 1.4s in prototype), identical rendering for crawlers and users. Negative: additional server capacity for SSR (budget allocated); cache invalidation more complex than pure static. |
+| **Quality Attribute Tradeoffs** | Performance: major improvement (positive). Cost: increased compute for SSR (negative, quantified and accepted). Reliability: SSR failure could impact page rendering -- mitigated by graceful fallback to client-side hydration. |
+
+**ADR-003: Stripe Elements Tokenisation to Reduce PCI-DSS Scope**
+
+| Field | Content |
+|-------|---------|
+| **Status** | Accepted |
+| **Date** | 2025-09-02 |
+| **Context** | The legacy platform is in full PCI-DSS scope (SAQ D) because cardholder data enters application servers. This imposes substantial audit and remediation cost. The target is SAQ A-EP via client-side tokenisation. |
+| **Decision** | Integrate Stripe Elements so that card data is entered into a Stripe-hosted iframe and never traverses NorthWind servers. Only opaque Stripe payment method tokens are stored. |
+| **Alternatives Considered** | **Direct card acceptance into Checkout Service:** Rejected -- expands PCI scope to the entire platform. **Stripe Checkout redirect:** Rejected -- breaks the custom checkout UX the business requires. **Alternative PSP (Adyen, Worldpay):** Evaluated; Stripe selected due to existing group-wide contract and superior developer experience. |
+| **Consequences** | Positive: SAQ A-EP scope achieved (annual audit cost reduced by an estimated £240k/year); reduced blast radius in the event of a storefront compromise. Negative: Stripe vendor lock-in is elevated (see R-002); Stripe outage would halt all card payments. |
+| **Quality Attribute Tradeoffs** | Security: major reduction in scope and risk (positive). Cost: lower audit cost (positive); Stripe transaction fees higher than some alternatives (negative, small). Reliability: additional SaaS dependency (negative, mitigated by fallback messaging during Stripe outage). |
+
+---
+
+## 4. Quality Attributes
+
+### 4.1 Operational Excellence
+
+#### 4.1.1 Observability -- Logging
+
+| Log Type | Events Logged | Local Storage | Retention Period | Remote Services |
+|----------|--------------|--------------|-----------------|----------------|
+| Application logs | API request/response metadata (PII redacted), errors, business events | stdout (container) | Ephemeral | Datadog (15 months), S3 archive (7 years for audit) |
+| Data store logs | Aurora slow query log, PostgreSQL error log | RDS log files | 7 days | Datadog |
+| Infrastructure logs | EKS control plane, node logs, VPC Flow Logs | CloudWatch Logs | 90 days | Datadog (subset) |
+| Security event logs | Auth events, admin actions, WAF blocks, GuardDuty findings | CloudWatch Logs + S3 | 7 years in S3 | Datadog Cloud SIEM + Splunk |
+
+#### 4.1.2 Observability -- Monitoring & Alerting
+
+##### Operational Alerts
+
+| Alert Category | Trigger Condition | Notification Method | Recipient |
+|---------------|-------------------|-------------------|-----------|
+| API error rate | > 0.5% of requests over 5 minutes | PagerDuty P1 | SRE on-call |
+| Checkout conversion drop | Conversion rate < 80% of 7-day baseline | PagerDuty P1 | SRE on-call + Commerce lead |
+| Latency | P95 API latency > 400ms over 5 minutes | PagerDuty P2 | SRE on-call |
+| Stripe failure rate | > 2% of payment attempts failing | PagerDuty P1 | SRE + Payments lead |
+| Aurora CPU | > 85% for 10 minutes | PagerDuty P2 | SRE + DBA |
+| Peak-readiness drill failure | Any scheduled drill fails | Slack + Email | Platform team + SRE |
+| WAF rule trigger spike | > 1000 blocks/min sustained | Slack | Security ops |
+| Certificate expiry | < 30 days to expiry | Email | Platform team |
+
+##### Monitoring Tools
+
+| Capability | Tool | Coverage |
+|-----------|------|----------|
+| Application Performance Monitoring | Datadog APM | All microservices, Next.js storefront, Lambda |
+| Infrastructure Monitoring | Datadog + CloudWatch | EKS, Aurora, ElastiCache, OpenSearch, API Gateway |
+| Log Aggregation | Datadog Logs | Application, infrastructure, security logs |
+| Distributed Tracing | Datadog APM tracing | Full request tracing from CloudFront to Aurora |
+| Real User Monitoring | Datadog RUM | Storefront and mobile app user experience |
+| Dashboards | Datadog | Executive, SRE, peak-readiness, per-service dashboards |
+| Alerting | PagerDuty | P1-P3 alerts; on-call rotation |
+
+#### 4.1.3 Operational Procedures
+
+| Procedure | Description | Owner | Documentation |
+|-----------|-------------|-------|--------------|
+| Incident response | P1: 15-min response, P2: 30-min; ITIL-aligned; blameless post-incident review within 48 hours | SRE Lead (Sally Doe) | Corporate Confluence / Ops / Runbooks |
+| Change management | All changes via GitHub PR; production requires 2 approvals; change freeze from 1 November to 31 December (peak trading) | SRE Lead | Corporate Confluence |
+| Peak-readiness drill | Monthly load test at 2x current peak against staging; full game-day 4 weeks before Black Friday | SRE Lead + Platform | Corporate Confluence |
+| On-call | 24x7, 1-week rotation, 6-engineer pool; secondary on-call during Nov/Dec peak | SRE Lead | PagerDuty |
+
+---
+
+### 4.2 Reliability & Resilience
+
+#### 4.2.1 Geographic Footprint & Disaster Recovery
+
+| Question | Response |
+|----------|----------|
+| Is the application deployed across multiple hosting venues for continuity? | Yes -- eu-west-2 (London) primary; eu-west-1 (Ireland) pilot-light DR |
+| What is the DR strategy? | Pilot Light. DR region has Aurora Global Database secondary (continuous replication, 1-minute RPO), minimum EKS node group (2 nodes), pre-provisioned OpenSearch snapshot restore. Scaled up on failover. |
+| Are there data sovereignty requirements affecting geographic choices? | Yes -- PII must remain in UK (eu-west-2); DR carries only non-PII operational data; failover including PII requires DPO approval |
+
+#### 4.2.2 Scalability
+
+##### Application Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Scaling capability** | Full auto-scaling -- HPA on all services (CPU + custom request-rate metric); Karpenter for EKS node provisioning; Aurora read-replica auto-scaling |
+| **Scaling details** | Validated to 3x current peak (approx. 7,000 orders/min) during 2025 staging game-day. Cold-start expansion from baseline to peak in 4 minutes. |
+
+##### Dependency Scalability
+
+| Attribute | Response |
+|-----------|----------|
+| **Dependencies adequately sized?** | Yes (confirmed) -- Stripe SLA supports 10k TPS; SendGrid transactional sending limits raised to 500k/day by arrangement; SAP order queue sized for 5,000 orders/min peak (buffered via SQS) |
+| **Dependency details** | SQS buffering protects against SAP slow-down; circuit breakers prevent cascade failure. OpenSearch indexing throttles to 2,000 docs/sec during peak reindex. |
+
+#### 4.2.3 Fault Tolerance
+
+- Yes -- designed with fault tolerance patterns:
+  - **Component failures:** Each microservice runs 3+ replicas across 2 AZs; Kubernetes reschedules failed pods; pod disruption budgets enforced.
+  - **Graceful degradation:** If Stripe is unavailable, the storefront disables the "Pay now" button and surfaces a clear message with a "Notify me" option; no partial orders are created.
+  - **Circuit breakers:** Stripe (open after 5 failures, half-open after 30s) and SAP (open after 3 failures, half-open after 60s); opossum library.
+  - **Health checks:** Kubernetes liveness (/health/live, 10s), readiness (/health/ready, 5s, checks DB + Redis reachability).
+  - **Testing:** Monthly chaos tests (AWS Fault Injection Service: AZ blackout, pod kill, latency injection); quarterly DR failover drill.
+
+#### 4.2.4 Failure Modes & Recovery Behaviour
+
+| Component / Dependency | Failure Mode | Detection Method | Recovery Behaviour | User Impact |
+|----------------------|-------------|-----------------|-------------------|-------------|
+| Single EKS pod | Crash or OOM | Kubernetes liveness probe | Automatic restart; traffic drained | Transparent; in-flight requests may retry |
+| Availability Zone | AZ outage | CloudWatch + EKS node status | Karpenter provisions replacement nodes in healthy AZ (< 90s) | Brief latency increase |
+| Aurora primary | Instance failure | Aurora health check | Automatic failover to replica (< 60s) | 30-60s elevated errors |
+| ElastiCache Redis node | Failure | Redis cluster health check | Failover to replica | Brief cache miss spike; requests fall through to Aurora |
+| Stripe | Outage | HTTP 5xx or timeout; circuit breaker | Checkout disabled with customer-facing message; browse/basket continue working | Customers cannot complete new card purchases |
+| SendGrid | Outage | HTTP error / timeout | Transactional emails queued to SQS for retry; in-app confirmation still shown | Delayed order-confirmation email |
+| SAP ERP | Outage | VPN or HTTP failure | Orders buffer in SQS DLQ; replay when SAP recovers | No customer impact; delayed fulfilment |
+| CloudFront | Regional disruption | Route 53 health checks | Route 53 DNS failover to regional origin (less common) | Short disruption |
+
+#### 4.2.5 Backup & Recovery
+
+##### Backup Design
+
+| Attribute | Detail |
+|-----------|--------|
+| Backup strategy | Aurora continuous backup (point-in-time to any second within retention window); S3 versioning; OpenSearch daily snapshots |
+| Backup product/service | AWS Backup (centralised), Aurora automated backups, OpenSearch snapshot repository |
+| Backup type | Continuous (Aurora WAL) + Daily snapshot (OpenSearch, Aurora cluster) |
+| Backup frequency | Aurora: continuous; OpenSearch: daily 02:00 UTC; S3: real-time versioning |
+| Backup retention | Aurora: 35 days; OpenSearch: 30 days; S3 versions: 90 days; audit logs: 7 years |
+
+##### Backup Protection
+
+| Control | Detail |
+|---------|--------|
+| Immutability | AWS Backup Vault Lock (compliance mode, 35 days); S3 Object Lock on audit bucket |
+| Encryption | All backups encrypted with AWS KMS CMK; cross-region copies re-encrypted |
+| Access control | Restore requires DBA or SRE Lead approval; cross-account backup vault in isolated security account |
+
+#### 4.2.6 Recovery Scenarios
+
+| # | Scenario | Recovery Approach | RTO | RPO |
+|---|----------|------------------|-----|-----|
+| 1 | Single AZ failure | Automatic: Karpenter + Aurora Multi-AZ failover | 5 minutes | 0 |
+| 2 | Primary region failure (eu-west-2) | Manual DR activation: promote Aurora Global DB secondary, scale EKS in eu-west-1, update Route 53 | 2 hours | 1 minute (async replication lag) |
+| 3 | Critical software defect | Automatic: Kubernetes rolls back to last healthy deployment; Argo Rollouts canary analysis | 15 minutes | 0 |
+| 4 | Ransomware / destructive cyber-attack | Isolate affected components; restore from immutable backups (Vault Lock); forensic investigation | 4 hours | Within last hourly snapshot |
+| 5 | Accidental data deletion | Aurora point-in-time recovery | 1 hour | 1 minute |
+
+---
+
+### 4.3 Performance Efficiency
+
+#### 4.3.1 Performance Requirements
+
+##### Key Performance Indicators
+
+| Metric | Target | Measurement Method |
+|--------|--------|-------------------|
+| Storefront LCP (Core Web Vitals) | < 1.8s (75th percentile) | Datadog RUM |
+| API response time P95 | < 200ms (steady state), < 400ms (peak) | Datadog APM |
+| Checkout success rate | > 99.5% | Datadog custom metric |
+| Throughput (steady state) | 600 orders/min | Datadog + API Gateway metrics |
+| Throughput (Black Friday peak validated) | 3,000 orders/min sustained, 4,500 orders/min burst | Load test (k6) and production observation |
+| Error rate | < 0.1% 5xx at steady state, < 0.5% at peak | API Gateway metrics |
+| Search P95 | < 150ms | OpenSearch query latency |
+| Cache hit ratio (catalogue) | > 88% | ElastiCache metrics |
+
+##### Performance Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| Performance testing approach | Monthly load tests at 2x current peak; quarterly peak-readiness tests at 3x current peak; soak test (72 hours at steady state) before each major release |
+| Testing tools | k6 (Grafana Cloud) for load generation; Datadog for observation |
+| Testing environment | Staging (production-mirror); read-only production smoke tests off-peak |
+| Testing frequency | Monthly (standard); weekly in September/October prior to Black Friday |
+
+##### Capacity & Growth Projections
+
+| Metric | Current | 1 Year | 3 Years | 5 Years |
+|--------|---------|--------|---------|---------|
+| Customers (active) | 12M | 13.5M | 17M | 21M |
+| Peak orders per minute | 2,400 (2024 legacy) | 3,500 | 5,500 | 8,000 |
+| Data volume (Aurora) | 300 GB | 420 GB | 750 GB | 1.2 TB |
+| Daily orders (average) | 180k | 220k | 320k | 450k |
+
+| Question | Response |
+|----------|----------|
+| Will the current design scale to accommodate projected growth? | Yes for 3 years. At 5-year horizon, Aurora vertical scaling is the primary concern; assessment of sharding via Aurora Limitless Database scheduled for 2028 review. |
+| Are there known seasonal or cyclical demand patterns? | **Strongly seasonal.** Black Friday week: 8x baseline; Christmas: 4x; January sale: 3x; Easter: 1.5x; payday (last working day): 1.3x. Capacity plan aligns with retail calendar. |
+
+---
+
+### 4.4 Cost Optimisation
+
+#### 4.4.1 Cost Influence & Analysis
+
+##### Cost Analysis
+
+- Yes -- detailed cost model produced using AWS Pricing Calculator and validated against 4 months of running-cost data in staging. Estimated annual opex is £800,000 (production + non-prod + SaaS). Reserved instance / Savings Plan commitment produces an approximately 22% saving versus pure on-demand.
+
+##### Monthly Cost Breakdown (Production, steady state)
+
+| Component | Monthly Cost (GBP) | Notes |
+|-----------|-------------------|-------|
+| EKS cluster (Graviton nodes, 1-year Savings Plan) | 18,500 | 8-16 nodes average, 24 at peak |
+| Aurora PostgreSQL (Multi-AZ, reserved) | 11,200 | r7g.xlarge primary + 2 replicas + Global DB |
+| ElastiCache Redis (reserved) | 2,800 | 2 shards with replicas |
+| OpenSearch | 3,400 | 3 x r7g.large data nodes |
+| CloudFront + WAF + Shield Advanced | 5,600 | Shield Advanced £2,400/mo; WAF £400/mo; CloudFront ~£2,800/mo |
+| API Gateway | 1,200 | Request-based pricing |
+| SQS, EventBridge | 300 | Consumption-based |
+| S3 + lifecycle | 500 | 1.2 TB + audit archive |
+| NAT Gateway + data transfer | 1,400 | 2 NATs (Multi-AZ) + egress to Stripe/SendGrid/Segment |
+| Datadog | 6,800 | APM + Logs + RUM + Cloud SIEM |
+| Stripe | 14,000 | Blended rate (varies with volume); £0.20 + 1.4% domestic |
+| SendGrid | 600 | Pro plan + transactional volume |
+| Segment | 4,200 | Enterprise tier (enterprise contract, allocated to NWO) |
+| Secrets Manager, KMS, Route 53, misc | 500 | -- |
+| **Total monthly (production)** | **71,000** | |
+| **Total annual (production)** | **852,000** | Offset by non-prod auto-shutdown and peak handling premium |
+| Non-production environments | 5,500/month | Dev + Test + Staging, auto-shutdown outside hours |
+| **Target annual (all environments)** | **800,000** | Target achieved via Savings Plans, Graviton and non-prod shutdown |
+
+#### 4.4.2 FinOps Practices
+
+| Practice | Implementation |
+|----------|---------------|
+| Cost monitoring | Corporate CloudHealth + Datadog cost dashboard; weekly review in Platform team |
+| Cost allocation | AWS tagging: Project (NWO), Environment, Service, CostCentre (CC-8821) |
+| Reserved capacity | 1-year Savings Plan (partial upfront) on EKS; 1-year reserved instances on Aurora + ElastiCache |
+| Rightsizing | Monthly Compute Optimizer review; quarterly pod resource-request review |
+| Waste elimination | Non-prod auto-shutdown 19:00-08:00 weekdays, full weekends (£3k/month saved); Spot instances for non-prod nodes |
+| Budget governance | AWS Budgets alerts at 80%/100% of monthly forecast; any incremental spend > £1,000/month requires Platform Lead approval |
+
+---
+
+### 4.5 Sustainability
+
+#### 4.5.1 Hosting Efficiency
+
+| Question | Response |
+|----------|----------|
+| Has the hosting location been chosen to reduce environmental impact? | Partially -- eu-west-2 (London) was chosen primarily for data sovereignty; AWS London operates under AWS's 100% renewable energy commitment achieved in 2023 |
+| What is the expected workload demand pattern? | Variable -- strong UK business-hours pattern with extreme seasonal peaks (Black Friday, Christmas) |
+
+#### 4.5.2 On-Demand Availability
+
+| Question | Response |
+|----------|----------|
+| Must the application be available continuously? | Yes -- 24x7 customer-facing platform |
+| Can the solution be shut down or scaled down during off-peak hours? | Yes -- auto-scaling reduces steady-state capacity by ~40% overnight; maintains minimum 3 replicas per service for HA |
+| Are non-production environments configured to downscale or shut down when not in use? | Yes -- dev, test and staging shut down outside office hours; saves approximately £3,000/month |
+
+#### 4.5.3 Resource Efficiency
+
+| Question | Response |
+|----------|----------|
+| Are resources rightsized to avoid overprovisioning? | Yes -- pod resource requests based on P95 observed usage; Karpenter consolidates workload onto fewer nodes during low demand |
+| Are the highest performance-per-watt hardware options used? | Yes -- Graviton3 (ARM) instances throughout; approximately 60% better energy efficiency than equivalent x86 (AWS published data) |
+| Are efficient networking patterns used? | VPC endpoints for S3 and SQS to avoid NAT Gateway traffic; CloudFront caches 72% of storefront requests at the edge, reducing origin compute |
+
+---
+
+## 5. Lifecycle Management
+
+### 5.1 Software Development & CI/CD
+
+The application is developed internally by the Digital Commerce team.
+
+| Attribute | Detail |
+|-----------|--------|
+| Source control platform | GitHub Enterprise (NorthWind organisation) |
+| CI/CD platform | GitHub Actions (corporate standard) |
+| Build automation | GitHub Actions workflows on push and PR; npm + Docker multi-stage builds; signed images pushed to ECR |
+| Deployment automation | Argo CD (GitOps) for Kubernetes; Terraform for infrastructure; Helm charts |
+| Test automation | Unit (Jest), integration (Testcontainers), contract (Pact), accessibility (axe), performance smoke (k6) -- all in CI |
+
+#### Application Security in Development
+
+| Control | Implementation |
+|---------|---------------|
+| Security requirements | Captured in threat model (SEC-TM-2025-044); OWASP ASVS L2 baseline |
+| SAST | SonarCloud (blocks merge on high/critical) |
+| DAST | OWASP ZAP weekly scan against staging |
+| SCA | Snyk (blocks merge on high/critical CVEs) |
+| Container scanning | Snyk Container + Amazon Inspector (continuous on ECR) |
+| Secure coding | Mandatory annual OWASP training; security champion in each squad; peer review on all PRs |
+| Patch management | Critical CVE: 24h plan, 7-day deployment. High: 30-day. Medium/Low: next scheduled release. |
+
+### 5.2 Service Transition & Migration
+
+#### Migration Classification (6 R's)
+
+| Classification | Selected? | Description |
+|---------------|-----------|-------------|
+| **Replace** | Yes | The legacy Oracle Commerce / .NET monolith is being entirely replaced with a cloud-native microservices platform |
+
+#### Transition Plan
+
+| Attribute | Detail |
+|-----------|--------|
+| Deployment strategy | Strangler Fig -- traffic migrated domain-by-domain via CloudFront routing rules (search first, then catalogue, then basket, then checkout) |
+| Data migration mode | Phased -- customer accounts migrated in cohorts; order history back-loaded; product catalogue rebuilt from SAP |
+| Data migration method | AWS DMS for customer and order data (Oracle -> Aurora); SAP IDoc stream for catalogue |
+| Data volume to migrate | Approximately 240 GB (customer + order history) |
+| End-user cutover approach | Phased -- 5% traffic cohort for 4 weeks, then 25%, 50%, 100% over 8 weeks |
+| External system cutover | Phased -- SAP integration switched over cohort by cohort; loyalty platform integration continues across both |
+| Maximum acceptable downtime | Minutes (hard cut-over windows are 5 minutes, always at 03:00-03:05 UTC on Tuesday) |
+| Rollback plan | CloudFront routing rules revert traffic to legacy monolith within 5 minutes per cohort; legacy platform retained for 3 months post-100% cut-over |
+| Transient infrastructure | Yes -- AWS DMS replication tasks decommissioned after final cut-over |
+
+### 5.3 Test Strategy
+
+| Test Type | Scope | Approach | Environment | Automated? |
+|-----------|-------|----------|-------------|-----------|
+| Integration | Service-to-service, database, SaaS | Testcontainers in CI; full suite in staging | CI + Staging | Yes |
+| Contract | Consumer-driven contracts | Pact broker | CI + Staging | Yes |
+| Accessibility | WCAG 2.2 AA | axe-core + manual review | CI + Staging | Partial |
+| Performance | Load, stress, soak, spike | k6 + Datadog | Staging | Yes |
+| Security | SAST, DAST, SCA, annual pen test | Continuous + annual by external firm | CI + Staging + Prod | Partial (pen test manual) |
+| DR | Failover, restore | Quarterly scripted drill | Prod + DR | Partial |
+
+### 5.4 Release Management
+
+| Attribute | Detail |
+|-----------|--------|
+| Release frequency | Multiple times daily for services (trunk-based with feature flags); fortnightly release-train for coordinated changes; **freeze from 1 November to 31 December** (peak trading) |
+| Release process | Feature branch -> PR (automated tests + 1 approval) -> merge to main -> auto-deploy staging -> canary (5% for 15 min) -> full production via Argo Rollouts |
+| Feature flags | LaunchDarkly used extensively for progressive roll-out, A/B testing, and kill switches |
+
+### 5.5 Operations & Support
+
+| Attribute | Detail |
+|-----------|--------|
+| Support model | L1: NorthWind Service Desk (customer-facing triage) + Tier 1 for system alerts; L2: SRE team; L3: Digital Commerce engineering; L4: Solution Architect / CTO |
+| Support hours | 24x7 (SRE on-call); enhanced coverage November-January (double-up rota) |
+| SLAs | External (customer-facing, published): 99.95% monthly availability excluding freeze windows. Internal: P1 response < 15 min, P2 < 30 min, P3 < 4 hours |
+| Escalation paths | L1 -> L2 (15 min) -> L3 (30 min) -> L4 (1 hour). Security incidents: CISO notified immediately. |
+
+### 5.6 Resourcing & Skills
+
+#### Team Capability Assessment
+
+| Skill Area | Current Level | Action Required |
+|-----------|--------------|-----------------|
+| AWS (EKS, Aurora, networking) | Medium | Ongoing: AWS SA Associate certification for 4 engineers |
+| Infrastructure as Code (Terraform) | High | None |
+| CI/CD (GitHub Actions, Argo CD) | High | None |
+| Node.js / NestJS | High | None |
+| Next.js SSR | Medium | Workshop delivered 2025-09; ongoing community of practice |
+| PostgreSQL DBA | Medium | Dedicated DBA allocated; advanced PostgreSQL training completed Q4 2025 |
+| Security & compliance | Medium | Security champion training complete; annual OWASP refresh |
+
+#### Operational Readiness
+
+| Question | Response |
+|----------|----------|
+| Can the team fully operate and support this solution in production? | A: Fully capable |
+
+### 5.8 Maintainability
+
+| Concern | Approach |
+|---------|----------|
+| Keeping software versions current | EKS: upgraded within 60 days of minor release; Aurora PostgreSQL: minor versions in monthly maintenance window; Node.js: LTS tracked, upgraded within 90 days |
+| Certificate management | ACM for public TLS (auto-renewal); AWS Private CA for internal mTLS |
+| Dependency management | Snyk continuous monitoring; Dependabot PRs; quarterly dependency review |
+
+### 5.10 Exit Planning
+
+| Attribute | Detail |
+|-----------|--------|
+| Exit strategy | Microservices are containerised (Helm charts); PostgreSQL is standard; data exportable; storefront (Next.js) portable to any Node.js host |
+| Data portability | Aurora: pg_dump / logical replication; S3: standard APIs; Cognito: CSV export with password reset required |
+| Vendor lock-in assessment | Low-Moderate overall. Primary concerns are Stripe (High -- see R-002) and Cognito (Moderate -- migration requires password reset cycle). All other components are standard and portable. |
+| Exit timeline estimate | 6-9 months (3 months infrastructure + 3-6 months payment provider migration if Stripe replaced) |
+
+---
+
+## 6. Decision Making & Governance
+
+### 6.1 Constraints
+
+| ID | Constraint | Category | Impact on Design | Last Assessed |
+|----|-----------|----------|-----------------|---------------|
+| C-001 | Must comply with PCI-DSS v4.0 by 31 March 2026 | Regulatory | SAQ A-EP scope achieved via Stripe Elements tokenisation; network segmentation and audit logging retained | 2026-03-01 |
+| C-002 | All customer PII must remain in the UK | Regulatory | Primary region eu-west-2; DR limited to non-PII; Aurora Global DB filtered replication | 2026-01-15 |
+| C-003 | Must deliver before Black Friday 2026 | Time | Fixed cut-over milestone 2026-10-01; scope prioritised accordingly | 2026-03-01 |
+| C-004 | Must integrate with SAP ERP for order fulfilment | Technical | SQS-buffered asynchronous integration; existing SAP APIs consumed as-is | 2025-09-30 |
+| C-005 | Corporate Cloud Landing Zone mandates AWS | Organisational | All hosting on AWS; Azure / GCP not permitted | 2025-07-14 |
+
+### 6.2 Assumptions
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | Stripe will maintain UK PSD2 SCA compliance and current pricing through 2028 | Commercial model re-negotiation; possible re-platform | High | Open | Priya Doe | Stripe contract signed 2025-05-01 with 3-year fixed pricing |
+| A-002 | SAP order API will handle 5,000 orders/min sustained during peak | Order backlog in SQS beyond SLA; customer confusion | Medium | Closed | Fred Bloggs | SAP team load-tested at 6,000 orders/min 2025-10-18 |
+| A-003 | Customer mobile app adoption will reach 55% of sessions by 2027 | Over-investment in mobile BFF | Medium | Open | Raj Bloggs | Current: 47%; trending +2pp/quarter |
+
+### 6.3 Risks
+
+**Risk identification:**
+
+| ID | Risk Event | Category | Severity | Likelihood | Owner |
+|----|-----------|----------|----------|-----------|-------|
+| R-001 | Peak trading capacity insufficient; platform degrades or fails during Black Friday | Operational | Critical | Low | Sally Doe |
+| R-002 | Vendor lock-in to Stripe creates commercial leverage or single-PSP exposure | Commercial | High | Medium | Priya Doe |
+| R-003 | Customer PII data-residency breach via misconfigured Aurora Global DB replication | Compliance | High | Low | Tom Bloggs |
+| R-004 | Third-party JavaScript (e.g., marketing tag) compromises storefront (Magecart-style) | Security | Critical | Medium | Jane Doe |
+| R-005 | Mobile app store review delays or rejection blocks timely release | Delivery | Medium | Medium | Fred Bloggs |
+| R-006 | AWS eu-west-2 regional outage during peak trading | Operational | Critical | Low | Sally Doe |
+
+**Risk response:**
+
+| ID | Mitigation Strategy | Mitigation Plan | Residual Risk | Last Assessed |
+|----|-------------------|-----------------|--------------|---------------|
+| R-001 | Mitigate | Monthly load tests at 2x peak, quarterly at 3x; full game-day 4 weeks before Black Friday; peak-readiness sign-off gate; additional SRE on rota Nov-Dec | Low | 2026-03-01 |
+| R-002 | Mitigate | Payment abstraction layer in Checkout Service isolates Stripe SDK; documented 6-9 month migration plan to a secondary PSP; stored payment token strategy reviewed annually; Adyen considered for dual-acquirer model from 2027 | Medium | 2026-03-01 |
+| R-003 | Mitigate | Filtered Aurora logical replication (PII tables excluded); monthly compliance audit of replication; Terraform guardrails prevent inadvertent PII-table replication; DPO quarterly sign-off | Low | 2026-02-15 |
+| R-004 | Mitigate | Strict Content Security Policy (script-src allowlist); Subresource Integrity on all third-party scripts; Stripe Elements isolates card entry in Stripe iframe; quarterly client-side security audit; tag-manager discipline enforced by Marketing | Medium | 2026-03-01 |
+| R-005 | Mitigate | Early submission 4 weeks before hard deadline; in-flight review with Apple / Google developer support; progressive web app (PWA) fallback if native store delays | Low | 2026-03-01 |
+| R-006 | Accept (with mitigation) | Pilot-light DR in eu-west-1; RTO 2 hours validated quarterly; customer-facing status page; accept 1-minute RPO | Medium | 2026-03-01 |
+
+### 6.4 Dependencies
+
+| ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
+|----|-----------|-----------|--------|-------|----------|---------------|
+| D-001 | SAP ERP provisioned for cloud-origin order traffic (new API scope + bandwidth) | Inbound | Resolved | SAP team | SAP integration live; load test 2025-10-18 | 2025-10-31 |
+| D-002 | Corporate Cognito customer user pool configured and DPIA-approved | Inbound | Resolved | Platform team | Cognito live 2025-08-15; DPIA-2025-091 approved | 2025-09-30 |
+| D-003 | Stripe contract signed with UK acquiring and 3-year pricing | Inbound | Resolved | Procurement | Contract NW-PROC-2025-118 signed 2025-05-01 | 2025-05-01 |
+| D-004 | Loyalty platform (APP-0417) supports Cognito identity attribute mapping | Inbound | Committed | Loyalty team | Integration in test; completion 2026-05-01 | 2026-03-01 |
+
+### 6.5 Issues
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | OpenSearch index rebuild time of 42 minutes blocks catalogue refresh cadence | Operational | Low | Sally Doe | Move to rolling reindex with dual-index alias swap; completion 2026-05-01 | In Progress | 2026-03-18 |
+| I-002 | Mobile app iOS notification permissions prompt shown too early, depressing opt-in | Delivery | Low | Fred Bloggs | Reorder onboarding flow; A/B test via LaunchDarkly | In Progress | 2026-03-10 |
+
+### 6.6 Guardrail Exceptions
+
+#### Policy Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create any exception to current policies and standards? | No |
+
+#### Process Exceptions
+
+| Question | Response |
+|----------|----------|
+| Does this design create an issue against the process library? | No |
+
+#### Risk Profile Impact
+
+| Question | Response |
+|----------|----------|
+| Does the design materially change the organisation's technology risk profile? | Yes -- reduces PCI-DSS scope and operational risk by replacing unsupported legacy; introduces elevated SaaS dependency on Stripe. Net impact assessed as favourable by Risk & Controls (RC-2025-118). |
+
+### 6.7 Architectural Decisions Log
+
+| ADR # | Title | Status | Date | Impact |
+|-------|-------|--------|------|--------|
+| ADR-001 | PostgreSQL (Aurora) over MySQL for Transactional Store | Accepted | 2025-08-05 | Determines data platform, tooling, team training |
+| ADR-002 | Next.js SSR over Client-Only SPA for the Storefront | Accepted | 2025-08-12 | Determines rendering model and SEO strategy |
+| ADR-003 | Stripe Elements Tokenisation to Reduce PCI-DSS Scope | Accepted | 2025-09-02 | Determines payment architecture and PCI scope (SAQ A-EP) |
+
+---
+
+## 7. Appendices
+
+### 7.1 Glossary
+
+| Term | Definition |
+|------|-----------|
+| Aurora | Amazon Aurora -- AWS managed PostgreSQL / MySQL-compatible database |
+| BFF | Backend-for-Frontend -- a service tailored to a specific client (e.g., mobile) |
+| CDP | Customer Data Platform (Segment, in this context) |
+| CMA | Cardholder Authentication -- card-scheme authentication step |
+| Cognito | AWS customer identity and access management service |
+| Core Web Vitals | Google's user-experience metrics (LCP, INP, CLS) |
+| HPA | Horizontal Pod Autoscaler -- Kubernetes autoscaling mechanism |
+| IRSA | IAM Roles for Service Accounts -- pod-level IAM on EKS |
+| LCP | Largest Contentful Paint -- page-load performance metric |
+| Magecart | Class of attack injecting malicious JavaScript to skim payment details |
+| NWO | NorthWind Online -- the subject of this SAD |
+| PAN | Primary Account Number -- the card number |
+| PCI-DSS | Payment Card Industry Data Security Standard |
+| PSD2 | Payment Services Directive 2 -- European payments regulation |
+| SAQ A-EP | PCI-DSS Self-Assessment Questionnaire A-EP -- applicable to merchants using a third-party tokenisation iframe |
+| SCA | Strong Customer Authentication -- PSD2 multi-factor requirement |
+| SSR | Server-Side Rendering -- rendering HTML on the server prior to sending to the browser |
+| Strangler Fig | Migration pattern that gradually replaces a legacy system |
+| TPP | Third-Party Provider (not used in this context; included for family-of-standards clarity) |
+
+### 7.2 Reference Documents
+
+| Document | Version | Description | Location |
+|----------|---------|-------------|----------|
+| NorthWind Information Security Standard | 3.4 | Corporate security standard | Corporate Confluence / Security |
+| NorthWind Cloud Landing Zone Standard | 2.1 | AWS baseline controls, tagging, networking | Corporate Confluence / Cloud |
+| NorthWind Data Classification Standard | 1.2 | Data classification and handling | Corporate Confluence / Data |
+| PCI-DSS | 4.0 | Payment card industry security standard | https://www.pcisecuritystandards.org/ |
+| UK GDPR | 2021 | UK General Data Protection Regulation | https://www.legislation.gov.uk/ |
+| OWASP ASVS | 4.0 | Application Security Verification Standard | https://owasp.org/www-project-application-security-verification-standard/ |
+| NWO Threat Model | SEC-TM-2025-044 | STRIDE-based threat model for NorthWind Online | Corporate Confluence / Security |
+| DPIA - NorthWind Online | DPIA-2025-091 | Data Protection Impact Assessment | Corporate Confluence / Compliance |
+| AWS Well-Architected Framework | 2025 | AWS best practice | https://aws.amazon.com/architecture/well-architected/ |
+
+### 7.3 Standards & Patterns Referenced
+
+| Standard / Pattern ID | Name | Version | Applicability |
+|----------------------|------|---------|--------------|
+| PCI-DSS-4.0 | Payment Card Industry DSS | 4.0 | Security View |
+| OWASP-ASVS-4.0 | Application Security Verification Standard | 4.0 L2 | Application security |
+| WCAG-2.2-AA | Web Content Accessibility Guidelines | 2.2 AA | Storefront and mobile |
+| 12-Factor | Twelve-Factor App | -- | Microservice design |
+| Strangler Fig | Strangler Fig migration pattern | -- | Migration plan |
+
+### 7.4 Approval Sign-Off
+
+| Role | Name | Date | Signature / Approval Reference |
+|------|------|------|-------------------------------|
+| Solution Architect | Priya Doe | 2026-03-18 | ARB-2026-NWO-011 |
+| Head of Digital Engineering | Fred Bloggs | 2026-03-17 | ARB-2026-NWO-012 |
+| Principal Security Architect | Jane Doe | 2026-03-17 | ARB-2026-NWO-013 |
+| Data Protection Officer | Tom Bloggs | 2026-03-18 | DPO-2026-014 |
+| SRE Lead | Sally Doe | 2026-03-17 | SRE-2026-NWO-009 |
+| CTO | Helen Doe | 2026-03-18 | ARB-2026-NWO-APPROVED |
+| Head of Digital Commerce | Raj Bloggs | 2026-03-18 | ARB-2026-NWO-APPROVED |
+
+---
+
+## Architecture Compliance Scoring
+
+<div class="guidance-box">
+<h4>Assessment Summary</h4>
+
+This SAD was assessed at **Recommended** depth -- the expected level for a Tier 2 High Impact regulated system. The scores below reflect a well-documented architecture proportionate to a B2C e-commerce platform with PCI-DSS and UK GDPR obligations.
+</div>
+
+| Section | Score (0-5) | Assessor | Date | Notes |
+|---------|:-----------:|----------|------|-------|
+| 1. Executive Summary | 5 | Design Authority | 2026-03-18 | Clear business drivers with priority, strategic alignment with reuse documented, current-state architecture complete, revenue impact quantified |
+| 3.1 Logical View | 4 | Design Authority | 2026-03-18 | Full component decomposition, design patterns with rationale, vendor lock-in assessed. Service mesh detail could be deeper |
+| 3.2 Integration & Data Flow | 4 | Design Authority | 2026-03-18 | All internal and external integrations documented with protocols and auth; customer-event tracking plan referenced externally |
+| 3.3 Physical View | 4 | Design Authority | 2026-03-18 | Deployment, hosting, networking, environments fully documented; peak bandwidth characterised from real Black Friday telemetry |
+| 3.4 Data View | 4 | Design Authority | 2026-03-18 | All data stores classified with retention and encryption; DPIA approved; sovereignty addressed with filtered replication. Field-level encryption detail at recommended depth, not exemplary |
+| 3.5 Security View | 4 | Design Authority | 2026-03-18 | STRIDE threat model with 6 named threats and mitigations; PCI-DSS scope-reduction strategy documented; identity models comprehensive |
+| 3.6 Scenarios | 4 | Design Authority | 2026-03-18 | Three architecturally significant use cases; three ADRs with alternatives and tradeoffs |
+| 4.1 Operational Excellence | 4 | Design Authority | 2026-03-18 | Datadog APM/Logs/RUM, PagerDuty on-call, peak-readiness drills. Runbook library noted but detail out of this document |
+| 4.2 Reliability | 4 | Design Authority | 2026-03-18 | Multi-AZ with pilot-light DR, RTO/RPO validated via quarterly drills, fault tolerance with circuit breakers, immutable backups |
+| 4.3 Performance | 4 | Design Authority | 2026-03-18 | KPIs defined, load-testing cadence documented, 3-year capacity projection; 5-year horizon flagged for review |
+| 4.4 Cost Optimisation | 5 | Design Authority | 2026-03-18 | Detailed monthly breakdown, Savings Plan + RI strategy, FinOps practices, tagging, rightsizing cadence |
+| 4.5 Sustainability | 3 | Design Authority | 2026-03-18 | Graviton used, non-prod shutdown configured, right-sizing practised. Carbon KPIs not baselined (gap) |
+| 5. Lifecycle | 4 | Design Authority | 2026-03-18 | CI/CD with security scanning, Strangler Fig migration plan, LaunchDarkly feature flags, team skills assessed, exit plan documented |
+| 6. Decision Making | 4 | Design Authority | 2026-03-18 | 5 constraints, 3 assumptions (with evidence), 6 risks with mitigation, 4 dependencies tracked, 2 issues with resolution plans |
+| **Overall** | **4** | Design Authority | 2026-03-18 | **Recommended depth achieved. Proportionate, well-evidenced documentation for a Tier 2 High Impact regulated e-commerce platform. Lowest individual score 3 (Sustainability: carbon KPIs not baselined).** |
+
+</div>
