@@ -24,6 +24,59 @@ the standard's documentation depth model.
 The goal is interoperability: a SAD produced by any conforming builder MUST be
 loadable, viewable, and editable by any other conforming builder.
 
+## Implementation Quickstart (non-normative)
+
+This is the shortest path to a Level 1 conformant builder. Use it to orient yourself before reading the normative sections that follow.
+
+### Step 1 — Fetch the schema
+
+```bash
+curl -O https://archstandard.org/schema/v1.0.0/ads.schema.json
+```
+
+The schema is ~1,000 lines of JSON. Read the top-level `properties` to see the document structure: `documentControl`, `executiveSummary`, `stakeholders`, `architecturalViews`, `qualityAttributes`, `lifecycleManagement`, `riskGovernance`, `appendices`. Each top-level property has an `x-ads-section` tag (e.g. `"3.1"`) that identifies its place in the printed standard.
+
+### Step 2 — Render one field
+
+Pick the simplest required field and prove your renderer works. `documentControl.metadata.title` is a `string` — render a plain text input. The schema's `description` field is your label / help text. Save the user's input into a JavaScript object keyed by the path:
+
+```javascript
+const doc = {};
+doc.documentControl = { metadata: { title: userInput } };
+```
+
+That's already half the work — the rest is repeating this for every field, mapping schema types to UI controls per §5 of this spec.
+
+### Step 3 — Walk the schema, generate forms
+
+Recursively descend into the schema and emit a UI control per leaf field. Resolve `$ref` pointers (`"#/$defs/yesNoNa"` → `schema.$defs.yesNoNa`) so you reach the underlying `enum` or `type`. Group fields by their nearest `x-ads-section` ancestor so the form has the same structure as the standard. Use the schema's `description` for help text and `examples` for placeholders.
+
+### Step 4 — Validate
+
+Use any JSON Schema 2020-12 validator (ajv for JS, jsonschema for Python, networknt for Java). Validate the in-memory `doc` object on every change or on save. Surface errors next to the offending field.
+
+```javascript
+import Ajv from 'ajv/dist/2020.js';
+const ajv = new Ajv({ strict: false });
+const validate = ajv.compile(schema);
+if (!validate(doc)) console.log(validate.errors);
+```
+
+### Step 5 — Export
+
+`JSON.stringify(doc, null, 2)` is your Level 1 export. That's the minimum viable conformant builder. Levels 2 and 3 add Markdown export (§10.3), YAML export, depth filtering (§6), and the rule engine (§9), but all of those build on this same in-memory object.
+
+### Common gotchas
+
+- **Don't hardcode field names.** If you list properties manually, you'll drift from the schema on every release. Walk the schema; use its `properties` object as the source of truth.
+- **Resolve `$ref` lazily.** A naive recursive walk will infinite-loop on cyclic refs. Cache resolved definitions.
+- **Don't 404 on unknown extension keys.** The schema declares custom keys like `x-ads-section`; ignore unknown `x-*` keys gracefully so future schema additions don't break your builder.
+- **Test with the Annex D example.** It's a complete schema-valid SAD. If your validator passes Annex D, your validator works.
+
+### Reference test corpus
+
+A small set of test SADs is published at `https://archstandard.org/v1/examples/` covering Minimum (`employee-directory.json`), Recommended (`customer-api-platform.json`), and migration (`cloud-migration.json`) cases. Loading and round-tripping all three is a good early smoke test.
+
 ## 2. Terminology
 
 The key words **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **MAY**, and
@@ -522,3 +575,181 @@ interoperability:
 A builder MAY interleave its own commentary, but interleaved content SHOULD be
 clearly demarcated (e.g., as a blockquote labelled "Builder note") so that
 re-importing the Markdown does not pollute the structured document.
+
+## Annex C — Minimum Conformant SAD Example (non-normative)
+
+The following JSON document is a complete, schema-valid SAD at Minimum
+documentation depth. Implementers SHOULD verify their validator and form
+renderer against this document before claiming Level 1 conformance.
+
+```json
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document — Internal Status Page",
+      "solutionName": "StatusPage",
+      "applicationId": "APP-0001",
+      "authors": ["Jane Doe"],
+      "owner": "Jane Doe",
+      "version": "0.1",
+      "status": "draft",
+      "createdDate": "2026-04-25",
+      "lastUpdated": "2026-04-25",
+      "classification": "internal"
+    }
+  },
+  "executiveSummary": {
+    "solutionOverview": "An internal status page that aggregates health checks from production services and surfaces them on a single dashboard for the on-call rota. It replaces a spreadsheet that was emailed manually each morning.",
+    "inScope": [
+      "Health-check aggregation from existing /healthz endpoints",
+      "Single dashboard accessible to engineering staff",
+      "Email digest at 09:00 UK time"
+    ],
+    "outOfScope": [
+      "Customer-facing status page (separate roadmap item)",
+      "Incident management workflow (handled by PagerDuty)"
+    ],
+    "businessCriticality": "tier-4-low"
+  },
+  "architecturalViews": {
+    "logicalView": {
+      "components": [
+        {
+          "name": "Status Aggregator",
+          "componentType": "api-service",
+          "technology": "Node.js / Fastify",
+          "status": "new"
+        },
+        {
+          "name": "Status Dashboard",
+          "componentType": "web-application",
+          "technology": "Next.js (static export)",
+          "status": "new"
+        }
+      ]
+    },
+    "physicalView": {
+      "hosting": {
+        "venueTypes": ["public-cloud"],
+        "regions": ["uk-south"],
+        "serviceModels": ["paas"],
+        "cloudProviders": ["azure"]
+      },
+      "networking": {
+        "internetFacing": false,
+        "outboundInternet": true
+      }
+    },
+    "securityView": {
+      "authentication": [
+        {
+          "accessType": "end-user-internal",
+          "method": "sso-oidc",
+          "usesGroupWideAuth": true
+        }
+      ],
+      "encryptionAtRest": {
+        "implemented": true,
+        "level": "storage-level",
+        "keyType": "symmetric"
+      }
+    }
+  },
+  "riskGovernance": {
+    "risks": [
+      {
+        "id": "R-001",
+        "riskEvent": "Vendor lock-in to Azure App Service",
+        "riskCategory": "technical",
+        "severity": "low",
+        "likelihood": "medium",
+        "owner": "Jane Doe",
+        "mitigationStrategy": "mitigate",
+        "mitigationPlan": "Use containerised runtime; portable to any container host if migration becomes necessary",
+        "residualRisk": "low",
+        "lastAssessed": "2026-04-25"
+      }
+    ]
+  }
+}
+```
+
+Notes:
+
+- This document includes only fields the schema marks as required at Minimum
+  depth. A conformant Level 1 builder MUST be able to load, render, and
+  re-export this document without losing data.
+- The complete worked examples at `https://archstandard.org/v1/examples/`
+  are richer (Recommended and Comprehensive depth) and are useful for testing
+  Level 2 and Level 3 features.
+- All identifiers, names, and business contexts in this example are fictional
+  and may be reused freely.
+
+## Annex D — Conformance Test Checklist (non-normative)
+
+A self-certification checklist for builders. Pass every item at your claimed
+level. Levels are cumulative: Level 2 requires every Level 1 check; Level 3
+requires every Level 1 and Level 2 check.
+
+### Level 1 — Basic Conformance
+
+| # | Check | How to verify |
+|---|-------|---------------|
+| L1.1 | Schema is loaded at runtime or embedded with version displayed in UI | Inspect builder UI for schema version label |
+| L1.2 | Every required field at Minimum depth has a rendered input control | Walk schema, count required fields with `x-ads-depth=minimum`; count UI controls; counts equal |
+| L1.3 | Validation rejects documents missing required fields | Submit Annex C with `documentControl.metadata.title` removed; expect validation error |
+| L1.4 | Validation rejects invalid enum values | Submit a document with `documentControl.metadata.status: "invalid"`; expect error |
+| L1.5 | Valid JSON exports parse with a third-party JSON Schema validator | Export Annex C from your builder; pipe through `ajv validate -s ads.schema.json -d export.json`; expect "valid" |
+| L1.6 | Schema version and ADS version are displayed in user-facing UI | Visual inspection |
+| L1.7 | Attribution to ADS is displayed in user-facing UI | Visual inspection |
+
+### Level 2 — Standard Conformance
+
+| # | Check | How to verify |
+|---|-------|---------------|
+| L2.1 | Documentation depth selector with values minimum / recommended / comprehensive is present | Visual inspection |
+| L2.2 | Switching depth shows / hides correct fields | Switch to Minimum; verify fields with `x-ads-depth=recommended` or `x-ads-depth=comprehensive` are hidden |
+| L2.3 | All depths render input controls for every field at that depth | Switch to Comprehensive; walk schema; every field has a control |
+| L2.4 | Switching depth does not delete data from hidden fields | Fill a Comprehensive field; switch to Minimum; switch back to Comprehensive; data is preserved |
+| L2.5 | JSON round-trip preserves all data | Import Annex C; export; diff exported against original; only whitespace/key-order differences allowed |
+| L2.6 | Markdown export renders a valid Markdown structure | Export Annex C as Markdown; verify §10.3 structure (top metadata table, `## 0.` through `## 7.` headings) |
+| L2.7 | Markdown export is deterministic | Export the same document twice; outputs are byte-identical |
+| L2.8 | Per-section completeness indicator is shown | Visual inspection of per-section progress / completeness UI |
+| L2.9 | Cross-field references validate | Reference a non-existent quality attribute via `qualityAttributeRefs`; expect error |
+| L2.10 | Custom sections and organisation profile are preserved on round-trip | Add a `customSections[0]` with id `"test-cs"`; export; re-import; the section is still present |
+
+### Level 3 — Full Conformance
+
+| # | Check | How to verify |
+|---|-------|---------------|
+| L3.1 | Compliance score is computed per scoreable section | Open Annex C; verify each section in §8 list has a 0–5 score |
+| L3.2 | Overall score is the lowest individual section score (weakest-link) | Verify a doc with section scores [5, 5, 5, 1, 5] returns overall 1, not 4.2 |
+| L3.3 | Pluggable rule engine loads a rule file conforming to §9.1 format | Load the reference rule set from Annex A; rules are evaluated |
+| L3.4 | Rule severities `info`, `warning`, `error` produce distinguishable UI feedback | Trigger a rule of each severity; verify visual distinction |
+| L3.5 | YAML import succeeds | Convert Annex C to YAML; import; document validates |
+| L3.6 | YAML export round-trips with JSON | Export as YAML; convert YAML→JSON; matches JSON round-trip output |
+| L3.7 | At least one of DOCX / ODT / PDF export is available | Export Annex C; the resulting file opens in the relevant viewer |
+| L3.8 | Unknown `x-*` extension properties are preserved on round-trip | Add `x-test-key: 42` to root of Annex C; re-export; key is still there |
+
+### Self-declaration template
+
+A builder claiming a conformance level SHOULD publish a self-declaration in its
+README or documentation, in this format:
+
+```markdown
+## ADS Conformance
+
+**MyBuilder v1.0** declares **ADS Level 2** conformance.
+
+- ADS version targeted: v1.3.0
+- Schema version: v1.0.0
+- Conformance test results: [link to test results document]
+- Last verified: 2026-05-15
+
+This builder was tested against the conformance checklist in
+ADS-BUILDER-SPEC v0.2 Annex D. All Level 1 and Level 2 checks pass.
+```
+
+A builder MAY embed a conformance badge in its README. (Badge SVGs are not yet
+published with this specification — they are a planned addition.)

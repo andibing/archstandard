@@ -50,7 +50,7 @@ Review the entire SAD, not just the Security View (3.5). Security spans every se
 - **Business continuity** — ransomware resilience, immutable backups, isolated recovery environment
 
 ### Regulatory alignment
-- If regulated (PCI-DSS, HIPAA, NHS DSPT, UK GDPR, FCA, SOX), are the specific control families addressed?
+- If regulated (PCI-DSS, US HIPAA, NHS DSPT, UK GDPR, UK FCA, US SOX), are the specific control families addressed?
 - Is compliance traceability (Section 6.8) populated with concrete mappings to controls, not generic claims?
 
 ### Evidence

@@ -168,6 +168,27 @@
 	color: var(--sl-color-accent);
 }
 
+/* Fictional-org logo on example pages */
+.example-org-logo {
+	display: block;
+	height: 56px;
+	width: auto;
+	max-width: 280px;
+	margin: 0 0 0.75rem 0;
+}
+@media (prefers-color-scheme: dark) {
+	.example-org-logo {
+		background: white;
+		padding: 0.25rem 0.5rem;
+		border-radius: 4px;
+	}
+}
+[data-theme='dark'] .example-org-logo {
+	background: white;
+	padding: 0.25rem 0.5rem;
+	border-radius: 4px;
+}
+
 /* Traceability tables */
 .traceability-table {
 	font-size: 0.875rem;

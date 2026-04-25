@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" role="img" aria-label="Medwick Healthcare logo">
+  <title>Medwick Healthcare Trust</title>
+  <desc>Fictional NHS healthcare trust used in ADS examples.</desc>
+  <!-- Icon: medical cross with pulse line -->
+  <g transform="translate(8, 12)">
+    <rect x="0" y="0" width="40" height="40" rx="6" fill="#005eb8"/>
+    <rect x="17" y="8" width="6" height="24" fill="white"/>
+    <rect x="8" y="17" width="24" height="6" fill="white"/>
+    <path d="M 4 32 L 10 32 L 13 26 L 17 38 L 21 28 L 24 32 L 36 32" fill="none" stroke="#a4d8f0" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="58" y="34" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="600" fill="#005eb8">Medwick</text>
+  <text x="58" y="50" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#5a6b80" letter-spacing="2.5">NHS  HEALTHCARE  TRUST</text>
+</svg>
