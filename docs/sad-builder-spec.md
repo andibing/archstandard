@@ -425,38 +425,50 @@ Comments and proposals are welcomed via
 The following rules are suggested for a default rule set. Implementations SHOULD
 treat them as a starting point, not as required content.
 
+All paths in this annex are validated against the **v1.0.0 schema**. Where the
+schema does not currently expose a property an example needs (e.g., a single
+`disasterRecoveryStrategy` enum), the rule is shown using a near-neighbour
+property and noted in the rationale column. Implementers MAY adapt these to
+their target schema version.
+
 ### Completeness Prompts
 
-| Rule ID | Section | Condition | Severity | Message |
-|---------|---------|-----------|----------|---------|
+| Rule ID | Section path | Condition | Severity | Message |
+|---------|--------------|-----------|----------|---------|
 | BP-101 | `riskGovernance.risks` | `empty` | warning | "No risks identified. Common risks include vendor lock-in, skill gaps, integration complexity, and performance under load. Are you sure?" |
 | BP-102 | `riskGovernance.assumptions` | `empty` | warning | "No assumptions documented. Consider: API availability, team capacity, third-party timelines, data quality." |
 | BP-103 | `riskGovernance.dependencies` | `empty` | warning | "No dependencies listed. Does this solution depend on any other systems, teams, or vendors?" |
 | BP-104 | `riskGovernance.constraints` | `empty` | warning | "No constraints recorded. Consider: budget, regulatory, technology mandates, delivery deadlines." |
-| BP-105 | `executiveSummary.scope.outOfScope` | `empty` | warning | "Nothing listed as out of scope. Defining boundaries prevents scope creep." |
+| BP-105 | `executiveSummary.outOfScope` | `empty` | warning | "Nothing listed as out of scope. Defining boundaries prevents scope creep." |
+| BP-106 | `architecturalViews.scenarios.useCases` | `empty` | info | "No use cases captured. At least one primary scenario is recommended to validate the design." |
+| BP-107 | `architecturalViews.scenarios.adrs` | `empty` | info | "No Architecture Decision Records. Capture significant decisions and their rationale." |
 
 ### Consistency Checks
 
-| Rule ID | Condition | Severity | Message |
-|---------|-----------|----------|---------|
-| BP-201 | `qualityAttributes.reliability.rto` defined && `qualityAttributes.reliability.disasterRecoveryStrategy == 'none'` | error | "You have an RTO target but no DR strategy. How will you recover within the target?" |
-| BP-202 | `any(dataView.dataStores, s => s.containsPersonalData && s.encryptionLevel == 'none')` | error | "Personal data is stored without encryption. This is likely a compliance risk." |
-| BP-203 | `architecturalViews.physicalView.internetFacing == true && securityView.wafEnabled == false` | warning | "Internet-facing applications typically require a Web Application Firewall." |
-| BP-204 | `executiveSummary.businessCriticality in ['tier-1','tier-2'] && documentControl.metadata.documentationDepth == 'minimum'` | warning | "Critical systems typically require Recommended or Comprehensive documentation depth." |
-| BP-205 | `securityView.authenticationMethods` is `empty` | error | "No authentication method specified. Is this intentionally unauthenticated?" |
-| BP-206 | `physicalView.hostingModel == 'cloud' && lifecycleManagement.exitPlan` is `empty` | warning | "Cloud-hosted solutions should document an exit strategy to avoid vendor lock-in." |
-| BP-207 | `dataView.dataStores` is non-empty && `any(dataView.dataStores, s => s.backupEnabled == false)` | warning | "Production data stores typically require a backup strategy." |
+| Rule ID | Condition (schema-validated paths) | Severity | Message |
+|---------|------------------------------------|----------|---------|
+| BP-201 | `architecturalViews.physicalView.networking.internetFacing == true && architecturalViews.physicalView.networking.wafEnabled == 'no'` | warning | "Internet-facing applications typically require a Web Application Firewall." |
+| BP-202 | `architecturalViews.physicalView.networking.internetFacing == true && architecturalViews.physicalView.networking.ddosProtection == 'no'` | warning | "Internet-facing applications typically require DDoS protection." |
+| BP-203 | `executiveSummary.businessCriticality in ['tier-1','tier-2'] && (selected documentation depth) == 'minimum'` | warning | "Tier 1/2 systems typically require Recommended or Comprehensive documentation depth. (Note: depth is the builder's runtime selector, not a stored schema field.)" |
+| BP-204 | `empty(architecturalViews.securityView.authentication)` | error | "No authentication method specified. Is this intentionally unauthenticated?" |
+| BP-205 | `architecturalViews.securityView.encryptionAtRest.implemented == false && any(architecturalViews.dataView.dataStores, s => s.containsPersonalData == true)` | error | "Personal data stored without encryption at rest." |
+| BP-206 | `'cloud' in architecturalViews.physicalView.hosting.venueTypes && lifecycleManagement.exitPlanDocumented == false` | warning | "Cloud-hosted solutions should document an exit strategy to avoid vendor lock-in." |
+| BP-207 | `any(architecturalViews.dataView.dataStores, s => s.backupEnabled == false)` | warning | "Production data stores typically require a backup strategy." |
+| BP-208 | `architecturalViews.physicalView.networking.thirdPartyConnectivity == true && architecturalViews.securityView.thirdPartyRiskAssessed == 'no'` | warning | "Third-party connectivity is in place but no third-party risk assessment recorded." |
 
 ### Scoring Recommendations
 
-| Rule ID | Section | Condition | Severity | Message |
-|---------|---------|-----------|----------|---------|
-| BP-301 | `architecturalViews.securityView` | score < 3 | info | "Add a threat model. Document authentication for all access types. Specify encryption at rest and in transit." |
-| BP-302 | `qualityAttributes.performance` | score < 3 | info | "Define response time, throughput, and concurrency targets. Add growth projections." |
-| BP-303 | `lifecycleManagement` | score < 3 | info | "Document the deployment pipeline, release frequency, and support model." |
+| Rule ID | Scope | Condition | Severity | Message |
+|---------|-------|-----------|----------|---------|
+| BP-301 | `architecturalViews.securityView` | section score < 3 | info | "Add controls for authentication, authorisation, encryption at rest, secret management, and security monitoring. Document business impact ratings." |
+| BP-302 | `qualityAttributes.performance` | section score < 3 | info | "Define response time, throughput, and concurrency targets. Add growth projections and a testing approach." |
+| BP-303 | `lifecycleManagement` | section score < 3 | info | "Document the deployment pipeline, release frequency, support model, and exit plan." |
+| BP-304 | `architecturalViews.dataView` | section score < 3 | info | "Classify data stores, document retention, sovereignty, and encryption requirements." |
 
-The exact paths shown above target the v1.0.0 schema. Implementers SHOULD
-adjust paths if targeting a different schema version.
+> **Verifying paths:** an implementer SHOULD validate every rule's path against
+> the target schema before shipping. A simple way is to load the schema and
+> walk each path's segments through `properties` (and `items.properties` for
+> array members), failing the build if any segment is missing.
 
 ## Annex B — Markdown Export Reference Format (non-normative)
 
