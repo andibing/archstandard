@@ -191,8 +191,8 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 | Backstage Portal | [x] Web Application | Single pane of glass: catalogue, Scaffolder, TechDocs, scorecards, cost insights | Backstage (Node.js, React, TypeScript) | Platform Team (Portal squad) | [x] New |
 | stellar CLI | [x] Other | Thin CLI wrapping Backstage APIs for terminal-first engineers | Go | Platform Team (DevEx squad) | [x] New |
 | Scaffolder Templates | [x] Other | Golden-path templates for new services, jobs, frontends, preview envs | Backstage Scaffolder, YAML | Platform Team (Portal squad) | [x] New |
-| Software Catalogue | [x] Api Service | Authoritative registry of services, APIs, resources, teams, ownership | Backstage catalog-backend, PostgreSQL | Platform Team (Portal squad) | [x] New |
-| Crossplane Control Plane | [x] Api Service | Kubernetes-native API for cloud resource provisioning | Crossplane v1.15 | Platform Team (Control squad) | [x] New |
+| Software Catalogue | [x] API Service | Authoritative registry of services, APIs, resources, teams, ownership | Backstage catalog-backend, PostgreSQL | Platform Team (Portal squad) | [x] New |
+| Crossplane Control Plane | [x] API Service | Kubernetes-native API for cloud resource provisioning | Crossplane v1.15 | Platform Team (Control squad) | [x] New |
 | Terraform Module Library | [x] Other | Audited modules for resources Crossplane does not yet model | Terraform 1.7, Terragrunt, Atlantis | Platform Team (Control squad) | [x] New |
 | Dagger Pipeline Library | [x] Other | Reusable typed CI pipelines (build, test, SBOM, sign, publish) | Dagger (Go SDK) | Platform Team (Delivery squad) | [x] New |
 | Tekton Pipelines | [x] Backend Service | Heavy privileged pipeline work (signing, image promotion) | Tekton v0.56 on GKE | Platform Team (Delivery squad) | [x] New |
@@ -211,7 +211,7 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 | [x] Other (Golden Paths / Paved Road) | Scaffolder, CI libraries, runtime conventions | Make the right thing the easy thing |
 | [x] Other (GitOps) | ArgoCD, Crossplane | Declarative, auditable, self-healing |
 | [x] Sidecar | OpenTelemetry Collector | Non-invasive telemetry |
-| [x] Api Gateway | Backstage BFF | Single authenticated entry point |
+| [x] API Gateway | Backstage BFF | Single authenticated entry point |
 | [x] Strangler Fig | Jenkins to Tekton migration | Gradual retirement without a big-bang cutover |
 
 ### 3.2 Integration & Data Flow View
@@ -220,34 +220,34 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 
 | Source | Destination | Protocol | Encrypted | Authentication Method | Direction | Synchronicity | Purpose |
 |------|------|------|------|------|------|------|------|
-| Engineer browser | Backstage Portal | [x] Https | [x] Yes | [x] Oidc | [x] Bidirectional | [x] Synchronous | Portal access |
-| stellar CLI | Backstage backend | [x] Https | [x] Yes | [x] Oidc | [x] Bidirectional | [x] Synchronous | CLI self-service |
-| Backstage | GitHub Enterprise | [x] Https | [x] Yes | [x] Other (GitHub App) | [x] Bidirectional | [x] Synchronous | Scaffolder, catalogue sync |
-| Backstage | PostgreSQL | [x] Tcp Tls | [x] Yes | [x] Mtls | [x] Bidirectional | [x] Synchronous | Catalogue persistence |
-| Tekton | Artifact Registry / GHCR | [x] Https | [x] Yes | [x] Iam Role | [x] Unidirectional | [x] Synchronous | Push container images |
-| ArgoCD | GKE / EKS API servers | [x] Https | [x] Yes | [x] Certificate | [x] Bidirectional | [x] Synchronous | Reconcile desired state |
-| Crossplane | GCP / AWS APIs | [x] Https | [x] Yes | [x] Iam Role | [x] Unidirectional | [x] Synchronous | Provision cloud resources |
-| OpenTelemetry Collector | Prometheus | [x] Https | [x] Yes | [x] Mtls | [x] Unidirectional | [x] Asynchronous | Metrics ingestion |
-| OpenTelemetry Collector | Datadog | [x] Https | [x] Yes | [x] Api Key | [x] Unidirectional | [x] Asynchronous | APM and trace ingestion |
-| Platform workloads | Vault | [x] Https | [x] Yes | [x] Jwt | [x] Bidirectional | [x] Synchronous | Dynamic secrets |
+| Engineer browser | Backstage Portal | [x] HTTPS | [x] Yes | [x] OIDC | [x] Bidirectional | [x] Synchronous | Portal access |
+| stellar CLI | Backstage backend | [x] HTTPS | [x] Yes | [x] OIDC | [x] Bidirectional | [x] Synchronous | CLI self-service |
+| Backstage | GitHub Enterprise | [x] HTTPS | [x] Yes | [x] Other (GitHub App) | [x] Bidirectional | [x] Synchronous | Scaffolder, catalogue sync |
+| Backstage | PostgreSQL | [x] TCP TLS | [x] Yes | [x] mTLS | [x] Bidirectional | [x] Synchronous | Catalogue persistence |
+| Tekton | Artifact Registry / GHCR | [x] HTTPS | [x] Yes | [x] IAM Role | [x] Unidirectional | [x] Synchronous | Push container images |
+| ArgoCD | GKE / EKS API servers | [x] HTTPS | [x] Yes | [x] Certificate | [x] Bidirectional | [x] Synchronous | Reconcile desired state |
+| Crossplane | GCP / AWS APIs | [x] HTTPS | [x] Yes | [x] IAM Role | [x] Unidirectional | [x] Synchronous | Provision cloud resources |
+| OpenTelemetry Collector | Prometheus | [x] HTTPS | [x] Yes | [x] mTLS | [x] Unidirectional | [x] Asynchronous | Metrics ingestion |
+| OpenTelemetry Collector | Datadog | [x] HTTPS | [x] Yes | [x] API Key | [x] Unidirectional | [x] Asynchronous | APM and trace ingestion |
+| Platform workloads | Vault | [x] HTTPS | [x] Yes | [x] JWT | [x] Bidirectional | [x] Synchronous | Dynamic secrets |
 
 #### External Integrations
 
 | Source App | Destination App | Integration Type | Protocol | Encrypted | Authentication Method | Purpose |
 |------|------|------|------|------|------|------|
-| Stellar Platform | Okta | [x] Saas | [x] Https | [x] Yes | [x] Oidc | Authentication, SCIM group sync |
-| Stellar Platform | GitHub Enterprise Cloud | [x] Saas | [x] Https | [x] Yes | [x] Other (GitHub App) | Source of truth |
-| Stellar Platform | Datadog | [x] Saas | [x] Https | [x] Yes | [x] Api Key | APM, paging |
-| Stellar Platform | Snowflake | [x] Saas | [x] Https | [x] Yes | [x] Certificate | DORA telemetry landing |
+| Stellar Platform | Okta | [x] SaaS | [x] HTTPS | [x] Yes | [x] OIDC | Authentication, SCIM group sync |
+| Stellar Platform | GitHub Enterprise Cloud | [x] SaaS | [x] HTTPS | [x] Yes | [x] Other (GitHub App) | Source of truth |
+| Stellar Platform | Datadog | [x] SaaS | [x] HTTPS | [x] Yes | [x] API Key | APM, paging |
+| Stellar Platform | Snowflake | [x] SaaS | [x] HTTPS | [x] Yes | [x] Certificate | DORA telemetry landing |
 
 #### APIs & Interfaces
 
-| Name | Api Type | Direction | Data Format | Version | Authenticated | Rate Limited |
+| Name | API Type | Direction | Data Format | Version | Authenticated | Rate Limited |
 |------|------|------|------|------|------|------|
-| Backstage Backend API | [x] Rest | [x] Exposed | [x] Json | v1 | [x] Yes | [x] Yes |
-| Scaffolder Templates Catalogue | [x] Rest | [x] Exposed | [x] Json | v1 | [x] Yes | [x] Yes |
-| DORA Metrics API | [x] Rest | [x] Exposed | [x] Json | v1 | [x] Yes | [x] Yes |
-| Crossplane API | [x] Other (K8s CRD) | [x] Exposed | [x] Json | Crossplane v1 | [x] Yes | [x] Yes |
+| Backstage Backend API | [x] REST | [x] Exposed | [x] JSON | v1 | [x] Yes | [x] Yes |
+| Scaffolder Templates Catalogue | [x] REST | [x] Exposed | [x] JSON | v1 | [x] Yes | [x] Yes |
+| DORA Metrics API | [x] REST | [x] Exposed | [x] JSON | v1 | [x] Yes | [x] Yes |
+| Crossplane API | [x] Other (K8s CRD) | [x] Exposed | [x] JSON | Crossplane v1 | [x] Yes | [x] Yes |
 
 ### 3.3 Physical View
 
@@ -295,10 +295,10 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 | **Wireless Required** | [ ] Yes [x] No |
 | **Traffic Pattern** | [x] Variable Predictable (engineer working hours) |
 | **Latency Requirement** | [x] Standard Sub 1s |
-| **Ddos Protection** | [x] Yes |
-| **Ddos Provider** | [x] GCP Cloud Armor + Cloudflare |
-| **Waf Enabled** | [x] Yes |
-| **Waf Provider** | [x] GCP Cloud Armor + AWS WAF |
+| **DDoS Protection** | [x] Yes |
+| **DDoS Provider** | [x] GCP Cloud Armor + Cloudflare |
+| **WAF Enabled** | [x] Yes |
+| **WAF Provider** | [x] GCP Cloud Armor + AWS WAF |
 | **Rate Limiting** | [x] Yes |
 
 #### Environments
@@ -321,22 +321,22 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 
 | Name | Store Type | Technology | Authoritative | Retention Period | Size | Classification | Personal Data | Sensitive | Encryption Level | Key Management |
 |------|------|------|------|------|------|------|------|------|------|------|
-| Software catalogue | [x] Relational Db | Cloud SQL (PostgreSQL) | [x] Yes | [x] Indefinite | [x] 1-100gb | [x] Internal | [x] Yes (engineer email) | [ ] No | [x] Field Level | [x] Customer Managed Kms |
-| TechDocs (built) | [x] Object Storage | GCS / S3 | [ ] No | [x] Indefinite | [x] 100gb-1tb | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Customer Managed Kms |
-| Metrics (hot) | [x] Time Series Db | Prometheus + Thanos | [x] Yes | [x] Weeks | [x] 1-10tb | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Customer Managed Kms |
-| Logs | [x] Search Index | Datadog | [ ] No | [x] Months | [x] 10-100tb | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Provider Managed |
-| DORA metrics | [x] Data Warehouse | Snowflake | [x] Yes | [x] 5-10 Years | [x] 1-100gb | [x] Internal | [x] Yes (team-linked) | [ ] No | [x] Storage Level | [x] Customer Managed Kms |
-| Tekton artefacts | [x] Object Storage | GCS / S3 | [x] Yes | [x] Months | [x] 100gb-1tb | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Customer Managed Kms |
-| Secrets | [x] Other (Vault KV + dynamic) | HashiCorp Vault | [x] Yes | [x] Transient | [x] Under 1gb | [x] Restricted | [ ] No | [ ] No | [x] Application Level | [x] Hsm |
-| Platform configuration | [x] Other (Git) | GitHub Enterprise | [x] Yes | [x] Indefinite | [x] 1-100gb | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Provider Managed |
+| Software catalogue | [x] Relational DB | Cloud SQL (PostgreSQL) | [x] Yes | [x] Indefinite | [x] 1-100 GB | [x] Internal | [x] Yes (engineer email) | [ ] No | [x] Field Level | [x] Customer Managed KMS |
+| TechDocs (built) | [x] Object Storage | GCS / S3 | [ ] No | [x] Indefinite | [x] 100 GB-1 TB | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Customer Managed KMS |
+| Metrics (hot) | [x] Time-Series DB | Prometheus + Thanos | [x] Yes | [x] Weeks | [x] 1-10 TB | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Customer Managed KMS |
+| Logs | [x] Search Index | Datadog | [ ] No | [x] Months | [x] 10-100 TB | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Provider Managed |
+| DORA metrics | [x] Data Warehouse | Snowflake | [x] Yes | [x] 5-10 Years | [x] 1-100 GB | [x] Internal | [x] Yes (team-linked) | [ ] No | [x] Storage Level | [x] Customer Managed KMS |
+| Tekton artefacts | [x] Object Storage | GCS / S3 | [x] Yes | [x] Months | [x] 100 GB-1 TB | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Customer Managed KMS |
+| Secrets | [x] Other (Vault KV + dynamic) | HashiCorp Vault | [x] Yes | [x] Transient | [x] Under 1 GB | [x] Restricted | [ ] No | [ ] No | [x] Application Level | [x] HSM |
+| Platform configuration | [x] Other (Git) | GitHub Enterprise | [x] Yes | [x] Indefinite | [x] 1-100 GB | [x] Internal | [ ] No | [ ] No | [x] Storage Level | [x] Provider Managed |
 
 #### Data Transfers
 
 | Destination | Destination Type | Classification | Transfer Method | Encrypted |
 |------|------|------|------|------|
-| Datadog | [x] Third Party | [x] Internal | [x] Api | [x] Yes |
-| Snowflake | [x] Third Party | [x] Internal | [x] Api | [x] Yes |
-| GitHub Enterprise Cloud | [x] Third Party | [x] Internal | [x] Api | [x] Yes |
+| Datadog | [x] Third Party | [x] Internal | [x] API | [x] Yes |
+| Snowflake | [x] Third Party | [x] Internal | [x] API | [x] Yes |
+| GitHub Enterprise Cloud | [x] Third Party | [x] Internal | [x] API | [x] Yes |
 
 **Data Sovereignty:** UK customer-facing tenants' metadata remains in europe-west2 / eu-west-2. Datadog data is routed to the EU site. Snowflake uses an EU deployment.
 
@@ -355,18 +355,18 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 
 | Access Type | Method | Uses Group Wide Auth |
 |------|------|------|
-| [x] End User Internal | [x] Sso Oidc + [x] Mfa | [x] Yes |
-| [x] It Operations | [x] Sso Oidc + hardware key + PIM | [x] Yes |
+| [x] End User Internal | [x] SSO OIDC + [x] MFA | [x] Yes |
+| [x] IT Operations | [x] SSO OIDC + hardware key + PIM | [x] Yes |
 | [x] Service Account | [x] Passwordless (Workload Identity) | [x] Yes |
-| [x] Api Consumer (CI runners) | [x] Certificate (SPIFFE SVID) | [x] Yes |
+| [x] API Consumer (CI runners) | [x] Certificate (SPIFFE SVID) | [x] Yes |
 
 #### Authorisation
 
 | Field | Value |
 |-------|-------|
-| **Model** | [x] Rbac (with ABAC attributes for team ownership) |
+| **Model** | [x] RBAC (with ABAC attributes for team ownership) |
 | **Entitlement Store** | Okta groups synced via SCIM to Backstage and Kubernetes RBAC |
-| **Provisioning Process** | [x] Automated Idm |
+| **Provisioning Process** | [x] Automated IDM |
 | **Recertification Enabled** | [x] Yes (quarterly) |
 | **Segregation Of Duties Enforced** | [x] Yes |
 
@@ -374,12 +374,12 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 
 | Field | Value |
 |-------|-------|
-| **Pam Solution** | Okta PIM with JIT 1-2h TTLs |
+| **PAM Solution** | Okta PIM with JIT 1-2h TTLs |
 | **Just In Time Access** | [x] Yes |
 | **Session Recording** | [x] Yes (IAP-tunnelled, recorded) |
 | **Break Glass Process** | [x] Yes (dual-approval) |
 
-#### Encryption at Rest
+#### Encryption at REST
 
 | Field | Value |
 |-------|-------|
@@ -387,8 +387,8 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 | **Level** | [x] Logical Container |
 | **Key Type** | [x] Symmetric |
 | **Algorithm** | AES-256-GCM |
-| **Key Generation** | [x] Hsm Fips140 L3 |
-| **Key Storage** | [x] Kms |
+| **Key Generation** | [x] HSM Fips140 L3 |
+| **Key Storage** | [x] KMS |
 | **Key Rotation Days** | 90 |
 
 #### Secret Management
@@ -403,8 +403,8 @@ Stellar Engineering reached its current scale (400 engineers, 60 teams, ~850 ser
 
 | Field | Value |
 |-------|-------|
-| **Siem Integration** | [x] Yes |
-| **Siem Tool** | Splunk Enterprise |
+| **SIEM Integration** | [x] Yes |
+| **SIEM Tool** | Splunk Enterprise |
 | **Security Event Logging** | [x] Yes |
 | **Intrusion Detection** | [x] Yes (Falco + GuardDuty + Security Command Center) |
 
@@ -454,10 +454,10 @@ Status: Accepted. Date: 2026-03-11. Context: Two of five largest customers requi
 
 | Field | Value |
 |-------|-------|
-| **Dr Strategy** | [x] Warm Standby |
+| **DR Strategy** | [x] Warm Standby |
 | **Multi Venue Deployment** | [x] Yes (multi-region GCP + multi-cloud) |
-| **Rto Target** | PT30M (portal); PT4H (Vault restore) |
-| **Rpo Target** | PT5M (PostgreSQL); PT24H (Vault) |
+| **RTO Target** | PT30M (portal); PT4H (Vault restore) |
+| **RPO Target** | PT5M (PostgreSQL); PT24H (Vault) |
 | **Scalability** | [x] Full Auto Scaling |
 | **Fault Tolerance Designed** | [x] Yes |
 | **Chaos Testing Practised** | [x] Yes (Litmus, monthly) |
@@ -649,7 +649,7 @@ Status: Accepted. Date: 2026-03-11. Context: Two of five largest customers requi
 
 ### References
 
-| Title | Version | Url | Description |
+| Title | Version | URL | Description |
 |------|------|------|------|
 | Stellar Engineering Platform Strategy 2026-2028 | 1.0 | (internal) | Strategic context |
 | Platform-as-a-Product Operating Model | 1.0 | (internal) | Operating model |

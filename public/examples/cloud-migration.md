@@ -598,7 +598,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 
 #### 3.5.4 Data Protection
 
-##### Encryption at Rest
+##### Encryption at REST
 
 | Attribute | Detail |
 |-----------|--------|

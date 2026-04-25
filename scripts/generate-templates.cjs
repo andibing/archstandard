@@ -20,6 +20,99 @@ const path = require('path');
 const SCHEMA_PATH = path.join(__dirname, '..', 'schema', 'ads.schema.json');
 const OUTPUT_DIR = path.join(__dirname, '..', 'public', 'templates');
 
+// Acronym overrides applied after naive title-casing of kebab-case enum values.
+// Schema enums are kebab-case (e.g. "api-key"); naive titlecase produces
+// "Api Key", which is wrong. This dictionary corrects each word.
+const ACRONYM_FIXES = {
+  // Protocols
+  'Http': 'HTTP', 'Https': 'HTTPS',
+  'Tcp': 'TCP', 'Udp': 'UDP',
+  'Tls': 'TLS', 'Ssl': 'SSL',
+  'Ssh': 'SSH', 'Sftp': 'SFTP', 'Ftp': 'FTP', 'Ftps': 'FTPS',
+  'Smtp': 'SMTP', 'Smtps': 'SMTPS',
+  'Imap': 'IMAP', 'Pop3': 'POP3',
+  'Amqp': 'AMQP', 'Amqps': 'AMQPS',
+  'Mqtt': 'MQTT', 'Mqtts': 'MQTTS',
+  'Wss': 'WSS', 'Ws': 'WS', 'Websocket': 'WebSocket',
+  'Grpc': 'gRPC',
+  'Jdbc': 'JDBC', 'Odbc': 'ODBC',
+  'Ldap': 'LDAP', 'Ldaps': 'LDAPS',
+  'Soap': 'SOAP', 'Rest': 'REST', 'Graphql': 'GraphQL',
+  // Auth and identity
+  'Mtls': 'mTLS',
+  'Oauth': 'OAuth', 'Oauth2': 'OAuth2',
+  'Oidc': 'OIDC', 'Saml': 'SAML', 'Jwt': 'JWT',
+  'Iam': 'IAM', 'Sso': 'SSO', 'Mfa': 'MFA', '2fa': '2FA',
+  'Rbac': 'RBAC', 'Abac': 'ABAC', 'Pbac': 'PBAC', 'Acl': 'ACL',
+  'Pam': 'PAM', 'Idm': 'IDM',
+  'Hsm': 'HSM', 'Kms': 'KMS', 'Pki': 'PKI',
+  'Byok': 'BYOK', 'Hyok': 'HYOK',
+  'Fips140': 'FIPS 140',
+  // Data and APIs
+  'Api': 'API', 'Apis': 'APIs',
+  'Json': 'JSON', 'Xml': 'XML', 'Yaml': 'YAML', 'Csv': 'CSV',
+  'Url': 'URL', 'Uri': 'URI',
+  'Html': 'HTML', 'Css': 'CSS',
+  'Sql': 'SQL', 'Nosql': 'NoSQL',
+  'Db': 'DB',
+  'Cqrs': 'CQRS', 'Bff': 'BFF',
+  // Cloud and platforms
+  'Aws': 'AWS', 'Gcp': 'GCP',
+  'Saas': 'SaaS', 'Iaas': 'IaaS', 'Paas': 'PaaS',
+  'Faas': 'FaaS', 'Caas': 'CaaS', 'Dbaas': 'DBaaS', 'Xaas': 'XaaS',
+  'Cdn': 'CDN', 'Waf': 'WAF',
+  'Vpn': 'VPN', 'Vpc': 'VPC',
+  'Lan': 'LAN', 'Wan': 'WAN', 'Vlan': 'VLAN', 'Nat': 'NAT',
+  'Dns': 'DNS',
+  'Eks': 'EKS', 'Aks': 'AKS', 'Gke': 'GKE', 'Ecs': 'ECS',
+  'Sns': 'SNS', 'Sqs': 'SQS', 'Rds': 'RDS',
+  'Vm': 'VM', 'Vms': 'VMs',
+  'Iot': 'IoT', 'Os': 'OS',
+  // Security
+  'Cors': 'CORS', 'Csrf': 'CSRF', 'Xss': 'XSS', 'Ssrf': 'SSRF',
+  'Ddos': 'DDoS',
+  'Hsts': 'HSTS', 'Csp': 'CSP',
+  'Sast': 'SAST', 'Dast': 'DAST', 'Sca': 'SCA',
+  'Apm': 'APM', 'Siem': 'SIEM', 'Soar': 'SOAR',
+  'Cve': 'CVE', 'Owasp': 'OWASP',
+  // Operational and SLAs
+  'Sla': 'SLA', 'Slo': 'SLO', 'Sli': 'SLI',
+  'Rpo': 'RPO', 'Rto': 'RTO',
+  'Mttr': 'MTTR', 'Mttf': 'MTTF', 'Mtbf': 'MTBF',
+  // Compliance
+  'Pii': 'PII', 'Pci': 'PCI',
+  'Hipaa': 'HIPAA', 'Wcag': 'WCAG',
+  'Iso': 'ISO', 'Soc2': 'SOC 2', 'Soc': 'SOC',
+  'Gdpr': 'GDPR', 'Ccpa': 'CCPA', 'Sox': 'SOX', 'Fca': 'FCA',
+  'Dsp': 'DSP', 'Dspt': 'DSPT',
+  'Ietf': 'IETF', 'Rfc': 'RFC',
+  // Business / domain
+  'Crm': 'CRM', 'Erp': 'ERP', 'Cms': 'CMS', 'Lms': 'LMS', 'Wms': 'WMS',
+  'Pos': 'POS', 'Tco': 'TCO', 'Roi': 'ROI',
+  'Capex': 'CapEx', 'Opex': 'OpEx',
+  'Ml': 'ML', 'Ai': 'AI', 'Llm': 'LLM',
+  'Ux': 'UX', 'Ui': 'UI',
+  'Cli': 'CLI', 'Gui': 'GUI', 'Sdk': 'SDK', 'Ide': 'IDE',
+  // Resilience / DR (these only appear in schema-derived labels, not human prose)
+  'Dr': 'DR', 'Rto': 'RTO', 'Rpo': 'RPO',
+  'Ha': 'HA', 'Az': 'AZ',
+  // Misc
+  'It': 'IT',
+};
+
+// Apply acronym fixes to a Title-Cased string (per word).
+function prettifyLabel(text) {
+  // Per-word substitution
+  let out = text.split(' ').map(w => ACRONYM_FIXES[w] || w).join(' ');
+  // Size suffixes: "1gb" → "1 GB", "100tb" → "100 TB", etc.
+  out = out.replace(/(\d+)gb\b/gi, '$1 GB')
+           .replace(/(\d+)tb\b/gi, '$1 TB')
+           .replace(/(\d+)pb\b/gi, '$1 PB')
+           .replace(/(\d+)mb\b/gi, '$1 MB')
+           .replace(/(\d+)kb\b/gi, '$1 KB');
+  return out;
+}
+
 // Section metadata for Markdown generation — maps schema keys to display names
 const SECTION_MAP = {
   documentControl: { num: '0', title: 'Document Control' },
@@ -321,9 +414,9 @@ function enumToCheckboxes(node, schema) {
   node = resolveNode(schema, node);
   if (!node || !node.enum) return '';
   return node.enum.map(v => {
-    // Convert kebab-case to Title Case
-    const label = v.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    return `[ ] ${label}`;
+    // Convert kebab-case to Title Case, then apply acronym overrides
+    const titleCased = v.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    return `[ ] ${prettifyLabel(titleCased)}`;
   }).join(' ');
 }
 
@@ -345,7 +438,7 @@ function generateMdTable(schema, objectNode, titlePrefix) {
     lines.push('|-------|-------|');
     for (const [key, prop] of props) {
       const resolved = resolveNode(schema, prop);
-      const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase()).trim();
+      const label = prettifyLabel(key.replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase()).trim());
       if (resolved && resolved.enum) {
         lines.push(`| **${label}** | ${enumToCheckboxes(prop, schema)} |`);
       } else if (resolved && resolved.type === 'boolean') {
@@ -574,11 +667,10 @@ function getDisplayName(key, context) {
 
   if (names[key]) return names[key];
 
-  // Convert camelCase to Title Case
-  return key
-    .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, c => c.toUpperCase())
-    .trim();
+  // Convert camelCase to Title Case, then apply acronym overrides
+  return prettifyLabel(
+    key.replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase()).trim()
+  );
 }
 
 // ---------------------------------------------

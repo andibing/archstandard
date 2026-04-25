@@ -236,19 +236,19 @@ No FCA-regulated activities. Payment regulation (PSD2 SCA) is satisfied by Strip
 | Storefront Web | [x] Web Application | Server-side rendered customer-facing storefront for SEO and performance | Next.js 14, React 18, TypeScript | Digital Commerce team | [x] New |
 | Mobile App (iOS, Android) | [x] Web Application | Native customer apps consuming platform APIs | Swift (iOS), Kotlin (Android) | Mobile team | [x] New |
 | API Gateway | [x] Gateway | Single ingress; validation, throttling, auth | AWS API Gateway (REST) | Platform team | [x] New |
-| Catalogue Service | [x] Api Service | Product data, categories, pricing, availability | Node.js 20, NestJS, EKS | Commerce team | [x] New |
-| Search Service | [x] Api Service | Faceted search, autocomplete, type-ahead, ranking | Node.js 20, NestJS, EKS | Commerce team | [x] New |
-| Basket Service | [x] Api Service | Basket state, promotion application | Node.js 20, NestJS, EKS | Commerce team | [x] New |
-| Checkout Service | [x] Api Service | Orchestration, Stripe integration, 3-D Secure flow | Node.js 20, NestJS, EKS | Commerce team | [x] New |
-| Order Service | [x] Api Service | Order creation, SAP hand-off, status tracking | Node.js 20, NestJS, EKS | Commerce team | [x] New |
-| Customer Service | [x] Api Service | Profile, address, consent, order history | Node.js 20, NestJS, EKS | Commerce team | [x] New |
-| Promotion Service | [x] Api Service | Promotion rules engine, voucher validation | Node.js 20, NestJS, EKS | Commerce team | [x] New |
+| Catalogue Service | [x] API Service | Product data, categories, pricing, availability | Node.js 20, NestJS, EKS | Commerce team | [x] New |
+| Search Service | [x] API Service | Faceted search, autocomplete, type-ahead, ranking | Node.js 20, NestJS, EKS | Commerce team | [x] New |
+| Basket Service | [x] API Service | Basket state, promotion application | Node.js 20, NestJS, EKS | Commerce team | [x] New |
+| Checkout Service | [x] API Service | Orchestration, Stripe integration, 3-D Secure flow | Node.js 20, NestJS, EKS | Commerce team | [x] New |
+| Order Service | [x] API Service | Order creation, SAP hand-off, status tracking | Node.js 20, NestJS, EKS | Commerce team | [x] New |
+| Customer Service | [x] API Service | Profile, address, consent, order history | Node.js 20, NestJS, EKS | Commerce team | [x] New |
+| Promotion Service | [x] API Service | Promotion rules engine, voucher validation | Node.js 20, NestJS, EKS | Commerce team | [x] New |
 | Transactional Database | [x] Database | Authoritative store for catalogue, orders, customer | Aurora PostgreSQL 15 (Multi-AZ) | DBA team | [x] New |
 | Search Index | [x] Search Engine | Product search index | Amazon OpenSearch 2.x | Platform team | [x] New |
 | Basket Cache | [x] Cache | Basket state and rate-limit counters | ElastiCache Redis 7.x | Platform team | [x] New |
 | Order Queue | [x] Queue | Decouples SAP hand-off from checkout | Amazon SQS (standard + DLQ) | Platform team | [x] New |
 | Static Asset Store | [x] File Storage | Product images, assets, app bundles | Amazon S3 + CloudFront | Platform team | [x] New |
-| Customer Identity | [x] Api Service | Sign-up, sign-in, MFA, password reset | AWS Cognito | Platform team | [x] New |
+| Customer Identity | [x] API Service | Sign-up, sign-in, MFA, password reset | AWS Cognito | Platform team | [x] New |
 
 #### Service & Capability Mapping
 
@@ -275,7 +275,7 @@ No FCA-regulated activities. Payment regulation (PSD2 SCA) is satisfied by Strip
 
 | Pattern | Where Applied | Rationale |
 |------|------|------|
-| [x] Microservices [x] Api Gateway [x] Strangler Fig [x] Bff [x] Event Driven [x] Pub Sub [x] Circuit Breaker [x] Request Response | Domain-aligned services; API Gateway at ingress; legacy migration; mobile BFF; order event flow to SAP and Segment; SaaS integrations (Stripe, SAP) with circuit breakers | Independent scaling and fault isolation; centralised traffic management; phased migration from legacy; mobile-optimised payload composition; decoupling from slow downstream systems; cache-aside for catalogue reads |
+| [x] Microservices [x] API Gateway [x] Strangler Fig [x] BFF [x] Event Driven [x] Pub Sub [x] Circuit Breaker [x] Request Response | Domain-aligned services; API Gateway at ingress; legacy migration; mobile BFF; order event flow to SAP and Segment; SaaS integrations (Stripe, SAP) with circuit breakers | Independent scaling and fault isolation; centralised traffic management; phased migration from legacy; mobile-optimised payload composition; decoupling from slow downstream systems; cache-aside for catalogue reads |
 
 #### Technology & Vendor Lock-in Assessment
 
@@ -315,26 +315,26 @@ No FCA-regulated activities. Payment regulation (PSD2 SCA) is satisfied by Strip
 
 | Source | Destination | Protocol | Encrypted | Authentication Method | Direction | Synchronicity | Purpose |
 |------|------|------|------|------|------|------|------|
-| Next.js Storefront | API Gateway | [x] Https | [x] Yes | [x] Iam Role | [x] Unidirectional | [x] Synchronous | SSR product and catalogue data |
-| Mobile App | API Gateway | [x] Https | [x] Yes | [x] Oauth2 | [x] Unidirectional | [x] Synchronous | Mobile client API access |
-| API Gateway | Microservices (EKS) | [x] Https | [x] Yes | [x] Iam Role | [x] Unidirectional | [x] Synchronous | Route requests |
-| Microservices | Aurora PostgreSQL | [x] Tcp Tls | [x] Yes | [x] Iam Role | [x] Bidirectional | [x] Synchronous | Authoritative data |
-| Microservices | ElastiCache Redis | [x] Tcp Tls | [x] Yes | [x] Api Key | [x] Bidirectional | [x] Synchronous | Cache and basket state |
-| Search Service | OpenSearch | [x] Https | [x] Yes | [x] Iam Role | [x] Bidirectional | [x] Synchronous | Search queries, index updates |
-| Order Service | SQS | [x] Https | [x] Yes | [x] Iam Role | [x] Unidirectional | [x] Event Driven | Publish order events |
-| SAP Integration Lambda | SQS | [x] Https | [x] Yes | [x] Iam Role | [x] Unidirectional | [x] Event Driven | Consume order events |
+| Next.js Storefront | API Gateway | [x] HTTPS | [x] Yes | [x] IAM Role | [x] Unidirectional | [x] Synchronous | SSR product and catalogue data |
+| Mobile App | API Gateway | [x] HTTPS | [x] Yes | [x] OAuth2 | [x] Unidirectional | [x] Synchronous | Mobile client API access |
+| API Gateway | Microservices (EKS) | [x] HTTPS | [x] Yes | [x] IAM Role | [x] Unidirectional | [x] Synchronous | Route requests |
+| Microservices | Aurora PostgreSQL | [x] TCP TLS | [x] Yes | [x] IAM Role | [x] Bidirectional | [x] Synchronous | Authoritative data |
+| Microservices | ElastiCache Redis | [x] TCP TLS | [x] Yes | [x] API Key | [x] Bidirectional | [x] Synchronous | Cache and basket state |
+| Search Service | OpenSearch | [x] HTTPS | [x] Yes | [x] IAM Role | [x] Bidirectional | [x] Synchronous | Search queries, index updates |
+| Order Service | SQS | [x] HTTPS | [x] Yes | [x] IAM Role | [x] Unidirectional | [x] Event Driven | Publish order events |
+| SAP Integration Lambda | SQS | [x] HTTPS | [x] Yes | [x] IAM Role | [x] Unidirectional | [x] Event Driven | Consume order events |
 
 #### External Integrations
 
 | Source App | Destination App | Integration Type | Protocol | Encrypted | Authentication Method | Purpose |
 |------|------|------|------|------|------|------|
-| Customer browser / mobile | CloudFront | [x] Customer Facing | [x] Https | [x] Yes | [x] None | Public storefront / API |
-| Checkout Service | Stripe | [x] Saas | [x] Https | [x] Yes | [x] Api Key | Payment authorisation / capture |
-| Customer browser | Stripe (direct) | [x] Saas | [x] Https | [x] Yes | [x] Api Key | Card tokenisation (Elements) |
-| Order Service | SendGrid | [x] Saas | [x] Https | [x] Yes | [x] Api Key | Transactional email |
-| SAP Integration Lambda | SAP ERP | [x] Internal App | [x] Https | [x] Yes | [x] Oauth2 | Sales order creation |
-| API Gateway / Storefront | Segment CDP | [x] Saas | [x] Https | [x] Yes | [x] Api Key | Customer event capture |
-| Admin users | Admin portal | [x] Internal App | [x] Https | [x] Yes | [x] Oidc | Merchandiser / operations access |
+| Customer browser / mobile | CloudFront | [x] Customer Facing | [x] HTTPS | [x] Yes | [x] None | Public storefront / API |
+| Checkout Service | Stripe | [x] SaaS | [x] HTTPS | [x] Yes | [x] API Key | Payment authorisation / capture |
+| Customer browser | Stripe (direct) | [x] SaaS | [x] HTTPS | [x] Yes | [x] API Key | Card tokenisation (Elements) |
+| Order Service | SendGrid | [x] SaaS | [x] HTTPS | [x] Yes | [x] API Key | Transactional email |
+| SAP Integration Lambda | SAP ERP | [x] Internal App | [x] HTTPS | [x] Yes | [x] OAuth2 | Sales order creation |
+| API Gateway / Storefront | Segment CDP | [x] SaaS | [x] HTTPS | [x] Yes | [x] API Key | Customer event capture |
+| Admin users | Admin portal | [x] Internal App | [x] HTTPS | [x] Yes | [x] OIDC | Merchandiser / operations access |
 
 ##### End User Access
 
@@ -347,17 +347,17 @@ No FCA-regulated activities. Payment regulation (PSD2 SCA) is satisfied by Strip
 
 #### APIs & Interfaces
 
-| Name | Api Type | Direction | Data Format | Version | Authenticated | Rate Limited |
+| Name | API Type | Direction | Data Format | Version | Authenticated | Rate Limited |
 |------|------|------|------|------|------|------|
-| Catalogue API | [x] Rest | [x] Exposed | [x] Json | v1 | [x] Yes | [x] Yes |
-| Basket API | [x] Rest | [x] Exposed | [x] Json | v1 | [x] Yes | [x] Yes |
-| Checkout API | [x] Rest | [x] Exposed | [x] Json | v1 | [x] Yes | [x] Yes |
-| Order API | [x] Rest | [x] Exposed | [x] Json | v1 | [x] Yes | [x] Yes |
-| Customer API | [x] Rest | [x] Exposed | [x] Json | v1 | [x] Yes | [x] Yes |
-| Stripe PaymentIntents | [x] Rest | [x] Consumed | [x] Json | 2024-06-20 | [x] Yes | [x] Yes |
-| SendGrid Mail | [x] Rest | [x] Consumed | [x] Json | v3 | [x] Yes | [x] Yes |
-| SAP Sales Order API | [x] Rest | [x] Consumed | [x] Json | v2 | [x] Yes | [x] No |
-| Segment Track | [x] Rest | [x] Consumed | [x] Json | v1 | [x] Yes | [x] No |
+| Catalogue API | [x] REST | [x] Exposed | [x] JSON | v1 | [x] Yes | [x] Yes |
+| Basket API | [x] REST | [x] Exposed | [x] JSON | v1 | [x] Yes | [x] Yes |
+| Checkout API | [x] REST | [x] Exposed | [x] JSON | v1 | [x] Yes | [x] Yes |
+| Order API | [x] REST | [x] Exposed | [x] JSON | v1 | [x] Yes | [x] Yes |
+| Customer API | [x] REST | [x] Exposed | [x] JSON | v1 | [x] Yes | [x] Yes |
+| Stripe PaymentIntents | [x] REST | [x] Consumed | [x] JSON | 2024-06-20 | [x] Yes | [x] Yes |
+| SendGrid Mail | [x] REST | [x] Consumed | [x] JSON | v3 | [x] Yes | [x] Yes |
+| SAP Sales Order API | [x] REST | [x] Consumed | [x] JSON | v2 | [x] Yes | [x] No |
+| Segment Track | [x] REST | [x] Consumed | [x] JSON | v1 | [x] Yes | [x] No |
 
 **Quality Attribute Refs:**
 - 4.3 Performance Efficiency
@@ -420,10 +420,10 @@ No FCA-regulated activities. Payment regulation (PSD2 SCA) is satisfied by Strip
 | **Peak Ingress Mbps** | 400 |
 | **Traffic Pattern** | [x] Seasonal |
 | **Latency Requirement** | [x] Moderate Sub 100ms |
-| **Ddos Protection** | [x] Yes |
-| **Ddos Provider** | [x] Aws Shield |
-| **Waf Enabled** | [x] Yes |
-| **Waf Provider** | [x] Aws Waf |
+| **DDoS Protection** | [x] Yes |
+| **DDoS Provider** | [x] AWS Shield |
+| **WAF Enabled** | [x] Yes |
+| **WAF Provider** | [x] AWS WAF |
 | **Rate Limiting** | [x] Yes |
 
 ##### User & Administrator Access
@@ -467,15 +467,15 @@ No FCA-regulated activities. Payment regulation (PSD2 SCA) is satisfied by Strip
 
 | Name | Store Type | Technology | Authoritative | Retention Period | Data Size | Classification | Personal Data | Sensitive | Encryption Level | Key Management |
 |------|------|------|------|------|------|------|------|------|------|------|
-| Product catalogue | [x] Relational Db | Aurora PostgreSQL 15 | [x] No | [x] 2 5 Years | [x] 1 100gb | [x] Internal | [x] No | [x] No | [x] Storage Level | [x] Customer Managed Kms |
-| Customer profile | [x] Relational Db | Aurora PostgreSQL 15 | [x] Yes | [x] 5 10 Years | [x] 1 100gb | [x] Restricted | [x] Yes | [x] No | [x] Field Level | [x] Customer Managed Kms |
-| Order history | [x] Relational Db | Aurora PostgreSQL 15 | [x] Yes | [x] 5 10 Years | [x] 100gb 1tb | [x] Restricted | [x] Yes | [x] No | [x] Field Level | [x] Customer Managed Kms |
-| Basket state | [x] Cache | ElastiCache Redis 7.x | [x] Yes | [x] Days | [x] 1 100gb | [x] Internal | [x] Yes | [x] No | [x] Storage Level | [x] Provider Managed |
-| Search index | [x] Search Index | OpenSearch 2.x | [x] No | [x] Transient | [x] 1 100gb | [x] Internal | [x] No | [x] No | [x] Storage Level | [x] Customer Managed Kms |
-| Product images | [x] Object Storage | S3 | [x] Yes | [x] 2 5 Years | [x] 1 10tb | [x] Public | [x] No | [x] No | [x] Storage Level | [x] Provider Managed |
-| Stripe payment tokens | [x] Relational Db | Aurora PostgreSQL 15 | [x] No | [x] 5 10 Years | [x] 1 100gb | [x] Restricted | [x] No | [x] No | [x] Field Level | [x] Customer Managed Kms |
-| Application logs | [x] Other | Datadog + S3 archive | [x] No | [x] 5 10 Years | [x] 1 10tb | [x] Internal | [x] No | [x] No | [x] Storage Level | [x] Customer Managed Kms |
-| Customer events | [x] Other | Segment CDP (SaaS) | [x] Yes | [x] 1 Year | [x] 10 100tb | [x] Internal | [x] Yes | [x] No | [x] Storage Level | [x] Provider Managed |
+| Product catalogue | [x] Relational DB | Aurora PostgreSQL 15 | [x] No | [x] 2 5 Years | [x] 1 100 GB | [x] Internal | [x] No | [x] No | [x] Storage Level | [x] Customer Managed KMS |
+| Customer profile | [x] Relational DB | Aurora PostgreSQL 15 | [x] Yes | [x] 5 10 Years | [x] 1 100 GB | [x] Restricted | [x] Yes | [x] No | [x] Field Level | [x] Customer Managed KMS |
+| Order history | [x] Relational DB | Aurora PostgreSQL 15 | [x] Yes | [x] 5 10 Years | [x] 100 GB 1 TB | [x] Restricted | [x] Yes | [x] No | [x] Field Level | [x] Customer Managed KMS |
+| Basket state | [x] Cache | ElastiCache Redis 7.x | [x] Yes | [x] Days | [x] 1 100 GB | [x] Internal | [x] Yes | [x] No | [x] Storage Level | [x] Provider Managed |
+| Search index | [x] Search Index | OpenSearch 2.x | [x] No | [x] Transient | [x] 1 100 GB | [x] Internal | [x] No | [x] No | [x] Storage Level | [x] Customer Managed KMS |
+| Product images | [x] Object Storage | S3 | [x] Yes | [x] 2 5 Years | [x] 1 10 TB | [x] Public | [x] No | [x] No | [x] Storage Level | [x] Provider Managed |
+| Stripe payment tokens | [x] Relational DB | Aurora PostgreSQL 15 | [x] No | [x] 5 10 Years | [x] 1 100 GB | [x] Restricted | [x] No | [x] No | [x] Field Level | [x] Customer Managed KMS |
+| Application logs | [x] Other | Datadog + S3 archive | [x] No | [x] 5 10 Years | [x] 1 10 TB | [x] Internal | [x] No | [x] No | [x] Storage Level | [x] Customer Managed KMS |
+| Customer events | [x] Other | Segment CDP (SaaS) | [x] Yes | [x] 1 Year | [x] 10 100 TB | [x] Internal | [x] Yes | [x] No | [x] Storage Level | [x] Provider Managed |
 
 No cardholder primary account number (PAN) is stored. PAN is tokenised by Stripe Elements at the browser; NorthWind stores only opaque Stripe payment method tokens. This keeps the platform out of full PCI-DSS scope (SAQ A-EP applies).
 
@@ -491,11 +491,11 @@ No cardholder primary account number (PAN) is stored. PAN is tokenised by Stripe
 
 | Destination | Destination Type | Classification | Transfer Method | Encrypted |
 |------|------|------|------|------|
-| Stripe | [x] Third Party | [x] Restricted | [x] Api | [x] Yes |
-| SendGrid | [x] Third Party | [x] Restricted | [x] Api | [x] Yes |
-| Segment CDP | [x] Third Party | [x] Internal | [x] Api | [x] Yes |
-| SAP ERP (internal) | [x] Internal | [x] Restricted | [x] Api | [x] Yes |
-| Datadog | [x] Third Party | [x] Internal | [x] Api | [x] Yes |
+| Stripe | [x] Third Party | [x] Restricted | [x] API | [x] Yes |
+| SendGrid | [x] Third Party | [x] Restricted | [x] API | [x] Yes |
+| Segment CDP | [x] Third Party | [x] Internal | [x] API | [x] Yes |
+| SAP ERP (internal) | [x] Internal | [x] Restricted | [x] API | [x] Yes |
+| Datadog | [x] Third Party | [x] Internal | [x] API | [x] Yes |
 
 #### Privacy Assessments
 
@@ -551,18 +551,18 @@ A STRIDE-based threat model was produced (SEC-TM-2025-044). Headline threats:
 
 | Access Type | Method | Uses Group Wide Auth |
 |------|------|------|
-| [x] End User External | [x] Oauth2 | [x] Yes |
-| [x] End User Internal | [x] Sso Oidc | [x] Yes |
-| [x] It Operations | [x] Sso Oidc | [x] Yes |
+| [x] End User External | [x] OAuth2 | [x] Yes |
+| [x] End User Internal | [x] SSO OIDC | [x] Yes |
+| [x] IT Operations | [x] SSO OIDC | [x] Yes |
 | [x] Service Account | [x] Custom | [x] No |
 
 #### Authorisation
 
 | Field | Value |
 |-------|-------|
-| **Model** | [x] Rbac |
+| **Model** | [x] RBAC |
 | **Entitlement Store** | Cognito groups (customers), Okta groups + IAM Identity Centre (internal), Kubernetes RBAC |
-| **Provisioning Process** | [x] Automated Idm |
+| **Provisioning Process** | [x] Automated IDM |
 | **Recertification Enabled** | [x] Yes |
 | **Segregation Of Duties Enforced** | [x] Yes |
 
@@ -570,12 +570,12 @@ A STRIDE-based threat model was produced (SEC-TM-2025-044). Headline threats:
 
 | Field | Value |
 |-------|-------|
-| **Pam Solution** | AWS IAM Identity Centre + corporate CyberArk |
+| **PAM Solution** | AWS IAM Identity Centre + corporate CyberArk |
 | **Just In Time Access** | [x] Yes |
 | **Session Recording** | [x] Yes |
 | **Break Glass Process** | [x] Yes |
 
-#### Encryption at Rest
+#### Encryption at REST
 
 | Field | Value |
 |-------|-------|
@@ -583,15 +583,15 @@ A STRIDE-based threat model was produced (SEC-TM-2025-044). Headline threats:
 | **Level** | [x] Field Level |
 | **Key Type** | [x] Symmetric |
 | **Algorithm** | AES-256-GCM (field-level); AES-256 (storage) |
-| **Key Generation** | [x] Hsm Fips140 L3 |
-| **Key Storage** | [x] Kms |
+| **Key Generation** | [x] HSM Fips140 L3 |
+| **Key Storage** | [x] KMS |
 | **Key Rotation Days** | 365 |
 
 #### Secret Management
 
 | Field | Value |
 |-------|-------|
-| **Secret Store** | [x] Aws Secrets Manager |
+| **Secret Store** | [x] AWS Secrets Manager |
 | **Distribution** | [x] Runtime Retrieval |
 | **Rotation** | [x] Automatic |
 
@@ -599,8 +599,8 @@ A STRIDE-based threat model was produced (SEC-TM-2025-044). Headline threats:
 
 | Field | Value |
 |-------|-------|
-| **Siem Integration** | [x] Yes |
-| **Siem Tool** | Datadog Cloud SIEM + Splunk (corporate) |
+| **SIEM Integration** | [x] Yes |
+| **SIEM Tool** | Datadog Cloud SIEM + Splunk (corporate) |
 | **Security Event Logging** | [x] Yes |
 | **Intrusion Detection** | [x] Yes |
 
@@ -644,10 +644,10 @@ A STRIDE-based threat model was produced (SEC-TM-2025-044). Headline threats:
 
 | Field | Value |
 |-------|-------|
-| **Dr Strategy** | [x] Pilot Light |
+| **DR Strategy** | [x] Pilot Light |
 | **Multi Venue Deployment** | [x] Yes |
-| **Rto Target** | PT2H |
-| **Rpo Target** | PT1M |
+| **RTO Target** | PT2H |
+| **RPO Target** | PT1M |
 | **Scalability** | [x] Full Auto Scaling |
 | **Fault Tolerance Designed** | [x] Yes |
 | **Chaos Testing Practised** | [x] Yes |
@@ -876,7 +876,7 @@ The application is developed internally by the Digital Commerce team.
 
 ### References
 
-| Title | Version | Url | Description |
+| Title | Version | URL | Description |
 |------|------|------|------|
 | NorthWind Information Security Standard | 3.4 | Corporate Confluence / Security | Corporate security standard |
 | NorthWind Cloud Landing Zone Standard | 2.1 | Corporate Confluence / Cloud | AWS baseline controls |

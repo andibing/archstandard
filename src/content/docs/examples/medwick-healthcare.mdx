@@ -885,7 +885,7 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 
 #### 3.5.4 Data Protection
 
-##### Encryption at Rest
+##### Encryption at REST
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1322,7 +1322,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Question | Response |
 |----------|----------|
 | Language / framework efficiency | .NET 8 is highly optimised; AOT compilation evaluated for Notification Service (deferred due to ACS SDK incompatibility) |
-| Optimised for platform and workload? | Yes -- connection pooling (Npgsql / SqlClient), efficient JSON serialisation (System.Text.Json), source-generated serializers |
+| Optimised for platform and workload? | Yes -- connection pooling (Npgsql / SqlClient), efficient JSON serialisation (System.Text.JSON), source-generated serializers |
 | Efficient algorithms / data structures? | Yes -- indexed lookups, pagination enforced |
 | vCPU hours per request minimised? | Yes -- async offload reduces per-request compute |
 

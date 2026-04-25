@@ -67,8 +67,8 @@
 | **Project Name** | |
 | **Project Code** | |
 | **Project Manager** | |
-| **Estimated Capex** | |
-| **Estimated Opex** | |
+| **Estimated CapEx** | |
+| **Estimated OpEx** | |
 | **Currency** | |
 | **Target Go Live** | |
 
@@ -103,13 +103,13 @@
 
 | Name | Component Type | Description | Technology | Owner | Status |
 |------|------|------|------|------|------|
-|  | [ ] Web Application [ ] Api Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] Cdn [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] Ml Model [ ] Other |  |  |  | [ ] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
+|  | [ ] Web Application [ ] API Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] CDN [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] ML Model [ ] Other |  |  |  | [ ] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
 
 #### Design Patterns
 
 | Pattern | Where Applied | Rationale |
 |------|------|------|
-| [ ] Microservices [ ] Monolith [ ] Modular Monolith [ ] Event Driven [ ] Cqrs [ ] Saga [ ] Strangler Fig [ ] Sidecar [ ] Api Gateway [ ] Bff [ ] Circuit Breaker [ ] Pub Sub [ ] Request Response [ ] Batch Processing [ ] Stream Processing [ ] Data Lake [ ] Data Mesh [ ] Other |  |  |
+| [ ] Microservices [ ] Monolith [ ] Modular Monolith [ ] Event Driven [ ] CQRS [ ] Saga [ ] Strangler Fig [ ] Sidecar [ ] API Gateway [ ] BFF [ ] Circuit Breaker [ ] Pub Sub [ ] Request Response [ ] Batch Processing [ ] Stream Processing [ ] Data Lake [ ] Data Mesh [ ] Other |  |  |
 
 **Quality Attribute Refs:**
 - 
@@ -123,19 +123,19 @@
 
 | Source | Destination | Protocol | Encrypted | Authentication Method | Direction | Synchronicity | Purpose |
 |------|------|------|------|------|------|------|------|
-|  |  | [ ] Https [ ] Http [ ] Grpc [ ] Grpc Tls [ ] Tcp [ ] Tcp Tls [ ] Amqp [ ] Amqps [ ] Mqtt [ ] Mqtts [ ] Kafka [ ] Websocket [ ] Wss [ ] Jdbc [ ] Odbc [ ] Sftp [ ] Ftps [ ] Smtp [ ] Smtps [ ] Ldaps [ ] Ssh [ ] Other | [ ] Yes [ ] No | [ ] Mtls [ ] Oauth2 [ ] Api Key [ ] Jwt [ ] Saml [ ] Oidc [ ] Basic Auth [ ] Certificate [ ] Iam Role [ ] Kerberos [ ] None [ ] Other | [ ] Unidirectional [ ] Bidirectional | [ ] Synchronous [ ] Asynchronous [ ] Event Driven |  |
+|  |  | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] MQTTS [ ] Kafka [ ] WebSocket [ ] WSS [ ] JDBC [ ] ODBC [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] LDAPS [ ] SSH [ ] Other | [ ] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] Kerberos [ ] None [ ] Other | [ ] Unidirectional [ ] Bidirectional | [ ] Synchronous [ ] Asynchronous [ ] Event Driven |  |
 
 #### External Integrations
 
 | Source App | Destination App | Integration Type | Protocol | Encrypted | Authentication Method | Purpose |
 |------|------|------|------|------|------|------|
-|  |  | [ ] Internal App [ ] External Service [ ] Saas [ ] Partner [ ] Customer Facing | [ ] Https [ ] Http [ ] Grpc [ ] Grpc Tls [ ] Tcp [ ] Tcp Tls [ ] Amqp [ ] Amqps [ ] Mqtt [ ] Kafka [ ] Sftp [ ] Ftps [ ] Smtp [ ] Smtps [ ] Other | [ ] Yes [ ] No | [ ] Mtls [ ] Oauth2 [ ] Api Key [ ] Jwt [ ] Saml [ ] Oidc [ ] Basic Auth [ ] Certificate [ ] Iam Role [ ] None [ ] Other |  |
+|  |  | [ ] Internal App [ ] External Service [ ] SaaS [ ] Partner [ ] Customer Facing | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] Kafka [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] Other | [ ] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] None [ ] Other |  |
 
 #### APIs & Interfaces
 
-| Name | Api Type | Direction | Data Format | Version | Authenticated | Rate Limited |
+| Name | API Type | Direction | Data Format | Version | Authenticated | Rate Limited |
 |------|------|------|------|------|------|------|
-|  | [ ] Rest [ ] Graphql [ ] Grpc [ ] Soap [ ] Websocket [ ] Event Stream [ ] File Transfer [ ] Other | [ ] Exposed [ ] Consumed | [ ] Json [ ] Xml [ ] Protobuf [ ] Avro [ ] Csv [ ] Parquet [ ] Binary [ ] Other |  | [ ] Yes [ ] No | [ ] Yes [ ] No |
+|  | [ ] REST [ ] GraphQL [ ] gRPC [ ] SOAP [ ] WebSocket [ ] Event Stream [ ] File Transfer [ ] Other | [ ] Exposed [ ] Consumed | [ ] JSON [ ] XML [ ] Protobuf [ ] Avro [ ] CSV [ ] Parquet [ ] Binary [ ] Other |  | [ ] Yes [ ] No | [ ] Yes [ ] No |
 
 **Quality Attribute Refs:**
 - 
@@ -166,7 +166,7 @@
 
 ##### Servers
 
-| Name | Instance Type | V Cpu | Memory Gb | Storage Tb | Quantity | Os |
+| Name | Instance Type | V Cpu | Memory Gb | Storage Tb | Quantity | OS |
 |------|------|------|------|------|------|------|
 |  |  |  |  |  |  | [ ] Rhel [ ] Amazon Linux [ ] Ubuntu [ ] Debian [ ] Centos [ ] Windows Server [ ] Suse [ ] Other |
 
@@ -194,17 +194,17 @@
 | **Peak Ingress Mbps** | |
 | **Traffic Pattern** | [ ] Constant [ ] Periodic [ ] Burst [ ] Seasonal [ ] Unpredictable |
 | **Latency Requirement** | [ ] Ultra Low Sub 1ms [ ] Low Sub 10ms [ ] Moderate Sub 100ms [ ] Standard Sub 1s [ ] Tolerant Above 1s [ ] Not Applicable |
-| **Ddos Protection** | [ ] Yes [ ] No [ ] Not Applicable |
-| **Ddos Provider** | [ ] Aws Shield [ ] Azure Ddos [ ] Cloudflare [ ] Akamai [ ] Gcp Cloud Armor [ ] Arbor [ ] Other [ ] None |
-| **Waf Enabled** | [ ] Yes [ ] No [ ] Not Applicable |
-| **Waf Provider** | [ ] Aws Waf [ ] Azure Waf [ ] Cloudflare Waf [ ] Gcp Cloud Armor [ ] F5 [ ] Imperva [ ] Other [ ] None |
+| **DDoS Protection** | [ ] Yes [ ] No [ ] Not Applicable |
+| **DDoS Provider** | [ ] AWS Shield [ ] Azure DDoS [ ] Cloudflare [ ] Akamai [ ] GCP Cloud Armor [ ] Arbor [ ] Other [ ] None |
+| **WAF Enabled** | [ ] Yes [ ] No [ ] Not Applicable |
+| **WAF Provider** | [ ] AWS WAF [ ] Azure WAF [ ] Cloudflare WAF [ ] GCP Cloud Armor [ ] F5 [ ] Imperva [ ] Other [ ] None |
 | **Rate Limiting** | [ ] Yes [ ] No |
 
 #### Environments
 
 | Environment Type | Count | Venue | Auto Scale Down |
 |------|------|------|------|
-| [ ] Development [ ] Test [ ] Qa [ ] Integration Test [ ] Staging [ ] Pre Production [ ] Production [ ] Dr [ ] Sandbox [ ] Demo [ ] Performance Test |  |  | [ ] Yes [ ] No |
+| [ ] Development [ ] Test [ ] Qa [ ] Integration Test [ ] Staging [ ] Pre Production [ ] Production [ ] DR [ ] Sandbox [ ] Demo [ ] Performance Test |  |  | [ ] Yes [ ] No |
 
 **Security Agents:**
 - 
@@ -218,13 +218,13 @@
 
 | Name | Store Type | Technology | Authoritative | Retention Period | Data Size Category | Classification | Contains Personal Data | Contains Sensitive Personal Data | Encryption Level | Key Management |
 |------|------|------|------|------|------|------|------|------|------|------|
-|  | [ ] Relational Db [ ] Nosql Document [ ] Nosql Key Value [ ] Nosql Graph [ ] Nosql Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time Series Db [ ] In Memory [ ] Other |  | [ ] Yes [ ] No | [ ] Transient [ ] Hours [ ] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [ ] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [ ] Under 1gb [ ] 1 100gb [ ] 100gb 1tb [ ] 1 10tb [ ] 10 100tb [ ] 100tb 1pb [ ] Over 1pb | [ ] Public [ ] Internal [ ] Restricted [ ] Highly Restricted | [ ] Yes [ ] No | [ ] Yes [ ] No | [ ] None [ ] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [ ] Provider Managed [ ] Customer Managed Kms [ ] Hsm [ ] Byok [ ] Custom [ ] None |
+|  | [ ] Relational DB [ ] NoSQL Document [ ] NoSQL Key Value [ ] NoSQL Graph [ ] NoSQL Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time Series DB [ ] In Memory [ ] Other |  | [ ] Yes [ ] No | [ ] Transient [ ] Hours [ ] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [ ] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [ ] Under 1 GB [ ] 1 100 GB [ ] 100 GB 1 TB [ ] 1 10 TB [ ] 10 100 TB [ ] 100 TB 1 PB [ ] Over 1 PB | [ ] Public [ ] Internal [ ] Restricted [ ] Highly Restricted | [ ] Yes [ ] No | [ ] Yes [ ] No | [ ] None [ ] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [ ] Provider Managed [ ] Customer Managed KMS [ ] HSM [ ] BYOK [ ] Custom [ ] None |
 
 #### Data Transfers
 
 | Destination | Destination Type | Classification | Transfer Method | Encrypted |
 |------|------|------|------|------|
-|  | [ ] Internal [ ] Third Party [ ] Regulator [ ] Customer [ ] Partner | [ ] Public [ ] Internal [ ] Restricted [ ] Highly Restricted | [ ] Api [ ] Sftp [ ] Email [ ] Message Queue [ ] Database Replication [ ] File Share [ ] Manual [ ] Other | [ ] Yes [ ] No |
+|  | [ ] Internal [ ] Third Party [ ] Regulator [ ] Customer [ ] Partner | [ ] Public [ ] Internal [ ] Restricted [ ] Highly Restricted | [ ] API [ ] SFTP [ ] Email [ ] Message Queue [ ] Database Replication [ ] File Share [ ] Manual [ ] Other | [ ] Yes [ ] No |
 
 **Quality Attribute Refs:**
 - 
@@ -244,15 +244,15 @@
 
 | Access Type | Method | Uses Group Wide Auth |
 |------|------|------|
-| [ ] End User Internal [ ] End User External [ ] It Operations [ ] Service Account [ ] Api Consumer | [ ] Sso Saml [ ] Sso Oidc [ ] Mfa [ ] Certificate [ ] Api Key [ ] Oauth2 [ ] Basic Auth [ ] Kerberos [ ] Passwordless [ ] Custom | [ ] Yes [ ] No |
+| [ ] End User Internal [ ] End User External [ ] IT Operations [ ] Service Account [ ] API Consumer | [ ] SSO SAML [ ] SSO OIDC [ ] MFA [ ] Certificate [ ] API Key [ ] OAuth2 [ ] Basic Auth [ ] Kerberos [ ] Passwordless [ ] Custom | [ ] Yes [ ] No |
 
 #### Authorisation
 
 | Field | Value |
 |-------|-------|
-| **Model** | [ ] Rbac [ ] Abac [ ] Pbac [ ] Acl [ ] Custom |
+| **Model** | [ ] RBAC [ ] ABAC [ ] PBAC [ ] ACL [ ] Custom |
 | **Entitlement Store** | |
-| **Provisioning Process** | [ ] Automated Idm [ ] Manual Request [ ] Self Service [ ] Api Driven [ ] Other |
+| **Provisioning Process** | [ ] Automated IDM [ ] Manual Request [ ] Self Service [ ] API Driven [ ] Other |
 | **Recertification Enabled** | [ ] Yes [ ] No |
 | **Segregation Of Duties Enforced** | [ ] Yes [ ] No |
 
@@ -260,7 +260,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Pam Solution** | |
+| **PAM Solution** | |
 | **Just In Time Access** | [ ] Yes [ ] No |
 | **Session Recording** | [ ] Yes [ ] No |
 | **Break Glass Process** | [ ] Yes [ ] No |
@@ -273,15 +273,15 @@
 | **Level** | [ ] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level |
 | **Key Type** | [ ] Symmetric [ ] Asymmetric |
 | **Algorithm** | |
-| **Key Generation** | [ ] Hsm Fips140 L3 [ ] Hsm Fips140 L2 [ ] Kms [ ] Software [ ] Other |
-| **Key Storage** | [ ] Hsm [ ] Kms [ ] Software Keystore [ ] Other |
+| **Key Generation** | [ ] HSM FIPS 140 L3 [ ] HSM FIPS 140 L2 [ ] KMS [ ] Software [ ] Other |
+| **Key Storage** | [ ] HSM [ ] KMS [ ] Software Keystore [ ] Other |
 | **Key Rotation Days** | |
 
 #### Secret Management
 
 | Field | Value |
 |-------|-------|
-| **Secret Store** | [ ] Hashicorp Vault [ ] Aws Secrets Manager [ ] Azure Key Vault [ ] Gcp Secret Manager [ ] Cyberark [ ] Custom [ ] None |
+| **Secret Store** | [ ] Hashicorp Vault [ ] AWS Secrets Manager [ ] Azure Key Vault [ ] GCP Secret Manager [ ] Cyberark [ ] Custom [ ] None |
 | **Distribution** | [ ] Runtime Retrieval [ ] Deployment Time [ ] Environment Variable [ ] Mounted Volume [ ] Other |
 | **Rotation** | [ ] Automatic [ ] Manual Scheduled [ ] Manual Ad Hoc [ ] Not Rotated |
 
@@ -289,8 +289,8 @@
 
 | Field | Value |
 |-------|-------|
-| **Siem Integration** | [ ] Yes [ ] No |
-| **Siem Tool** | |
+| **SIEM Integration** | [ ] Yes [ ] No |
+| **SIEM Tool** | |
 | **Security Event Logging** | [ ] Yes [ ] No |
 | **Intrusion Detection** | [ ] Yes [ ] No |
 
@@ -330,10 +330,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Dr Strategy** | [ ] Active Active [ ] Active Passive [ ] Pilot Light [ ] Warm Standby [ ] Backup Restore [ ] None |
+| **DR Strategy** | [ ] Active Active [ ] Active Passive [ ] Pilot Light [ ] Warm Standby [ ] Backup Restore [ ] None |
 | **Multi Venue Deployment** | [ ] Yes [ ] No |
-| **Rto Target** | |
-| **Rpo Target** | |
+| **RTO Target** | |
+| **RPO Target** | |
 | **Scalability** | [ ] No Dynamic Scaling [ ] Manual Scaling [ ] Partial Auto Scaling [ ] Full Auto Scaling |
 | **Fault Tolerance Designed** | [ ] Yes [ ] No |
 | **Chaos Testing Practised** | [ ] Yes [ ] No |
@@ -470,7 +470,7 @@
 
 ### References
 
-| Title | Version | Url | Description |
+| Title | Version | URL | Description |
 |------|------|------|------|
 |  |  |  |  |
 
