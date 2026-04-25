@@ -1,107 +1,195 @@
 ---
 title: "Vorlagen"
-description: "Laden Sie leere SAD-Vorlagen in verschiedenen Formaten herunter, um mit der Dokumentation Ihrer Lösungsarchitektur zu beginnen."
+description: "Wie Sie ADS-Vorlagen verwenden, um Ihr Solution Architecture Document zu erstellen."
 ---
 
-## Herunterladbare Vorlagen
+import { Aside } from '@astrojs/starlight/components';
 
-Laden Sie eine leere SAD-Vorlage gemäß ADS v1.3.0 in Ihrem bevorzugten Format herunter. Alle Vorlagen enthalten die vollständige Abschnittsstruktur mit Platzhalterfeldern, die ausgefüllt werden können.
+## Eine Vorlage beziehen
 
-### Maschinenlesbare Formate
+Laden Sie eine leere SAD-Vorlage von der **[Downloads](/de/standard/downloads/)**-Seite in Ihrem bevorzugten Format (Word, Markdown, YAML oder JSON) herunter.
 
-#### Markdown-Vorlage
+## Drei Wege, Vorlagen zu verwenden
 
-Vollständige Vorlage im Markdown-Format. Ideal für Versionskontrolle neben Code in Git-Repositories.
+**1. Manuell ausfüllen** — öffnen Sie die Vorlage in Ihrem Editor, Wiki oder Textverarbeitungsprogramm und füllen Sie jeden Abschnitt aus.
 
-**[Download sad-template.md](/v1/templates/sad-template.md)**
+**2. In ein LLM importieren** — übergeben Sie die Vorlage an ChatGPT, Claude oder Copilot zusammen mit einem Projekt-Briefing, um einen strukturierten Erstentwurf zu erzeugen.
 
-#### YAML-Vorlage
+**3. In Confluence einfügen** — kopieren Sie die Markdown-Vorlage in Ihre Zwischenablage und fügen Sie sie direkt in Confluence, Notion oder ein beliebiges Wiki ein, das Markdown unterstützt.
 
-Strukturierte Vorlage im YAML-Format. Ideal für programmatische Verarbeitung, CI/CD-Integration und Tooling.
+<button id="copy-md-btn" class="ads-copy-btn">Markdown in die Zwischenablage kopieren</button>
 
-**[Download sad-template.yaml](/v1/templates/sad-template.yaml)**
+<script>
+{`
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('copy-md-btn');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/v1/templates/sad-template.md');
+      const text = await res.text();
+      await navigator.clipboard.writeText(text);
+      btn.textContent = 'Kopiert!';
+      btn.classList.add('ads-copy-btn-success');
+      setTimeout(() => {
+        btn.textContent = 'Markdown in die Zwischenablage kopieren';
+        btn.classList.remove('ads-copy-btn-success');
+      }, 3000);
+    } catch (e) {
+      btn.textContent = 'Kopieren fehlgeschlagen — bitte herunterladen';
+      setTimeout(() => { btn.textContent = 'Markdown in die Zwischenablage kopieren'; }, 3000);
+    }
+  });
+});
+`}
+</script>
 
-#### JSON-Vorlage
+## Zwischen Formaten konvertieren
 
-Strukturierte Vorlage im JSON-Format. Validiert gegen das ADS JSON Schema.
-
-**[Download sad-template.json](/v1/templates/sad-template.json)**
-
-### Vollständiger Standard zum Download
-
-#### Vollständiger Standard (DOCX)
-
-Der vollständige ADS-Standard als einzelnes Word-Dokument mit Inhaltsverzeichnis. Geeignet für Offline-Lektüre, Governance-Einreichungen und Druck.
-
-**[Download ads-standard-v1.docx](/ads-standard-v1.docx)**
-
-### Menschenlesbare Formate
-
-#### Word / DOCX
-
-Generieren Sie ein Word-Dokument aus der Markdown-Vorlage mit [Pandoc](https://pandoc.org/). Ideal für formale Governance-Einreichungen und Offline-Prüfung.
-
-Siehe den Pandoc-Befehl unten zur Generierung.
-
-#### Confluence / Wiki
-
-Kopieren Sie die Markdown-Vorlage in Ihre Zwischenablage und fügen Sie sie direkt in Confluence, Notion oder jedes Wiki ein, das Markdown unterstützt.
-
-Um die Markdown-Vorlage zu kopieren, laden Sie die Datei sad-template.md herunter und kopieren Sie den Inhalt.
-
-> **Tipp: Word / DOCX generieren**
->
-> Konvertieren Sie die Markdown-Vorlage mit [Pandoc](https://pandoc.org/) in das Word-Format:
->
-> ```bash
-> # Basic conversion
-> pandoc sad-template.md -o sad-template.docx
->
-> # With a custom reference document for branding/styling
-> pandoc sad-template.md -o sad-template.docx --reference-doc=your-template.docx
-> ```
->
-> Ein dedizierter Word-Vorlagengenerator ist für eine zukünftige Version des Standards geplant.
-
-## Vorlageninhalt
-
-Jede Vorlage enthält die vollständige ADS-Abschnittsstruktur:
-
-| Abschnitt | Enthalten | Documentation Depth |
-|-----------|----------|---------------|
-| 0. Dokumentenlenkung | Metadaten, Änderungshistorie, Mitwirkende | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 1. Zusammenfassung | Überblick, Kontext, Scope, Entscheidungen, Kritikalität | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 2. Stakeholder & Concerns | Register, Concerns-Matrix, Compliance | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 3.1 Logical View | Komponenten, Services, Muster | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.2 Integration & Data Flow View | Konnektivität, Integrationen, APIs | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.3 Physical View | Hosting, Compute, Netzwerk, Umgebungen | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.4 Data View | Datenspeicher, Klassifizierung, Datenschutz | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.5 Security View | IAM, Verschlüsselung, Überwachung | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.6 Scenarios | Anwendungsfälle, ADRs | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 4. Qualitätsattribute | Alle Qualitätsattribute + Kompromisse | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 5. Lebenszyklusmanagement | SDLC, Betrieb, Exit-Planung | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 6. Entscheidungsfindung & Governance | Risiken, Ausnahmen, Compliance-Rückverfolgbarkeit | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 7. Anhänge | Glossar, Referenzen, Genehmigungen | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-
-## Validierung
-
-Die JSON- und YAML-Vorlagen können gegen das [ADS JSON Schema](/v1/de/standard/schema/) validiert werden:
+Verwenden Sie [Pandoc](https://pandoc.org/), um zwischen Formaten zu konvertieren:
 
 ```bash
-# Validate JSON template
-npx ajv validate -s schema/ads.schema.json -d my-sad.json
+# Markdown nach Word
+pandoc sad-template.md -o my-sad.docx
 
-# Validate YAML (convert to JSON first)
-npx js-yaml my-sad.yaml | npx ajv validate -s schema/ads.schema.json -d /dev/stdin
+# Markdown nach ODF (LibreOffice)
+pandoc sad-template.md -o my-sad.odt
+
+# Mit individueller Markendarstellung
+pandoc sad-template.md -o my-sad.docx --reference-doc=your-template.docx
 ```
 
-## Organisationsanpassung
+## Ihr SAD validieren
 
-Um eine organisationsspezifische Vorlage zu erstellen:
+Validieren Sie ein fertiggestelltes SAD (JSON oder YAML) gegen das ADS-Schema:
 
-1. Laden Sie die YAML- oder JSON-Vorlage herunter
-2. Fügen Sie Ihren `organisationProfile`-Abschnitt mit internen Tool-Zuordnungen und Governance Gates hinzu
-3. Fügen Sie alle `customSections` hinzu, die Ihre Organisation benötigt
-4. Verteilen Sie die angepasste Vorlage an Ihre Architekturteams
+```bash
+npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d my-sad.json
+```
 
-Siehe [Konformität und Nutzung](/v1/de/standard/how-to-use/) für Anpassungsrichtlinien.
+Weitere Validierungsoptionen finden Sie auf der Seite [JSON Schema](/de/standard/schema/).
+
+## Anpassung für Ihre Organisation
+
+Sie können den Standard für Ihre Organisation erweitern, ohne die Kernabschnitte zu verändern. Es gibt zwei Erweiterungspunkte:
+
+- **`organisationProfile`** — bildet den Standard auf Ihre internen Werkzeuge, Standards und Governance-Gates ab
+- **`customSections`** — fügt organisationsspezifische Abschnitte hinzu (z. B. Cloud-Governance-Checklisten, Datenschutz-Folgenabschätzungen)
+
+### Wie Sie diese zu Ihrem SAD hinzufügen
+
+**In YAML oder JSON:** Fügen Sie die Blöcke `organisationProfile` und/oder `customSections` am Ende Ihrer SAD-Datei (nach `appendices`) hinzu. Sie stehen auf der obersten Ebene, neben den Standardabschnitten.
+
+**In Markdown:** Fügen Sie neue Überschriften nach Abschnitt 7 (Anhänge) mit Ihrem benutzerdefinierten Inhalt hinzu. Verwenden Sie dasselbe Tabellenformat wie im Rest des Dokuments.
+
+**In Word:** Fügen Sie neue Abschnitte nach den Anhängen hinzu. Folgen Sie demselben Überschriften- und Tabellenstil.
+
+**Für Ihre gesamte Organisation:** Erstellen Sie eine angepasste Vorlage mit vorausgefülltem `organisationProfile` und verteilen Sie sie an Ihre Architektur-Teams. So beginnt jedes neue SAD mit den richtigen Werkzeug-Mappings und Governance-Gates.
+
+### Beispiel Organisationsprofil (YAML)
+
+Fügen Sie diesen Block am Ende Ihres YAML-SAD hinzu, um den Standard auf die Werkzeuge und Governance Ihrer Organisation abzubilden:
+
+```yaml
+organisationProfile:
+  organisationName: "Acme Corp"
+  tooling:
+    cmdb: "ServiceNow"
+    secretStore: "HashiCorp Vault"
+    monitoring: "Datadog"
+    siem: "Splunk"
+    cicd: "GitHub Actions"
+    portfolioManagement: "LeanIX"
+  internalStandards:
+    - id: "STD-001"
+      name: "Cloud Platform Standards"
+      version: "2.0"
+      mappedSections: ["physicalView", "securityView"]
+    - id: "POL-008"
+      name: "Information Security Policy"
+      version: "4.1"
+      mappedSections: ["securityView", "dataView"]
+  governanceGates:
+    - gateName: "Dev/Test Review"
+      requiredMaturityLevel: "minimum"
+      requiredSections: ["documentControl", "executiveSummary", "architecturalViews", "riskGovernance"]
+    - gateName: "Production Approval"
+      requiredMaturityLevel: "recommended"
+      requiredSections: ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance"]
+    - gateName: "Enterprise Architecture Review"
+      requiredMaturityLevel: "comprehensive"
+      requiredSections: ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance", "appendices"]
+```
+
+### Beispiel Organisationsprofil (JSON)
+
+Dieselbe Konfiguration im JSON-Format:
+
+```json
+{
+  "organisationProfile": {
+    "organisationName": "Acme Corp",
+    "tooling": {
+      "cmdb": "ServiceNow",
+      "secretStore": "HashiCorp Vault",
+      "monitoring": "Datadog",
+      "siem": "Splunk",
+      "cicd": "GitHub Actions",
+      "portfolioManagement": "LeanIX"
+    },
+    "internalStandards": [
+      {
+        "id": "STD-001",
+        "name": "Cloud Platform Standards",
+        "version": "2.0",
+        "mappedSections": ["physicalView", "securityView"]
+      }
+    ],
+    "governanceGates": [
+      {
+        "gateName": "Dev/Test Review",
+        "requiredMaturityLevel": "minimum",
+        "requiredSections": ["documentControl", "executiveSummary", "architecturalViews", "riskGovernance"]
+      },
+      {
+        "gateName": "Production Approval",
+        "requiredMaturityLevel": "recommended",
+        "requiredSections": ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance"]
+      }
+    ]
+  }
+}
+```
+
+### Beispiel benutzerdefinierte Abschnitte
+
+Fügen Sie organisationsspezifische Abschnitte hinzu, ohne den Kernstandard zu verändern:
+
+```yaml
+customSections:
+  - id: "cloud-governance"
+    title: "Cloud-Governance-Checkliste"
+    description: "Organisationsspezifische Cloud-Governance-Anforderungen"
+    maturityLevel: "recommended"
+    parentSection: "physicalView"
+    content: |
+      | Kontrolle | Status | Nachweis |
+      |-----------|--------|----------|
+      | Tagging-Richtlinie angewendet | Ja / Nein | |
+      | Kostenwarnungen konfiguriert | Ja / Nein | |
+      | Backup-Richtlinie angewendet | Ja / Nein | |
+
+  - id: "data-privacy"
+    title: "Datenschutz-Folgenabschätzung"
+    description: "DSGVO- und datenschutzspezifische Anforderungen"
+    maturityLevel: "recommended"
+    parentSection: "dataView"
+    content: |
+      | Frage | Antwort |
+      |-------|---------|
+      | DSFA durchgeführt? | Ja / Nein |
+      | Auftragsverarbeitungsverträge vorhanden? | Ja / Nein |
+      | Auskunftsanfrage-Prozess dokumentiert? | Ja / Nein |
+```
+
+Vollständige Anpassungsrichtlinien finden Sie unter [Konformität und Verwendung](/de/standard/how-to-use/).

@@ -1,107 +1,195 @@
 ---
 title: "Modèles"
-description: "Téléchargez des modèles SAD vierges dans plusieurs formats pour commencer à documenter votre architecture de solution."
+description: "Comment utiliser les modèles ADS pour créer votre Solution Architecture Document."
 ---
 
-## Modèles téléchargeables
+import { Aside } from '@astrojs/starlight/components';
 
-Téléchargez un modèle SAD vierge conforme à l'ADS v1.3.0 dans votre format préféré. Tous les modèles contiennent la structure complète des sections avec des champs à remplir.
+## Obtenir un modèle
 
-### Formats lisibles par machine
+Téléchargez un modèle SAD vierge depuis la page **[Téléchargements](/fr/standard/downloads/)** dans votre format préféré (Word, Markdown, YAML ou JSON).
 
-#### Modèle Markdown
+## Trois façons d'utiliser les modèles
 
-Modèle complet au format Markdown. Idéal pour le contrôle de version aux côtés du code dans les dépôts git.
+**1. Remplir manuellement** — ouvrez le modèle dans votre éditeur, votre wiki ou votre traitement de texte et complétez chaque section.
 
-**[Télécharger sad-template.md](/v1/templates/sad-template.md)**
+**2. Importer dans un LLM** — fournissez le modèle à ChatGPT, Claude ou Copilot avec un brief de projet pour générer un premier brouillon structuré.
 
-#### Modèle YAML
+**3. Coller dans Confluence** — copiez le modèle Markdown dans votre presse-papiers et collez-le directement dans Confluence, Notion ou tout wiki qui prend en charge le Markdown.
 
-Modèle structuré au format YAML. Idéal pour le traitement programmatique, l'intégration CI/CD et l'outillage.
+<button id="copy-md-btn" class="ads-copy-btn">Copier le Markdown dans le presse-papiers</button>
 
-**[Télécharger sad-template.yaml](/v1/templates/sad-template.yaml)**
+<script>
+{`
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('copy-md-btn');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/v1/templates/sad-template.md');
+      const text = await res.text();
+      await navigator.clipboard.writeText(text);
+      btn.textContent = 'Copié !';
+      btn.classList.add('ads-copy-btn-success');
+      setTimeout(() => {
+        btn.textContent = 'Copier le Markdown dans le presse-papiers';
+        btn.classList.remove('ads-copy-btn-success');
+      }, 3000);
+    } catch (e) {
+      btn.textContent = 'Échec de la copie — utilisez le téléchargement';
+      setTimeout(() => { btn.textContent = 'Copier le Markdown dans le presse-papiers'; }, 3000);
+    }
+  });
+});
+`}
+</script>
 
-#### Modèle JSON
+## Convertir entre formats
 
-Modèle structuré au format JSON. Se valide par rapport au JSON Schema ADS.
-
-**[Télécharger sad-template.json](/v1/templates/sad-template.json)**
-
-### Téléchargements du standard complet
-
-#### Standard complet (DOCX)
-
-Le standard ADS complet sous forme d'un document Word unique avec table des matières. Adapté à la lecture hors ligne, aux soumissions de gouvernance et à l'impression.
-
-**[Télécharger ads-standard-v1.docx](/ads-standard-v1.docx)**
-
-### Formats lisibles par l'humain
-
-#### Word / DOCX
-
-Générez un document Word à partir du modèle Markdown en utilisant [Pandoc](https://pandoc.org/). Idéal pour les soumissions formelles de gouvernance et la révision hors ligne.
-
-Voir la commande Pandoc ci-dessous pour générer le document.
-
-#### Confluence / Wiki
-
-Copiez le modèle Markdown dans votre presse-papiers, puis collez-le directement dans Confluence, Notion ou tout wiki prenant en charge le Markdown.
-
-Pour copier le modèle Markdown, téléchargez le fichier sad-template.md ci-dessus et copiez son contenu.
-
-> **Astuce : Génération Word / DOCX**
->
-> Convertissez le modèle Markdown au format Word en utilisant [Pandoc](https://pandoc.org/) :
->
-> ```bash
-> # Basic conversion
-> pandoc sad-template.md -o sad-template.docx
->
-> # With a custom reference document for branding/styling
-> pandoc sad-template.md -o sad-template.docx --reference-doc=your-template.docx
-> ```
->
-> Un générateur de modèles Word dédié est prévu pour une future version du standard.
-
-## Contenu des modèles
-
-Chaque modèle inclut la structure complète des sections ADS :
-
-| Section | Contenu | Documentation Depth |
-|---------|---------|---------------|
-| 0. Document Control | Métadonnées, historique des modifications, contributeurs | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 1. Executive Summary | Vue d'ensemble, contexte, périmètre, décisions, criticité | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 2. Stakeholders & Concerns | Registre, matrice des préoccupations, conformité | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 3.1 Logical View | Composants, services, patterns | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.2 Integration & Data Flow View | Connectivité, intégrations, APIs | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.3 Physical View | Hébergement, compute, réseau, environnements | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.4 Data View | Stockages de données, classification, confidentialité | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.5 Security View | IAM, chiffrement, surveillance | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 3.6 Scenarios | Cas d'utilisation, ADRs | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 4. Quality Attributes | Tous les attributs de qualité + compromis | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 5. Lifecycle Management | SDLC, opérations, planification de sortie | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 6. Decision Making & Governance | Risques, exceptions, traçabilité de conformité | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 7. Appendices | Glossaire, références, approbations | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-
-## Validation
-
-Les modèles JSON et YAML peuvent être validés par rapport au [JSON Schema ADS](/v1/fr/standard/schema/) :
+Utilisez [Pandoc](https://pandoc.org/) pour convertir entre formats :
 
 ```bash
-# Validate JSON template
-npx ajv validate -s schema/ads.schema.json -d my-sad.json
+# Markdown vers Word
+pandoc sad-template.md -o my-sad.docx
 
-# Validate YAML (convert to JSON first)
-npx js-yaml my-sad.yaml | npx ajv validate -s schema/ads.schema.json -d /dev/stdin
+# Markdown vers ODF (LibreOffice)
+pandoc sad-template.md -o my-sad.odt
+
+# Avec une charte personnalisée
+pandoc sad-template.md -o my-sad.docx --reference-doc=your-template.docx
 ```
 
-## Personnalisation par l'organisation
+## Valider votre SAD
 
-Pour créer un modèle spécifique à votre organisation :
+Validez un SAD complété (JSON ou YAML) par rapport au schéma ADS :
 
-1. Téléchargez le modèle YAML ou JSON
-2. Ajoutez votre section `organisationProfile` avec les mappings d'outils internes et les portes de gouvernance
-3. Ajoutez les `customSections` requises par votre organisation
-4. Distribuez le modèle personnalisé à vos équipes d'architecture
+```bash
+npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d my-sad.json
+```
 
-Voir [Conformité et utilisation](/v1/fr/standard/how-to-use/) pour les directives de personnalisation.
+Voir la page [JSON Schema](/fr/standard/schema/) pour davantage d'options de validation.
+
+## Personnaliser pour votre organisation
+
+Vous pouvez étendre le standard pour votre organisation sans modifier les sections principales. Il existe deux points d'extension :
+
+- **`organisationProfile`** — fait correspondre le standard à vos outils, standards et portes de gouvernance internes
+- **`customSections`** — ajoute des sections spécifiques à l'organisation (par ex., listes de contrôle de gouvernance cloud, évaluations de confidentialité des données)
+
+### Comment les ajouter à votre SAD
+
+**En YAML ou JSON :** ajoutez les blocs `organisationProfile` et/ou `customSections` à la fin de votre fichier SAD (après `appendices`). Ils se placent au niveau supérieur, à côté des sections du standard.
+
+**En Markdown :** ajoutez de nouveaux titres après la Section 7 (Annexes) avec votre contenu personnalisé. Utilisez le même format de tableau que le reste du document.
+
+**En Word :** ajoutez de nouvelles sections après les Annexes. Suivez le même style de titre et de tableau.
+
+**Pour toute votre organisation :** créez un modèle personnalisé avec le `organisationProfile` pré-rempli et distribuez-le à vos équipes d'architecture. Ainsi, chaque nouveau SAD démarre avec les bons mappings d'outils et portes de gouvernance.
+
+### Exemple de profil d'organisation (YAML)
+
+Ajoutez ce bloc à la fin de votre SAD YAML pour faire correspondre le standard aux outils et à la gouvernance de votre organisation :
+
+```yaml
+organisationProfile:
+  organisationName: "Acme Corp"
+  tooling:
+    cmdb: "ServiceNow"
+    secretStore: "HashiCorp Vault"
+    monitoring: "Datadog"
+    siem: "Splunk"
+    cicd: "GitHub Actions"
+    portfolioManagement: "LeanIX"
+  internalStandards:
+    - id: "STD-001"
+      name: "Cloud Platform Standards"
+      version: "2.0"
+      mappedSections: ["physicalView", "securityView"]
+    - id: "POL-008"
+      name: "Information Security Policy"
+      version: "4.1"
+      mappedSections: ["securityView", "dataView"]
+  governanceGates:
+    - gateName: "Dev/Test Review"
+      requiredMaturityLevel: "minimum"
+      requiredSections: ["documentControl", "executiveSummary", "architecturalViews", "riskGovernance"]
+    - gateName: "Production Approval"
+      requiredMaturityLevel: "recommended"
+      requiredSections: ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance"]
+    - gateName: "Enterprise Architecture Review"
+      requiredMaturityLevel: "comprehensive"
+      requiredSections: ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance", "appendices"]
+```
+
+### Exemple de profil d'organisation (JSON)
+
+La même configuration au format JSON :
+
+```json
+{
+  "organisationProfile": {
+    "organisationName": "Acme Corp",
+    "tooling": {
+      "cmdb": "ServiceNow",
+      "secretStore": "HashiCorp Vault",
+      "monitoring": "Datadog",
+      "siem": "Splunk",
+      "cicd": "GitHub Actions",
+      "portfolioManagement": "LeanIX"
+    },
+    "internalStandards": [
+      {
+        "id": "STD-001",
+        "name": "Cloud Platform Standards",
+        "version": "2.0",
+        "mappedSections": ["physicalView", "securityView"]
+      }
+    ],
+    "governanceGates": [
+      {
+        "gateName": "Dev/Test Review",
+        "requiredMaturityLevel": "minimum",
+        "requiredSections": ["documentControl", "executiveSummary", "architecturalViews", "riskGovernance"]
+      },
+      {
+        "gateName": "Production Approval",
+        "requiredMaturityLevel": "recommended",
+        "requiredSections": ["documentControl", "executiveSummary", "stakeholders", "architecturalViews", "qualityAttributes", "lifecycleManagement", "riskGovernance"]
+      }
+    ]
+  }
+}
+```
+
+### Exemple de sections personnalisées
+
+Ajoutez des sections spécifiques à l'organisation sans modifier le standard principal :
+
+```yaml
+customSections:
+  - id: "cloud-governance"
+    title: "Liste de contrôle de gouvernance cloud"
+    description: "Exigences de gouvernance cloud spécifiques à l'organisation"
+    maturityLevel: "recommended"
+    parentSection: "physicalView"
+    content: |
+      | Contrôle | Statut | Preuve |
+      |----------|--------|--------|
+      | Politique de tagging appliquée | Oui / Non | |
+      | Alertes de coût configurées | Oui / Non | |
+      | Politique de sauvegarde appliquée | Oui / Non | |
+
+  - id: "data-privacy"
+    title: "Évaluation de la confidentialité des données"
+    description: "Exigences spécifiques au RGPD et à la confidentialité des données"
+    maturityLevel: "recommended"
+    parentSection: "dataView"
+    content: |
+      | Question | Réponse |
+      |----------|---------|
+      | AIPD réalisée ? | Oui / Non |
+      | Accords de sous-traitance des données en place ? | Oui / Non |
+      | Processus de demande d'accès des personnes documenté ? | Oui / Non |
+```
+
+Voir [Conformité et utilisation](/fr/standard/how-to-use/) pour les directives de personnalisation complètes.

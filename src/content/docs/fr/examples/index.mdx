@@ -1,0 +1,71 @@
+---
+title: "Exemples de SAD"
+description: "Exemples de Solution Architecture Documents complétés démontrant l'ADS en pratique sur différents types de solutions."
+---
+
+import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
+
+## Apprendre par l'exemple
+
+Ces exemples de SAD montrent comment appliquer l'Architecture Description Standard à des solutions concrètes. Chaque exemple est un Solution Architecture Document complété (fictif) qui montre à quoi ressemble un bon document pour différents types de projets.
+
+<Aside type="tip" title="Pas de vrais projets">
+Ces exemples sont fictifs mais réalistes. Ils sont conçus pour illustrer les sections, les champs et la notation du standard — pas pour prescrire des choix technologiques spécifiques.
+</Aside>
+
+<CardGrid>
+  <Card title="Employee Directory" icon="open-book">
+    Une simple application web interne. Illustre un SAD direct au niveau **Recommended** — idéal pour comprendre les bases.
+
+    [Voir l'exemple SAD](/fr/examples/employee-directory/) | [Markdown](/examples/employee-directory.md) | [JSON](/examples/employee-directory.json)
+  </Card>
+  <Card title="Customer API Platform" icon="rocket">
+    Une API REST cloud-native orientée client sur AWS. Illustre un SAD **Comprehensive** avec attributs de qualité complets, sécurité et gouvernance.
+
+    [Voir l'exemple SAD](/fr/examples/customer-api-platform/) | [Markdown](/examples/customer-api-platform.md) | [JSON](/examples/customer-api-platform.json)
+  </Card>
+  <Card title="Cloud Migration" icon="setting">
+    Une application legacy on-premises migrant vers Azure. Illustre les sections de migration (les 6 R), l'architecture de l'état actuel et la planification de la transition.
+
+    [Voir l'exemple SAD](/fr/examples/cloud-migration/) | [Markdown](/examples/cloud-migration.md) | [JSON](/examples/cloud-migration.json)
+  </Card>
+  <Card title="archstandard.org" icon="star">
+    Ce site web. Un méta-exemple montrant comment l'ADS documente un site statique simple — démontrant que même de petits projets bénéficient d'une documentation d'architecture structurée.
+
+    [Voir l'exemple SAD](/fr/examples/archstandard-org/) | [Markdown](/examples/archstandard-org.md) | [JSON](/examples/archstandard-org.json)
+  </Card>
+</CardGrid>
+
+## Comparaison synthétique
+
+| Exemple | Profondeur | Criticité | Hébergement | Sections clés démontrées | Score global |
+|---------|------------|-----------|-------------|--------------------------|:------------:|
+| **Employee Directory** | Recommended | Tier 4 (Faible) | Azure PaaS | Vues de base, attributs de qualité simples, gouvernance directe | 3 |
+| **Customer API Platform** | Comprehensive | Tier 1 (Critique) | AWS EKS | Vue sécurité complète, modèle de menace, intégrations étendues, traçabilité de conformité | 5 |
+| **Cloud Migration** | Recommended | Tier 2 (Élevée) | Azure PaaS | Architecture de l'état actuel, 6 R de migration, plan de transition, dimensionnement | 3 |
+| **archstandard.org** | Minimum | Tier 5 (Minimale) | Cloudflare Pages | SAD minimal viable, prouvant que même les projets simples bénéficient d'une structure | 3 |
+
+## Comment utiliser ces exemples
+
+1. **Lisez celui qui correspond à votre type de projet** — choisissez l'exemple le plus proche de votre solution
+2. **Notez la profondeur** — chaque exemple indique son niveau de documentation (Minimum, Recommended ou Comprehensive)
+3. **Vérifiez la notation** — chaque exemple inclut un tableau de notation de conformité montrant comment il a été évalué
+4. **Copiez la structure** — téléchargez un [modèle vierge](/fr/standard/templates/) et utilisez l'exemple comme référence en complétant votre propre SAD
+
+## Valider votre SAD par rapport au schéma
+
+Une fois votre SAD complété au format JSON ou YAML, validez-le par rapport au schéma ADS :
+
+```bash
+# Valider un SAD JSON par rapport au schéma hébergé
+npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d my-sad.json
+
+# Valider un SAD YAML (le convertir d'abord en JSON)
+npx js-yaml my-sad.yaml | npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d /dev/stdin
+
+# Avec Python
+pip install jsonschema pyyaml
+python -m jsonschema -i my-sad.json https://archstandard.org/schema/v1.0.0/ads.schema.json
+```
+
+Le schéma valide la structure, les champs obligatoires et les valeurs d'énumération — il garantit que votre SAD est conforme au standard. Voir la [page JSON Schema](/fr/standard/schema/) pour les détails complets.
