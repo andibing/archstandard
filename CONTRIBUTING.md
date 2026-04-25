@@ -114,6 +114,68 @@ AI prompts live in `public/prompts/` and are referenced from `src/content/docs/s
 3. Include realistic output format examples.
 4. Update `prompts.mdx` to list the new prompt.
 
+## Contributing a translation
+
+ADS is canonically maintained in **English (UK)**. French and German pages are provided for orientation only — five Tier-1 pages per locale (landing, Quickstart, Cheat Sheet, Why ADS?, Conformance and Usage). Deeper sections, examples, templates, and guidance remain in English, in line with international architecture standard convention (ISO, TOGAF, arc42).
+
+When the standard reaches a stable point (currently planned for v2.0.0), full translations of additional sections will become valuable.
+
+### Before you translate
+
+1. **Read the [Translation Glossary](./docs/translation-glossary.md).** It defines canonical FR/DE equivalents for ADS-specific terms and lists which terms (acronyms, RFC 2119 keywords, framework names) must stay in English.
+2. **Translate from a tagged release**, not from `dev` or `main`. The tag `vX.Y.Z-en-canonical` (e.g. `v1.3.0-en-canonical`) marks a stable English baseline. Note the tag in your PR description.
+3. **Open an issue first** if you are starting a new locale or a substantial expansion. We may have constraints (Crowdin setup, glossary updates) that affect your approach.
+
+### Tier 1 — orientation pages (active)
+
+These five pages per locale are the current translation surface. PRs welcome:
+
+- `index.mdx` — locale landing page
+- `standard/quickstart.mdx`
+- `standard/cheat-sheet.mdx`
+- `standard/why-ads.mdx`
+- `standard/how-to-use.mdx`
+
+Match the structure of the English source. Keep the bilingual notice Aside on the landing page that points readers to the English standard for deeper content.
+
+### Tier 2 — deferred until standard stabilises
+
+Sections 0–7, examples, guidance, templates page, AI prompts, FAQ, downloads, schema reference, version history, framework alignment, design principles. Do not translate these yet — the maintenance cost outweighs the benefit while the standard is still iterating.
+
+### Translation conventions
+
+- Translate from UK English source (organise, optimisation, behaviour, licence-as-noun).
+- Keep all acronyms (SAD, HLD, ADR, IAM, WAF, RTO, etc.) in English.
+- Keep RFC 2119 keywords (SHALL, SHOULD, MAY, OPTIONAL) in English uppercase.
+- Documentation depth values stay as `minimum` / `recommended` / `comprehensive` in schema references; localised words are acceptable in narrative prose.
+- For German: never let umlauts get stripped. Run `python scripts/fix-umlauts.py` if you suspect an encoding issue.
+- For French: vouvoiement throughout (use *vous*, not *tu*).
+
+### Tooling
+
+If you want to run a translation workflow at scale (e.g., Crowdin, Weblate), open a discussion so we can align on the source-of-truth set-up before you start.
+
+### Translation baseline tags
+
+Each release that is intended as a translation baseline gets a companion tag:
+
+```
+v1.3.0          # the release
+v1.3.0-en-canonical  # the EN content baseline against which FR/DE were last synced
+```
+
+If you contribute a translation, add a note in the file header:
+
+```yaml
+---
+title: "..."
+description: "..."
+translatedFromTag: v1.3.0-en-canonical
+---
+```
+
+This lets future translators see when a page might be due for a re-sync.
+
 ## Local development
 
 ```bash
