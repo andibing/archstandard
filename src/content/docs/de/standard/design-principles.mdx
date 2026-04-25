@@ -1,24 +1,24 @@
 ---
 title: "Designprinzipien"
-description: "Grundlegende Designprinzipien des ADS, einschliesslich atomarem Felddesign und Multi-Format-Kompatibilitat."
+description: "Grundlegende Designprinzipien des ADS, einschließlich atomarem Felddesign und Multi-Format-Kompatibilitat."
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
 ## Atomares Felddesign
 
-ADS ist mit **atomaren Feldern** konzipiert — strukturierten, diskreten Werten anstelle von Freitext, wo immer moglich. Dies ist ein Kernprinzip des Standards.
+ADS ist mit **atomaren Feldern** konzipiert — strukturierten, diskreten Werten anstelle von Freitext, wo immer möglich. Dies ist ein Kernprinzip des Standards.
 
 ### Warum atomare Felder?
 
 | Vorteil | Beschreibung |
 |---------|-------------|
 | **Reduzierte Mehrdeutigkeit** | Autoren wahlen aus definierten Optionen, anstatt Prosatext zu verfassen |
-| **Maschinenverarbeitbar** | Werkzeuge konnen SADs aggregieren, vergleichen, validieren und darüber berichten |
+| **Maschinenverarbeitbar** | Werkzeuge können SADs aggregieren, vergleichen, validieren und darüber berichten |
 | **Schneller auszufullen** | Kontrollkastchen und Auswahlen sind schneller als leere Textfelder |
-| **Vergleichbar** | Zwei SADs konnen strukturell verglichen und differenziert werden |
-| **Übersetzbar** | Enum-Werte konnen eindeutig in jede Sprache übertragen werden |
-| **Governance-fähig** | Der Architektur-Governance-Prozess kann die Vollständigkeit programmatisch überprufen |
+| **Vergleichbar** | Zwei SADs können strukturell verglichen und differenziert werden |
+| **Übersetzbar** | Enum-Werte können eindeutig in jede Sprache übertragen werden |
+| **Governance-fähig** | Der Architektur-Governance-Prozess kann die Vollständigkeit programmatisch überprüfen |
 
 ### Wie es über Formate hinweg funktioniert
 
@@ -50,7 +50,7 @@ Das Schema verwendet die folgenden atomaren Muster:
 | **Klassifizierung** | `classification` | `public`, `internal`, `restricted`, `highly-restricted` |
 | **Status** | `document status`, `ADR status`, `risk status` | Je nach Kontext definiert |
 | **Technologie-Enum** | `protocol`, `authenticationMethod`, `secretStore` | Je Feld definiert |
-| **Grossenkategorie** | `dataSizeCategory`, `clusterSize` | Bandbereiche |
+| **Größenkategorie** | `dataSizeCategory`, `clusterSize` | Bandbereiche |
 | **Dauer** | `retentionPeriod`, `rtoTarget` | ISO 8601 oder Bandkategorien |
 | **Kritikalitat** | `businessCriticality` | `tier-1-critical` bis `tier-5-minimal` |
 | **ID-Muster** | `UC-01`, `ADR-001`, `R-001` | Regex-eingeschrankte Zeichenketten |
@@ -67,7 +67,7 @@ Das JSON Schema ist die einzige Wahrheitsquelle. Alle Ausgabeformate werden dara
 
 ## Barrierefreiheit & kognitive Belastung
 
-ADS ist so konzipiert, dass es von allen Architekten nutzbar ist, einschliesslich neurodivergenter Personen. Die folgenden Prinzipien reduzieren die kognitive Belastung und verbessern die Lesbarkeit:
+ADS ist so konzipiert, dass es von allen Architekten nutzbar ist, einschließlich neurodivergenter Personen. Die folgenden Prinzipien reduzieren die kognitive Belastung und verbessern die Lesbarkeit:
 
 ### Strukturelle Konsistenz
 
@@ -84,10 +84,10 @@ Diese vorhersehbare Struktur bedeutet, dass Sie immer wissen, was Sie erwartet, 
 | Prinzip | Wie ADS es umsetzt |
 |---------|-------------------|
 | **Atomare Felder statt leerer Seiten** | Kontrollkastchen, Enums und strukturierte Tabellen ersetzen offene Textfelder. Sie wahlen aus, anstatt zu formulieren. |
-| **Schrittweise Offenlegung** | Drei Dokumentationstiefen (Minimum -> Empfohlen -> Umfassend) ermoglichen es, einfach zu beginnen und Details nur bei Bedarf hinzuzufugen. |
+| **Schrittweise Offenlegung** | Drei Dokumentationstiefen (Minimum -> Empfohlen -> Umfassend) ermöglichen es, einfach zu beginnen und Details nur bei Bedarf hinzuzufugen. |
 | **Eine Idee pro Zeile** | Tabellen prasentieren ein Feld pro Zeile, anstatt mehrere Konzepte zu kombinieren. |
 | **Konsistente Terminologie** | Das [Glossar](/v1/de/standard/7-appendices/#71-glossar) definiert alle Akronyme. Begriffe werden durchgehend einheitlich verwendet. |
-| **Visuelle Markierungen** | Farbcodierte Tiefeindikatoren (<span class="maturity-indicator maturity-minimum">Minimum</span> <span class="maturity-indicator maturity-recommended">Empfohlen</span> <span class="maturity-indicator maturity-comprehensive">Umfassend</span>) ermoglichen ein schnelles Erkennen der Anforderungen. |
+| **Visuelle Markierungen** | Farbcodierte Tiefeindikatoren (<span class="maturity-indicator maturity-minimum">Minimum</span> <span class="maturity-indicator maturity-recommended">Empfohlen</span> <span class="maturity-indicator maturity-comprehensive">Umfassend</span>) ermöglichen ein schnelles Erkennen der Anforderungen. |
 | **Klare Bewertung** | Die 0–5 Compliance-Skala liefert eindeutiges, numerisches Feedback statt subjektiver Prosa. |
 
 ### Akronyme & Terminologie

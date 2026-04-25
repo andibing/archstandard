@@ -1,6 +1,6 @@
 ---
 title: "4.2 Zuverlässigkeit & Resilienz"
-description: Geografischer Fussabdruck, Skalierbarkeit, Fehlertoleranz, Backup und Wiederherstellung.
+description: Geografischer Fußabdruck, Skalierbarkeit, Fehlertoleranz, Backup und Wiederherstellung.
 ---
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
@@ -9,9 +9,9 @@ description: Geografischer Fussabdruck, Skalierbarkeit, Fehlertoleranz, Backup u
 
 ## Zweck
 
-Zuverlässigkeit & Resilienz konzentriert sich auf die Fähigkeit der Lösung, Ausfalle zu überstehen, sich von Storungen zu erholen und bei Bedarf zu skalieren. Dieses Qualitätsattribut ist eng mit der Physischen Ansicht (3.3) und der Datenansicht (3.4) für Infrastruktur- und Daten-Backup-Details verknupft.
+Zuverlässigkeit & Resilienz konzentriert sich auf die Fähigkeit der Lösung, Ausfalle zu überstehen, sich von Störungen zu erholen und bei Bedarf zu skalieren. Dieses Qualitätsattribut ist eng mit der Physischen Ansicht (3.3) und der Datenansicht (3.4) für Infrastruktur- und Daten-Backup-Details verknupft.
 
-## 4.2.1 Geografischer Fussabdruck & Disaster Recovery
+## 4.2.1 Geografischer Fußabdruck & Disaster Recovery
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
@@ -19,7 +19,7 @@ Zuverlässigkeit & Resilienz konzentriert sich auf die Fähigkeit der Lösung, A
 |-------|---------|
 | Ist die Anwendung für Kontinuitat über mehrere Hosting-Standorte bereitgestellt? | Ja / Nein — *[Details]* |
 | Wie lautet die DR-Strategie? | Active-Active / Active-Passive / Pilot Light / Backup & Restore |
-| Gibt es Datensouveranitatanforderungen, die die geografische Wahl beeinflussen? | Ja / Nein — *[Details]* |
+| Gibt es Datensouveränitätanforderungen, die die geografische Wahl beeinflussen? | Ja / Nein — *[Details]* |
 
 *[Geografisches Bereitstellungsdiagramm einfugen, falls zutreffend]*
 
@@ -45,9 +45,9 @@ Zuverlässigkeit & Resilienz konzentriert sich auf die Fähigkeit der Lösung, A
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Wurde die Anwendung so entworfen, dass sie unerwartete Storungen wie Ausfall oder Verschlechterung interner Komponenten oder externer Abhängigkeiten toleriert?
+Würde die Anwendung so entworfen, dass sie unerwartete Störungen wie Ausfall oder Verschlechterung interner Komponenten oder externer Abhängigkeiten toleriert?
 
-- [ ] **Ja** — *[beschreiben Sie das Fehlertolernzdesign, einschliesslich:]*
+- [ ] **Ja** — *[beschreiben Sie das Fehlertolernzdesign, einschließlich:]*
   - Wie die Anwendung Komponentenausfalle behandelt
   - Strategien für graduelle Funktionseinschrankung
   - Circuit-Breaker- oder Retry-Muster
@@ -68,11 +68,11 @@ Dokumentieren Sie, wie sich die Lösung verhalt, wenn einzelne Komponenten oder 
 <div class="guidance-box">
 <h4>Leitfaden</h4>
 
-Berucksichtigen Sie für jede kritische Komponente:
+Berücksichtigen Sie für jede kritische Komponente:
 - **Was passiert, wenn sie nicht verfügbar wird?** Fallt die Lösung vollständig aus, wird sie graduell eingeschrankt oder lauft sie mit reduzierter Funktionalität weiter?
 - **Wie wird der Ausfall erkannt?** Health Checks, Heartbeats, Fehlerschwellenwerte, Timeouts?
 - **Wie wird wiederhergestellt?** Automatischer Neustart, Failover auf Sekundar, Circuit Breaker, manueller Eingriff?
-- **Was erleben die Benutzer?** Vollausfall, eingeschrankte Erfahrung, erhohte Latenz oder transparentes Failover?
+- **Was erleben die Benutzer?** Vollausfall, eingeschrankte Erfahrung, erhöhte Latenz oder transparentes Failover?
 
 Dieser Abschnitt fehlt haufig in Architekturdokumenten, ist aber einer der wertvollsten für Betriebsteams und SREs.
 </div>
@@ -95,8 +95,8 @@ Dieser Abschnitt fehlt haufig in Architekturdokumenten, ist aber einer der wertv
 
 | Kontrolle | Detail |
 |-----------|--------|
-| Unveranderlichkeit | *[wie Backups vor Anderung/Loschung geschutzt werden]* |
-| Verschlusselung | *[wie Backup-Daten verschlusselt werden]* |
+| Unveranderlichkeit | *[wie Backups vor Änderung/Loschung geschützt werden]* |
+| Verschlüsselung | *[wie Backup-Daten verschlüsselt werden]* |
 | Zugriffskontrolle | *[wer kann auf Backups zugreifen]* |
 
 ## 4.2.6 Wiederherstellungsszenarien
@@ -123,7 +123,7 @@ Beschreiben Sie für jedes Szenario:
 - Automatische vs. manuelle Wiederherstellungsschritte
 - Erwartetes Recovery Time Objective (RTO) und Recovery Point Objective (RPO)
 - Abhängigkeiten von anderen Teams oder Systemen für die Wiederherstellung
-- Ob die Wiederherstellung getestet wurde und wann
+- Ob die Wiederherstellung getestet würde und wann
 </div>
 
 <div class="guidance-box">
@@ -133,5 +133,5 @@ Beschreiben Sie für jedes Szenario:
 |:---------:|-------------------|
 | **1** | DR-Strategie identifiziert, aber RTO/RPO nicht definiert |
 | **3** | DR-Strategie mit RTO/RPO-Zielen dokumentiert, Backup konfiguriert, Skalierungsansatz definiert |
-| **5** | Alles oben Genannte plus Fehlertoleranz entworfen, Chaos-Tests praktiziert, Backup-Unveranderlichkeit und -Verschlusselung bestatigt, DR getestet |
+| **5** | Alles oben Genannte plus Fehlertoleranz entworfen, Chaos-Tests praktiziert, Backup-Unveranderlichkeit und -Verschlüsselung bestatigt, DR getestet |
 </div>

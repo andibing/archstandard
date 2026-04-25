@@ -24,24 +24,24 @@ import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
 
 ADS ist ein **kostenloser, quelloffener, präskriptiver Standard**, der genau festlegt, welche Abschnitte, Inhalte und Qualitätskriterien ein Solution Architecture Document (SAD) enthalten MUSS. Er wird unter der [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) Lizenz veroffentlicht — jeder darf ihn nutzen, anpassen und weiterverbreiten, auch für kommerzielle Zwecke.
 
-Er basiert auf — ist aber keine Kopie von — ISO/IEC/IEEE 42010, das ein abstraktes konzeptionelles Modell für Architekturbeschreibungen definiert. Wahrend ISO 42010 besagt *"eine Architekturbeschreibung MUSS Stakeholder und deren Anliegen identifizieren"*, legt ADS fest *"Abschnitt 2.1 MUSS eine Stakeholder-Register-Tabelle mit Spalten für Stakeholder, Rolle, zentrale Anliegen und relevante Architekturansichten enthalten."*
+Er basiert auf — ist aber keine Kopie von — ISO/IEC/IEEE 42010, das ein abstraktes konzeptionelles Modell für Architekturbeschreibungen definiert. Während ISO 42010 besagt *"eine Architekturbeschreibung MUSS Stakeholder und deren Anliegen identifizieren"*, legt ADS fest *"Abschnitt 2.1 MUSS eine Stakeholder-Register-Tabelle mit Spalten für Stakeholder, Rolle, zentrale Anliegen und relevante Architekturansichten enthalten."*
 
 ### Das Benennungsmodell
 
 | Begriff | Bedeutung | In diesem Standard |
 |---------|-----------|-------------------|
 | **Architecture Description** | Der formale ISO 42010-Begriff für das Arbeitsergebnis | Der Standard selbst (ADS) orientiert sich an diesem Konzept |
-| **Solution Architecture Document (SAD)** | Die in der Unternehmenspraxis gebrauchliche Bezeichnung für das Dokument. Das Akronym SAD stammt aus dem Rational Unified Process (RUP), wo es für "Software Architecture Document" stand. Dieser Standard verwendet "Solution", um den breiteren Umfang jenseits von Software widerzuspiegeln — einschliesslich Infrastruktur, Daten, Sicherheit und Betrieb. | Das Dokument, das Sie mit diesem Standard erstellen |
+| **Solution Architecture Document (SAD)** | Die in der Unternehmenspraxis gebrauchliche Bezeichnung für das Dokument. Das Akronym SAD stammt aus dem Rational Unified Process (RUP), wo es für "Software Architecture Document" stand. Dieser Standard verwendet "Solution", um den breiteren Umfang jenseits von Software widerzuspiegeln — einschließlich Infrastruktur, Daten, Sicherheit und Betrieb. | Das Dokument, das Sie mit diesem Standard erstellen |
 | **High Level Design (HLD)** | Der konzeptionelle Designinhalt | Abschnitte 3–4 (Architekturansichten + Qualitätsattribute) innerhalb des SAD |
 
 ## Geltungsbereich
 
 Dieser Standard definiert die erforderliche und empfohlene Struktur für Solution Architecture Documents, die:
 
-- **Organisationsunabhängig** sind — von jedem Unternehmen ohne Anderung übernehmbar
+- **Organisationsunabhängig** sind — von jedem Unternehmen ohne Änderung übernehmbar
 - **Plattformneutral** sind — anwendbar auf Cloud-, On-Premises-, Hybrid- und SaaS-Architekturen
 - **Framework-konform** sind — rückverfolgbbar zu ISO/IEC 42010, dem 4+1 View Model und den AWS/Azure Well-Architected Frameworks
-- **Schemagesteuert** sind — unterstutzt durch ein formales JSON Schema zur Validierung und Erzeugung in mehreren Formaten
+- **Schemagesteuert** sind — unterstützt durch ein formales JSON Schema zur Validierung und Erzeugung in mehreren Formaten
 
 ## Aufbau
 
@@ -56,19 +56,19 @@ Dieser Standard definiert die erforderliche und empfohlene Struktur für Solutio
 		Entwicklungslebenszyklus, Betriebsverfahren, Risikomanagement und Compliance-Rückverfolgbarkeit für den gesamten Lösungslebenszyklus.
 	</Card>
 	<Card title="Erweiterbarkeit" icon="puzzle">
-		Ein formales JSON Schema mit Organisationsprofilen und Erweiterungspunkten für benutzerdefinierte Abschnitte, das eine Einführung ohne Verzweigung des Standards ermoglicht.
+		Ein formales JSON Schema mit Organisationsprofilen und Erweiterungspunkten für benutzerdefinierte Abschnitte, das eine Einführung ohne Verzweigung des Standards ermöglicht.
 	</Card>
 </CardGrid>
 
 ## Über ISO/IEC 42010 hinaus
 
-ADS *entspricht* dem konzeptionellen Modell von ISO 42010 und bietet gleichzeitig die konkrete, handlungsorientierte Struktur, die ISO 42010 bewusst den Implementierern überlasst. Es geht weit über ISO 42010 hinaus, indem es Folgendes einbezieht:
+ADS *entspricht* dem konzeptionellen Modell von ISO 42010 und bietet gleichzeitig die konkrete, handlungsorientierte Struktur, die ISO 42010 bewusst den Implementierern überlässt. Es geht weit über ISO 42010 hinaus, indem es Folgendes einbezieht:
 
 - **Qualitätsattribute aus den AWS-, Azure- und GCP Well-Architected Frameworks** — Betriebliche Exzellenz, Zuverlässigkeit, Leistungseffizienz, Kostenoptimierung und Nachhaltigkeit als querschnittliche Bewertungsebenen über alle Architekturansichten
-- **Dokumentationstiefen mit RFC 2119-Anforderungsschlusselwortern** — jeder Abschnitt ist als SHALL (Minimum), SHOULD (Empfohlen) oder MAY (Umfassend) gekennzeichnet, was eine schrittweise Einführung von leichtgewichtigen Designs bis hin zu vollständiger Unternehmensdokumentation ermoglicht
-- **Sicherheit als eigene Architekturansicht** — ISO 42010 schreibt keine spezifischen Blickwinkel vor; ADS erhebt Sicherheit zu einer erstklassigen Ansicht, die IAM, Verschlusselung, Bedrohungsmodellierung und Überwachung abdeckt
+- **Dokumentationstiefen mit RFC 2119-Anforderungsschlüsselwortern** — jeder Abschnitt ist als SHALL (Minimum), SHOULD (Empfohlen) oder MAY (Umfassend) gekennzeichnet, was eine schrittweise Einführung von leichtgewichtigen Designs bis hin zu vollständiger Unternehmensdokumentation ermöglicht
+- **Sicherheit als eigene Architekturansicht** — ISO 42010 schreibt keine spezifischen Blickwinkel vor; ADS erhebt Sicherheit zu einer erstklassigen Ansicht, die IAM, Verschlüsselung, Bedrohungsmodellierung und Überwachung abdeckt
 - **Lebenszyklusmanagement** — CI/CD-Pipelines, Dienstübergang, Release-Management, Betrieb, Wartbarkeit und Ausstiegsplanung
-- **Entscheidungsfindung & Governance mit Compliance-Rückverfolgbarkeit** — Designrisiken, Leitplanken-Ausnahmen, Architecture Decision Records und eine Rückverfolgbarkeitsmatrix, die Designelemente den Standards zuordnet, die sie erfullen
+- **Entscheidungsfindung & Governance mit Compliance-Rückverfolgbarkeit** — Designrisiken, Leitplanken-Ausnahmen, Architecture Decision Records und eine Rückverfolgbarkeitsmatrix, die Designelemente den Standards zuordnet, die sie erfüllen
 - **JSON Schema für Multi-Format-Erzeugung** — ein formales Schema zur Validierung und Erzeugung von Solution Architecture Documents in JSON, YAML, Markdown oder Word
 - **Herunterladbare Vorlagen** — sofort einsatzbereite leere Vorlagen in Markdown-, YAML- und JSON-Formaten
 
@@ -94,16 +94,16 @@ ADS *entspricht* dem konzeptionellen Modell von ISO 42010 und bietet gleichzeiti
 | AWS Well-Architected | Well-Architected Framework | Definitionen und Bewertungskriterien für Qualitätsattribute |
 | Azure Well-Architected | Well-Architected Framework | Definitionen von Qualitätsattributen mit Tradeoff-Dokumentation |
 | GCP Architecture | Well-Architected Framework | Definitionen von Qualitätsattributen mit querschnittlichen Perspektiven |
-| Oracle Cloud | Well-Architected Framework | Definitionen von Qualitätsattributen einschliesslich Distributed Cloud |
-| IBM Cloud | Well-Architected Framework | Definitionen von Qualitätsattributen einschliesslich Hybrid und Portable |
+| Oracle Cloud | Well-Architected Framework | Definitionen von Qualitätsattributen einschließlich Distributed Cloud |
+| IBM Cloud | Well-Architected Framework | Definitionen von Qualitätsattributen einschließlich Hybrid und Portable |
 | TOGAF 10th Edition | The Open Group Architecture Framework | Ausrichtung der Architekturdomanen |
 | RFC 2119 / RFC 8174 | Requirement Level Key Words | SHALL / SHOULD / MAY Terminologie |
 
 ## Begriffe und Definitionen
 
-Die Schlusselworter "SHALL", "SHOULD", "MAY" und "OPTIONAL" in diesem Standard sind wie in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) und [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) beschrieben zu interpretieren:
+Die Schlüsselworter "SHALL", "SHOULD", "MAY" und "OPTIONAL" in diesem Standard sind wie in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) und [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) beschrieben zu interpretieren:
 
-| Dokumentationstiefe | Schlusselwort | Bedeutung |
+| Dokumentationstiefe | Schlüsselwort | Bedeutung |
 |---------------------|---------------|-----------|
 | **Minimum** | SHALL | Erforderlich für alle Solution Architecture Documents |
 | **Empfohlen** | SHOULD | Erforderlich für produktionsreife Designs |

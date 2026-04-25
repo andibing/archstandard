@@ -15,10 +15,10 @@ import sectionMap from '../../../../assets/section-map.svg';
 
 Dieser Standard definiert die erforderliche Struktur und den Inhalt für **Solution Architecture Documents (SADs)**. Die Architekturansichten und Qualitätsattribute innerhalb eines SAD bilden das **High Level Design (HLD)** der Lösung.
 
-Ein Solution Architecture Document, das diesem Standard entspricht, erfullt die folgenden Funktionen:
+Ein Solution Architecture Document, das diesem Standard entspricht, erfüllt die folgenden Funktionen:
 
-1. **Kommunikation** — Bietet ein gemeinsames Verstandnis der Lösungsarchitektur für alle Stakeholder
-2. **Governance** — Ermoglicht dem Architektur-Governance-Prozess, das Design anhand von Qualitätskriterien zu bewerten
+1. **Kommunikation** — Bietet ein gemeinsames Verständnis der Lösungsarchitektur für alle Stakeholder
+2. **Governance** — Ermöglicht dem Architektur-Governance-Prozess, das Design anhand von Qualitätskriterien zu bewerten
 3. **Rückverfolgbarkeit** — Stellt Verbindungen zwischen Designentscheidungen, Geschäftsanforderungen, Qualitätsattributen und geltenden Standards her
 4. **Referenz** — Dient als lebendes Dokument, das die aktuelle Lösungsarchitektur akkurat beschreibt
 5. **Nachweis** — Belegt, dass die Lösung gegenüber branchenweit anerkannten Frameworks gut architekturiert ist
@@ -30,7 +30,7 @@ Dieser Standard gilt für die Dokumentation jeder technologischen Lösungsarchit
 - **Bereitstellungsmodell** — Cloud-nativ, On-Premises, Hybrid, Multi-Cloud oder SaaS
 - **Skalierung** — von Einzelanwendungen bis zu Multi-Anwendungs-Okosystemen
 - **Branche** — der Standard ist organisationsunabhängig und branchenneutral
-- **Lebenszyklusphase** — Neubauten, Migrationen, Modernisierungen oder inkrementelle Anderungen
+- **Lebenszyklusphase** — Neubauten, Migrationen, Modernisierungen oder inkrementelle Änderungen
 
 ## Zielgruppe
 
@@ -61,7 +61,7 @@ Gemeinsam bilden diese Ansichten das **High Level Design (HLD)** der Lösung:
 | **3.2 Integrations- & Datenflussansicht** | Datenflusse, Integrationen, Schnittstellen | Integratoren, Architekten |
 | **3.3 Physische Ansicht** | Bereitstellung, Hosting, Netzwerk, Umgebungen | Infrastruktur, DevOps |
 | **3.4 Datenansicht** | Datenspeicher, Klassifizierung, Datenschutz, Lebenszyklus | Datenarchitekten, Compliance |
-| **3.5 Sicherheitsansicht** | IAM, Verschlusselung, Überwachung, Bedrohungsmodell | Sicherheit, CISO, Compliance |
+| **3.5 Sicherheitsansicht** | IAM, Verschlüsselung, Überwachung, Bedrohungsmodell | Sicherheit, CISO, Compliance |
 | **3.6 Szenarien** | Wichtige Anwendungsfalle, Architecture Decision Records | Alle Stakeholder |
 
 Keine einzelne Ansicht liefert eine vollständige Beschreibung der Architektur. Zusammen bieten die sechs Ansichten ein ganzheitliches Bild, das alle Stakeholder-Anliegen adressiert.
@@ -86,11 +86,11 @@ Unterstutzende Abschnitte behandeln, wie die Lösung entwickelt, betrieben, gest
 
 Das folgende Diagramm zeigt, wie die drei Ebenen zusammenwirken. Architekturansichten beschreiben, *was* die Lösung ist. Qualitätsattribute bewerten, *wie gut* sie funktioniert. Lebenszyklus und Governance behandeln, *wie* sie gebaut, betrieben und gesteuert wird.
 
-<Image src={sectionMap} alt="Diagramm, das die drei Ebenen des ADS-Standards zeigt: Ebene 1 (Architekturansichten: Logisch, Integration, Physisch, Daten, Sicherheit, Szenarien), bewertet durch Ebene 2 (Qualitätsattribute: Betriebliche Exzellenz, Zuverlässigkeit, Leistung, Kosten, Nachhaltigkeit), unterstutzt durch Ebene 3 (Lebenszyklusmanagement, Entscheidungsfindung, Anhänge)" />
+<Image src={sectionMap} alt="Diagramm, das die drei Ebenen des ADS-Standards zeigt: Ebene 1 (Architekturansichten: Logisch, Integration, Physisch, Daten, Sicherheit, Szenarien), bewertet durch Ebene 2 (Qualitätsattribute: Betriebliche Exzellenz, Zuverlässigkeit, Leistung, Kosten, Nachhaltigkeit), unterstützt durch Ebene 3 (Lebenszyklusmanagement, Entscheidungsfindung, Anhänge)" />
 
 ## Dokumentationstiefen
 
-Jedem Abschnitt in diesem Standard ist eine Dokumentationstiefe zugewiesen — <span class="maturity-indicator maturity-minimum">Minimum</span> (SHALL), <span class="maturity-indicator maturity-recommended">Empfohlen</span> (SHOULD) oder <span class="maturity-indicator maturity-comprehensive">Umfassend</span> (MAY) — die festlegt, wann er ausgefüllt werden muss. Dies ermoglicht eine schrittweise Einführung: Beginnen Sie mit Minimum für fruhphasige Designs und erweitern Sie auf Umfassend für kritische und regulierte Systeme.
+Jedem Abschnitt in diesem Standard ist eine Dokumentationstiefe zugewiesen — <span class="maturity-indicator maturity-minimum">Minimum</span> (SHALL), <span class="maturity-indicator maturity-recommended">Empfohlen</span> (SHOULD) oder <span class="maturity-indicator maturity-comprehensive">Umfassend</span> (MAY) — die festlegt, wann er ausgefüllt werden muss. Dies ermöglicht eine schrittweise Einführung: Beginnen Sie mit Minimum für frühphasige Designs und erweitern Sie auf Umfassend für kritische und regulierte Systeme.
 
 Siehe [Konformität und Anwendung](/v1/de/standard/how-to-use/) für die vollständige Tiefentabelle, Terminologiedefinitionen und die Zuordnung zu Governance-Gates.
 
@@ -104,4 +104,4 @@ Ein Solution Architecture Document **entspricht** diesem Standard, wenn:
 4. Qualitätsattribute als querschnittliche Bewertungsebenen über die Architekturansichten bewertet werden
 5. Das Dokument gegen das JSON Schema (ADS Schema v1.0.0) validiert wird, falls maschinenlesbare Ausgabe erforderlich ist
 
-Ein Dokument, das zusatzlich alle als <span class="maturity-indicator maturity-recommended">Empfohlen</span> gekennzeichneten Abschnitte vervollständigt, erreicht **vollständige Konformität**.
+Ein Dokument, das zusätzlich alle als <span class="maturity-indicator maturity-recommended">Empfohlen</span> gekennzeichneten Abschnitte vervollständigt, erreicht **vollständige Konformität**.

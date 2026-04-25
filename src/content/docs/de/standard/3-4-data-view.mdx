@@ -9,19 +9,19 @@ description: Datenarchitektur, Speicherung, Klassifizierung, Lebenszyklus, Daten
 
 ## Zweck
 
-Die Datenansicht beschreibt, wie Daten gespeichert, klassifiziert, geschutzt und über ihren gesamten Lebenszyklus verwaltet werden. Sie adressiert die Anliegen von Datenarchitekten, DBAs, Compliance-Beauftragten und Datenschutzteams.
+Die Datenansicht beschreibt, wie Daten gespeichert, klassifiziert, geschützt und über ihren gesamten Lebenszyklus verwaltet werden. Sie adressiert die Anliegen von Datenarchitekten, DBAs, Compliance-Beauftragten und Datenschützteams.
 
 ## 3.4.1 Datenarchitektur & Speicherung
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 
-### Datenfussabdruck
+### Datenfußabdruck
 
-Dokumentieren Sie alle von der Lösung genutzten Datenspeicher, einschliesslich Geschäftsdaten, Protokolle, Caches und temporare Speicher:
+Dokumentieren Sie alle von der Lösung genutzten Datenspeicher, einschließlich Geschäftsdaten, Protokolle, Caches und temporäre Speicher:
 
-| Datenname | Speichertechnologie | Autoritative Quelle? | Aufbewahrungsfrist | Datengrosse | Klassifizierung | Personenbezogene Daten? | Verschlusselungsebene | Schlusselverwaltung |
+| Datenname | Speichertechnologie | Autoritative Quelle? | Aufbewahrungsfrist | Datengröße | Klassifizierung | Personenbezogene Daten? | Verschlüsselungsebene | Schlüsselverwaltung |
 |-----------|--------------------|-----------------------|--------------------|-----------|-----------------|-----------------------|----------------------|---------------------|
-| *[Name]* | *[z.B. PostgreSQL, S3, Redis]* | Ja / Nein | *[Zeitraum]* | *[Grosse]* | Public / Internal / Restricted / Highly Restricted | Ja / Nein | None / Storage / Container / Application | *[Methode]* |
+| *[Name]* | *[z.B. PostgreSQL, S3, Redis]* | Ja / Nein | *[Zeitraum]* | *[Größe]* | Public / Internal / Restricted / Highly Restricted | Ja / Nein | None / Storage / Container / Application | *[Methode]* |
 
 <div class="guidance-box">
 <h4>Leitfaden</h4>
@@ -32,20 +32,20 @@ Dokumentieren Sie für jeden Datenspeicher:
 - **Aufbewahrungsfrist** — Wie lange werden Daten vor der Loschung aufbewahrt?
 - **Sicherheitsklassifizierung** — Hochste Klassifizierung der Daten im Speicher
 - **Personenbezogene Daten** — Enthalt er PII oder besonders schutzwurdige personenbezogene Daten (SPI)?
-- **Verschlusselung** — Angewandte Verschlusselungsebene (Storage, Container, Application)
-- **Schlusselverwaltung** — Wie Verschlusselungsschlussel verwaltet werden (anbieterverwaltert, HSM, kundenspezifisch)
+- **Verschlüsselung** — Angewandte Verschlüsselungsebene (Storage, Container, Application)
+- **Schlüsselverwaltung** — Wie Verschlüsselungsschlüssel verwaltet werden (anbieterverwaltert, HSM, kundenspezifisch)
 </div>
 
 ### Speichersysteme
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
-Falls spezifische Speichersysteme bereitgestellt werden mussen:
+Falls spezifische Speichersysteme bereitgestellt werden müssen:
 
 | Attribut | Detail |
 |----------|--------|
 | **Speicherprodukt** | *[Anbieter / Produkt]* |
-| **Speichergrosse** | *[TB]* |
+| **Speichergroße** | *[TB]* |
 | **Speichertyp** | SAN / NAS / Object / Block / File |
 | **Speicherprotokoll** | NFS / SMB / iSCSI / Sonstige |
 | **Replikation** | Synchron / Asynchron / Snapshot / Keine |
@@ -61,8 +61,8 @@ Fassen Sie das Datenklassifizierungsprofil der Lösung zusammen:
 |-----------------------|-----------|--------------------------|
 | **Public** | *[...]* | Offener Zugriff |
 | **Internal / Corporate** | *[...]* | Interne Zugriffskontrollen |
-| **Restricted** | *[...]* | Verschlusselt, zugriffskontrolliert, auditiert |
-| **Highly Restricted** | *[...]* | Verschlusselt, strenger Zugriff, erweiterte Überwachung |
+| **Restricted** | *[...]* | Verschlüsselt, zugriffskontrolliert, auditiert |
+| **Highly Restricted** | *[...]* | Verschlüsselt, strenger Zugriff, erweiterte Überwachung |
 
 ## 3.4.3 Datenlebenszyklus
 
@@ -74,8 +74,8 @@ Beschreiben Sie, wie Daten durch ihren Lebenszyklus wandern:
 |-------|-------------|-----------|
 | **Erstellung / Aufnahme** | Wie Daten in die Lösung gelangen | *[Validierung, Klassifizierung]* |
 | **Verarbeitung** | Wie Daten transformiert oder verwendet werden | *[Zugriffskontrollen, Audit]* |
-| **Speicherung** | Wie Daten im Ruhezustand gespeichert werden | *[Verschlusselung, Backup]* |
-| **Weitergabe / Transfer** | Wie Daten geteilt oder verschoben werden | *[Verschlusselung bei Übertragung, Autorisierung]* |
+| **Speicherung** | Wie Daten im Ruhezustand gespeichert werden | *[Verschlüsselung, Backup]* |
+| **Weitergabe / Transfer** | Wie Daten geteilt oder verschoben werden | *[Verschlüsselung bei Übertragung, Autorisierung]* |
 | **Archivierung** | Wie Daten archiviert werden | *[Archivspeicher, Wiederherstellungs-SLA]* |
 | **Loschung / Bereinigung** | Wie Daten sicher entfernt werden | *[Sichere Loschungsmethode, Zeitplan]* |
 
@@ -99,13 +99,13 @@ Beschreiben Sie, wie Daten durch ihren Lebenszyklus wandern:
 | Sensible Produktionsdaten werden verwendet (Begründung unten) | [ ] |
 | Produktionsdaten werden nicht für Tests verwendet | [ ] |
 
-*[Zusatzliche Details zu Datenmaskierung, Zugriffskontrollen, Dauer und Vernichtung]*
+*[Zusätzliche Details zu Datenmaskierung, Zugriffskontrollen, Dauer und Vernichtung]*
 
-### Datenintegritat
+### Datenintegrität
 
-Enthalt die Lösung spezifische Datenintegritatskontrollen über Standard-Hardware-, Protokoll- und Zugriffskontrollen hinaus?
+Enthalt die Lösung spezifische Datenintegritätskontrollen über Standard-Hardware-, Protokoll- und Zugriffskontrollen hinaus?
 
-- [ ] Ja — *[beschreiben Sie Integritatskontrollen]*
+- [ ] Ja — *[beschreiben Sie Integritätskontrollen]*
 - [ ] Nein
 
 ### Daten auf Endgeraten
@@ -115,7 +115,7 @@ Erlaubt die Lösung das Herunterladen oder Speichern von Daten auf Endgeraten?
 - [ ] Ja — *[beschreiben Sie Datenschutzmaßnahmen]*
 - [ ] Nein
 
-## 3.4.5 Datentransfers & Datensouveranitat
+## 3.4.5 Datentransfers & Datensouveränität
 
 <span class="maturity-indicator maturity-recommended">Empfohlen</span>
 
@@ -123,13 +123,13 @@ Erlaubt die Lösung das Herunterladen oder Speichern von Daten auf Endgeraten?
 
 | Ziel | Datentyp | Klassifizierung | Transfermethode | Schutz |
 |------|---------|-----------------|-----------------|--------|
-| *[Dritter]* | *[Datenbeschreibung]* | *[Klassifizierung]* | *[Methode]* | *[Verschlusselung, Vertrage]* |
+| *[Dritter]* | *[Datenbeschreibung]* | *[Klassifizierung]* | *[Methode]* | *[Verschlüsselung, Vertrage]* |
 
-### Datensouveranitat
+### Datensouveränität
 
-Gibt es Anforderungen an Datensouveranitat oder Datenresidenz?
+Gibt es Anforderungen an Datensouveränität oder Datenresidenz?
 
-- [ ] Ja — *[beschreiben Sie Anforderungen und wie sie erfullt werden]*
+- [ ] Ja — *[beschreiben Sie Anforderungen und wie sie erfüllt werden]*
 - [ ] Nein
 
 <div class="guidance-box">
@@ -138,8 +138,8 @@ Gibt es Anforderungen an Datensouveranitat oder Datenresidenz?
 | Bewertung | Was dies bedeutet |
 |:---------:|-------------------|
 | **1** | Datenspeicher aufgelistet, aber Klassifizierung und Aufbewahrung nicht definiert |
-| **3** | Alle Datenspeicher klassifiziert, Aufbewahrung und Verschlusselung spezifiziert, PII/SPI identifiziert |
-| **5** | Alles oben Genannte plus Datensouveranitat adressiert, Datentransfers mit Verschlusselung dokumentiert, Datenintegritatskontrollen nachgewiesen |
+| **3** | Alle Datenspeicher klassifiziert, Aufbewahrung und Verschlüsselung spezifiziert, PII/SPI identifiziert |
+| **5** | Alles oben Genannte plus Datensouveränität adressiert, Datentransfers mit Verschlüsselung dokumentiert, Datenintegritätskontrollen nachgewiesen |
 </div>
 
 <div class="quality-attribute-ref">

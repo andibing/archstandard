@@ -9,7 +9,7 @@ description: Sicherheitsüberblick, IAM, Netzwerksicherheit, Datenschutz und Üb
 
 ## Zweck
 
-Die Sicherheitsansicht beschreibt, wie die Lösung vor Bedrohungen schutzt, Identitat und Zugriff verwaltet und Daten sichert. Sie adressiert die Anliegen von Security Architects, dem CISO-Buro, Compliance-Teams und Prufern.
+Die Sicherheitsansicht beschreibt, wie die Lösung vor Bedrohungen schützt, Identität und Zugriff verwaltet und Daten sichert. Sie adressiert die Anliegen von Security Architects, dem CISO-Buro, Compliance-Teams und Prüfern.
 
 ## 3.5.1 Sicherheitsüberblick & Bedrohungsmodell
 
@@ -19,18 +19,18 @@ Die Sicherheitsansicht beschreibt, wie die Lösung vor Bedrohungen schutzt, Iden
 
 | Frage | Antwort |
 |-------|---------|
-| Unterstutzt die Lösung regulierte Aktivitaten? | Ja / Nein — *[Details]* |
+| Unterstutzt die Lösung regulierte Aktivitäten? | Ja / Nein — *[Details]* |
 | Ist die Lösung SaaS oder drittgehostet? | Ja / Nein — *[Details]* |
-| Wurde eine Drittanbieter-Risikobewertung durchgefuhrt? | Ja / Nein — *[Referenz]* |
+| Würde eine Drittanbieter-Risikobewertung durchgeführt? | Ja / Nein — *[Referenz]* |
 
 ### Bewertung der Geschäftsauswirkung
 
 | Auswirkungskategorie | Geschäftsauswirkung bei Kompromittierung |
 |---------------------|----------------------------------------|
 | **Vertraulichkeit** | *[Auswirkung eines unbefugten Datenzugriffs]* |
-| **Integritat** | *[Auswirkung einer unbefugten Datenanderung]* |
+| **Integrität** | *[Auswirkung einer unbefugten Datenänderung]* |
 | **Verfügbarkeit** | *[Auswirkung einer Dienstverfugungsstorung]* |
-| **Nichtabstreitbarkeit** | *[Auswirkung, wenn Aktionen bestritten werden konnen]* |
+| **Nichtabstreitbarkeit** | *[Auswirkung, wenn Aktionen bestritten werden können]* |
 
 ### Bedrohungsmodell
 
@@ -73,10 +73,10 @@ Dokumentieren Sie die wesentlichen Bedrohungen und wie das Design sie adressiert
 | Was ist der eindeutige Bezeichner für Benutzerkonten? | *[...]* |
 | Wie sieht der Authentifizierungsfluss aus? | *[beschreiben oder diagrammatisch darstellen]* |
 | Wie werden Anmeldeinformationen an Benutzer ausgegeben? | *[...]* |
-| Welche Komplexitatsregeln gelten für Anmeldeinformationen? | *[...]* |
+| Welche Komplexitätsregeln gelten für Anmeldeinformationen? | *[...]* |
 | Welche Rotationsregeln gelten für Anmeldeinformationen? | *[...]* |
 | Welche Kontosperrungsregeln gelten? | *[...]* |
-| Wie konnen Benutzer vergessene Anmeldeinformationen zurucksetzen? | *[...]* |
+| Wie können Benutzer vergessene Anmeldeinformationen zurücksetzen? | *[...]* |
 
 ### Sitzungsverwaltung
 
@@ -85,7 +85,7 @@ Dokumentieren Sie die wesentlichen Bedrohungen und wie das Design sie adressiert
 | Kontrolle | Antwort |
 |-----------|---------|
 | Wie werden Sitzungen nach der Authentifizierung aufgebaut? | *[Token, Cookies usw.]* |
-| Wie werden Sitzungs-Token gegen Missbrauch geschutzt? | *[Signierung, Verschlusselung usw.]* |
+| Wie werden Sitzungs-Token gegen Missbrauch geschützt? | *[Signierung, Verschlüsselung usw.]* |
 | Welche Sitzungs-Timeout- und Nebenlaufigkeitslimits gelten? | *[...]* |
 
 ### Autorisierungsmodell
@@ -129,7 +129,7 @@ Beschreiben Sie Netzwerksegmentierung, Firewalls und Perimeterkontrollen. Querve
 | Netzwerksegmentierung | *[Firewalls, Security Groups, NSGs]* |
 | Eingangsfilterung | *[WAF, DDoS, Rate Limiting]* |
 | Ausgangsfilterung | *[Proxy, Gateway, Positivlisten]* |
-| Verschlusselung bei Übertragung | *[TLS-Versionen, Zertifikatsverwaltung]* |
+| Verschlüsselung bei Übertragung | *[TLS-Versionen, Zertifikatsverwaltung]* |
 
 ## 3.5.4 Datenschutz
 
@@ -137,16 +137,16 @@ Beschreiben Sie Netzwerksegmentierung, Firewalls und Perimeterkontrollen. Querve
 
 Querverweis auf Abschnitt 3.4 (Datenansicht) für die vollständige Datenarchitektur. Dieser Abschnitt konzentriert sich auf die angewandten Sicherheitskontrollen.
 
-### Verschlusselung im Ruhezustand
+### Verschlüsselung im Ruhezustand
 
 | Attribut | Detail |
 |----------|--------|
-| Verschlusselungsbereitstellungsebene | Storage / Logical Container / Application |
-| Schlusseltyp | Symmetrisch / Asymmetrisch |
-| Algorithmus / Chiffre / Schlussellange | *[...]* |
-| Schlusselerzeugungsmethode | *[HSM / Software / Sonstige]* |
-| Schlusselspeicherung | *[HSM / KMS / Sonstige]* |
-| Schlusselrotationsplan | *[...]* |
+| Verschlüsselungsbereitstellungsebene | Storage / Logical Container / Application |
+| Schlüsseltyp | Symmetrisch / Asymmetrisch |
+| Algorithmus / Chiffre / Schlüssellange | *[...]* |
+| Schlüsselerzeugungsmethode | *[HSM / Software / Sonstige]* |
+| Schlüsselspeicherung | *[HSM / KMS / Sonstige]* |
+| Schlüsselrotationsplan | *[...]* |
 
 ### Geheimnis- & Passwortschutz
 
@@ -176,7 +176,7 @@ Querverweis auf Abschnitt 3.4 (Datenansicht) für die vollständige Datenarchite
 | Bewertung | Was dies bedeutet |
 |:---------:|-------------------|
 | **1** | Authentifizierungsmethode identifiziert, aber Kontrollen nicht detailliert |
-| **3** | Geschäftsauswirkung bewertet, Authentifizierung und Autorisierung dokumentiert, Verschlusselung im Ruhezustand und bei Übertragung spezifiziert |
+| **3** | Geschäftsauswirkung bewertet, Authentifizierung und Autorisierung dokumentiert, Verschlüsselung im Ruhezustand und bei Übertragung spezifiziert |
 | **5** | Alles oben Genannte plus Bedrohungsmodell vollständig, Geheimnisverwaltung dokumentiert, Sicherheitsüberwachung mit SIEM integriert, privilegierter Zugriff mit JIT kontrolliert |
 </div>
 

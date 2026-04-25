@@ -13,7 +13,7 @@ import { Aside } from '@astrojs/starlight/components';
 Die Integrations- & Datenflussansicht beschreibt, wie Daten durch die Lösung fliessen, wie Komponenten kommunizieren und wie die Lösung mit internen und externen Systemen integriert ist. Sie adressiert die Anliegen von Integratoren, Betriebsteams und Architekten.
 
 <Aside type="note" title="Benennung">
-Diese Ansicht ist adaptiert von Kruchtens **Process View**, die sich ursprunglich auf Nebenlaufigkeit und Laufzeit-Prozesszerlegung konzentrierte. In der modernen Lösungsarchitektur sind die primaren Anliegen auf dieser Ebene Datenflusse, Integrationsmuster und Schnittstellenvertrage. Der Name wurde aktualisiert, um diesen zeitgemäßen Gebrauch widerzuspiegeln.
+Diese Ansicht ist adaptiert von Kruchtens **Process View**, die sich ursprunglich auf Nebenlaufigkeit und Laufzeit-Prozesszerlegung konzentrierte. In der modernen Lösungsarchitektur sind die primaren Anliegen auf dieser Ebene Datenflusse, Integrationsmuster und Schnittstellenvertrage. Der Name würde aktualisiert, um diesen zeitgemäßen Gebrauch widerzuspiegeln.
 </Aside>
 
 ## 3.2.1 Datenflussdiagramme
@@ -41,7 +41,7 @@ Erwagen Sie die Darstellung von:
 
 Dokumentieren Sie die Konnektivitat zwischen internen Komponenten der Lösung:
 
-| Quellkomponente | Zielkomponente | Protokoll / Verschlusselung | Authentifizierungsmethode | Zweck |
+| Quellkomponente | Zielkomponente | Protokoll / Verschlüsselung | Authentifizierungsmethode | Zweck |
 |----------------|----------------|----------------------------|--------------------------|-------|
 | *[Komponente]* | *[Komponente]* | *[z.B. HTTPS/TLS 1.3]* | *[z.B. mTLS, API Key]* | *[Zweck]* |
 
@@ -50,7 +50,7 @@ Dokumentieren Sie die Konnektivitat zwischen internen Komponenten der Lösung:
 
 Listen Sie alle Verbindungen zwischen den internen Komponenten der Lösung auf. Dokumentieren Sie für jede Verbindung:
 - Verbindungsinitiator (Quelle) und Empfanger (Ziel)
-- Verwendetes Protokoll und Verschlusselungsstandard
+- Verwendetes Protokoll und Verschlüsselungsstandard
 - Authentifizierungs- und Autorisierungsmethode
 - Ob die Verbindung synchron oder asynchron ist
 </div>
@@ -61,7 +61,7 @@ Listen Sie alle Verbindungen zwischen den internen Komponenten der Lösung auf. 
 
 Dokumentieren Sie, wie die Lösung mit externen Systemen, Drittanbieterdiensten und anderen internen Anwendungen interagiert:
 
-| Quellanwendung | Zielanwendung | Protokoll / Verschlusselung | Authentifizierung | Sicherheits-Proxy | Zweck |
+| Quellanwendung | Zielanwendung | Protokoll / Verschlüsselung | Authentifizierung | Sicherheits-Proxy | Zweck |
 |---------------|---------------|----------------------------|-------------------|-------------------|-------|
 | *[App-Name / ID]* | *[App-Name / ID]* | *[Protokoll]* | *[Methode]* | *[falls zutreffend]* | *[Zweck]* |
 
