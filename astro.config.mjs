@@ -80,47 +80,33 @@ export default defineConfig({
 				},
 			},
 			sidebar: [
+				// Getting Started — only the truly getting-started items
 				{
 					label: 'Getting Started',
 					translations: { fr: 'Pour commencer', de: 'Erste Schritte' },
 					items: [
 						{ label: 'Quickstart', slug: 'standard/quickstart', translations: { fr: 'Démarrage rapide', de: 'Schnellstart' } },
 						{ label: 'Depth Cheat Sheet', slug: 'standard/cheat-sheet', translations: { fr: 'Aide-mémoire', de: 'Spickzettel' } },
-						{ label: 'Overview', slug: 'standard/overview', translations: { fr: 'Aperçu', de: 'Übersicht' } },
-						{ label: 'Conformance and Usage', slug: 'standard/how-to-use', translations: { fr: 'Conformité et utilisation', de: 'Konformität und Verwendung' } },
 					],
 				},
+				// About ADS — gains Overview and Conformance (both reference reading)
 				{
 					label: 'About ADS',
 					translations: { fr: 'À propos de ADS', de: 'Über ADS' },
 					collapsed: true,
 					items: [
+						{ label: 'Overview', slug: 'standard/overview', translations: { fr: 'Aperçu', de: 'Übersicht' } },
 						{ label: 'Why ADS?', slug: 'standard/why-ads', translations: { fr: 'Pourquoi ADS ?', de: 'Warum ADS?' } },
+						{ label: 'Conformance and Usage', slug: 'standard/how-to-use', translations: { fr: 'Conformité et utilisation', de: 'Konformität und Verwendung' } },
 						{ label: 'Framework Alignment', slug: 'standard/framework-alignment', translations: { fr: 'Alignement des cadres', de: 'Framework-Zuordnung' } },
 						{ label: 'Design Principles', slug: 'standard/design-principles', translations: { fr: 'Principes de conception', de: 'Designprinzipien' } },
 					],
 				},
-				{
-					label: '0. Document Control',
-					translations: { fr: '0. Contrôle du document', de: '0. Dokumentenkontrolle' },
-					items: [
-						{ label: 'Document Control', slug: 'standard/0-document-control', translations: { fr: 'Contrôle du document', de: 'Dokumentenkontrolle' } },
-					],
-				},
-				{
-					label: '1. Executive Summary',
-					translations: { fr: '1. Résumé exécutif', de: '1. Zusammenfassung' },
-					items: [
-						{ label: 'Executive Summary', slug: 'standard/1-executive-summary', translations: { fr: 'Résumé exécutif', de: 'Zusammenfassung' } },
-					],
-				},
-				{
-					label: '2. Stakeholders & Concerns',
-					translations: { fr: '2. Parties prenantes', de: '2. Stakeholder und Anforderungen' },
-					items: [
-						{ label: 'Stakeholders & Concerns', slug: 'standard/2-stakeholders', translations: { fr: 'Parties prenantes', de: 'Stakeholder und Anforderungen' } },
-					],
-				},
+				// Standard sections — single-child groups flattened to direct links;
+				// only Section 3 and Section 4 keep group treatment because they have multiple sub-pages.
+				{ label: '0. Document Control', slug: 'standard/0-document-control', translations: { fr: '0. Contrôle du document', de: '0. Dokumentenkontrolle' } },
+				{ label: '1. Executive Summary', slug: 'standard/1-executive-summary', translations: { fr: '1. Résumé exécutif', de: '1. Zusammenfassung' } },
+				{ label: '2. Stakeholders & Concerns', slug: 'standard/2-stakeholders', translations: { fr: '2. Parties prenantes', de: '2. Stakeholder und Anforderungen' } },
 				{
 					label: '3. Architectural Views',
 					translations: { fr: '3. Vues architecturales', de: '3. Architekturansichten' },
@@ -146,27 +132,10 @@ export default defineConfig({
 						{ label: '4.5 Sustainability', slug: 'standard/4-5-sustainability', translations: { fr: '4.5 Durabilité', de: '4.5 Nachhaltigkeit' } },
 					],
 				},
-				{
-					label: '5. Lifecycle Management',
-					translations: { fr: '5. Gestion du cycle de vie', de: '5. Lebenszyklusmanagement' },
-					items: [
-						{ label: 'Lifecycle Management', slug: 'standard/5-lifecycle', translations: { fr: 'Gestion du cycle de vie', de: 'Lebenszyklusmanagement' } },
-					],
-				},
-				{
-					label: '6. Decision Making & Governance',
-					translations: { fr: '6. Prise de décision et gouvernance', de: '6. Entscheidungsfindung und Governance' },
-					items: [
-						{ label: 'Decision Making & Governance', slug: 'standard/6-decision-making', translations: { fr: 'Prise de décision et gouvernance', de: 'Entscheidungsfindung und Governance' } },
-					],
-				},
-				{
-					label: '7. Appendices',
-					translations: { fr: '7. Annexes', de: '7. Anhänge' },
-					items: [
-						{ label: 'Appendices', slug: 'standard/7-appendices', translations: { fr: 'Annexes', de: 'Anhänge' } },
-					],
-				},
+				{ label: '5. Lifecycle Management', slug: 'standard/5-lifecycle', translations: { fr: '5. Gestion du cycle de vie', de: '5. Lebenszyklusmanagement' } },
+				{ label: '6. Decision Making & Governance', slug: 'standard/6-decision-making', translations: { fr: '6. Prise de décision et gouvernance', de: '6. Entscheidungsfindung und Governance' } },
+				{ label: '7. Appendices', slug: 'standard/7-appendices', translations: { fr: '7. Annexes', de: '7. Anhänge' } },
+				// Examples — adoption-critical, kept here for now
 				{
 					label: 'Examples',
 					translations: { fr: 'Exemples', de: 'Beispiele' },
@@ -181,6 +150,7 @@ export default defineConfig({
 						{ label: 'archstandard.org', slug: 'examples/archstandard-org' },
 					],
 				},
+				// Guidance — Cheat Cards and Pitch promoted to Resources for shareability
 				{
 					label: 'Guidance',
 					translations: { fr: 'Guide', de: 'Anleitung' },
@@ -193,10 +163,9 @@ export default defineConfig({
 						{ label: 'Starter Kits', slug: 'guidance/starter-kits' },
 						{ label: 'Review Checklist', slug: 'guidance/review-checklist' },
 						{ label: 'Industry Mappings', slug: 'guidance/industry-mappings' },
-						{ label: 'Cheat Cards', slug: 'guidance/cheat-cards' },
-						{ label: 'The 2-Minute Pitch', slug: 'guidance/pitch' },
 					],
 				},
+				// Resources — gains Cheat Cards and 2-Minute Pitch (both designed to be shared/printed)
 				{
 					label: 'Resources',
 					translations: { fr: 'Ressources', de: 'Ressourcen' },
@@ -204,6 +173,8 @@ export default defineConfig({
 						{ label: 'Templates', slug: 'standard/templates', translations: { fr: 'Modèles', de: 'Vorlagen' } },
 						{ label: 'Downloads', slug: 'standard/downloads', translations: { fr: 'Téléchargements', de: 'Downloads' } },
 						{ label: 'AI Prompts', slug: 'standard/prompts' },
+						{ label: 'Cheat Cards', slug: 'guidance/cheat-cards' },
+						{ label: '2-Minute Pitch', slug: 'guidance/pitch' },
 						{ label: 'FAQ', slug: 'standard/faq' },
 						{ label: 'JSON Schema', slug: 'standard/schema', translations: { fr: 'Schéma JSON', de: 'JSON-Schema' } },
 						{ label: 'Version History', slug: 'standard/version-history', translations: { fr: 'Historique des versions', de: 'Versionsgeschichte' } },
