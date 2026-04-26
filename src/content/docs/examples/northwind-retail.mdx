@@ -542,6 +542,16 @@ Justification: NorthWind Online is the primary digital sales channel, contributi
 
 Non-production environments scale down outside business hours.
 
+#### 3.3.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Hosting region chosen for low carbon intensity | eu-west-2 (London) — chosen primarily for UK customer proximity and data residency. AWS published carbon intensity for eu-west-2 is moderate; AWS commitment to 100% renewable matching by 2025 applies. DR region eu-west-1 (Ireland) operates at lower carbon intensity than the AWS European average. |
+| Non-production environments auto-shutdown out of hours | Yes — dev and staging EKS clusters scale to 1-2 system nodes overnight (19:00-07:00 weekdays) and weekends; non-prod Aurora paused via Lambda cron. ~£14k/year saving on non-prod compute. |
+| Compute family chosen for performance-per-watt | Yes — Graviton3 (c7g/m7g) throughout; AWS published data shows ~60% better performance-per-watt vs equivalent x86. CloudFront and S3 reduce origin compute. |
+| Auto-scaling configured to release capacity when idle | Yes — Karpenter consolidates underutilised nodes; HPA on CPU + custom queue-depth metrics; nodes scaled down within 5 minutes of becoming idle. Black Friday peak fleet (~24 nodes) scales back to 8 within 2 hours of peak passing. |
+| DR strategy proportionate | Pilot-light (Aurora Global Database secondary + minimal EKS) chosen over warm standby. RTO 4 hours, RPO 1 minute. Hot active-active was rejected: unnecessary for the business RTO and would have ~50% additional always-on compute and replication carbon cost. |
+
 ---
 
 ### 3.4 Data View
@@ -634,6 +644,17 @@ Production customer data is tokenised into a masked dataset via a scheduled AWS 
 ##### Data Sovereignty
 
 - Yes -- customer PII and order data must remain in the UK (eu-west-2 London). The DR region (eu-west-1 Ireland) contains only operational telemetry. Aurora Global Database is configured to replicate non-PII schemas only; customer PII tables are replicated via a filtered logical replication stream terminated at a UK-only subsystem. Segment is configured to use its EU data plane; Stripe operates under UK and EU safeguards under standard contractual clauses.
+
+#### 3.4.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Retention periods minimised | Customer order data 7 years (HMRC); browsing/clickstream 25 months (legitimate interest basis); inactive customer accounts archived after 3 years inactivity (PII deleted at 5 years); session data ≤ 24 hours. Lifecycle policies enforce automated expiry. |
+| Older data tiered to cold/archive storage | Yes — order archives transition S3 Standard → Intelligent-Tiering → Glacier IR (90 days) → Glacier Deep Archive (1 year). Aurora cold tables exported to S3 quarterly. ~75% of historical data sits in archive tiers. |
+| Unused or duplicate replicas | Single Aurora primary + 1 DR replica; no read-replicas (SearchKit + ElastiCache absorb read load). Quarterly review of S3 buckets via AWS Trusted Advisor. |
+| Compression applied | Brotli on HTTPS (~70% reduction on JSON catalogue payloads); WebP/AVIF for product images (CloudFront origin transformation); Parquet+Snappy for BigQuery exports. |
+| Cross-region replication justified | Aurora Global Database secondary required by DR RPO (1 min). Customer PII tables explicitly excluded from cross-region replication (sovereignty + reduced carbon cost). |
+| Large data transfers off-peak | Nightly Snowflake export 02:00-04:00 UTC; weekly partner reconciliations Sunday 03:00 UTC; both align with low-carbon-intensity periods on the UK grid. |
 
 ---
 
@@ -1154,6 +1175,16 @@ The application is developed internally by the Digital Commerce team.
 | Support hours | 24x7 (SRE on-call); enhanced coverage November-January (double-up rota) |
 | SLAs | External (customer-facing, published): 99.95% monthly availability excluding freeze windows. Internal: P1 response < 15 min, P2 < 30 min, P3 < 4 hours |
 | Escalation paths | L1 -> L2 (15 min) -> L3 (30 min) -> L4 (1 hour). Security incidents: CISO notified immediately. |
+
+#### Sustainability in Operation
+
+| Question | Response |
+|----------|----------|
+| Non-prod auto-shutdown schedule | EKS dev/staging scale to system-only 19:00-07:00 weekdays + weekends; Aurora non-prod paused via Lambda cron; AWS Config rule alerts FinOps on non-prod resources running > 24h without exception. |
+| Right-sizing review cadence | Quarterly via AWS Compute Optimizer + Datadog. Last review (Q1 2026) downgraded 24 over-provisioned pods, recovering ~£3,200/month. |
+| Unused / orphaned resource reclamation | Weekly Lambda tags resources idle > 14 days; FinOps reviews and confirms before deletion. Scope: snapshots, EBS volumes, ELB targets, Lambda versions > 5 generations old. |
+| Carbon footprint reported alongside cost | Yes — monthly FinOps + Sustainability review using AWS Customer Carbon Footprint Tool; tracked against a 2026 baseline. Sustainability KPI not yet formalised (gap noted in 4.5 scoring). |
+| Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Terraform destroy + S3 emptying + KMS schedule deletion; CMDB Retired status only after Cost Explorer confirms zero spend for 30 days. |
 
 ### 5.6 Resourcing & Skills
 

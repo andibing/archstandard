@@ -438,6 +438,15 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Azure Communication Services | Microsoft Azure | Moderate | Standard SMS/email APIs; portable to GOV.UK Notify or Twilio | Provider swap evaluated and tested as a fallback pattern (see 4.2.4) |
 | Azure Data Lake Storage Gen2 | Microsoft Azure | Low | Standard HDFS-compatible object storage | Portable to any S3/ADLS-compatible store |
 
+#### 3.1.7 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Caching to avoid recomputation | Yes — Azure Front Door + CDN cache static assets at the edge (~92% cache hit rate); Azure Cache for Redis (Premium) for session state, API response caching for the patient portal (TTL 60s for non-PII reference data). Spine demographic look-ups cached for the duration of a patient session. |
+| Batch processes consolidated rather than continuously polling | Yes — appointment reminder generation runs as nightly batch (00:30 UTC) rather than per-event; PDS demographic refresh runs weekly per cohort, not on every login; clinical-letter ingestion via webhook from EPR rather than polling. |
+| Async / event-driven patterns to flatten peak load | Yes — Service Bus + Azure Functions for SMS/email dispatch, EPR sync, audit log shipping. Consumer functions auto-scale on queue depth; capacity returns to zero at idle. |
+| Heavy framework choices weighed against lighter alternatives | Considered — .NET 8 / ASP.NET Core retained for the patient portal API (existing Trust skill, AOT compilation reduces start time and memory). Azure Functions Isolated Worker selected over in-process; chosen for clearer dependency isolation and a smaller memory footprint per invocation. |
+
 ---
 
 ### 3.2 Integration & Data Flow View
@@ -676,6 +685,16 @@ Trust service desk staff use Intune-managed Windows laptops for administrative f
 
 Not applicable -- no IoT devices are part of this solution. Trust Internet-of-Things programmes (e.g., remote vital signs monitoring) are separate initiatives.
 
+#### 3.3.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Hosting region chosen for low carbon intensity | Azure UK South (London) primary and UK West (Cardiff) DR — chosen for data residency and NHS DSPT requirements. Microsoft has committed to 100% renewable energy matching across UK regions by 2025. UK West's published grid mix is on average cleaner than UK South. |
+| Non-production environments auto-shutdown | Yes — non-prod App Service plans scaled-in 19:00-07:00 weekdays + weekends via Azure Automation; non-prod Azure SQL auto-paused after 1 hour idle. Estimated saving £800/month (referenced in 4.5). |
+| Compute family chosen for performance-per-watt | Yes — Premium v3 (Pv3) App Service plan SKUs throughout; Microsoft published data shows ~25% better performance-per-watt than Pv2 with faster warm-up. ADLS Gen2 uses latest-generation Microsoft hardware. |
+| Auto-scaling configured to release capacity when idle | Yes — App Service Plan auto-scale: scale-out at &gt;70% CPU 10 min, scale-in at &lt;30% CPU 20 min. Azure Functions consumption plan scales to zero between bursts. |
+| DR strategy proportionate to recovery objective | Active-passive (warm) with Azure SQL geo-replica + ADLS Gen2 RA-GRS + App Service in UK West deployed via IaC on failover. RTO 4 hours, RPO 15 minutes meets clinical-safety RTO. Hot active-active rejected: would have doubled compute footprint without RTO benefit beyond what's clinically required. |
+
 ---
 
 ### 3.4 Data View
@@ -767,6 +786,17 @@ Production data is never copied into non-production environments. Staging uses a
 ##### Data Sovereignty
 
 - Yes -- all customer data (PII and clinical data) remains within the United Kingdom. Primary in UK South (London); DR in UK West (Cardiff). Azure Policy "Allowed Locations" rejects any resource deployment outside UK. ACS SMS / email uses UK region endpoints. The Microsoft Online Services DPA, combined with Microsoft's UK data residency commitments for ACS and Azure SQL, is assessed as adequate for UK GDPR purposes. Any future third-country transfer would require a Transfer Risk Assessment (TRA) and Standard Contractual Clauses.
+
+#### 3.4.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Retention periods minimised to regulator + business need | Yes — patient identifiable data retained per Records Management Code of Practice for Health and Social Care 2021 (ranges 8 years for adult outpatient records to lifetime+8 for some categories); audit logs 25 years (NHS DSPT requirement); session data ≤ 24 hours. ADLS Gen2 lifecycle policies enforce automatic expiry; no "indefinite" retention. |
+| Older data tiered to cold/archive storage | Yes — ADLS Gen2 lifecycle: Hot for current year, Cool for years 2-3, Archive for years 4+. Azure SQL longer-term retention (LTR) backups stored in cool tier. ~70% of historical data in Cool/Archive. |
+| Unused or duplicate replicas | Single Azure SQL primary + 1 DR geo-replica; no read replicas (the application is light-read for individual patients). Quarterly review of storage accounts via Azure Advisor recommendations. |
+| Compression applied | Brotli on HTTPS responses (~70% reduction on FHIR JSON payloads); gzip on audit log uploads to ADLS; FHIR resources are stored compressed in cold tiers. |
+| Cross-region replication justified | Azure SQL geo-replica required by clinical-safety RTO. ADLS GRS chosen over LRS specifically to support DR; LRS would not have met the RPO. No cross-region replication outside UK regions. |
+| Large data transfers off-peak | Nightly EPR ingest 02:00-04:00 UTC; weekly Spine batch reconciliation Saturday 03:00 UTC. Both align with low UK grid carbon intensity. |
 
 ---
 
@@ -1422,6 +1452,16 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | SLA | 99.9% monthly availability (external commitment); P1 acknowledge 15 min; P2 30 min; P3 4h; clinical safety P1 -> CSO within 15 min |
 | Escalation | L1 -> L2 (15 min P1) -> L3 -> L4 + CSO + CISO as appropriate |
 | Clinical safety escalation | Any HAZ-* event -> CSO (Dr Amir Doe) -> CSG if confirmed -> Datix + CQC if actual harm |
+
+#### Sustainability in Operation
+
+| Question | Response |
+|----------|----------|
+| Non-prod auto-shutdown schedule and enforcement | Azure Automation runbook scales-in non-prod App Service plans 19:00-07:00 weekdays + weekends; Azure SQL auto-pause on non-prod databases. Azure Policy "deny on tag missing" prevents new non-prod resources without an auto-shutdown tag. |
+| Right-sizing review cadence | Quarterly via Azure Advisor + Application Insights metrics. Last review (2026-Q1) downgraded the staging Pv3 from P1v3 to P0v3, recovering ~£140/month. |
+| Unused / orphaned resource reclamation | Monthly review of orphaned managed disks, unattached public IPs, stale storage account containers; deleted after 30 days idle without recorded exception. |
+| Carbon footprint reported alongside cost | Yes — Azure Emissions Impact Dashboard reviewed monthly alongside cost; reported quarterly to Trust Sustainability Committee against the NHS Net Zero target (2040). |
+| Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Bicep destroy + Storage Account deletion + Key Vault soft-delete purge after retention. Trust CMDB (ServiceNow) entry marked Retired only after Azure Cost Management confirms zero spend for 30 days. |
 
 ### 5.6 Resourcing & Skills
 

@@ -548,6 +548,16 @@ Platform control-plane footprint (steady state, production):
 
 Dev and integration-test environments automatically scale to zero outside business hours.
 
+#### 3.3.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Hosting regions chosen for low carbon intensity | europe-west2 (London), us-east4, asia-southeast1 chosen for customer proximity. Each region operates under its respective cloud provider's carbon-neutral / 100% renewable matching commitments; europe-west2 published carbon intensity tracks with the UK grid. |
+| Non-production environments auto-shutdown | Yes — dev and integration-test GKE Autopilot clusters scale to zero outside business hours; non-prod databases (Cloud SQL) auto-paused; ~£18k/year saving on non-prod compute (referenced in 4.4 FinOps). |
+| Compute family chosen for performance-per-watt | GKE Autopilot uses Google's latest-generation efficient nodes (Tau-T2D ARM-equivalent on supported workloads); EKS uses Graviton3 (c7g/m7g) where customer workloads tolerate ARM. AWS Graviton's ~60% performance-per-watt advantage is captured for backend services. |
+| Auto-scaling configured to release capacity when idle | Yes — GKE Autopilot scales pods on resource demand; Karpenter on EKS consolidates within 5 minutes; Backstage portal scales to two replicas overnight (down from peak of eight). |
+| DR strategy proportionate | Multi-region active-active for the data plane (delivery / artefact services), warm standby for the portal control plane. Hot active-active rejected for the portal: not justified by the SLO (99.5%), would have ~30% additional always-on compute and PostgreSQL replication carbon cost. |
+
 ### 3.4 Data View
 
 #### 3.4.1 Data Architecture & Storage
@@ -622,6 +632,17 @@ The platform does not process customer data. Platform-generated data (metrics, l
 ##### Data Sovereignty
 
 - Yes -- UK customer-facing tenants' metadata remains in `europe-west2` / `eu-west-2`. Datadog data is routed to the EU site. Snowflake uses an EU deployment.
+
+#### 3.4.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Retention periods minimised | Build artefacts retained 30 days (latest 5 successful per repo retained indefinitely); container images expire on tag age (90 days for non-stable tags); audit logs 7 years (per Stellar audit policy); telemetry rolled up after 30 days. Lifecycle policies enforce automatic expiry. |
+| Older data tiered to cold/archive storage | Yes — Cloud Storage / S3 lifecycle: artefacts transition Standard → Nearline → Coldline (90 days) → Archive (1 year). Datadog rolls metrics from raw to aggregated tiers automatically. |
+| Unused or duplicate replicas | Single Cloud SQL primary + 1 read replica (justified by Backstage read-heavy load); Snowflake reserves no idle warehouses (auto-suspend after 10 min). Quarterly orphan-bucket review via gcloud + AWS Trusted Advisor. |
+| Compression applied | Brotli on Backstage HTTPS responses; gzip on artefact uploads to Cloud Storage; Parquet+Zstandard for DORA metric exports to Snowflake. |
+| Cross-region replication justified | Yes — multi-region active-active for the data plane is required by the platform SLO (99.9%). Portal control-plane uses regional Cloud SQL replication only. No cross-cloud data replication beyond explicit pipelines. |
+| Large data transfers off-peak | Nightly DORA metric ingest to Snowflake 03:00 UTC; weekly Backstage analytics export Sunday 02:00 UTC. Aligned with low UK / EU grid carbon intensity. |
 
 ### 3.5 Security View
 
@@ -1086,6 +1107,16 @@ The platform is built internally (open-source-first where appropriate).
 | SLAs | Portal 99.5% monthly; delivery plane 99.9% monthly |
 | Escalation paths | Slack -> Platform on-call -> Platform Lead -> Head of Engineering |
 | Team Topologies role | Platform team = Platform Team (per Skelton/Pais); stream-aligned teams are customers; enabling teams coach adoption |
+
+#### Sustainability in Operation
+
+| Question | Response |
+|----------|----------|
+| Non-prod auto-shutdown schedule and enforcement | GKE Autopilot non-prod clusters scale to zero out of hours; Cloud SQL non-prod auto-paused; AWS Config + GCP Org Policy alert FinOps if non-prod resources run > 24h without exception tag. |
+| Right-sizing review cadence | Quarterly via Cloudability + GCP Recommender + AWS Compute Optimizer. Last review (2026-Q1) downsized 4 EKS node groups and one Cloud SQL instance, recovering ~£42k/year. |
+| Unused / orphaned resource reclamation | Weekly automation tags resources idle > 14 days; FinOps confirms before deletion. Scope: snapshots, persistent disks, unused service accounts, idle Datadog integrations. |
+| Carbon footprint reported alongside cost | Yes — monthly multi-cloud FinOps + Sustainability review combines AWS Customer Carbon Footprint Tool, GCP Carbon Footprint reports; tracked against a 2026 platform-wide baseline. |
+| Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Terraform destroy + bucket emptying + key destruction; CMDB Retired status only after both AWS Cost Explorer and GCP Billing confirm zero spend for 30 days. |
 
 ### 5.6 Resourcing & Skills
 

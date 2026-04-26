@@ -501,6 +501,16 @@ Not applicable — PaaS deployment; no IaaS virtual machines.
 
 - [x] Yes — Staging environment connects to BACS sandbox and HMRC test gateway for integration testing. Production and non-production environments do not share any other connectivity.
 
+#### 3.3.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Hosting regions chosen for low carbon intensity | Azure UK South (London) primary and UK West (Cardiff) DR — both chosen for data residency. Microsoft has committed to 100% renewable energy matching across UK regions by 2025. Cardiff's published grid mix is cleaner than London on average. |
+| Non-production environments auto-shutdown out of hours | Yes — Dev and UAT App Service plans set to free-tier-equivalent off-hours via Azure Automation runbook (19:00-07:00 weekdays + weekends). Non-prod Azure SQL auto-paused after 1 hour idle. Estimated saving £600/month. |
+| Compute family chosen for performance-per-watt | Yes — Premium v3 App Service Plan SKUs (Pv3) selected over Pv2; Microsoft published data shows ~25% better performance-per-watt and faster warm-up. Azure SQL Business Critical tier uses latest-generation hardware. |
+| Auto-scaling configured to release capacity when idle | Yes — App Service Plan auto-scale rules: scale-out at &gt;70% CPU for 10 min; scale-in at &lt;30% CPU for 20 min; minimum 2 instances during business hours, 1 instance overnight. |
+| DR strategy proportionate to recovery objective | Pilot light: Azure SQL geo-replica is read-only and continuously replicated; App Service in UK West is deployed on-demand via Bicep IaC during DR invocation. RTO 4 hours, RPO 15 minutes. Hot standby was rejected as the business RTO does not justify doubling the always-on compute footprint. |
+
 ### 3.4 Data View
 
 #### 3.4.1 Data Architecture & Storage
@@ -583,6 +593,17 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 ##### Data Sovereignty
 
 - [x] Yes — All payroll data must reside within the United Kingdom. Azure SQL Database and Blob Storage are deployed in UK South (London) and UK West (Cardiff) regions only. Geo-replication is restricted to UK regions. Azure backup vaults are configured for UK geo-redundancy only.
+
+#### 3.4.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Retention periods minimised to regulator + business need | Yes — payroll data and payslips retained 7 years (HMRC requirement); audit logs 7 years; transient session data ≤ 24 hours. Lifecycle policies on Blob Storage enforce automatic expiry; no "indefinite" retention. |
+| Older data tiered to cold/archive storage | Yes — Blob Storage lifecycle policy: Hot tier for the current tax year, Cool tier for years 2-3, Archive tier for years 4-7. ~80% of payslip storage sits in Cool/Archive. |
+| Unused or duplicate replicas identified and removed | Yes — quarterly review of Azure SQL replica count (currently primary + 1 DR replica only). No legacy unused storage accounts; verified via Azure Advisor recommendations. |
+| Compression applied to reduce storage and transfer | Yes — gzip on payslip PDFs at upload (~40% reduction); HTTPS responses use Brotli. SSIS packages use bulk insert with compression enabled. |
+| Cross-region replication justified by recovery requirement | Yes — only Azure SQL geo-replica and Blob Storage RA-GRS replicate to UK West. Both are required by the documented RPO (15 min) and DR strategy. No replication to non-UK regions. |
+| Large data transfers scheduled to off-peak windows | Yes — monthly payroll batch and HMRC RTI submissions run between 02:00-05:00 UTC; nightly database backups run 23:00-01:00 UTC; both off-peak from a UK grid carbon intensity perspective. |
 
 ### 3.5 Security View
 
@@ -1053,6 +1074,16 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | Support hours | Business hours (08:00-18:00 UK) with on-call escalation for P1/P2 incidents during payroll window (days 22-25 of month) |
 | SLAs | P1 (payroll processing blocked): 1-hour response, 4-hour resolution target. P2 (degraded service): 2-hour response, 8-hour resolution target. P3 (minor issue): next business day. |
 | Escalation paths | Service Desk -> IT Operations -> Development Team / DBA Team -> Lead Solution Architect -> IT Director |
+
+#### Sustainability in Operation
+
+| Question | Response |
+|----------|----------|
+| Non-prod auto-shutdown schedule and enforcement | Dev and UAT App Service plans scaled-in to F1 (free) tier 19:00-07:00 weekdays + weekends via Azure Automation runbook; non-prod Azure SQL auto-pauses after 1 hour idle. Azure Policy alerts FinOps if a non-prod resource runs without a tag/exception. |
+| Periodic right-sizing review cadence | Quarterly via Azure Advisor; last review (2026-Q1) downgraded the staging App Service Plan from P1v3 to P0v3, recovering ~£90/month. |
+| Unused / orphaned resource reclamation | Monthly review of orphaned managed disks, unattached public IPs, stale snapshots; deleted after 30 days idle if no exception recorded. |
+| Carbon footprint reported alongside cost | Yes — Azure Emissions Impact Dashboard reviewed monthly alongside cost; tracked against a 2026 baseline established during migration cutover. |
+| Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Bicep destroy + Storage Account deletion + Key Vault soft-delete purge after retention. CMDB entry marked Retired only after Cost Management confirms zero spend for 30 days. |
 
 ### 5.6 Resourcing & Skills
 

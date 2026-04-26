@@ -13,28 +13,21 @@ The Architecture Description Standard (ADS) uses [**semantic versioning**](https
 
 The **standard version** (e.g. v1.3.0) and the **[JSON Schema](/v1/standard/schema/) version** (e.g. v1.0.0) are versioned independently. The schema is the machine-readable contract that SADs and tooling validate against. The schema version only changes when the schema's structure changes; minor and patch releases of the standard add content (guidance, examples, prompts) without touching the schema.
 
-## Schema (API) Compatibility
+## Versions and Schema Compatibility
 
-This table shows which JSON Schema version each release of the standard supports. SADs and any third-party builders ([see specification](https://github.com/andibing/archstandard/blob/main/docs/sad-builder-spec.md)) should target the schema version listed here.
+Each release of the standard ties to a specific JSON Schema version. Major versions of the standard live at permanent versioned URLs so SADs and tooling targeting a previous version remain valid.
 
-| Standard Version | JSON Schema Version | Schema URL | Notes |
-|------------------|---------------------|------------|-------|
-| v1.0.0 | v1.0.0 | [`/schema/v1.0.0/ads.schema.json`](https://archstandard.org/schema/v1.0.0/ads.schema.json) | Initial release; schema established |
-| v1.1.0 | v1.0.0 | [`/schema/v1.0.0/ads.schema.json`](https://archstandard.org/schema/v1.0.0/ads.schema.json) | Content additions only; schema unchanged |
-| v1.2.0 | v1.0.0 | [`/schema/v1.0.0/ads.schema.json`](https://archstandard.org/schema/v1.0.0/ads.schema.json) | Public release; schema unchanged |
-| v1.3.0 | v1.0.0 | [`/schema/v1.0.0/ads.schema.json`](https://archstandard.org/schema/v1.0.0/ads.schema.json) | Adoption release; schema unchanged |
+| Standard Version | JSON Schema | URL | Status | Notes |
+|------------------|-------------|-----|--------|-------|
+| **v1.0.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.0 | Initial release; schema established |
+| **v1.1.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.0 | Content additions; schema unchanged |
+| **v1.2.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.0 | Public release; schema unchanged |
+| **v1.3.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | **Current** | Adoption release; schema unchanged |
+| v2.x (planned) | v2.0.0 (planned) | [archstandard.org/v2/](https://archstandard.org/v2/) | In development | First schema major bump |
 
-**Compatibility implication:** any SAD that validates against schema v1.0.0 is structurally valid against any v1.x.y release of the standard. Editorial improvements (new prompts, new guidance, new examples) do not invalidate prior SADs. A schema v2.0.0 would only ship alongside a standard v2.0.0 major release.
+**Compatibility implication:** any SAD that validates against schema v1.0.0 is structurally valid against any v1.x.y release of the standard. Editorial improvements (new prompts, new guidance, new examples) do not invalidate prior SADs. A schema v2.0.0 would only ship alongside a standard v2.0.0 major release; the current `/v1/` URLs and the v1.0.0 schema would remain available permanently for backwards compatibility.
 
-## Previous Versions
-
-Previous major versions are permanently available at versioned URLs. SADs referencing a previous version remain valid.
-
-| Version | URL | Status |
-|---------|-----|--------|
-| **Latest** | [archstandard.org](https://archstandard.org) | Current |
-| **v1** | [archstandard.org/v1/](https://archstandard.org/v1/) | Current (v1.3.0, schema v1.0.0) |
-| **v2** | [archstandard.org/v2/](https://archstandard.org/v2/) | In development |
+Third-party builders ([see specification](https://github.com/andibing/archstandard/blob/main/docs/sad-builder-spec.md)) should declare which schema version they target.
 
 ## Releases
 
