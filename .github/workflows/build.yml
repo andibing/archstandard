@@ -20,12 +20,12 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -54,3 +54,13 @@ jobs:
           name: dist-${{ github.event.pull_request.number || github.sha }}
           path: dist
           retention-days: 7
+
+# Notes on action versions:
+# - actions/checkout@v5 and actions/setup-node@v5 use Node.js 24, addressing
+#   the September 2025 Node 20 deprecation warning.
+# - actions/upload-artifact remains on v4 (the current major; v5 isn't out as
+#   of this write). It runs on Node 20 internally — when v5 ships supporting
+#   Node 24, bump it. Until then, the deprecation warning for upload-artifact
+#   is informational, not a build failure.
+# - We build with Node.js 22 (active LTS) — newer than 20, with broader
+#   ecosystem support than 24. Bump to 24 when it goes LTS (Oct 2026).

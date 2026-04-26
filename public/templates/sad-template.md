@@ -186,12 +186,12 @@
 |-------|-------|
 | **Internet Facing** | [ ] Yes [ ] No |
 | **Outbound Internet** | [ ] Yes [ ] No |
-| **Cloud To On Prem** | [ ] Yes [ ] No |
-| **Third Party Connectivity** | [ ] Yes [ ] No |
+| **Cloud-to-On-Premises Connectivity** | [ ] Yes [ ] No |
+| **Third-Party Connectivity** | [ ] Yes [ ] No |
 | **Cloud Peering** | [ ] Yes [ ] No |
 | **Wireless Required** | [ ] Yes [ ] No |
-| **Peak Egress Mbps** | |
-| **Peak Ingress Mbps** | |
+| **Peak Egress (Mbps)** | |
+| **Peak Ingress (Mbps)** | |
 | **Traffic Pattern** | [ ] Constant [ ] Periodic [ ] Burst [ ] Seasonal [ ] Unpredictable |
 | **Latency Requirement** | [ ] Ultra Low Sub 1ms [ ] Low Sub 10ms [ ] Moderate Sub 100ms [ ] Standard Sub 1s [ ] Tolerant Above 1s [ ] Not Applicable |
 | **DDoS Protection** | [ ] Yes [ ] No [ ] Not Applicable |
@@ -275,7 +275,7 @@
 | **Algorithm** | |
 | **Key Generation** | [ ] HSM FIPS 140 L3 [ ] HSM FIPS 140 L2 [ ] KMS [ ] Software [ ] Other |
 | **Key Storage** | [ ] HSM [ ] KMS [ ] Software Keystore [ ] Other |
-| **Key Rotation Days** | |
+| **Key Rotation (Days)** | |
 
 #### Secret Management
 
@@ -375,9 +375,9 @@
 
 | Field | Value |
 |-------|-------|
-| **Hosting Location Optimised For Carbon** | [ ] Yes [ ] No |
-| **Non Prod Auto Shutdown** | [ ] Yes [ ] No |
-| **Resources Rightsized** | [ ] Yes [ ] No |
+| **Hosting Location Optimised for Carbon** | [ ] Yes [ ] No |
+| **Non-Production Auto-Shutdown** | [ ] Yes [ ] No |
+| **Resources Right-Sized** | [ ] Yes [ ] No |
 | **Workload Pattern** | [ ] Constant [ ] Variable Predictable [ ] Variable Unpredictable |
 | **Continuous Availability Required** | [ ] Yes [ ] No |
 

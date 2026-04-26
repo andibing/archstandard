@@ -663,6 +663,20 @@ function getDisplayName(key, context) {
     glossary: 'Glossary',
     references: 'References',
     approvals: 'Approvals',
+    // Awkward auto-labels — explicit overrides
+    resourcesRightsized: 'Resources Right-Sized',
+    hostingLocationOptimisedForCarbon: 'Hosting Location Optimised for Carbon',
+    nonProdAutoShutdown: 'Non-Production Auto-Shutdown',
+    workloadPattern: 'Workload Pattern',
+    cloudToOnPrem: 'Cloud-to-On-Premises Connectivity',
+    thirdPartyConnectivity: 'Third-Party Connectivity',
+    wirelessRequired: 'Wireless Required',
+    peakEgressMbps: 'Peak Egress (Mbps)',
+    peakIngressMbps: 'Peak Ingress (Mbps)',
+    keyRotationDays: 'Key Rotation (Days)',
+    intendedLifespan: 'Intended Lifespan',
+    exitPlanDocumented: 'Exit Plan Documented',
+    vendorLockInLevel: 'Vendor Lock-In Level',
   };
 
   if (names[key]) return names[key];
