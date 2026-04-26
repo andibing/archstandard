@@ -103,11 +103,47 @@ export default defineConfig({
 						{ label: 'Design Principles', slug: 'standard/design-principles', translations: { fr: 'Principes de conception', de: 'Designprinzipien' } },
 					],
 				},
-				// Standard sections — single-child groups flattened to direct links;
-				// only Section 3 and Section 4 keep group treatment because they have multiple sub-pages.
-				{ label: '0. Document Control', slug: 'standard/0-document-control', translations: { fr: '0. Contrôle du document', de: '0. Dokumentenkontrolle' } },
-				{ label: '1. Executive Summary', slug: 'standard/1-executive-summary', translations: { fr: '1. Résumé exécutif', de: '1. Zusammenfassung' } },
-				{ label: '2. Stakeholders & Concerns', slug: 'standard/2-stakeholders', translations: { fr: '2. Parties prenantes', de: '2. Stakeholder und Anforderungen' } },
+				// Standard sections.
+				// Sections 3 and 4 are split across multiple files (one per view / quality attribute).
+				// Sections 0, 1, 2, 5, 6, 7 are single files with multiple H2 sub-sections — surfaced
+				// as anchor links here so the sidebar reflects the standard's full structure.
+				{
+					label: '0. Document Control',
+					translations: { fr: '0. Contrôle du document', de: '0. Dokumentenkontrolle' },
+					items: [
+						{ label: 'Section 0 (overview)', slug: 'standard/0-document-control', translations: { fr: 'Section 0 (aperçu)', de: 'Abschnitt 0 (Übersicht)' } },
+						{ label: '0.1 Document Metadata', link: '/v1/standard/0-document-control/#01-document-metadata' },
+						{ label: '0.2 Change History', link: '/v1/standard/0-document-control/#02-change-history' },
+						{ label: '0.3 Contributors & Approvals', link: '/v1/standard/0-document-control/#03-contributors--approvals' },
+						{ label: '0.4 Document Purpose & Scope', link: '/v1/standard/0-document-control/#04-document-purpose--scope' },
+					],
+				},
+				{
+					label: '1. Executive Summary',
+					translations: { fr: '1. Résumé exécutif', de: '1. Zusammenfassung' },
+					collapsed: true,
+					items: [
+						{ label: 'Section 1 (overview)', slug: 'standard/1-executive-summary', translations: { fr: 'Section 1 (aperçu)', de: 'Abschnitt 1 (Übersicht)' } },
+						{ label: '1.1 Solution Overview', link: '/v1/standard/1-executive-summary/#11-solution-overview' },
+						{ label: '1.2 Business Context & Drivers', link: '/v1/standard/1-executive-summary/#12-business-context--drivers' },
+						{ label: '1.3 Strategic Alignment', link: '/v1/standard/1-executive-summary/#13-strategic-alignment' },
+						{ label: '1.4 Scope', link: '/v1/standard/1-executive-summary/#14-scope' },
+						{ label: '1.5 Current State / As-Is', link: '/v1/standard/1-executive-summary/#15-current-state--as-is-architecture' },
+						{ label: '1.6 Key Decisions & Constraints', link: '/v1/standard/1-executive-summary/#16-key-decisions--constraints' },
+						{ label: '1.7 Project Details', link: '/v1/standard/1-executive-summary/#17-project-details' },
+						{ label: '1.8 Business Criticality', link: '/v1/standard/1-executive-summary/#18-business-criticality' },
+					],
+				},
+				{
+					label: '2. Stakeholders & Concerns',
+					translations: { fr: '2. Parties prenantes', de: '2. Stakeholder und Anforderungen' },
+					items: [
+						{ label: 'Section 2 (overview)', slug: 'standard/2-stakeholders', translations: { fr: 'Section 2 (aperçu)', de: 'Abschnitt 2 (Übersicht)' } },
+						{ label: '2.1 Stakeholder Register', link: '/v1/standard/2-stakeholders/#21-stakeholder-register' },
+						{ label: '2.2 Concerns Matrix', link: '/v1/standard/2-stakeholders/#22-concerns-matrix' },
+						{ label: '2.3 Compliance & Regulatory Context', link: '/v1/standard/2-stakeholders/#23-compliance--regulatory-context' },
+					],
+				},
 				{
 					label: '3. Architectural Views',
 					translations: { fr: '3. Vues architecturales', de: '3. Architekturansichten' },
@@ -133,9 +169,52 @@ export default defineConfig({
 						{ label: '4.5 Sustainability', slug: 'standard/4-5-sustainability', translations: { fr: '4.5 Durabilité', de: '4.5 Nachhaltigkeit' } },
 					],
 				},
-				{ label: '5. Lifecycle Management', slug: 'standard/5-lifecycle', translations: { fr: '5. Gestion du cycle de vie', de: '5. Lebenszyklusmanagement' } },
-				{ label: '6. Decision Making & Governance', slug: 'standard/6-decision-making', translations: { fr: '6. Prise de décision et gouvernance', de: '6. Entscheidungsfindung und Governance' } },
-				{ label: '7. Appendices', slug: 'standard/7-appendices', translations: { fr: '7. Annexes', de: '7. Anhänge' } },
+				{
+					label: '5. Lifecycle Management',
+					translations: { fr: '5. Gestion du cycle de vie', de: '5. Lebenszyklusmanagement' },
+					collapsed: true,
+					items: [
+						{ label: 'Section 5 (overview)', slug: 'standard/5-lifecycle', translations: { fr: 'Section 5 (aperçu)', de: 'Abschnitt 5 (Übersicht)' } },
+						{ label: '5.1 Software Development & CI/CD', link: '/v1/standard/5-lifecycle/#51-software-development--cicd' },
+						{ label: '5.2 Service Transition & Migration', link: '/v1/standard/5-lifecycle/#52-service-transition--migration' },
+						{ label: '5.3 Test Strategy', link: '/v1/standard/5-lifecycle/#53-test-strategy' },
+						{ label: '5.4 Release Management', link: '/v1/standard/5-lifecycle/#54-release-management' },
+						{ label: '5.5 Operations & Support', link: '/v1/standard/5-lifecycle/#55-operations--support' },
+						{ label: '5.6 Resourcing & Skills', link: '/v1/standard/5-lifecycle/#56-resourcing--skills' },
+						{ label: '5.7 Service Start', link: '/v1/standard/5-lifecycle/#57-service-start' },
+						{ label: '5.8 Maintainability', link: '/v1/standard/5-lifecycle/#58-maintainability' },
+						{ label: '5.9 Decommissioning & Legacy Removal', link: '/v1/standard/5-lifecycle/#59-decommissioning--legacy-removal' },
+						{ label: '5.10 Exit Planning', link: '/v1/standard/5-lifecycle/#510-exit-planning' },
+					],
+				},
+				{
+					label: '6. Decision Making & Governance',
+					translations: { fr: '6. Prise de décision et gouvernance', de: '6. Entscheidungsfindung und Governance' },
+					collapsed: true,
+					items: [
+						{ label: 'Section 6 (overview)', slug: 'standard/6-decision-making', translations: { fr: 'Section 6 (aperçu)', de: 'Abschnitt 6 (Übersicht)' } },
+						{ label: '6.1 Constraints', link: '/v1/standard/6-decision-making/#61-constraints' },
+						{ label: '6.2 Assumptions', link: '/v1/standard/6-decision-making/#62-assumptions' },
+						{ label: '6.3 Risks', link: '/v1/standard/6-decision-making/#63-risks' },
+						{ label: '6.4 Dependencies', link: '/v1/standard/6-decision-making/#64-dependencies' },
+						{ label: '6.5 Issues', link: '/v1/standard/6-decision-making/#65-issues' },
+						{ label: '6.6 Technical Debt Register', link: '/v1/standard/6-decision-making/#66-technical-debt-register' },
+						{ label: '6.7 Guardrail Exceptions', link: '/v1/standard/6-decision-making/#67-guardrail-exceptions' },
+						{ label: '6.8 Architectural Decisions Log', link: '/v1/standard/6-decision-making/#68-architectural-decisions-log' },
+						{ label: '6.9 Compliance Traceability', link: '/v1/standard/6-decision-making/#69-compliance-traceability' },
+						{ label: '6.10 Approval Sign-Off', link: '/v1/standard/6-decision-making/#610-approval-sign-off' },
+					],
+				},
+				{
+					label: '7. Appendices',
+					translations: { fr: '7. Annexes', de: '7. Anhänge' },
+					items: [
+						{ label: 'Section 7 (overview)', slug: 'standard/7-appendices', translations: { fr: 'Section 7 (aperçu)', de: 'Abschnitt 7 (Übersicht)' } },
+						{ label: '7.1 Glossary', link: '/v1/standard/7-appendices/#71-glossary' },
+						{ label: '7.2 Reference Documents', link: '/v1/standard/7-appendices/#72-reference-documents' },
+						{ label: '7.3 Standards & Patterns Referenced', link: '/v1/standard/7-appendices/#73-standards--patterns-referenced' },
+					],
+				},
 				// Examples — adoption-critical, kept here for now
 				{
 					label: 'Examples',
