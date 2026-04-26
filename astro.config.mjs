@@ -219,6 +219,7 @@ export default defineConfig({
 				{
 					label: 'Examples',
 					translations: { fr: 'Exemples', de: 'Beispiele' },
+					collapsed: true,
 					items: [
 						{ label: 'Example SADs', slug: 'examples', translations: { fr: 'Exemples de SAD', de: 'Beispiel-SADs' } },
 						{ label: 'Employee Directory', slug: 'examples/employee-directory', translations: { fr: 'Annuaire des employés', de: 'Mitarbeiterverzeichnis' } },
@@ -234,6 +235,7 @@ export default defineConfig({
 				{
 					label: 'Guidance',
 					translations: { fr: 'Guide', de: 'Anleitung' },
+					collapsed: true,
 					items: [
 						{ label: 'Overview', slug: 'guidance' },
 						{ label: 'What Good Looks Like', slug: 'guidance/what-good-looks-like' },
@@ -249,6 +251,7 @@ export default defineConfig({
 				{
 					label: 'Resources',
 					translations: { fr: 'Ressources', de: 'Ressourcen' },
+					collapsed: true,
 					items: [
 						{ label: 'Templates', slug: 'standard/templates', translations: { fr: 'Modèles', de: 'Vorlagen' } },
 						{ label: 'Downloads', slug: 'standard/downloads', translations: { fr: 'Téléchargements', de: 'Downloads' } },
