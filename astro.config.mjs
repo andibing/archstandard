@@ -208,6 +208,7 @@ export default defineConfig({
 				{
 					label: '7. Appendices',
 					translations: { fr: '7. Annexes', de: '7. Anhänge' },
+					collapsed: true,
 					items: [
 						{ label: 'Section 7 (overview)', slug: 'standard/7-appendices', translations: { fr: 'Section 7 (aperçu)', de: 'Abschnitt 7 (Übersicht)' } },
 						{ label: '7.1 Glossary', link: '/standard/7-appendices/#71-glossary' },
