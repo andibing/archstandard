@@ -132,6 +132,27 @@ Are there data sovereignty or residency requirements?
 - [ ] Yes - *[describe requirements and how they are met]*
 - [ ] No
 
+### Sustainability Considerations
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Data has a carbon cost — to store, to move, and to back up. Capture how the design minimises that cost. Detail belongs in [Section 4.5](/v1/standard/4-5-sustainability/); decisions belong here.
+
+| Question | Response |
+|----------|----------|
+| Are retention periods set to the minimum the regulator and business actually need? | Yes / No — *[per data store]* |
+| Is older data tiered to cold/archive storage (S3 Glacier, Azure Archive, etc.)? | Yes / No — *[tiering policy]* |
+| Are unused or duplicate replicas of data identified and removed? | Yes / No — *[review cadence]* |
+| Is compression applied to reduce storage and transfer volume? | Yes / No — *[formats]* |
+| Is cross-region or cross-cloud replication justified by an actual recovery requirement? | Yes / No — *[justification]* |
+| Are large data transfers scheduled to off-peak / low-carbon-intensity windows where feasible? | Yes / No / Not applicable |
+
+<div class="guidance-box">
+<h4>Why this matters</h4>
+
+Every byte stored consumes electricity for as long as it exists. Two patterns drive most of the waste: **over-retention** (keeping data "just in case" for years past the regulator's requirement) and **uncompressed cold data** (raw logs, raw snapshots, full-fidelity replicas of data that's never read). The fix is policy-led: classify, set retention, automate expiry, tier the rest.
+</div>
+
 <div class="guidance-box">
 <h4>Scoring Guidance</h4>
 
@@ -139,7 +160,7 @@ Are there data sovereignty or residency requirements?
 |:-----:|---------------------|
 | **1** | Data stores listed but classification and retention not defined |
 | **3** | All data stores classified, retention and encryption specified, PII/SPI identified |
-| **5** | All of the above plus data sovereignty addressed, data transfers documented with encryption, data integrity controls evidenced |
+| **5** | All of the above plus data sovereignty addressed, data transfers documented with encryption, data integrity controls evidenced, retention/compression aligned to sustainability goals |
 </div>
 
 <div class="quality-attribute-ref">

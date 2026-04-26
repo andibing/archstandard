@@ -97,6 +97,25 @@ Consider lock-in across multiple dimensions:
 This assessment should inform the Exit Planning section (5.10) and the Cost Optimisation quality attribute (4.4).
 </div>
 
+### Sustainability Considerations
+
+<span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
+
+Component-level decisions influence the carbon profile of the running system. Capture the sustainability-relevant patterns; details and metrics belong in [Section 4.5](/v1/standard/4-5-sustainability/).
+
+| Question | Response |
+|----------|----------|
+| Where appropriate, has caching been used to avoid recomputation or repeated downstream calls? | Yes / No — *[which components, what's cached]* |
+| Are batch processes consolidated rather than continuously polling? | Yes / No / Not applicable |
+| Are async / event-driven patterns used to flatten peak load and right-size compute? | Yes / No — *[where]* |
+| Have heavy framework choices been weighed against lighter alternatives where the workload allows? | Yes / No — *[discussion]* |
+
+<div class="guidance-box">
+<h4>Why this matters</h4>
+
+The biggest sustainability gains in the Logical View are usually **avoiding work** rather than **doing work efficiently**: a cached response, a debounced poll, an event consumed once instead of polled fifty times. These are architectural patterns chosen here, not infrastructure tweaks made later.
+</div>
+
 <div class="guidance-box">
 <h4>Scoring Guidance</h4>
 

@@ -130,6 +130,20 @@ This section covers architecturally significant testing — not unit tests or fu
 | SLAs | *[internal or external service level agreements]* |
 | Escalation paths | *[how issues are escalated]* |
 
+### Sustainability in Operation
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Operational practices have a continuous carbon impact. Document how sustainability is preserved over the life of the running solution; the metric and tooling detail belongs in [Section 4.5](/v1/standard/4-5-sustainability/).
+
+| Question | Response |
+|----------|----------|
+| Are non-production environments on an auto-shutdown schedule (e.g., evenings, weekends)? | Yes / No — *[schedule]* |
+| Is there a periodic review of compute right-sizing (typically quarterly)? | Yes / No — *[cadence]* |
+| Are unused resources (orphaned VMs, unattached disks, idle environments) actively identified and reclaimed? | Yes / No — *[process]* |
+| Is the carbon footprint reported alongside cost in operational reviews? | Yes / No |
+| Are environment retirements (e.g., a decommissioned dev cluster) actually deleted, not just stopped? | Yes / No |
+
 ## 5.6 Resourcing & Skills
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>

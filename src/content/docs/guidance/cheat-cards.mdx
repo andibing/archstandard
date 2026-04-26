@@ -168,6 +168,41 @@ Over-documenting a simple tool burns goodwill. Under-documenting a critical syst
 
 ---
 
+## Card 6 — Sustainability Quick Hits
+
+<div class="cheat-card">
+
+### Where carbon footprint is actually decided
+
+Most of a SAD's environmental impact is locked in by a small number of decisions. Get these right and Section 4.5 becomes evidence rather than aspiration.
+
+| Decision | Where in the SAD | Quick win |
+|----------|------------------|-----------|
+| **Cloud region** | 3.3 Physical View | Pick a region with high renewable energy share. Carbon intensity varies 5–10× across regions of the same provider. |
+| **Non-prod runtime** | 3.3 + 5.5 Operations | Auto-shutdown dev/test out of hours. Typical saving: 60–70% of non-prod compute cost and carbon. |
+| **Compute family** | 3.3 Physical View | ARM (Graviton, Ampere, Cobalt) and latest-generation x86 deliver 20–40% better performance-per-watt than older instance types. |
+| **DR posture** | 3.3 + 4.2 Reliability | A warm standby running 24×7 doubles compute footprint. Match DR mode (cold / pilot light / warm / hot) to the actual RTO. |
+| **Data retention** | 3.4 Data View | Set a retention policy and automate expiry. Indefinite "keep just in case" is the most common waste. |
+| **Cold storage tiering** | 3.4 Data View | Move logs/snapshots/backups to archive tiers (S3 Glacier, Azure Archive). Cost and carbon both drop sharply. |
+| **Caching & async** | 3.1 Logical View | Avoid recomputation. Cache responses, debounce polls, replace busy-wait with events. |
+| **Right-sizing cadence** | 5.5 Operations | Quarterly right-sizing using cloud advisor tools catches drift. Without a cadence, over-provisioning grows linearly. |
+
+### The three Green Software principles
+
+| Principle | Meaning | Typical action |
+|-----------|---------|----------------|
+| **Carbon efficiency** | Emit the least carbon for a given output | Region choice, ARM compute, retention |
+| **Energy efficiency** | Use the least energy for a given task | Caching, async, code-level efficiency |
+| **Carbon awareness** | Do more when the grid is clean, less when it isn't | Time-shift batch jobs, defer non-urgent work |
+
+### When to skip sustainability prompts
+
+A Tier 5 internal tool running on shared SaaS doesn't need a Software Carbon Intensity baseline. Match the depth of treatment to the system's actual footprint. A 50-instance e-commerce platform deserves the full Section 4.5 treatment; a fortnightly batch job on shared compute does not.
+
+</div>
+
+---
+
 <style>{`
   .cheat-card {
     break-after: page;

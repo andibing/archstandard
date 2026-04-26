@@ -108,6 +108,20 @@ When writing free-text content in a SAD:
 - Use diagrams to complement text, not replace it.
 - Ensure diagrams have alt-text descriptions for screen readers.
 
+## Sustainability as a First-Class Concern
+
+ADS treats sustainability as a quality attribute on equal footing with reliability, performance, and cost — not as an afterthought or a one-line tick-box.
+
+| Principle | How ADS Implements It |
+|-----------|----------------------|
+| **A dedicated quality attribute** | [Section 4.5](/v1/standard/4-5-sustainability/) covers hosting efficiency, carbon measurement, network efficiency, code efficiency, and data efficiency, with prompts and a 0–5 scoring scale. |
+| **Embedded in the views, not bolted on** | The Physical View ([3.3](/v1/standard/3-3-physical-view/)), Data View ([3.4](/v1/standard/3-4-data-view/)), and Logical View ([3.1](/v1/standard/3-1-logical-view/)) each have explicit *Sustainability Considerations* prompts at the point where the carbon-impacting decisions are actually made. |
+| **Operational, not aspirational** | The Lifecycle Management section ([5.5](/v1/standard/5-lifecycle/#55-operations--support)) requires documenting how non-prod auto-shutdown, right-sizing reviews, and orphan-resource reclamation are operationalised — not just intended. |
+| **Aligned to recognised frameworks** | Cross-references to AWS Well-Architected Sustainability and the Green Software Foundation's [Software Carbon Intensity (SCI)](https://sci.greensoftware.foundation/) specification. |
+| **Trade-offs documented, not buried** | Where sustainability conflicts with another quality attribute (e.g., always-on DR vs cold standby), the trade-off is captured in [Section 4.6 Quality Attribute Tradeoffs](/v1/standard/4-quality-attributes-overview/) rather than left implicit. |
+
+The intent is that a SAD reviewer who reads only the views and the lifecycle section, never opening Section 4.5, still encounters the carbon-impacting decisions and can challenge them.
+
 ## Extensibility Without Ambiguity
 
 When organisations add custom sections via the `customSections` extension point, they SHOULD follow the same atomic field principles:
