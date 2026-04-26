@@ -1,6 +1,6 @@
 ---
 title: "Example: Medwick Healthcare Trust -- MyMedwick Patient Portal"
-description: "A completed SAD for an NHS Trust patient portal on Microsoft Azure, demonstrating ADS at Comprehensive depth for a Tier 1 Critical clinical system."
+description: "A completed SAD for a MediCore Trust patient portal on Microsoft Azure, demonstrating ADS at Comprehensive depth for a Tier 1 Critical clinical system."
 ---
 
 import Mermaid from '../../../components/Mermaid.astro';
@@ -12,10 +12,10 @@ import Mermaid from '../../../components/Mermaid.astro';
 <img src="/v1/logos/medwick-healthcare.svg" alt="Medwick Healthcare Trust logo (fictional)" class="example-org-logo" />
 <h4>About This Example</h4>
 
-This is a **fictional but realistic** Solution Architecture Document for Medwick Healthcare Trust's MyMedwick Patient Portal. It demonstrates the Architecture Description Standard at **Comprehensive** depth for a Tier 1 Critical clinical system governed by NHS clinical safety standards and UK data protection law. Every section is completed with realistic content showing what a mature, well-documented SAD looks like for an NHS Trust-class solution where patient harm is a credible risk.
+This is a **fictional but realistic** Solution Architecture Document for Medwick Healthcare Trust's MyMedwick Patient Portal. It demonstrates the Architecture Description Standard at **Comprehensive** depth for a Tier 1 Critical clinical system governed by MediCore clinical safety standards and UK data protection law. Every section is completed with realistic content showing what a mature, well-documented SAD looks like for a Trust-class solution where patient harm is a credible risk.
 
-**Fictional organisation:** Medwick Healthcare Trust -- a mid-sized NHS-style hospital trust, approximately 12,000 staff, serving 800,000 patients across three acute sites and a network of community clinics.
-**Fictional solution:** MyMedwick Patient Portal -- a web and mobile application providing outpatient appointment management, test results, letters, and prescription management to patients, integrated with the Trust's Electronic Patient Record (EPR), the NHS Spine, and NHS e-Referral Service.
+**Fictional organisation:** Medwick Healthcare Trust -- a mid-sized national-health-service-style hospital trust, approximately 12,000 staff, serving 800,000 patients across three acute sites and a network of community clinics.
+**Fictional solution:** MyMedwick Patient Portal -- a web and mobile application providing outpatient appointment management, test results, letters, and prescription management to patients, integrated with the Trust's Electronic Patient Record (EPR), the MediCore Spine, and MediCore e-Referral Service.
 </div>
 
 ---
@@ -35,7 +35,7 @@ This is a **fictional but realistic** Solution Architecture Document for Medwick
 | **Status** | Approved |
 | **Created Date** | 2025-02-10 |
 | **Last Updated** | 2026-03-28 |
-| **Classification** | Official -- Sensitive (NHS) |
+| **Classification** | Confidential -- Healthcare |
 
 ### 0.2 Change History
 
@@ -44,11 +44,11 @@ This is a **fictional but realistic** Solution Architecture Document for Medwick
 | 0.1 | 2025-02-10 | Dr Raj Doe | Initial draft with executive summary, scope, and logical view |
 | 0.2 | 2025-03-04 | Dr Raj Doe | Added physical view, data view, integration with EPR and Spine |
 | 0.3 | 2025-03-25 | Jane Bloggs | Information security review feedback incorporated |
-| 0.4 | 2025-04-08 | Dr Amir Doe | Clinical safety review; Hazard Log reference added (DCB0129/0160) |
-| 0.5 | 2025-04-22 | Sally Bloggs | Information Governance review; DPIA and DCB0160 status incorporated |
+| 0.4 | 2025-04-08 | Dr Amir Doe | Clinical safety review; Hazard Log reference added (CS-129/0160) |
+| 0.5 | 2025-04-22 | Sally Bloggs | Information Governance review; DPIA and CS-160 status incorporated |
 | 1.0 | 2025-05-14 | Dr Raj Doe | First approved version following Design Authority and CSG sign-off |
 | 1.1 | 2025-09-02 | Dr Raj Doe | Added GP Connect integration (Phase 2 -- appointment availability) |
-| 1.2 | 2025-11-19 | Dr Raj Doe | Updated following annual DSPT submission and NHS Digital assurance review |
+| 1.2 | 2025-11-19 | Dr Raj Doe | Updated following annual DSPT submission and MediCore Digital assurance review |
 | 2.0 | 2026-03-28 | Dr Raj Doe | Major revision: Azure AD B2C for patient auth (ADR-003 superseded), SMS fallback redesign, updated clinical safety case v3 |
 
 ### 0.3 Contributors & Approvals
@@ -60,7 +60,7 @@ This is a **fictional but realistic** Solution Architecture Document for Medwick
 | Sally Bloggs | Information Governance (IG) Lead & Data Protection Officer | Author / Approver |
 | Jane Bloggs | Chief Information Security Officer (CISO) | Reviewer / Approver |
 | Mark Doe | Principal Infrastructure Engineer (Azure Landing Zones) | Reviewer |
-| Priya Bloggs | Data Architect (NHS data standards, FHIR R4) | Reviewer |
+| Priya Bloggs | Data Architect (MediCore healthcare data standards, FHIR R4) | Reviewer |
 | Tom Doe | Head of Service Management (ITIL) | Reviewer |
 | Helen Bloggs | Caldicott Guardian (Medical Director) | Approver |
 | Dr Fiona Doe | Chief Clinical Information Officer (CCIO) | Approver |
@@ -71,16 +71,16 @@ This is a **fictional but realistic** Solution Architecture Document for Medwick
 
 ### 0.4 Document Purpose & Scope
 
-This SAD describes the architecture of MyMedwick, Medwick Healthcare Trust's patient-facing digital service. The portal gives patients secure, self-service access to their outpatient appointments, clinic letters, test results, and repeat prescription requests. It reduces clinic DNA (Did Not Attend) rates, eases the administrative burden on outpatient booking teams, and supports the Trust's commitment to the NHS Long Term Plan objective of digital-first patient access.
+This SAD describes the architecture of MyMedwick, Medwick Healthcare Trust's patient-facing digital service. The portal gives patients secure, self-service access to their outpatient appointments, clinic letters, test results, and repeat prescription requests. It reduces clinic DNA (Did Not Attend) rates, eases the administrative burden on outpatient booking teams, and supports the Trust's commitment to the MediCore National Digital Health Plan objective of digital-first patient access.
 
 **In scope:**
 - MyMedwick web application (React) and mobile applications (iOS, Android)
 - Azure landing zone resources in UK South (primary) and UK West (DR)
 - Integration with Trust EPR (Cerner Millennium), Pharmacy (JAC), Pathology (Clinisys WinPath), PACS (GE Centricity)
-- Integration with NHS Spine (PDS, SCR), NHS e-Referral Service, GP Connect (appointment availability only)
-- Patient identity (Azure AD B2C) and clinician identity (NHS CIS2)
+- Integration with MediCore Spine (PDS, SCR), MediCore e-Referral Service, GP Connect (appointment availability only)
+- Patient identity (Azure AD B2C) and clinician identity (MediCore CIS)
 - Azure Communication Services SMS and email (appointment reminders, OTP, notifications)
-- Clinical safety case (DCB0129) and deployment safety case (DCB0160)
+- Clinical safety case (CS-129) and deployment safety case (CS-160)
 - Operational tooling: Microsoft Sentinel, Azure Monitor, App Insights
 
 **Out of scope:**
@@ -94,9 +94,9 @@ This SAD describes the architecture of MyMedwick, Medwick Healthcare Trust's pat
 - Trust Digital & Data Strategy 2024-2029 (STRAT-DDS-2024)
 - Medwick Information Security Policy (MHT-SEC-POL-001)
 - Medwick Clinical Risk Management Policy (MHT-CRM-POL-003)
-- DCB0129 Hazard Log -- MyMedwick (MHT-HAZ-LOG-0208)
-- DCB0160 Deployment Safety Case -- MyMedwick (MHT-DSC-0208)
-- NHS Data Security and Protection Toolkit Submission 2025/26 (Organisation Code: RX9)
+- CS-129 Hazard Log -- MyMedwick (MHT-HAZ-LOG-0208)
+- CS-160 Deployment Safety Case -- MyMedwick (MHT-DSC-0208)
+- MediCore Data Security & Protection Toolkit Submission 2025/26 (Organisation Code: RX9)
 
 ---
 
@@ -106,15 +106,15 @@ This SAD describes the architecture of MyMedwick, Medwick Healthcare Trust's pat
 
 MyMedwick is a web and mobile patient portal that gives patients of Medwick Healthcare Trust secure, real-time access to their outpatient care. Patients can view and reschedule appointments, read clinic letters, see pathology and radiology results released by their clinical team, request repeat prescriptions, update contact preferences, and opt in or out of SMS reminders.
 
-The solution is built on Microsoft Azure (UK South primary, UK West DR) using a layered architecture: React single-page application for the web front end; Ionic/Capacitor hybrid mobile apps; .NET 8 microservices behind Azure API Management; Azure SQL for portal-owned data; and an integration layer that exposes and consumes FHIR R4 APIs against the Trust EPR, the NHS Spine, and the NHS e-Referral Service. Patient identity is provided by Azure AD B2C with NHS-compatible identity proofing; clinician identity (for staff administration functions) is provided by NHS CIS2.
+The solution is built on Microsoft Azure (UK South primary, UK West DR) using a layered architecture: React single-page application for the web front end; Ionic/Capacitor hybrid mobile apps; .NET 8 microservices behind Azure API Management; Azure SQL for portal-owned data; and an integration layer that exposes and consumes FHIR R4 APIs against the Trust EPR, the MediCore Spine, and the MediCore e-Referral Service. Patient identity is provided by Azure AD B2C with MediCore-compatible identity proofing; clinician identity (for staff administration functions) is provided by MediCore CIS.
 
-Clinical safety has been assessed under DCB0129 (manufacturer) and DCB0160 (deployment). A Clinical Safety Officer (Dr Amir Doe) has signed off the clinical safety case; the Hazard Log is actively maintained. The service is included in Medwick's annual Data Security and Protection Toolkit (DSPT) submission.
+Clinical safety has been assessed under CS-129 (manufacturer) and CS-160 (deployment). A Clinical Safety Officer (Dr Amir Doe) has signed off the clinical safety case; the Hazard Log is actively maintained. The service is included in Medwick's annual Data Security and Protection Toolkit (DSPT) submission.
 
 ### 1.2 Business Context & Drivers
 
 | Driver | Description | Priority |
 |--------|------------|----------|
-| NHS Long Term Plan -- digital-first patient access | National commitment for every patient to have digital access to their outpatient records, appointments and prescriptions | Critical |
+| MediCore National Digital Health Plan -- digital-first patient access | National commitment for every patient to have digital access to their outpatient records, appointments and prescriptions | Critical |
 | Reduce outpatient DNA rate | Trust DNA rate for outpatient appointments is 9.4% (national benchmark 6.7%); target reduction of 2 percentage points through self-service rescheduling and SMS reminders | High |
 | Reduce call centre burden | Outpatient booking team handles approximately 3,200 calls/day, of which 62% are appointment enquiries resolvable via self-service | High |
 | Improve patient experience and CQC Well-Led evidence | Patient survey satisfaction with appointment communications at 58%; target improvement to greater than 75% | High |
@@ -135,12 +135,12 @@ Clinical safety has been assessed under DCB0129 (manufacturer) and DCB0160 (depl
 
 | Capability | Shared Service / Platform | Reused? | Justification (if not reused) |
 |-----------|--------------------------|---------|------------------------------|
-| Patient Identity | NHS login (national service) | No | Evaluated in ADR-003; rejected in favour of Azure AD B2C due to Trust control over identity proofing journey, faster enrolment, and ability to federate NHS login as an external IdP later if required |
-| Clinician Identity | NHS CIS2 (Care Identity Service 2) | Yes | Mandatory for NHS staff accessing patient-identifiable data; used for admin / service desk functions |
-| Spine Integration | NHS Spine (PDS, SCR) via TLS-MA | Yes | National service, mandatory for Patient Demographic Service lookups |
-| e-Referral | NHS e-Referral Service (e-RS) | Yes | National service, mandatory for outpatient referral lifecycle |
+| Patient Identity | MediCore login (national service) | No | Evaluated in ADR-003; rejected in favour of Azure AD B2C due to Trust control over identity proofing journey, faster enrolment, and ability to federate MediCore login as an external IdP later if required |
+| Clinician Identity | MediCore CIS (Clinician Identity Service) | Yes | Mandatory for MediCore staff accessing patient-identifiable data; used for admin / service desk functions |
+| Spine Integration | MediCore Spine (PDS, SCR) via TLS-MA | Yes | National service, mandatory for Patient Demographic Service lookups |
+| e-Referral | MediCore e-Referral Service (e-RS) | Yes | National service, mandatory for outpatient referral lifecycle |
 | SMS / Email | Azure Communication Services (ACS) | Yes | Trust has enterprise Azure agreement; ACS supports UK data residency |
-| Secure Email | NHSmail | Yes | Used for clinical correspondence notifications where appropriate |
+| Secure Email | MediCoreMail | Yes | Used for clinical correspondence notifications where appropriate |
 | SIEM | Microsoft Sentinel (Trust tenant) | Yes | Corporate SIEM |
 | CI/CD | Azure DevOps | Yes | Trust standard |
 | Secrets | Azure Key Vault | Yes | Trust standard |
@@ -157,12 +157,12 @@ Clinical safety has been assessed under DCB0129 (manufacturer) and DCB0160 (depl
 - Azure SQL Database for portal-owned state (preferences, consent, sessions)
 - Azure Service Bus for asynchronous notification and integration events
 - FHIR R4 facade microservice integrating EPR (Cerner Millennium HL7v2 + FHIR), PACS, Pathology, and Pharmacy
-- Integration with NHS Spine via HSCN/Message Exchange for Social Care and Health (MESH) and TLS-MA
+- Integration with MediCore Spine via national healthcare secure network/Message Exchange for Social Care and Health (MESH) and TLS-MA
 - Azure AD B2C for patient identity (custom policies, MFA, step-up for sensitive actions)
-- NHS CIS2 for clinician identity (service desk admin)
+- MediCore CIS for clinician identity (service desk admin)
 - Azure Communication Services for SMS and email (appointment reminders, OTP, notifications)
 - Microsoft Sentinel SIEM integration and Azure Monitor/App Insights observability
-- Clinical safety (DCB0129/DCB0160) artefacts and Hazard Log
+- Clinical safety (CS-129/CS-160) artefacts and Hazard Log
 - Annual DSPT submission content relating to this service
 
 #### Out of Scope
@@ -175,9 +175,9 @@ Clinical safety has been assessed under DCB0129 (manufacturer) and DCB0160 (depl
 
 #### Related External Dependencies
 
-- NHS Spine PDS / SCR availability and interface versions
-- NHS CIS2 availability for clinician authentication
-- NHS e-Referral Service API availability and version
+- MediCore Spine PDS / SCR availability and interface versions
+- MediCore CIS availability for clinician authentication
+- MediCore e-Referral Service API availability and version
 - Cerner Millennium HL7v2 and FHIR interface availability
 - Azure UK South and UK West regional availability
 
@@ -197,7 +197,7 @@ The Trust currently offers limited digital patient access:
 - No surfacing of test results to patients; results are conveyed by letter (typically 2-3 week delay) or phone call
 - Patient Knows Best contract ends 2026-Q3 -- mandatory replacement
 
-**What is being retained:** Cerner Millennium EPR (authoritative clinical record); NHS Spine and e-RS integrations (reused via new FHIR facade); NHSmail; NHS CIS2.
+**What is being retained:** Cerner Millennium EPR (authoritative clinical record); MediCore Spine and e-RS integrations (reused via new FHIR facade); MediCoreMail; MediCore CIS.
 **What is being replaced:** Patient Knows Best pilot (decommissioned 2026-Q3); Firetext SMS (replaced by Azure Communication Services); SharePoint cancellation form.
 **What is being decommissioned:** PKB integration, Firetext contract, SharePoint appointment cancellation form -- all after 3-month parallel run.
 
@@ -205,12 +205,12 @@ The Trust currently offers limited digital patient access:
 
 | Decision / Constraint | Rationale | Impact |
 |----------------------|-----------|--------|
-| Microsoft Azure as hosting platform | Trust enterprise Azure agreement; Azure UK South/West provide sovereign UK data residency; ISO/IEC 27018 assurance for cloud PII; NCSC/NHS England pattern alignment | All infrastructure on Azure; no AWS or GCP |
-| All data (including PII and clinical data) in UK regions | UK GDPR, NHS Data Security and Protection Toolkit, and Caldicott Principle 7 (data sharing) | UK South primary, UK West DR; no data replication outside UK |
-| FHIR R4 as the canonical clinical data contract | NHS England interoperability standards and forward compatibility with ICS-wide data sharing | FHIR facade microservice required; HL7v2 from EPR translated to FHIR |
-| Azure AD B2C for patient identity (not NHS login) | Trust control over identity proofing, enrolment UX, and MFA policy; NHS login can be added as federated IdP in a later phase | Custom B2C policies to be maintained; explicit ADR (ADR-003) |
-| DCB0129 and DCB0160 clinical safety compliance mandatory | NHS Digital's mandatory clinical safety standards for any health IT system with clinical impact | Clinical Safety Officer required; Hazard Log maintained; deployment safety case signed before go-live |
-| Two-factor authentication required for all patients | UK GDPR Article 32 and NHS CIS2 assurance equivalence | SMS OTP (default), TOTP authenticator (advanced); step-up MFA for prescription requests |
+| Microsoft Azure as hosting platform | Trust enterprise Azure agreement; Azure UK South/West provide sovereign UK data residency; ISO/IEC 27018 assurance for cloud PII; NCSC/MediCore Authority pattern alignment | All infrastructure on Azure; no AWS or GCP |
+| All data (including PII and clinical data) in UK regions | UK GDPR, MediCore Data Security & Protection Toolkit, and Caldicott Principle 7 (data sharing) | UK South primary, UK West DR; no data replication outside UK |
+| FHIR R4 as the canonical clinical data contract | MediCore Authority interoperability standards and forward compatibility with ICS-wide data sharing | FHIR facade microservice required; HL7v2 from EPR translated to FHIR |
+| Azure AD B2C for patient identity (not MediCore login) | Trust control over identity proofing, enrolment UX, and MFA policy; MediCore login can be added as federated IdP in a later phase | Custom B2C policies to be maintained; explicit ADR (ADR-003) |
+| CS-129 and CS-160 clinical safety compliance mandatory | MediCore Digital's mandatory clinical safety standards for any health IT system with clinical impact | Clinical Safety Officer required; Hazard Log maintained; deployment safety case signed before go-live |
+| Two-factor authentication required for all patients | UK GDPR Article 32 and MediCore CIS assurance equivalence | SMS OTP (default), TOTP authenticator (advanced); step-up MFA for prescription requests |
 
 ### 1.7 Project Details
 
@@ -232,7 +232,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 
 - **Clinical safety:** Incorrect results display, mis-identification of a patient's record, or silent failure of appointment reminders could contribute to patient harm (missed appointment for time-sensitive oncology follow-up; acting on wrong results). Clinical risk assessed and documented in the Hazard Log (MHT-HAZ-LOG-0208).
 - **Service continuity:** At steady state, MyMedwick is the primary digital channel for ~280,000 enrolled patients. Extended outage would substantially increase call centre load (projected x3.5 call volume within 24 hours of outage).
-- **Regulatory exposure:** A confidentiality breach of patient data would require ICO notification within 72 hours (UK GDPR Art 33) and trigger mandatory reporting under the NHS DSPT.
+- **Regulatory exposure:** A confidentiality breach of patient data would require ICO notification within 72 hours (UK GDPR Art 33) and trigger mandatory reporting under the MediCore DSPT.
 - **Reputational:** Patient trust and Trust Board reputation sensitivity is high; CQC Well-Led and Responsive domains reference digital access.
 - **Financial impact:** Not the primary driver, but DNA reduction target (2 pp) represents ~GBP 1.8m/year of recovered clinic capacity.
 
@@ -247,7 +247,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Paul Bloggs | SRO / Deputy CEO | Strategic alignment, benefit realisation, political and regulatory risk | Executive Summary, Governance |
 | Robert Bloggs | CDIO | Architecture alignment, Azure strategy, cost, assurance | All views |
 | Dr Fiona Doe | CCIO | Clinical workflow alignment, clinical risk, clinician adoption (admin users) | Logical, Data, Security, Scenarios |
-| Dr Amir Doe | Clinical Safety Officer | Clinical safety (DCB0129/0160), Hazard Log, clinical risk controls | Security, Data, Scenarios, Lifecycle |
+| Dr Amir Doe | Clinical Safety Officer | Clinical safety (CS-129/0160), Hazard Log, clinical risk controls | Security, Data, Scenarios, Lifecycle |
 | Helen Bloggs | Caldicott Guardian | Information governance, Caldicott Principles, patient confidentiality | Security, Data, Governance |
 | Sally Bloggs | IG Lead / DPO | UK GDPR, DPIA, DSPT, ROPA, consent, subject access | Data, Security, Governance |
 | Jane Bloggs | CISO | Threat model, UK GDPR Art 32 controls, DSPT, Cyber Essentials Plus | Security, Physical |
@@ -260,7 +260,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Patient Participation Group (PPG) | Patient representatives | Usability, trust, transparency, accessibility | Scenarios |
 | Booking office team (operational) | Outpatient booking team leader | Call volume reduction, admin exception handling | Scenarios, Operational Excellence |
 | ICO (external) | Information Commissioner's Office | UK GDPR, ICO registration ZA123456 | Data, Security, Governance |
-| NHS England (external) | Digital policy and assurance | Interoperability, DSPT, DCB0129/0160 conformance, DSCRO | Data, Security, Governance |
+| MediCore Authority (external) | Digital policy and assurance | Interoperability, DSPT, CS-129/0160 conformance, DSCRO | Data, Security, Governance |
 | MHRA (external, watching brief) | Medicines and Healthcare products Regulatory Agency | Whether the portal meets criteria for a medical device (assessed -- no, not a clinical decision-support tool) | Security, Governance |
 | Patients (end users) | Registered enrolled patients | Usability, trust, accuracy, accessibility, privacy | Scenarios, Integration, Security |
 | Clinical teams | Outpatient clinicians (secondary users via EPR) | Data accuracy, results release workflow, not introducing additional admin | Integration, Data, Scenarios |
@@ -271,7 +271,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 |---------|---------------|-------------|
 | Clinical safety -- risk of patient harm from system failure or misuse | Dr Amir Doe, Dr Fiona Doe, Helen Bloggs, CSG | 1.8, 3.5, 3.6, 4.2, 5.1, 5.2, 6.3, 6.8 |
 | Patient confidentiality and UK GDPR compliance | Sally Bloggs, Helen Bloggs, Jane Bloggs, ICO | 3.4, 3.5, 6.8 |
-| NHS Data Security and Protection Toolkit (DSPT) conformance | Sally Bloggs, Jane Bloggs, NHS England | 3.5, 6.8 |
+| MediCore Data Security & Protection Toolkit (DSPT) conformance | Sally Bloggs, Jane Bloggs, MediCore Authority | 3.5, 6.8 |
 | Clinical data accuracy and interoperability (FHIR R4, HL7v2) | Priya Bloggs, Dr Fiona Doe, Dr Amir Doe | 3.2, 3.4, 3.6 |
 | Patient identity assurance (preventing misidentification) | Sally Bloggs, Helen Bloggs, Dr Amir Doe | 3.5, 3.6 (UC-04) |
 | Availability and DR (clinical continuity) | Tom Doe, Mark Doe, Dr Fiona Doe | 4.2 |
@@ -289,33 +289,33 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Regulation / Standard | Applicability | Impact on Design |
 |----------------------|--------------|-----------------|
 | UK GDPR & Data Protection Act 2018 | Mandatory -- processes special category personal data (health) | Lawful basis (Art 6(1)(e), Art 9(2)(h)); DPIA completed; data minimisation; right of access/erasure/rectification; data residency UK |
-| NHS Data Security and Protection Toolkit (DSPT) 2025/26 | Mandatory -- annual submission; status Standards Met | 10 DSPT assertions applicable; evidence mapped; submitted 2025-06-30 |
-| DCB0129 -- Clinical Risk Management: Manufacturer | Mandatory for health IT systems with clinical impact | Clinical Safety Officer (Dr Amir Doe) appointed; Clinical Safety Case v3 approved; Hazard Log maintained |
-| DCB0160 -- Clinical Risk Management: Deployment | Mandatory for deploying health IT in health / social care settings | Deployment Safety Case signed off by Trust CSO before each major release |
+| MediCore Data Security & Protection Toolkit (DSPT) 2025/26 | Mandatory -- annual submission; status Standards Met | 10 DSPT assertions applicable; evidence mapped; submitted 2025-06-30 |
+| CS-129 -- Clinical Risk Management: Manufacturer | Mandatory for health IT systems with clinical impact | Clinical Safety Officer (Dr Amir Doe) appointed; Clinical Safety Case v3 approved; Hazard Log maintained |
+| CS-160 -- Clinical Risk Management: Deployment | Mandatory for deploying health IT in health / social care settings | Deployment Safety Case signed off by Trust CSO before each major release |
 | Common Law Duty of Confidentiality | Mandatory -- Caldicott Principles | Caldicott Guardian (Helen Bloggs) approval required for data uses; explicit patient consent for SMS |
 | Human Medicines Regulations 2012 | Applicable -- prescription request surfacing | Portal does not prescribe; only surfaces prescriptions issued in EPR/JAC. No clinical decision support. |
 | MHRA -- Medical Device assessment | Assessed -- not a medical device (no diagnosis/treatment/prevention function) | Assessment documented; reviewed annually |
 | Accessibility Regulations 2018 (public sector body) | Mandatory | WCAG 2.2 Level AA conformance; annual accessibility statement published |
-| NHS England Interoperability Standards | Mandatory for new health IT | FHIR R4 for external clinical APIs; NHS Number as primary identifier |
+| MediCore Authority Interoperability Standards | Mandatory for new health IT | FHIR R4 for external clinical APIs; National Patient ID as primary identifier |
 | ICO registration | Mandatory | Registered (ZA123456); Data Protection Officer: Sally Bloggs |
 | Cyber Essentials Plus | Trust certified annually | Inherits Trust certification; additional controls evidenced |
 | ISO/IEC 27001 | Trust-wide ISMS | Solution included in statement of applicability |
 
 #### Regulated Activities
 
-- Yes -- processes special category personal data (health) under UK GDPR Article 9. Not a regulated medical device (formally assessed). Subject to NHS-specific clinical safety standards (DCB0129 manufacturer, DCB0160 deployment).
+- Yes -- processes special category personal data (health) under UK GDPR Article 9. Not a regulated medical device (formally assessed). Subject to MediCore-specific clinical safety standards (CS-129 manufacturer, CS-160 deployment).
 
 #### Compliance Standards
 
 | Standard | Version | Applicability |
 |----------|---------|--------------|
-| NHS Data Security and Protection Toolkit | 2025/26 | All sections -- security, IG, training, incident reporting |
-| DCB0129 Clinical Risk Management (Manufacturer) | 2018 | Security, Scenarios, Lifecycle -- Hazard Log, clinical safety case |
-| DCB0160 Clinical Risk Management (Deployment) | 2018 | Lifecycle, Governance -- deployment safety case |
-| NHS England Interoperability Standards | 2025 | Integration -- FHIR R4, HL7v2 transition path |
+| MediCore Data Security & Protection Toolkit | 2025/26 | All sections -- security, IG, training, incident reporting |
+| CS-129 Clinical Risk Management (Manufacturer) | 2018 | Security, Scenarios, Lifecycle -- Hazard Log, clinical safety case |
+| CS-160 Clinical Risk Management (Deployment) | 2018 | Lifecycle, Governance -- deployment safety case |
+| MediCore Authority Interoperability Standards | 2025 | Integration -- FHIR R4, HL7v2 transition path |
 | WCAG 2.2 | Level AA | Scenarios, Performance -- accessibility |
 | NCSC Cloud Security Principles | 14 principles | Physical, Security |
-| NHS England Data Protection Impact Assessment Framework | 2024 | Data, Security |
+| MediCore Authority Data Protection Impact Assessment Framework | 2024 | Data, Security |
 | ISO/IEC 27018 | 2019 | Data, Security -- Azure's assurance for cloud PII |
 
 ---
@@ -328,7 +328,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 
 <Mermaid chart={`graph TD
     Patient[Patient - Web / iOS / Android] --> FD[Azure Front Door + WAF]
-    Clinician[Service Desk Admin - NHS CIS2] --> FD
+    Clinician[Service Desk Admin - MediCore CIS] --> FD
     FD --> APIM[Azure API Management]
     APIM --> BFF[Patient BFF]
     APIM --> AdminAPI[Admin API]
@@ -350,13 +350,13 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
     Results --> FHIR
     Rx --> FHIR
     FHIR --> EPR[Cerner EPR - HL7v2 / FHIR]
-    FHIR --> Spine[NHS Spine PDS / SCR]
-    FHIR --> eRS[NHS e-Referral]
+    FHIR --> Spine[MediCore Spine PDS / SCR]
+    FHIR --> eRS[MediCore e-Referral]
     FHIR --> GPC[GP Connect - Appointments]
     FHIR --> Path[Pathology - WinPath]
     FHIR --> PACS[PACS - GE Centricity]
     BFF --> B2C[Azure AD B2C]
-    AdminAPI --> CIS2[NHS CIS2]`} />
+    AdminAPI --> CIS2[MediCore CIS]`} />
 
 #### 3.1.2 Component Decomposition
 
@@ -379,7 +379,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Azure API Management | Gateway | External API product (Front Door origin) and internal product for partner integration | APIM Premium (UK South + UK West regions) | Platform Team |
 | Azure Front Door + WAF | Gateway / Load Balancer | Global edge entry, TLS 1.3 termination, WAF (OWASP Core Rule Set 3.2), DDoS Standard | Azure Front Door Premium | Platform Team |
 | Patient IdP | Gateway (identity) | Azure AD B2C with custom policies; MFA (SMS OTP default, TOTP optional); step-up MFA | Azure AD B2C (UK tenant) | Security Team |
-| Clinician IdP | Gateway (identity) | NHS CIS2 OIDC for staff service desk admin functions | NHS CIS2 (external national service) | Security Team |
+| Clinician IdP | Gateway (identity) | MediCore CIS OIDC for staff service desk admin functions | MediCore CIS (external national service) | Security Team |
 
 #### 3.1.3 Service & Capability Mapping
 
@@ -402,8 +402,8 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | GE Centricity (PACS) | MHT-APP-0067 | Use | Consume imaging availability metadata (report text; images not shown to patients in this phase) | Phase 3 candidate for image thumbnails |
 | Patient Knows Best (PKB) | MHT-APP-0180 | Decommission | Retire after 3-month parallel run; contract ends 2026-Q3 | Migration of 40,000 PKB enrolled patients |
 | Firetext SMS | MHT-APP-0142 | Decommission | Replaced by Azure Communication Services | |
-| NHS Spine | External | Use | PDS for patient demographic verification; SCR not directly consumed | Via HSCN |
-| NHS e-Referral Service | External | Use | Read UBRN, appointment slots, worklists | |
+| MediCore Spine | External | Use | PDS for patient demographic verification; SCR not directly consumed | Via national healthcare secure network |
+| MediCore e-Referral Service | External | Use | Read UBRN, appointment slots, worklists | |
 | GP Connect (Appointments) | External | Use | Phase 2 -- read GP appointment availability for cross-care navigation | Limited to appointment availability in this phase |
 | Microsoft Sentinel | MHT-APP-0099 | Use | Receive security events | Existing SIEM |
 
@@ -464,9 +464,9 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
     Notif --> ACS[ACS SMS / Email]
     Svc --> FHIR[FHIR Facade]
     FHIR -- HL7v2 over VPN --> EPR[Cerner EPR]
-    FHIR -- TLS-MA over HSCN --> Spine[NHS Spine]
-    FHIR -- TLS over HSCN --> eRS[e-RS]
-    FHIR -- TLS + NHS CIS2 --> GPC[GP Connect]
+    FHIR -- TLS-MA over national healthcare secure network --> Spine[MediCore Spine]
+    FHIR -- TLS over national healthcare secure network --> eRS[e-RS]
+    FHIR -- TLS + MediCore CIS --> GPC[GP Connect]
     SB -- audit --> Audit[ADLS Gen2 Audit]
     Audit --> Sentinel[Microsoft Sentinel]`} />
 
@@ -485,7 +485,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Notification Service | Azure Communication Services | HTTPS / TLS 1.3 | Managed Identity (Entra ID) | Send SMS / Email |
 | Notification Service | Azure Key Vault | HTTPS / TLS 1.3 (Private Endpoint) | Managed Identity | Retrieve ACS endpoint secrets / connection strings |
 | Patient BFF | Azure AD B2C | HTTPS / TLS 1.3 | OIDC authorization code + PKCE | Patient authentication / token exchange |
-| Admin API | NHS CIS2 | HTTPS / TLS 1.3 | OIDC authorization code | Clinician authentication |
+| Admin API | MediCore CIS | HTTPS / TLS 1.3 | OIDC authorization code | Clinician authentication |
 | FHIR Facade | Azure Cache for Redis | TLS 1.3 (Private Endpoint) | Managed Identity | Short-TTL read cache |
 | Domain Services | App Insights | HTTPS / TLS 1.3 | Instrumentation key (Key Vault) | Telemetry |
 | Audit Sink | ADLS Gen2 | HTTPS / TLS 1.3 (Private Endpoint) | Managed Identity | Append audit blobs (immutable, WORM) |
@@ -498,11 +498,11 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Patient web/mobile app | Azure Front Door | HTTPS / TLS 1.3 | Azure AD B2C JWT (per request) | Front Door WAF, Azure DDoS Standard | All patient traffic |
 | FHIR Facade | Cerner Millennium HL7v2 listener | MLLP over IPsec VPN | Network-layer auth + service account | Trust internal firewall | HL7v2 ADT/ORM/ORU (legacy interfaces) |
 | FHIR Facade | Cerner Millennium FHIR R4 | HTTPS / TLS 1.3 | OAuth 2.0 client credentials | Trust internal firewall | Patient/Appointment FHIR reads |
-| FHIR Facade | NHS Spine (PDS) | HTTPS / TLS 1.2-MA | Mutual TLS with Spine certificate | Spine Core via HSCN | Patient demographic lookups |
-| FHIR Facade | NHS e-Referral Service | HTTPS / TLS 1.2 | OAuth 2.0 + NHS Digital assurance key | HSCN | Outpatient referral reads |
-| FHIR Facade | GP Connect (Appointments) | HTTPS / TLS 1.2 | JWT + NHS CIS2 organisation certificate | HSCN | Cross-organisation appointment availability (Phase 2) |
+| FHIR Facade | MediCore Spine (PDS) | HTTPS / TLS 1.2-MA | Mutual TLS with Spine certificate | Spine Core via national healthcare secure network | Patient demographic lookups |
+| FHIR Facade | MediCore e-Referral Service | HTTPS / TLS 1.2 | OAuth 2.0 + MediCore Digital assurance key | national healthcare secure network | Outpatient referral reads |
+| FHIR Facade | GP Connect (Appointments) | HTTPS / TLS 1.2 | JWT + MediCore CIS organisation certificate | national healthcare secure network | Cross-organisation appointment availability (Phase 2) |
 | Notification Service | Azure Communication Services (SMS / Email) | HTTPS / TLS 1.3 | Managed Identity | Private Endpoint | Appointment reminders, OTP delivery, notifications |
-| Service Desk Clinician | Admin Portal (Admin API) | HTTPS / TLS 1.3 | NHS CIS2 OIDC + MFA (smart card or FIDO2) | Front Door WAF | Read-only enrolment lookups, account suspension |
+| Service Desk Clinician | Admin Portal (Admin API) | HTTPS / TLS 1.3 | MediCore CIS OIDC + MFA (smart card or FIDO2) | Front Door WAF | Read-only enrolment lookups, account suspension |
 | Microsoft Sentinel | Azure AD B2C / App Insights / ADLS Gen2 | Azure diagnostic settings | Managed Identity | Azure-internal | Security analytics and alerting |
 | Patient web/mobile app | Microsoft Intune (for MDM-managed Trust devices only) | HTTPS / TLS 1.3 | Intune-managed | N/A | Managed device posture (corporate-issued devices only) |
 
@@ -512,7 +512,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 |-----------|-------------|---------------|----------|
 | Patient (web) | Responsive web app | Azure AD B2C (OIDC) + MFA (SMS OTP default / TOTP) | HTTPS / TLS 1.3 |
 | Patient (mobile) | iOS / Android app | Azure AD B2C (OIDC, refresh token rotation) + biometric unlock | HTTPS / TLS 1.3 |
-| Service desk admin (clinician) | Admin portal (responsive web) | NHS CIS2 (OIDC) + smart card or FIDO2 | HTTPS / TLS 1.3 |
+| Service desk admin (clinician) | Admin portal (responsive web) | MediCore CIS (OIDC) + smart card or FIDO2 | HTTPS / TLS 1.3 |
 | Operations / SRE | Azure Portal + Bastion | Entra ID SSO + conditional access + PAM (Just-in-Time elevation) | HTTPS / TLS 1.3, SSH over Bastion |
 
 #### 3.2.4 API & Interface Contracts
@@ -523,12 +523,12 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | MyMedwick Admin API | REST | Exposed | JSON | v1.0 | Internal developer portal |
 | Cerner Millennium FHIR R4 | REST (FHIR R4) | Consumed | JSON (FHIR) | R4 | Cerner vendor docs |
 | Cerner Millennium HL7v2 | MLLP | Consumed | HL7v2.5 pipe-delimited | 2.5 | Trust integration wiki |
-| NHS Spine PDS | REST / SOAP | Consumed | XML / JSON | 3.0 | NHS Digital developer portal |
-| NHS e-Referral Service | REST | Consumed | JSON (FHIR R4) | v2 | NHS Digital developer portal |
-| GP Connect Appointments | REST (FHIR STU3) | Consumed | JSON (FHIR STU3) | STU3 v1.4 | NHS Digital developer portal |
+| MediCore Spine PDS | REST / SOAP | Consumed | XML / JSON | 3.0 | MediCore Digital developer portal |
+| MediCore e-Referral Service | REST | Consumed | JSON (FHIR R4) | v2 | MediCore Digital developer portal |
+| GP Connect Appointments | REST (FHIR STU3) | Consumed | JSON (FHIR STU3) | STU3 v1.4 | MediCore Digital developer portal |
 | WinPath Pathology | HL7v2 / MLLP | Consumed | HL7v2.5 | 2.5 | Clinisys docs |
 | Azure Communication Services | REST | Consumed | JSON | 2023-08 | Microsoft docs |
-| NHS CIS2 OIDC | REST (OIDC) | Consumed | JSON | OIDC 1.0 | NHS Digital developer portal |
+| MediCore CIS OIDC | REST (OIDC) | Consumed | JSON | OIDC 1.0 | MediCore Digital developer portal |
 
 ---
 
@@ -560,9 +560,9 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
     SB1 -- Geo-DR Pairing --> SB2
     ADLS1 -- GRS / RA-GRS --> ADLS2[ADLS Gen2 - UK West]
     AppSvc -. HL7v2 over IPsec VPN .-> EPR[Cerner EPR - Trust Data Centre]
-    AppSvc -. TLS-MA over HSCN .-> HSCN[NHS HSCN]
-    HSCN --> Spine[NHS Spine]
-    HSCN --> eRS[NHS e-Referral]`} />
+    AppSvc -. TLS-MA over national healthcare secure network .-> national healthcare secure network[National Healthcare Secure Network]
+    national healthcare secure network --> Spine[MediCore Spine]
+    national healthcare secure network --> eRS[MediCore e-Referral]`} />
 
 #### 3.3.2 Hosting & Infrastructure
 
@@ -570,12 +570,12 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 
 | Attribute | Selection |
 |-----------|----------|
-| **Hosting Venue Type** | Public cloud (Azure) with HSCN connectivity to NHS national services |
+| **Hosting Venue Type** | Public cloud (Azure) with national healthcare secure network connectivity to MediCore national services |
 | **Hosting Region(s)** | UK South (primary -- London), UK West (DR -- Cardiff) |
 | **Service Model** | PaaS (App Service, Azure SQL, Service Bus, APIM, Functions) and SaaS (Azure Communication Services, Front Door, Sentinel) |
 | **Cloud Provider** | Microsoft Azure |
 | **Account / Subscription Type** | Medwick Healthcare Trust Enterprise Agreement -- dedicated "mymedwick-prod" subscription; separate subscriptions per environment |
-| **Landing Zone Pattern** | Medwick ALZ (Azure Landing Zone) -- NHS England-aligned, hub-and-spoke with platform hub (shared connectivity, shared services) and workload spoke |
+| **Landing Zone Pattern** | Medwick ALZ (Azure Landing Zone) -- MediCore Authority-aligned, hub-and-spoke with platform hub (shared connectivity, shared services) and workload spoke |
 | **Data residency** | All data (primary, DR, backups, logs) in UK regions only -- UK South and UK West. Enforced by Azure Policy "Allowed Locations". |
 
 ##### Compute
@@ -595,7 +595,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 - [x] Microsoft Defender for Cloud -- enabled across the subscription (Defender for App Service, SQL, Storage, Key Vault, Containers)
 - [x] Microsoft Defender for Endpoint -- on all admin jump boxes (via Intune)
 - [x] Microsoft Sentinel -- SIEM / SOAR
-- [x] Azure Policy -- enforces NCSC / NHS / Medwick baselines
+- [x] Azure Policy -- enforces NCSC / MediCore / Medwick baselines
 - [x] Microsoft Purview -- data classification and sensitivity labels on Azure SQL
 - [x] Vulnerability scanning (Defender for Cloud built-in + OWASP ZAP in CI)
 
@@ -609,8 +609,8 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Outbound Internet connectivity required? | Limited -- only via Private Endpoints and Azure-managed egress. Outbound to ACS, B2C, Apple/Google push services via Managed Firewall allow-list |
 | Cloud-to-on-premises connectivity required? | Yes -- IPsec VPN + ExpressRoute (1 Gbps) to Trust core data centre for Cerner EPR HL7v2 and ancillary systems |
 | Wireless networking required? | No (within Azure); Trust-site wireless is used by Trust devices and is out of scope here |
-| Third-party / co-location connectivity required? | No -- all NHS national services via HSCN; no private co-location links |
-| HSCN connectivity required? | Yes -- dedicated HSCN CN-SP link for NHS Spine, e-Referral Service, and GP Connect |
+| Third-party / co-location connectivity required? | No -- all MediCore national services via national healthcare secure network; no private co-location links |
+| national healthcare secure network connectivity required? | Yes -- dedicated national healthcare secure network CN-SP link for MediCore Spine, e-Referral Service, and GP Connect |
 
 ##### User & Administrator Access
 
@@ -640,7 +640,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Peak egress bandwidth to Internet | 400 Mb/s (projected Year 3) |
 | Peak ingress bandwidth from Internet | 150 Mb/s |
 | Peak bandwidth between on-prem and cloud (EPR) | 250 Mb/s (over 1 Gbps ExpressRoute) |
-| Peak HSCN bandwidth | 50 Mb/s (Spine, e-RS, GP Connect combined) |
+| Peak national healthcare secure network bandwidth | 50 Mb/s (Spine, e-RS, GP Connect combined) |
 | Traffic characteristics | Daily peaks 07:30-09:00 (appointment reminder windows) and 18:00-20:00 (after-work access); weekend slow |
 | Latency requirements | Patient-perceived TTFB < 300ms P95 |
 
@@ -651,7 +651,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | DDoS Protection | Yes | Azure DDoS Standard on the VNet; Front Door absorbs volumetric attacks at edge |
 | Rate Limiting | Yes | APIM rate limit policies (per subscription key and per user); Front Door WAF rate-based rules |
 | Source IP Restrictions | Yes | Admin portal: geo-blocked outside UK + allow-list for Trust IPs; patient portal: no IP restriction (open) |
-| Web Application Firewall (WAF) | Yes | Front Door Premium WAF with OWASP Core Rule Set 3.2, bot manager, custom rules (NHS Number format, block common path traversal) |
+| Web Application Firewall (WAF) | Yes | Front Door Premium WAF with OWASP Core Rule Set 3.2, bot manager, custom rules (National Patient ID format, block common path traversal) |
 | Client Verification Controls | Yes | Patient JWTs from Azure AD B2C bound to session, short-lived (30 min access token, 8h refresh with rotation) |
 | File Upload Protection | Limited | Only repeat prescription note field accepts text (no file upload) |
 
@@ -689,7 +689,7 @@ Not applicable -- no IoT devices are part of this solution. Trust Internet-of-Th
 
 | Question | Response |
 |----------|----------|
-| Hosting region chosen for low carbon intensity | Azure UK South (London) primary and UK West (Cardiff) DR — chosen for data residency and NHS DSPT requirements. Microsoft has committed to 100% renewable energy matching across UK regions by 2025. UK West's published grid mix is on average cleaner than UK South. |
+| Hosting region chosen for low carbon intensity | Azure UK South (London) primary and UK West (Cardiff) DR — chosen for data residency and MediCore DSPT requirements. Microsoft has committed to 100% renewable energy matching across UK regions by 2025. UK West's published grid mix is on average cleaner than UK South. |
 | Non-production environments auto-shutdown | Yes — non-prod App Service plans scaled-in 19:00-07:00 weekdays + weekends via Azure Automation; non-prod Azure SQL auto-paused after 1 hour idle. Estimated saving £800/month (referenced in 4.5). |
 | Compute family chosen for performance-per-watt | Yes — Premium v3 (Pv3) App Service plan SKUs throughout; Microsoft published data shows ~25% better performance-per-watt than Pv2 with faster warm-up. ADLS Gen2 uses latest-generation Microsoft hardware. |
 | Auto-scaling configured to release capacity when idle | Yes — App Service Plan auto-scale: scale-out at &gt;70% CPU 10 min, scale-in at &lt;30% CPU 20 min. Azure Functions consumption plan scales to zero between bursts. |
@@ -705,12 +705,12 @@ Not applicable -- no IoT devices are part of this solution. Trust Internet-of-Th
 
 | Data Name | Store Technology | Authoritative? | Retention Period | Data Size | Classification | Personal Data? | Special Category? | Encryption Level | Key Management |
 |-----------|-----------------|---------------|-----------------|-----------|---------------|---------------|-------------------|-----------------|---------------|
-| Patient enrolment records (NHS Number, portal user ID mapping, verification evidence references) | Azure SQL | Yes | Life + 8 years (Records Management Code of Practice) | 5 GB | Restricted | Yes | Yes (health status inferred) | TDE + Always Encrypted (deterministic on NHS Number) | Customer-managed key (HSM-backed) |
+| Patient enrolment records (National Patient ID, portal user ID mapping, verification evidence references) | Azure SQL | Yes | Life + 8 years (Records Management Code of Practice) | 5 GB | Restricted | Yes | Yes (health status inferred) | TDE + Always Encrypted (deterministic on National Patient ID) | Customer-managed key (HSM-backed) |
 | Patient preferences (contact, consent, SMS opt-in) | Azure SQL | Yes | Life + 8 years | 1 GB | Restricted | Yes | Partial | TDE + Always Encrypted | Customer-managed key |
 | Appointment cache (read-through cache from EPR) | Azure SQL + Redis | No (EPR authoritative) | 30 days rolling | 20 GB | Restricted | Yes | Yes | TDE (SQL); in-memory TLS (Redis) | Customer-managed key |
 | Results metadata (result ID, released flag, view timestamps) | Azure SQL | Yes (for view tracking); No (result content in EPR) | 8 years | 15 GB | Restricted | Yes | Yes | TDE + Always Encrypted | Customer-managed key |
 | Session state / MFA state | Azure SQL | Yes | 24 hours | less than 1 GB | Restricted | Yes | No | TDE | Customer-managed key |
-| Audit log | ADLS Gen2 (WORM immutable) | Yes | 7 years (DSPT / NHS Records Management) | 150 GB / year | Restricted | Yes | Yes | Azure Storage SSE + immutable blob policy | Customer-managed key |
+| Audit log | ADLS Gen2 (WORM immutable) | Yes | 7 years (DSPT / MediCore Records Management) | 150 GB / year | Restricted | Yes | Yes | Azure Storage SSE + immutable blob policy | Customer-managed key |
 | Application logs (PII-redacted) | Log Analytics (Sentinel workspace) | No | 2 years (hot) + 5 years (archive) | 80 GB / year | Internal | No (redaction enforced) | No | Azure Storage SSE | Microsoft-managed |
 | Integration event store (Service Bus messages) | Azure Service Bus | Transient | 14 days max | less than 10 GB | Restricted | Yes | Yes | Service Bus encryption (TLS + at-rest) | Customer-managed key |
 
@@ -731,18 +731,18 @@ Not applicable -- no IoT devices are part of this solution. Trust Internet-of-Th
 | **Internal** | Redacted application logs, infrastructure metrics, aggregated usage statistics | Trust access controls |
 | **Restricted (Official-Sensitive)** | All patient-identifiable data, enrolment records, preferences, audit logs referencing patients, clinical messages | Encrypted at rest (TDE + Always Encrypted for PII fields) and in transit (TLS 1.3); access-controlled (RBAC + PIM); audited; 7-year audit retention |
 
-NHS data classification: All patient-identifiable data is "Official-Sensitive" with the NHS handling caveat "PERSONAL". The Caldicott Principles are applied to every data use.
+MediCore healthcare data classification: All patient-identifiable data is "Official-Sensitive" with the MediCore handling caveat "PERSONAL". The Caldicott Principles are applied to every data use.
 
 #### 3.4.3 Data Lifecycle
 
 | Stage | Description | Controls |
 |-------|-------------|----------|
-| **Creation / Ingestion** | Patient enrolment (self-service with NHS Number + PDS verification); clinical data read-through from EPR via FHIR facade; no primary clinical data created in portal | PDS demographics match; NHS Number validation (Modulus 11); consent captured and logged |
-| **Processing** | Domain services resolve each request against EPR / Spine in real time, applying results release rules and consent checks | Every patient data access logged with NHS Number, user session, and purpose; Caldicott justification coded per access type |
+| **Creation / Ingestion** | Patient enrolment (self-service with National Patient ID + PDS verification); clinical data read-through from EPR via FHIR facade; no primary clinical data created in portal | PDS demographics match; National Patient ID validation (Modulus 11); consent captured and logged |
+| **Processing** | Domain services resolve each request against EPR / Spine in real time, applying results release rules and consent checks | Every patient data access logged with National Patient ID, user session, and purpose; Caldicott justification coded per access type |
 | **Storage** | Portal-owned data in Azure SQL (TDE + Always Encrypted); immutable audit logs in ADLS Gen2 | Customer-managed keys in Azure Key Vault (HSM); automated daily backups; geo-redundant for audit |
-| **Sharing / Transfer** | To NHS Spine (TLS-MA), to e-RS, to GP Connect (Phase 2), to ACS (patient contact details for SMS/email delivery only); no third-country transfer | Data minimisation -- only send what is required; DPIA DPIA-2025-004 assesses each flow |
+| **Sharing / Transfer** | To MediCore Spine (TLS-MA), to e-RS, to GP Connect (Phase 2), to ACS (patient contact details for SMS/email delivery only); no third-country transfer | Data minimisation -- only send what is required; DPIA DPIA-2025-004 assesses each flow |
 | **Archival** | Audit log transitions from hot (1 year) to cool (years 2-7) in ADLS lifecycle policy; SQL archival is application-level (mark as archived) | Lifecycle policies, WORM immutability on audit container (7-year legal hold) |
-| **Deletion / Purging** | On patient request (UK GDPR Art 17 with NHS records caveats) or at end of retention; pseudo-anonymised research aggregates may be retained | Data Retention Committee approves; tombstone records preserved for audit trail integrity |
+| **Deletion / Purging** | On patient request (UK GDPR Art 17 with MediCore records caveats) or at end of retention; pseudo-anonymised research aggregates may be retained | Data Retention Committee approves; tombstone records preserved for audit trail integrity |
 
 #### 3.4.4 Data Privacy & Protection
 
@@ -760,7 +760,7 @@ NHS data classification: All patient-identifiable data is "Official-Sensitive" w
 |----------|----------|
 | Sensitive data is masked (describe method below) | [x] |
 
-Production data is never copied into non-production environments. Staging uses a masked dataset derived from EPR test data where all NHS Numbers, names, addresses, dates of birth, and contact details are replaced by realistic synthetic values using a deterministic tokenisation approach. Referential integrity (appointment-to-patient, result-to-patient) is preserved using the tokens. Approved by IG Lead (2025-04-08).
+Production data is never copied into non-production environments. Staging uses a masked dataset derived from EPR test data where all National Patient IDs, names, addresses, dates of birth, and contact details are replaced by realistic synthetic values using a deterministic tokenisation approach. Referential integrity (appointment-to-patient, result-to-patient) is preserved using the tokens. Approved by IG Lead (2025-04-08).
 
 ##### Data Integrity
 
@@ -777,9 +777,9 @@ Production data is never copied into non-production environments. Staging uses a
 
 | Destination | Data Type | Classification | Transfer Method | Protection |
 |------------|-----------|---------------|----------------|------------|
-| NHS Spine (PDS) | NHS Number, demographic query | Restricted | TLS-MA over HSCN | Mutual TLS with Spine-issued certificate; minimum data for lookup |
-| NHS e-Referral Service | Patient UBRN, appointment references | Restricted | HTTPS over HSCN | OAuth 2.0; NHS Digital assurance key |
-| GP Connect | Patient NHS Number for appointment availability (Phase 2) | Restricted | HTTPS over HSCN | JWT + CIS2 organisation certificate |
+| MediCore Spine (PDS) | National Patient ID, demographic query | Restricted | TLS-MA over national healthcare secure network | Mutual TLS with Spine-issued certificate; minimum data for lookup |
+| MediCore e-Referral Service | Patient UBRN, appointment references | Restricted | HTTPS over national healthcare secure network | OAuth 2.0; MediCore Digital assurance key |
+| GP Connect | Patient National Patient ID for appointment availability (Phase 2) | Restricted | HTTPS over national healthcare secure network | JWT + CIS2 organisation certificate |
 | Microsoft Azure Communication Services (subprocessor) | Patient mobile number / email (ephemeral at time of send) | Restricted | HTTPS / TLS 1.3 | Microsoft is contracted subprocessor under Trust enterprise agreement; UK region only; subject to Microsoft Online Services DPA |
 | Microsoft Sentinel (Trust internal SIEM) | Pseudonymised security events | Internal | Azure diagnostic settings | Internal Trust service |
 
@@ -791,7 +791,7 @@ Production data is never copied into non-production environments. Staging uses a
 
 | Question | Response |
 |----------|----------|
-| Retention periods minimised to regulator + business need | Yes — patient identifiable data retained per Records Management Code of Practice for Health and Social Care 2021 (ranges 8 years for adult outpatient records to lifetime+8 for some categories); audit logs 25 years (NHS DSPT requirement); session data ≤ 24 hours. ADLS Gen2 lifecycle policies enforce automatic expiry; no "indefinite" retention. |
+| Retention periods minimised to regulator + business need | Yes — patient identifiable data retained per MediCore Records Management Code 2021 (ranges 8 years for adult outpatient records to lifetime+8 for some categories); audit logs 25 years (MediCore DSPT requirement); session data ≤ 24 hours. ADLS Gen2 lifecycle policies enforce automatic expiry; no "indefinite" retention. |
 | Older data tiered to cold/archive storage | Yes — ADLS Gen2 lifecycle: Hot for current year, Cool for years 2-3, Archive for years 4+. Azure SQL longer-term retention (LTR) backups stored in cool tier. ~70% of historical data in Cool/Archive. |
 | Unused or duplicate replicas | Single Azure SQL primary + 1 DR geo-replica; no read replicas (the application is light-read for individual patients). Quarterly review of storage accounts via Azure Advisor recommendations. |
 | Compression applied | Brotli on HTTPS responses (~70% reduction on FHIR JSON payloads); gzip on audit log uploads to ADLS; FHIR resources are stored compressed in cold tiers. |
@@ -808,7 +808,7 @@ Production data is never copied into non-production environments. Staging uses a
 
 | Question | Response |
 |----------|----------|
-| Does the solution support regulated activities? | Yes -- processes special category personal data (health). Subject to DCB0129/0160 clinical safety standards. Not a medical device (assessed). |
+| Does the solution support regulated activities? | Yes -- processes special category personal data (health). Subject to CS-129/0160 clinical safety standards. Not a medical device (assessed). |
 | Is the solution SaaS or third-party hosted? | No -- hosted on Azure (IaaS/PaaS) by the Trust; Microsoft is the cloud provider (subprocessor) |
 | Has a third-party risk assessment been completed? | Yes -- Microsoft Azure: MHT-TRA-2024-001 (approved); Cerner (EPR vendor): MHT-TRA-2023-007 (approved); ACS: inherits Microsoft TRA |
 
@@ -828,14 +828,14 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 | STRIDE | Threat | Attack Vector | Likelihood | Impact | Mitigation |
 |--------|--------|-------------|-----------|--------|------------|
 | **Spoofing** | Attacker impersonates patient to view records | Credential stuffing from other-site breaches; SIM-swap to intercept SMS OTP | Medium | Critical | Azure AD B2C + MFA (SMS OTP default; TOTP upgrade recommended); breached-password detection; step-up MFA for prescription actions; FIDO2 option |
-| **Spoofing** | Attacker impersonates Trust clinician to service desk admin portal | Stolen smart card / coerced clinician | Low | Critical | NHS CIS2 smart card + FIDO2; IP geo-restriction; session recording; behavioural analytics (Sentinel) |
+| **Spoofing** | Attacker impersonates Trust clinician to service desk admin portal | Stolen smart card / coerced clinician | Low | Critical | MediCore CIS smart card + FIDO2; IP geo-restriction; session recording; behavioural analytics (Sentinel) |
 | **Tampering** | Man-in-the-middle alters appointment details in transit | TLS downgrade | Low | High | TLS 1.3 enforced; HSTS + preload; certificate pinning on mobile apps |
 | **Tampering** | Modification of audit log | Insider with storage access | Low | Critical | ADLS Gen2 WORM immutable policy (7-year legal hold); Key Vault access separated from audit writers; alerted on access |
 | **Repudiation** | Patient denies an action (cancellation, Rx request) | Session hijack or dispute | Medium | High | Immutable audit trail including device, IP, session ID, MFA method; step-up MFA for sensitive actions |
 | **Information Disclosure** | Data breach exposing patient records | SQL injection, misconfigured storage, stolen credentials | Low | Critical | Parameterised queries; Defender for SQL; Private Endpoints only; Always Encrypted on PII; Sentinel UEBA |
-| **Information Disclosure** | Wrong patient's record shown to another patient (misidentification) -- clinical safety hazard HAZ-04 | Logic bug in session/context handling; identity merge error | Low | Critical | Strict session-to-NHS-Number binding; automated clinical safety regression tests; manual clinical safety review per release (DCB0160) |
+| **Information Disclosure** | Wrong patient's record shown to another patient (misidentification) -- clinical safety hazard HAZ-04 | Logic bug in session/context handling; identity merge error | Low | Critical | Strict session-to-MediCore-Number binding; automated clinical safety regression tests; manual clinical safety review per release (CS-160) |
 | **Denial of Service** | Volumetric DDoS on public endpoint | Botnet attack | Medium | High | Azure DDoS Standard; Front Door absorbs edge; APIM rate limiting; graceful degradation |
-| **Elevation of Privilege** | Standard user escalates to admin | Broken access control | Low | Critical | RBAC + ABAC (patient can only see own NHS Number data, enforced at service layer and re-validated in FHIR facade); pen testing annually (NCC Group) |
+| **Elevation of Privilege** | Standard user escalates to admin | Broken access control | Low | Critical | RBAC + ABAC (patient can only see own National Patient ID data, enforced at service layer and re-validated in FHIR facade); pen testing annually (NCC Group) |
 | **Clinical safety** (cross-cutting) | Silent SMS delivery failure causing missed critical appointment -- hazard HAZ-02 | ACS outage, mobile number out of date | Medium | High | Delivery receipts tracked; fallback to email; booking office manual check for high-priority appointments; patient UI shows "last notified" timestamp |
 | **Clinical safety** (cross-cutting) | Wrong results shown to patient -- hazard HAZ-03 | EPR interface defect, mapping error | Low | Critical | Results release only after clinician review and explicit release; FHIR conformance tests; contract tests; sample reconciliation with EPR nightly |
 
@@ -851,7 +851,7 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 
 | Access Type | Role(s) | Destination(s) | Authentication Method | Credential Protection |
 |------------|---------|----------------|----------------------|----------------------|
-| Service desk admin (clinician / admin) | Service Desk Admin, Read-Only Admin | Admin portal | NHS CIS2 OIDC -- smart card or FIDO2 (phishing-resistant) | CIS2-managed; Trust enforces smart card for clinical users |
+| Service desk admin (clinician / admin) | Service Desk Admin, Read-Only Admin | Admin portal | MediCore CIS OIDC -- smart card or FIDO2 (phishing-resistant) | CIS2-managed; Trust enforces smart card for clinical users |
 | Operations / SRE | Platform Engineer, DBA, Security Engineer | Azure Portal, ADO, runbooks | Entra ID SSO + MFA (FIDO2 / Microsoft Authenticator) + Conditional Access + PIM (JIT) | Entra ID policies; PIM 8-hour max elevation |
 | Service accounts | Internal services | Azure resources | Azure Managed Identity (system-assigned or user-assigned) | No passwords; tokens short-lived and Entra-managed |
 
@@ -859,14 +859,14 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 
 | Control | Response |
 |---------|----------|
-| Does the application use SSO? | Yes -- Azure AD B2C for patients; NHS CIS2 for clinicians; Entra ID for staff/ops |
-| What is the unique identifier for user accounts? | Patients: Azure AD B2C user objectId mapped to NHS Number (verified via PDS during enrolment); clinicians: CIS2 UUID |
+| Does the application use SSO? | Yes -- Azure AD B2C for patients; MediCore CIS for clinicians; Entra ID for staff/ops |
+| What is the unique identifier for user accounts? | Patients: Azure AD B2C user objectId mapped to National Patient ID (verified via PDS during enrolment); clinicians: CIS2 UUID |
 | What is the authentication flow? | Authorization code + PKCE for all web/mobile; token exchange at BFF |
-| Credential issuance | Patient: self-service enrolment with PDS demographic match + email verification + SMS verification; service desk admin: CIS2 smart card issued by NHS Registration Authority |
+| Credential issuance | Patient: self-service enrolment with PDS demographic match + email verification + SMS verification; service desk admin: CIS2 smart card issued by MediCore Registration Authority |
 | Credential complexity | Patient: 12+ chars with complexity, breached-password check; clinician: CIS2 policy |
-| Credential rotation | Patient: 180-day password rotation recommended (not enforced -- aligned to NCSC guidance); CIS2: NHS CIS2 policy |
+| Credential rotation | Patient: 180-day password rotation recommended (not enforced -- aligned to NCSC guidance); CIS2: MediCore CIS policy |
 | Account lockout | Patient: 5 failed attempts -> 15 minute soft lockout; 10 attempts -> account locked, manual unlock via service desk after verification |
-| Password reset | Patient: self-service with registered email + SMS OTP verification of NHS Number + date of birth |
+| Password reset | Patient: self-service with registered email + SMS OTP verification of National Patient ID + date of birth |
 
 ##### Session Management
 
@@ -881,8 +881,8 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 
 | Access Type | Role / Scope | Entitlement Store | Provisioning Process |
 |------------|-------------|-------------------|---------------------|
-| Patients | Fine-grained access bound to own NHS Number only | Azure SQL (enrolment table) | Self-service enrolment + PDS verification |
-| Service desk admin | Admin Read-Only, Account Suspend | NHS CIS2 attributes + Trust role mapping | Via Trust RA process |
+| Patients | Fine-grained access bound to own National Patient ID only | Azure SQL (enrolment table) | Self-service enrolment + PDS verification |
+| Service desk admin | Admin Read-Only, Account Suspend | MediCore CIS attributes + Trust role mapping | Via Trust RA process |
 | Operations / SRE | Platform Operator, DBA, Security | Entra ID groups + PIM | Manager approval + PIM JIT elevation |
 | Service accounts | Per-service Managed Identity (least privilege) | Azure RBAC | IaC-managed (Bicep) |
 
@@ -909,9 +909,9 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 |---------|---------------|
 | Network segmentation | Azure Landing Zone hub-spoke; VNet per environment; subnets per tier (app, data, management); NSGs with deny-by-default; Azure Firewall at hub; Private Endpoints for all PaaS; no public network access to SQL, Key Vault, Storage, Service Bus |
 | Ingress filtering | Azure Front Door Premium with WAF (OWASP CRS 3.2 + Microsoft managed rulesets), bot protection, rate-based rules, geo-rules; APIM policies (JWT validation, schema validation, rate limit) |
-| Egress filtering | Azure Firewall; explicit allow-list (ACS, Microsoft Graph, Spine/HSCN targets, Apple/Google push); deny-all-else; NAT Gateway with fixed egress IPs |
+| Egress filtering | Azure Firewall; explicit allow-list (ACS, Microsoft Graph, Spine/national healthcare secure network targets, Apple/Google push); deny-all-else; NAT Gateway with fixed egress IPs |
 | Encryption in transit | TLS 1.3 enforced for all external; TLS 1.2 minimum internally; private CA for service-to-service mTLS optional; Azure Key Vault + Managed HSM for certificate management |
-| HSCN boundary | Dedicated HSCN CN-SP connection (2 links, diverse carriers) with NHS-approved firewalling |
+| national healthcare secure network boundary | Dedicated national healthcare secure network CN-SP connection (2 links, diverse carriers) with MediCore-approved firewalling |
 
 #### 3.5.4 Data Protection
 
@@ -939,12 +939,12 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 
 | Capability | Implementation |
 |-----------|---------------|
-| Security event logging | All authn/authz events, patient data access (with NHS Number, action, result), admin actions, privilege elevation, WAF blocks, configuration changes. Forwarded to Sentinel. |
+| Security event logging | All authn/authz events, patient data access (with National Patient ID, action, result), admin actions, privilege elevation, WAF blocks, configuration changes. Forwarded to Sentinel. |
 | SIEM integration | Microsoft Sentinel (Trust tenant) -- all Azure diagnostic logs + App Insights security events. Custom analytics rules: patient-credential-stuffing (failed MFA > 10 in 15 min across unique patient IDs from one IP), impossible travel, admin after-hours access, mass-export pattern, prescription request anomaly |
 | Infrastructure event detection | Microsoft Defender for Cloud (Defender for App Service, SQL, Storage, Key Vault, Containers); Microsoft Defender for Identity on Entra ID |
 | Security alerting | Sentinel playbooks (SOAR): automatic account lockout on credential stuffing pattern, Teams notification to SOC, ServiceNow ticket creation; 24x7 SOC (outsourced to Trust MSSP) |
-| Threat intelligence | MISP feed, NHS Digital Data Security Centre (DSC) alerts ingested into Sentinel |
-| Clinical safety monitoring | Dedicated Sentinel workbook with clinical-safety-relevant KPIs: SMS delivery failure rate, FHIR facade error rate against EPR, session-to-NHS-Number binding anomaly count |
+| Threat intelligence | MISP feed, MediCore Digital Data Security Centre (DSC) alerts ingested into Sentinel |
+| Clinical safety monitoring | Dedicated Sentinel workbook with clinical-safety-relevant KPIs: SMS delivery failure rate, FHIR facade error rate against EPR, session-to-MediCore-Number binding anomaly count |
 
 ---
 
@@ -959,8 +959,8 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 | **Actor(s)** | Enrolled patient |
 | **Trigger** | Patient opens app and navigates to "My Appointments" |
 | **Pre-conditions** | Patient is enrolled, authenticated (Azure AD B2C session valid), has given consent to SMS/email communications, has at least one scheduled outpatient appointment |
-| **Main Flow** | 1. App calls GET /appointments on Patient BFF with Bearer JWT. 2. BFF validates token (JWT signature, audience, not expired). 3. BFF calls Appointments Service with patient context (NHS Number from session). 4. Appointments Service checks Redis cache (60s TTL) for patient appointments. 5. Cache miss: Appointments Service calls FHIR Facade. 6. FHIR Facade calls Cerner FHIR R4 Appointment search by patient identifier. 7. FHIR Facade normalises to MyMedwick canonical model. 8. Appointments Service filters to outpatient-type only and applies results release rules. 9. Appointments Service caches and returns response. 10. BFF aggregates and returns to app. 11. Audit event emitted to Service Bus. |
-| **Post-conditions** | Patient sees list of appointments; audit event recorded with NHS Number, session ID, timestamp, purpose=view-appointments |
+| **Main Flow** | 1. App calls GET /appointments on Patient BFF with Bearer JWT. 2. BFF validates token (JWT signature, audience, not expired). 3. BFF calls Appointments Service with patient context (National Patient ID from session). 4. Appointments Service checks Redis cache (60s TTL) for patient appointments. 5. Cache miss: Appointments Service calls FHIR Facade. 6. FHIR Facade calls Cerner FHIR R4 Appointment search by patient identifier. 7. FHIR Facade normalises to MyMedwick canonical model. 8. Appointments Service filters to outpatient-type only and applies results release rules. 9. Appointments Service caches and returns response. 10. BFF aggregates and returns to app. 11. Audit event emitted to Service Bus. |
+| **Post-conditions** | Patient sees list of appointments; audit event recorded with National Patient ID, session ID, timestamp, purpose=view-appointments |
 | **Views Involved** | Logical, Integration & Data Flow, Physical (App Service, SQL, Redis, ExpressRoute to EPR), Data (cache, audit), Security (JWT, RBAC, audit) |
 
 **UC-02: Patient cancels or reschedules an appointment**
@@ -989,10 +989,10 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 
 | Attribute | Detail |
 |-----------|--------|
-| **Actor(s)** | Enrolled patient, FHIR Facade, Cerner EPR, NHS Spine PDS |
+| **Actor(s)** | Enrolled patient, FHIR Facade, Cerner EPR, MediCore Spine PDS |
 | **Trigger** | Any patient data read or write |
 | **Pre-conditions** | Patient authenticated and enrolled |
-| **Main Flow** | 1. Session JWT contains patient_nhs_number (verified at enrolment via PDS). 2. Every call to FHIR Facade asserts patient_nhs_number as both HTTP header and query parameter. 3. FHIR Facade verifies patient_nhs_number exists in PDS cache (TTL 24h) and has not been merged/retired. 4. FHIR Facade calls Cerner FHIR with NHS Number as identifier -- never with Cerner internal IDs. 5. Returned resources are verified to have matching patient identifier; mismatched responses raise MHT-HAZ-04 alert, block the request, and log to Sentinel. 6. If PDS returns "merged", Facade fetches new identifier, updates enrolment, logs clinical-safety event, and forces patient re-verification on next login. |
+| **Main Flow** | 1. Session JWT contains patient_nhs_number (verified at enrolment via PDS). 2. Every call to FHIR Facade asserts patient_nhs_number as both HTTP header and query parameter. 3. FHIR Facade verifies patient_nhs_number exists in PDS cache (TTL 24h) and has not been merged/retired. 4. FHIR Facade calls Cerner FHIR with National Patient ID as identifier -- never with Cerner internal IDs. 5. Returned resources are verified to have matching patient identifier; mismatched responses raise MHT-HAZ-04 alert, block the request, and log to Sentinel. 6. If PDS returns "merged", Facade fetches new identifier, updates enrolment, logs clinical-safety event, and forces patient re-verification on next login. |
 | **Post-conditions** | Patient receives only their own data; any mismatch is blocked and raises a clinical safety event |
 | **Views Involved** | Security (identity binding), Data (identity controls), Scenarios, Governance (Hazard Log) |
 
@@ -1015,10 +1015,10 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 |-------|---------|
 | **Status** | Accepted |
 | **Date** | 2025-02-05 |
-| **Context** | The Trust has a sovereign UK cloud hosting requirement and operates an enterprise agreement with Microsoft. A technology choice was made between Microsoft Azure (UK South / UK West) and AWS (London / Ireland). Evaluation criteria: UK data residency assurance, alignment with NHS England patterns, existing Trust skills, identity integration (Entra ID already Trust standard), regulatory attestations (ISO/IEC 27018), and cost. |
+| **Context** | The Trust has a sovereign UK cloud hosting requirement and operates an enterprise agreement with Microsoft. A technology choice was made between Microsoft Azure (UK South / UK West) and AWS (London / Ireland). Evaluation criteria: UK data residency assurance, alignment with MediCore Authority patterns, existing Trust skills, identity integration (Entra ID already Trust standard), regulatory attestations (ISO/IEC 27018), and cost. |
 | **Decision** | Adopt Microsoft Azure with UK South (primary) and UK West (DR). |
-| **Alternatives Considered** | **AWS:** Strong services and mature UK presence. Rejected because: (a) Trust existing Entra ID / Intune investment favoured Microsoft stack for identity; (b) Existing staff skills heavily Azure-weighted (migration from on-premises to Azure for non-clinical systems); (c) AWS UK regions do not yet have the same UK sovereignty contractual commitments as Azure's UK regions for Trust's specific workloads; (d) ISO/IEC 27018 certification and NHS alignment patterns more mature on Azure. **Google Cloud:** insufficient UK coverage and Trust skills at decision time. **On-premises:** inconsistent with Trust "cloud-first-where-appropriate" policy for non-clinical-record workloads. |
-| **Consequences** | Positive: unified identity stack (Entra ID, B2C, CIS2 federation pattern); mature NHS landing zone patterns; Trust staff skills aligned; integrated Sentinel SIEM. Negative: Azure-specific skills required for deep ops; Moderate lock-in to Azure AD B2C and APIM (see 3.1.6). |
+| **Alternatives Considered** | **AWS:** Strong services and mature UK presence. Rejected because: (a) Trust existing Entra ID / Intune investment favoured Microsoft stack for identity; (b) Existing staff skills heavily Azure-weighted (migration from on-premises to Azure for non-clinical systems); (c) AWS UK regions do not yet have the same UK sovereignty contractual commitments as Azure's UK regions for Trust's specific workloads; (d) ISO/IEC 27018 certification and MediCore alignment patterns more mature on Azure. **Google Cloud:** insufficient UK coverage and Trust skills at decision time. **On-premises:** inconsistent with Trust "cloud-first-where-appropriate" policy for non-clinical-record workloads. |
+| **Consequences** | Positive: unified identity stack (Entra ID, B2C, CIS2 federation pattern); mature MediCore landing zone patterns; Trust staff skills aligned; integrated Sentinel SIEM. Negative: Azure-specific skills required for deep ops; Moderate lock-in to Azure AD B2C and APIM (see 3.1.6). |
 | **Quality Attribute Tradeoffs** | Operational Excellence: positive (tooling alignment). Security: positive (unified IAM). Cost: neutral (comparable to AWS). Portability: neutral-to-negative (B2C is high lock-in, mitigated by IdP facade pattern). |
 
 **ADR-002: FHIR R4 over HL7v2 as the canonical clinical data contract**
@@ -1027,22 +1027,22 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 |-------|---------|
 | **Status** | Accepted |
 | **Date** | 2025-02-20 |
-| **Context** | Downstream clinical systems (Cerner, WinPath, JAC) historically integrate via HL7v2 messaging (MLLP). NHS England's Interoperability Strategy mandates FHIR R4 for new clinical APIs. The FHIR Facade pattern allows both in parallel. The decision is whether MyMedwick's internal clinical data model should be HL7v2 (the data's native form) or FHIR R4. |
+| **Context** | Downstream clinical systems (Cerner, WinPath, JAC) historically integrate via HL7v2 messaging (MLLP). MediCore Authority's Interoperability Strategy mandates FHIR R4 for new clinical APIs. The FHIR Facade pattern allows both in parallel. The decision is whether MyMedwick's internal clinical data model should be HL7v2 (the data's native form) or FHIR R4. |
 | **Decision** | Use FHIR R4 as the canonical internal model; the FHIR Facade performs HL7v2-to-FHIR mapping at the ingestion boundary. |
-| **Alternatives Considered** | **HL7v2 as canonical:** Lower impedance with legacy systems but rejected: (a) Inconsistent with NHS England standards for new systems; (b) HL7v2 is poorly suited to JSON/REST consumption by modern web clients; (c) Would lock MyMedwick out of the ICS-wide FHIR-based data sharing roadmap. **Bespoke domain model:** Rejected -- reinvents the wheel; FHIR R4 is a recognised NHS standard and has mature .NET SDKs (Firely). |
+| **Alternatives Considered** | **HL7v2 as canonical:** Lower impedance with legacy systems but rejected: (a) Inconsistent with MediCore Authority standards for new systems; (b) HL7v2 is poorly suited to JSON/REST consumption by modern web clients; (c) Would lock MyMedwick out of the ICS-wide FHIR-based data sharing roadmap. **Bespoke domain model:** Rejected -- reinvents the wheel; FHIR R4 is a recognised MediCore standard and has mature .NET SDKs (Firely). |
 | **Consequences** | Positive: standards-aligned; forward-compatible with ICS Shared Care Record; strong tooling (Firely SDK); easier external audit. Negative: HL7v2-to-FHIR mapping is non-trivial for edge cases (address types, telecom systems) and must be clinically validated; FHIR conformance testing added to CI. |
 | **Quality Attribute Tradeoffs** | Operational Excellence: positive (single internal model). Performance: neutral (mapping overhead marginal). Reliability: positive (tested mapping layer isolates EPR changes). Cost: slight increase in initial development, net positive over 3-year life. |
 
-**ADR-003: Azure AD B2C over NHS login for patient authentication**
+**ADR-003: Azure AD B2C over MediCore login for patient authentication**
 
 | Field | Content |
 |-------|---------|
-| **Status** | Accepted (revised 2026-03-28; supersedes v1 which had proposed NHS login) |
+| **Status** | Accepted (revised 2026-03-28; supersedes v1 which had proposed MediCore login) |
 | **Date** | 2026-03-28 |
-| **Context** | Patient authentication choice. NHS login is the national patient identity service; Azure AD B2C is Microsoft's customer identity. National policy encourages NHS login adoption but does not mandate it for Trust patient portals. Evaluation criteria: control over enrolment UX, MFA options, verification journey speed, ability to step-up MFA for sensitive actions, future optionality. |
-| **Decision** | Use Azure AD B2C as the primary patient IdP; design the architecture to allow NHS login to be federated in as an additional IdP in a future phase (target 2026-Q4). |
-| **Alternatives Considered** | **NHS login as primary:** Recognised national identity; would avoid duplicate enrolment. Rejected for v2.0 because: (a) Trust requires explicit control over the enrolment UX to reach 800,000 patients quickly (including digitally-excluded patients who fail NHS login's identity proofing); (b) MFA method flexibility (SMS + TOTP + FIDO2) is richer in B2C; (c) Patients who fail NHS login verification would be blocked whereas Trust can provide an "in-person at the Trust" fallback verification through its service desk. A facade (AuthGateway) is in place so NHS login can be federated without breaking downstream services. **Bespoke Trust IdP:** rejected -- reinventing identity is high-risk. |
-| **Consequences** | Positive: faster enrolment path for patients; Trust controls verification journey (including in-person fallback); future-proofed for NHS login federation. Negative: risk of fragmented identity between NHS login and Trust portal (mitigated by later federation); Trust bears responsibility for identity proofing to NHS-equivalent standard (documented in DPIA-2025-004). |
+| **Context** | Patient authentication choice. MediCore login is the national patient identity service; Azure AD B2C is Microsoft's customer identity. National policy encourages MediCore login adoption but does not mandate it for Trust patient portals. Evaluation criteria: control over enrolment UX, MFA options, verification journey speed, ability to step-up MFA for sensitive actions, future optionality. |
+| **Decision** | Use Azure AD B2C as the primary patient IdP; design the architecture to allow MediCore login to be federated in as an additional IdP in a future phase (target 2026-Q4). |
+| **Alternatives Considered** | **MediCore login as primary:** Recognised national identity; would avoid duplicate enrolment. Rejected for v2.0 because: (a) Trust requires explicit control over the enrolment UX to reach 800,000 patients quickly (including digitally-excluded patients who fail MediCore login's identity proofing); (b) MFA method flexibility (SMS + TOTP + FIDO2) is richer in B2C; (c) Patients who fail MediCore login verification would be blocked whereas Trust can provide an "in-person at the Trust" fallback verification through its service desk. A facade (AuthGateway) is in place so MediCore login can be federated without breaking downstream services. **Bespoke Trust IdP:** rejected -- reinventing identity is high-risk. |
+| **Consequences** | Positive: faster enrolment path for patients; Trust controls verification journey (including in-person fallback); future-proofed for MediCore login federation. Negative: risk of fragmented identity between MediCore login and Trust portal (mitigated by later federation); Trust bears responsibility for identity proofing to MediCore-equivalent standard (documented in DPIA-2025-004). |
 | **Quality Attribute Tradeoffs** | Operational Excellence: neutral (extra policies to maintain). Security: positive (step-up MFA richer in B2C). Cost: negligible difference. Patient experience: positive (faster, more forgiving enrolment journey). |
 
 **ADR-004: Outbox pattern for EPR-affecting write operations**
@@ -1070,8 +1070,8 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 | Log Type | Events Logged | Local Storage | Retention Period | Remote Services |
 |----------|--------------|--------------|-----------------|----------------|
 | Application logs | Request/response metadata (PII-redacted), service errors, business events | App Insights (immediate) | 2 years hot + 5 years archive | Log Analytics + Sentinel |
-| Patient access audit | NHS Number, session, action, purpose (Caldicott), outcome | ADLS Gen2 (WORM immutable) | 7 years | Sentinel |
-| Clinical safety event log | Hazard trigger events (HAZ-01..HAZ-07), clinical-safety-relevant errors | ADLS Gen2 WORM + Sentinel workbook | 25 years (per NHS clinical records) | Sentinel + Trust Clinical Safety portal |
+| Patient access audit | National Patient ID, session, action, purpose (Caldicott), outcome | ADLS Gen2 (WORM immutable) | 7 years | Sentinel |
+| Clinical safety event log | Hazard trigger events (HAZ-01..HAZ-07), clinical-safety-relevant errors | ADLS Gen2 WORM + Sentinel workbook | 25 years (per MediCore clinical records) | Sentinel + Trust Clinical Safety portal |
 | Security event log | Authn/authz, WAF, PIM activations, key vault access | Log Analytics | 2 years hot + 5 years archive | Sentinel |
 | Infrastructure diagnostic | Azure diagnostic logs (App Service, SQL, APIM, Front Door) | Log Analytics | 90 days hot + 1 year archive | Sentinel subset |
 | Access logs | Front Door, APIM, App Service HTTP logs | Log Analytics | 90 days | Sentinel |
@@ -1085,7 +1085,7 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 | Portal availability (Front Door) | External probe failure > 2 min | PagerDuty P1 + Teams | SRE on-call |
 | P95 latency | P95 > 800ms for 5 min | PagerDuty P2 | SRE on-call |
 | FHIR Facade error rate (EPR) | > 2% errors over 5 min | PagerDuty P1 | SRE on-call + Integration Lead |
-| NHS Spine error rate | > 5% errors over 5 min | Teams + PagerDuty P2 | SRE on-call |
+| MediCore Spine error rate | > 5% errors over 5 min | Teams + PagerDuty P2 | SRE on-call |
 | SMS delivery failure rate | > 5% failures over 15 min | PagerDuty P2 + Teams + Email to Patient Experience | SRE on-call + Tom Doe |
 | Clinical safety event raised | Any HAZ-* event | PagerDuty P1 + SMS to CSO | Dr Amir Doe (CSO) + CSG |
 | Authentication failure spike | > 20 failures / 5 min from same IP | Sentinel alert + SOC | SOC on-call |
@@ -1120,7 +1120,7 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 | Procedure | Description | Owner | Documentation |
 |-----------|-------------|-------|--------------|
 | Incident response (ITIL) | P1: 15-min response, resolve 4h; P2: 30-min, 8h; post-incident review within 5 working days | Tom Doe | Runbooks in ADO wiki |
-| Clinical safety incident handling | Triggered on any HAZ-* event; CSO paged; 15-min engagement; DCB0160 incident report within 48h; SI if actual harm (Datix) | Dr Amir Doe | Trust Clinical Safety Management System (CSMS) |
+| Clinical safety incident handling | Triggered on any HAZ-* event; CSO paged; 15-min engagement; CS-160 incident report within 48h; SI if actual harm (Datix) | Dr Amir Doe | Trust Clinical Safety Management System (CSMS) |
 | Change management | Normal: ARB ticket + 2 technical approvals + CSO sign-off for clinical-impact changes; Emergency CAB for P1 fixes | Robert Bloggs | ServiceNow change module |
 | On-call rotation | 24x7, 1-week, 6 engineers; clinical safety secondary rota (3 clinical safety officers) | Tom Doe | PagerDuty schedule |
 | Patient support | Digital-support helpline 08:00-20:00 Mon-Sun; service desk L1 + portal L2 | Service Desk lead | Internal KB |
@@ -1148,7 +1148,7 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 | Scaling capability | Full auto-scaling (App Service autoscale rules on CPU + queue depth; SQL vCore elastic; APIM unit scaling) |
 | Scaling details | App Service: 2-10 instances per service, scale-out in 90 seconds. SQL Business Critical: vertical scale in minutes. Front Door: unlimited edge. ACS: managed throughput. |
 | Dependencies adequately sized | Yes -- ExpressRoute 1 Gbps (25% utilised at peak); EPR interface tested at 3x projected peak. |
-| Dependency details | NHS Spine: national service, published SLA; EPR: tested to 5,000 concurrent sessions; GP Connect: limited per NHS national throttles. |
+| Dependency details | MediCore Spine: national service, published SLA; EPR: tested to 5,000 concurrent sessions; GP Connect: limited per MediCore national throttles. |
 
 #### 4.2.3 Fault Tolerance
 
@@ -1169,7 +1169,7 @@ A STRIDE-based threat model was conducted (MHT-TM-2025-008). Healthcare-specific
 | Azure SQL | Primary unavailable | SQL HA probe | Auto-failover group fails over; connection string unchanged | 30-60s interruption |
 | Service Bus | Primary namespace unavailable | Delivery failures | Geo-DR pairing promotes secondary | Brief async latency |
 | Cerner EPR | Interface down | FHIR Facade error spike | Circuit breaker opens; cached read data served; writes queued in Outbox; booking office notified for manual backfill | Degraded: read stale data; writes delayed (hazard HAZ-05 mitigation) |
-| NHS Spine | Outage | FHIR Facade timeout | Enrolment blocked; existing user impact limited (demographics verified at login daily) | New enrolment suspended; banner shown |
+| MediCore Spine | Outage | FHIR Facade timeout | Enrolment blocked; existing user impact limited (demographics verified at login daily) | New enrolment suspended; banner shown |
 | GP Connect | Outage | Integration error spike | Feature hidden; banner shown: "GP appointment view temporarily unavailable" | Partial feature degradation |
 | Azure Communication Services (SMS) | SMS delivery degraded/outage | ACS delivery receipts < threshold | Automatic retry; email fallback; booking office manual-call worklist if neither delivered (HAZ-02 mitigation); evaluated fallback to GOV.UK Notify (validated in staging quarterly) | Patient may receive email instead of SMS or receive a phone call from booking office |
 | Azure AD B2C | Outage | Login failure rate | Cached refresh tokens allow existing sessions to continue up to 8h; new logins blocked; banner shown; incident P1 | New logins blocked during outage |
@@ -1410,8 +1410,8 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 |-----------|--------|
 | Deployment strategy | Phased rollout: Trust staff (dogfooding) -> invited cohort 5,000 patients -> public beta -> general availability. PKB decommissioned after 3-month parallel run. |
 | Data migration mode | Continuous sync -- MyMedwick reads through to EPR; no bulk migration from PKB; PKB patient enrolment list used to invite PKB users to re-enrol in MyMedwick |
-| Data migration method | Azure Data Factory one-time extract of PKB user list (NHS Numbers only) for invitation mailing |
-| Data volume | Approximately 40,000 NHS Numbers |
+| Data migration method | Azure Data Factory one-time extract of PKB user list (National Patient IDs only) for invitation mailing |
+| Data volume | Approximately 40,000 National Patient IDs |
 | End-user cutover | Phased -- patients invited in cohorts over 3 months |
 | External system cutover | Phased -- PKB interface disabled after final patient migrated |
 | Max acceptable downtime | Zero (parallel run) |
@@ -1460,7 +1460,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Non-prod auto-shutdown schedule and enforcement | Azure Automation runbook scales-in non-prod App Service plans 19:00-07:00 weekdays + weekends; Azure SQL auto-pause on non-prod databases. Azure Policy "deny on tag missing" prevents new non-prod resources without an auto-shutdown tag. |
 | Right-sizing review cadence | Quarterly via Azure Advisor + Application Insights metrics. Last review (2026-Q1) downgraded the staging Pv3 from P1v3 to P0v3, recovering ~£140/month. |
 | Unused / orphaned resource reclamation | Monthly review of orphaned managed disks, unattached public IPs, stale storage account containers; deleted after 30 days idle without recorded exception. |
-| Carbon footprint reported alongside cost | Yes — Azure Emissions Impact Dashboard reviewed monthly alongside cost; reported quarterly to Trust Sustainability Committee against the NHS Net Zero target (2040). |
+| Carbon footprint reported alongside cost | Yes — Azure Emissions Impact Dashboard reviewed monthly alongside cost; reported quarterly to Trust Sustainability Committee against the MediCore Net Zero target (2040). |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Bicep destroy + Storage Account deletion + Key Vault soft-delete purge after retention. Trust CMDB (ServiceNow) entry marked Retired only after Azure Cost Management confirms zero spend for 30 days. |
 
 ### 5.6 Resourcing & Skills
@@ -1473,8 +1473,8 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Bicep / IaC | High | None |
 | .NET 8 | High | None |
 | FHIR R4 | Medium | Action -- Firely training for 2 integration engineers (Q2 2026) |
-| NHS interoperability (Spine, e-RS, GP Connect) | Medium | Action -- NHS Digital partner programme training |
-| Clinical safety (DCB0129/0160) | Medium | Action -- second CSO designate in training (supports succession planning) |
+| MediCore interoperability (Spine, e-RS, GP Connect) | Medium | Action -- MediCore Digital partner programme training |
+| Clinical safety (CS-129/0160) | Medium | Action -- second CSO designate in training (supports succession planning) |
 | Information Governance | High | None |
 | Security / Sentinel | Medium | Action -- SOC MSSP engaged to cover 24x7 |
 
@@ -1495,14 +1495,14 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Software versions current | .NET: within 90 days of LTS release; SQL: minor patches in monthly maintenance window; mobile OS support: last 2 major versions per Apple/Google policy |
 | Certificate management | Azure Key Vault + Front Door managed certificates; auto-renewal; alerts at 30/14/7 days |
 | Dependency management | Mend + Dependabot; quarterly review |
-| NHS Spine / e-RS / GP Connect interface updates | NHS Digital issues are tracked via the Digital Assurance Manager; change windows coordinated |
+| MediCore Spine / e-RS / GP Connect interface updates | MediCore Digital issues are tracked via the Digital Assurance Manager; change windows coordinated |
 
 ### 5.9 End-of-Life & Decommissioning
 
 | Attribute | Detail |
 |-----------|--------|
 | Intended lifespan | 7-10 years; major review at 5 years |
-| End-of-life triggers | ICS-wide patient portal adoption (possible 2028+); NHS login mandated |
+| End-of-life triggers | ICS-wide patient portal adoption (possible 2028+); MediCore login mandated |
 | Decommissioning blockers | 7-year audit retention; patient records retention under Records Management Code of Practice |
 | Data disposal | Patient data: secure deletion (NIST 800-88 equivalent via Azure Storage secure delete + Key Vault key destruction); audit: retained to legal minimum then lifecycle-expired |
 | Infrastructure disposal | Bicep `what-if` + Terraform destroy; Azure resources deleted; DNS removed; ADO project archived |
@@ -1525,9 +1525,9 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
 | C-001 | All data must reside in the UK (UK GDPR, DSPT, Caldicott) | Regulatory | UK South primary, UK West DR; Azure Policy "Allowed Locations"; ACS UK region | 2026-03-01 |
-| C-002 | DCB0129 and DCB0160 mandatory for any change with clinical impact | Regulatory | Clinical Safety Officer required; Hazard Log; Clinical Safety Case per release | 2026-03-01 |
+| C-002 | CS-129 and CS-160 mandatory for any change with clinical impact | Regulatory | Clinical Safety Officer required; Hazard Log; Clinical Safety Case per release | 2026-03-01 |
 | C-003 | Must integrate with Cerner Millennium EPR (legacy HL7v2) | Technical | FHIR Facade pattern required; no changes to EPR in scope | 2025-12-01 |
-| C-004 | Must comply with NHS DSPT (annual submission) | Regulatory | Extensive security and IG controls; evidence maintained continuously | 2025-06-30 (last submission) |
+| C-004 | Must comply with MediCore DSPT (annual submission) | Regulatory | Extensive security and IG controls; evidence maintained continuously | 2025-06-30 (last submission) |
 | C-005 | WCAG 2.2 Level AA accessibility required (public sector body regs) | Regulatory | Accessibility built in from alpha; external audit annually | 2026-01-15 |
 | C-006 | 99.9% availability SLA committed in Trust Digital Strategy | Commercial | Zone-redundant SQL; multi-region DR; App Service Premium v3 | 2026-03-01 |
 
@@ -1538,7 +1538,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | A-001 | Cerner FHIR R4 interface will remain available and contractually supported for the life of MyMedwick | Would require re-engineering to HL7v2-only integration | High | Closed | Dr Raj Doe | Cerner contract extension to 2030; FHIR R4 on roadmap |
 | A-002 | Azure AD B2C will remain a Microsoft strategic service | Would require migration to Entra External ID | Medium | Open | Jane Bloggs | Microsoft has announced B2C long-term support and Entra External ID convergence; migration path understood |
 | A-003 | Patient enrolment growth 180k/year for 3 years | Capacity plan under- or over-sized | Medium | Open | Nisha Doe | Alpha + beta uptake consistent with trajectory |
-| A-004 | NHS login federation remains optional for Trust portals | Would require emergency NHS login integration | Medium | Open | Sally Bloggs | Current NHS England policy position; monitored |
+| A-004 | MediCore login federation remains optional for Trust portals | Would require emergency MediCore login integration | Medium | Open | Sally Bloggs | Current MediCore Authority policy position; monitored |
 | A-005 | Patients have reliable mobile signal for SMS OTP | MFA failure rate could increase; requires TOTP fallback adoption | High | Closed | Dr Raj Doe | Research shows ≥ 97% UK mobile coverage in Trust catchment |
 
 ### 6.3 Risks
@@ -1567,7 +1567,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | R-001 | Mitigate | Clinical safety regression suite; CSO sign-off per release; 24h release delay for first-time viewing; clinician release control in EPR; audit trail | Low | 2026-03-01 |
 | R-002 | Mitigate | Feature flag allows instant disable; cached availability with banner; read-only fallback | Medium | 2026-03-01 |
 | R-003 | Mitigate | Retry + email fallback + booking office manual exception worklist (HAZ-02); patient UI shows "last notified" timestamp; monthly reconciliation report | Low | 2026-03-01 |
-| R-004 | Mitigate | Strict NHS Number binding; PDS verification; clinical safety control HAZ-04; automated regression test; CSO sign-off | Low | 2026-03-01 |
+| R-004 | Mitigate | Strict National Patient ID binding; PDS verification; clinical safety control HAZ-04; automated regression test; CSO sign-off | Low | 2026-03-01 |
 | R-005 | Mitigate | Defender for Cloud + Sentinel + annual pen test; ICO breach process documented and rehearsed; DPO engaged; DSPT incident reporting | Low | 2026-03-01 |
 | R-006 | Mitigate | Contract tests + FHIR conformance; Cerner change notice process (60 days); facade pattern isolates change | Medium | 2026-01-15 |
 | R-007 | Accept (with mitigation) | Cached refresh tokens for existing sessions up to 8h; maintenance banner; P1 incident process | Low | 2026-03-01 |
@@ -1582,21 +1582,21 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
 | D-001 | Cerner Millennium EPR HL7v2 + FHIR R4 interfaces available | Inbound | Resolved | EPR team | Operational since alpha | 2026-03-01 |
-| D-002 | NHS Spine PDS availability | Inbound | Committed | NHS Digital | National service | 2026-03-01 |
-| D-003 | NHS CIS2 for clinician admin auth | Inbound | Committed | NHS Digital | National service | 2026-03-01 |
-| D-004 | NHS e-Referral Service API | Inbound | Resolved | NHS Digital | Integration live since 2025-09 | 2026-03-01 |
-| D-005 | GP Connect Appointments | Inbound | Committed | NHS Digital | Integration live since 2025-09 (Phase 2) | 2026-03-01 |
-| D-006 | HSCN CN-SP connectivity | Inbound | Resolved | Trust Network | Dual-link live | 2026-01-10 |
+| D-002 | MediCore Spine PDS availability | Inbound | Committed | MediCore Digital | National service | 2026-03-01 |
+| D-003 | MediCore CIS for clinician admin auth | Inbound | Committed | MediCore Digital | National service | 2026-03-01 |
+| D-004 | MediCore e-Referral Service API | Inbound | Resolved | MediCore Digital | Integration live since 2025-09 | 2026-03-01 |
+| D-005 | GP Connect Appointments | Inbound | Committed | MediCore Digital | Integration live since 2025-09 (Phase 2) | 2026-03-01 |
+| D-006 | national healthcare secure network CN-SP connectivity | Inbound | Resolved | Trust Network | Dual-link live | 2026-01-10 |
 | D-007 | Azure Communication Services UK region | Inbound | Resolved | Microsoft | Enterprise agreement; UK region available | 2025-11-15 |
 | D-008 | DSPT 2025/26 submission | Outbound | Resolved | Sally Bloggs | Submitted 2025-06-30; Standards Met | 2025-06-30 |
-| D-009 | DCB0160 deployment safety case for each release | Outbound | In progress (continuous) | Dr Amir Doe | Approved for v2.0 | 2026-03-28 |
+| D-009 | CS-160 deployment safety case for each release | Outbound | In progress (continuous) | Dr Amir Doe | Approved for v2.0 | 2026-03-28 |
 
 ### 6.5 Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution | Status | Last Assessed |
 |----|-------|----------|--------|-------|-----------|--------|---------------|
 | I-001 | Cerner FHIR R4 interface intermittent 502 errors during overnight batch | Technical | Medium | Dr Raj Doe | Cerner aware; FHIR Facade retry with back-off implemented as interim mitigation; permanent fix expected in Cerner 2026.03 release | In progress | 2026-03-15 |
-| I-002 | Two patients reported receiving SMS reminders at 03:00 due to scheduler timezone misconfiguration | Operational | Medium | Tom Doe | Scheduler corrected to Europe/London; affected patients contacted; DCB0160 incident report filed | Resolved | 2025-12-08 |
+| I-002 | Two patients reported receiving SMS reminders at 03:00 due to scheduler timezone misconfiguration | Operational | Medium | Tom Doe | Scheduler corrected to Europe/London; affected patients contacted; CS-160 incident report filed | Resolved | 2025-12-08 |
 | I-003 | Accessibility audit identified 3 AA-level issues (focus order on results page, colour contrast on notification chip, aria-label on cancel button) | Compliance | Low | Nisha Doe | Fixes in current sprint; external auditor re-test booked for 2026-04 | In progress | 2026-03-20 |
 
 ### 6.6 Guardrail Exceptions
@@ -1628,7 +1628,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 |-------|-------|--------|------|--------|
 | ADR-001 | Azure over AWS as hosting platform | Accepted | 2025-02-05 | Platform direction |
 | ADR-002 | FHIR R4 over HL7v2 as canonical clinical data contract | Accepted | 2025-02-20 | Integration model |
-| ADR-003 | Azure AD B2C over NHS login for patient identity | Accepted (revised 2026-03-28) | 2026-03-28 | Identity model; NHS login federation planned |
+| ADR-003 | Azure AD B2C over MediCore login for patient identity | Accepted (revised 2026-03-28) | 2026-03-28 | Identity model; MediCore login federation planned |
 | ADR-004 | Outbox pattern for EPR-affecting writes | Accepted | 2025-03-12 | Reliability pattern |
 
 ### 6.8 Compliance Traceability
@@ -1642,13 +1642,13 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | UK GDPR Art 32 | Security of processing | Full IAM, encryption, monitoring, threat model | 3.5 |
 | UK GDPR Art 33 | Breach notification within 72h | Documented incident process with DPO engagement | 4.1, 6.3 |
 | UK GDPR Art 35 | DPIA | DPIA-2025-004 and DPIA-2025-018 completed | 2.3, 3.4 |
-| NHS DSPT 2025/26 (10 assertions) | Standards Met | Evidence package submitted 2025-06-30; scored Standards Met | 2.3, 3.5, 6.8 |
-| DCB0129 (Manufacturer) | Clinical risk management (manufacturer) | CSO appointed; Clinical Safety Case v3 approved; Hazard Log MHT-HAZ-LOG-0208; regression suite | 2.3, 3.5, 3.6, 5.1 |
-| DCB0160 (Deployment) | Clinical risk management (deployment) | Deployment Safety Case signed by Trust CSO per release; CSG sign-off | 5.4, 6.4 |
+| MediCore DSPT 2025/26 (10 assertions) | Standards Met | Evidence package submitted 2025-06-30; scored Standards Met | 2.3, 3.5, 6.8 |
+| CS-129 (Manufacturer) | Clinical risk management (manufacturer) | CSO appointed; Clinical Safety Case v3 approved; Hazard Log MHT-HAZ-LOG-0208; regression suite | 2.3, 3.5, 3.6, 5.1 |
+| CS-160 (Deployment) | Clinical risk management (deployment) | Deployment Safety Case signed by Trust CSO per release; CSG sign-off | 5.4, 6.4 |
 | Caldicott Principles | Justifiable purpose, minimum necessary, need-to-know | Caldicott Guardian approval of data uses; access audit | 2.3, 3.4 |
 | WCAG 2.2 AA | Public sector accessibility | Axe + manual + external audit; accessibility statement published | 4.3, 5.3, 6.3 |
 | NCSC Cloud Security Principles | 14 principles | Private Endpoints; CMK in HSM; Sentinel; Defender for Cloud; Trust landing zone | 3.3, 3.5 |
-| NHS England Interop Standards | FHIR R4, NHS Number as primary identifier | FHIR Facade; NHS Number binding | 3.2, 3.5 |
+| MediCore Authority Interop Standards | FHIR R4, National Patient ID as primary identifier | FHIR Facade; National Patient ID binding | 3.2, 3.5 |
 | Cyber Essentials Plus | Trust certification | Inherited; evidenced | 3.3, 3.5 |
 
 ---
@@ -1662,39 +1662,39 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | ACS | Azure Communication Services -- Microsoft's cloud communication platform |
 | ALZ | Azure Landing Zone |
 | ASEv3 | App Service Environment v3 -- dedicated, isolated App Service compute |
-| Caldicott Guardian | Senior person in an NHS organisation responsible for protecting the confidentiality of patient information |
+| Caldicott Guardian | Senior person in a MediCore organisation responsible for protecting the confidentiality of patient information |
 | CCIO | Chief Clinical Information Officer |
-| CIS2 | NHS Care Identity Service 2 -- NHS staff identity and authentication |
+| CIS2 | MediCore Care Identity Service 2 -- MediCore staff identity and authentication |
 | CDIO | Chief Digital Information Officer |
 | CQC | Care Quality Commission -- England's health and social care regulator |
 | CSG | Clinical Safety Group (Medwick's multi-disciplinary clinical safety panel) |
-| CSO | Clinical Safety Officer -- defined in DCB0129 |
-| DCB0129 | NHS Digital standard: Clinical Risk Management -- Manufacturer |
-| DCB0160 | NHS Digital standard: Clinical Risk Management -- Deployment |
+| CSO | Clinical Safety Officer -- defined in CS-129 |
+| CS-129 | MediCore Digital standard: Clinical Risk Management -- Manufacturer |
+| CS-160 | MediCore Digital standard: Clinical Risk Management -- Deployment |
 | DPIA | Data Protection Impact Assessment |
 | DPO | Data Protection Officer |
-| DSPT | NHS Data Security and Protection Toolkit |
+| DSPT | MediCore Data Security & Protection Toolkit |
 | EPR | Electronic Patient Record |
-| e-RS | NHS e-Referral Service |
+| e-RS | MediCore e-Referral Service |
 | FHIR | Fast Healthcare Interoperability Resources (HL7 standard) |
-| GP Connect | NHS service providing GP information via FHIR |
+| GP Connect | MediCore service providing GP information via FHIR |
 | HAZ | Hazard (entry in Hazard Log) |
-| HSCN | Health and Social Care Network -- private NHS network |
+| national healthcare secure network | Health and Social Care Network -- private MediCore network |
 | ICO | Information Commissioner's Office -- UK data protection regulator |
 | ICS | Integrated Care System |
-| MESH | NHS Message Exchange for Social Care and Health |
+| MESH | MediCore Message Exchange for Social Care and Health |
 | MHRA | Medicines and Healthcare products Regulatory Agency |
 | MICS | Medwick Integrated Care System |
 | MyMedwick | The solution described in this SAD |
-| NHS DSPT | NHS Data Security and Protection Toolkit |
+| MediCore DSPT | MediCore Data Security & Protection Toolkit |
 | PACS | Picture Archiving and Communication System |
-| PDS | Personal Demographics Service (NHS Spine) |
+| PDS | Personal Demographics Service (MediCore Spine) |
 | PKB | Patient Knows Best (legacy portal being replaced) |
-| RA | NHS Registration Authority (manages NHS identity cards) |
+| RA | MediCore Registration Authority (manages MediCore identity cards) |
 | RoPA | Record of Processing Activities (UK GDPR Art 30) |
-| SCR | Summary Care Record (NHS Spine) |
+| SCR | Summary Care Record (MediCore Spine) |
 | SRO | Senior Responsible Officer |
-| Spine | NHS Spine -- national set of health services (PDS, SCR, etc.) |
+| Spine | MediCore Spine -- national set of health services (PDS, SCR, etc.) |
 | TLS-MA | TLS Mutual Authentication |
 | UBRN | Unique Booking Reference Number (e-RS referrals) |
 | WCAG | Web Content Accessibility Guidelines |
@@ -1704,16 +1704,16 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 
 | Document | Version | Description | Location |
 |----------|---------|-------------|----------|
-| NHS Data Security and Protection Toolkit | 2025/26 | Mandatory annual NHS IG assessment | dsptoolkit.nhs.uk |
-| DCB0129 Clinical Risk Management: Manufacturer | 2018 | NHS Digital clinical safety standard | NHS Digital |
-| DCB0160 Clinical Risk Management: Deployment | 2018 | NHS Digital clinical safety standard | NHS Digital |
-| NHS England Interoperability Standards | 2025 | FHIR R4 profiles and guidance | NHS England |
+| MediCore Data Security & Protection Toolkit | 2025/26 | Mandatory annual MediCore IG assessment | dsptoolkit.nhs.uk |
+| CS-129 Clinical Risk Management: Manufacturer | 2018 | MediCore Digital clinical safety standard | MediCore Digital |
+| CS-160 Clinical Risk Management: Deployment | 2018 | MediCore Digital clinical safety standard | MediCore Digital |
+| MediCore Authority Interoperability Standards | 2025 | FHIR R4 profiles and guidance | MediCore Authority |
 | Trust Information Security Policy | 4.1 | Medwick corporate security policy | Trust intranet |
 | Trust Clinical Risk Management Policy | 3.2 | Medwick clinical risk governance | Trust intranet |
 | DPIA -- MyMedwick | DPIA-2025-004 | Data Protection Impact Assessment | Trust IG library |
-| Clinical Safety Case v3 -- MyMedwick | CSC-MHT-0208-v3 | Clinical safety case per DCB0129 | Trust CSMS |
+| Clinical Safety Case v3 -- MyMedwick | CSC-MHT-0208-v3 | Clinical safety case per CS-129 | Trust CSMS |
 | Hazard Log -- MyMedwick | MHT-HAZ-LOG-0208 | Live hazard register | Trust CSMS |
-| Deployment Safety Case v3 -- MyMedwick | MHT-DSC-0208-v3 | Per DCB0160 | Trust CSMS |
+| Deployment Safety Case v3 -- MyMedwick | MHT-DSC-0208-v3 | Per CS-160 | Trust CSMS |
 | MyMedwick Threat Model | MHT-TM-2025-008 | STRIDE threat model | Trust Security Library |
 | NCSC Cloud Security Principles | 2024 | 14 principles | ncsc.gov.uk |
 | Accessibility Statement -- MyMedwick | 2026-01 | Public-facing accessibility statement | mymedwick.nhs.uk/accessibility |
@@ -1729,8 +1729,8 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | OWASP-CRS | OWASP Core Rule Set | 3.2 | 3.3, 3.5 WAF |
 | NIST-800-88 | Media Sanitisation | Rev 1 | 5.9 |
 | WCAG | Web Content Accessibility Guidelines | 2.2 AA | 3.6, 4.3, 5.3 |
-| DCB0129 | Clinical Risk Management (Manufacturer) | 2018 | 3.5, 3.6, 5.1 |
-| DCB0160 | Clinical Risk Management (Deployment) | 2018 | 5.4, 6 |
+| CS-129 | Clinical Risk Management (Manufacturer) | 2018 | 3.5, 3.6, 5.1 |
+| CS-160 | Clinical Risk Management (Deployment) | 2018 | 5.4, 6 |
 | C4-Model | C4 Model for Software Architecture | N/A | 3.1 |
 | 12-Factor | The Twelve-Factor App | N/A | 3.1 |
 
@@ -1755,7 +1755,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 <div class="guidance-box">
 <h4>Assessment Summary</h4>
 
-This SAD was assessed at **Comprehensive** depth. The scores below reflect a mature, well-documented architecture for a Tier 1 Critical clinical system under NHS clinical safety and information governance standards.
+This SAD was assessed at **Comprehensive** depth. The scores below reflect a mature, well-documented architecture for a Tier 1 Critical clinical system under MediCore clinical safety and information governance standards.
 </div>
 
 | Section | Score | Justification |
@@ -1764,8 +1764,8 @@ This SAD was assessed at **Comprehensive** depth. The scores below reflect a mat
 | **1. Executive Summary** | 5 | Business drivers with priority; strategic alignment; reuse assessment; current-state documented; Tier 1 Critical criticality justified by patient-harm analysis |
 | **2. Stakeholders & Concerns** | 5 | Comprehensive register including Caldicott Guardian, CSO, CCIO and external regulators; concerns matrix fully mapped; twelve applicable regulations |
 | **3.1 Logical View** | 5 | Full component decomposition; design patterns with rationale; lock-in assessment for all components; service-to-capability mapping |
-| **3.2 Integration & Data Flow** | 5 | All internal and external integrations documented with protocol/auth; ten API contracts versioned; end user access patterns; HSCN and NHS national services modelled |
-| **3.3 Physical View** | 5 | Deployment diagram; compute fully specified (ASEv3); full networking including ExpressRoute, HSCN, Private Endpoints; six environments; security agents |
+| **3.2 Integration & Data Flow** | 5 | All internal and external integrations documented with protocol/auth; ten API contracts versioned; end user access patterns; national healthcare secure network and MediCore national services modelled |
+| **3.3 Physical View** | 5 | Deployment diagram; compute fully specified (ASEv3); full networking including ExpressRoute, national healthcare secure network, Private Endpoints; six environments; security agents |
 | **3.4 Data View** | 5 | All data stores classified with retention and encryption; Always Encrypted for PII; UK data sovereignty; two DPIAs; data integrity and patient identity controls |
 | **3.5 Security View** | 5 | STRIDE threat model with eleven threats including two explicit clinical safety threats; comprehensive IAM (patient, clinician, service); HSM-backed CMK; Sentinel with clinical-safety analytics |
 | **3.6 Scenarios** | 5 | Five architecturally significant use cases including a clinical-safety control scenario (UC-04); four ADRs with alternatives and tradeoffs |
@@ -1777,6 +1777,6 @@ This SAD was assessed at **Comprehensive** depth. The scores below reflect a mat
 | **5. Lifecycle** | 5 | CI/CD with SAST/DAST/SCA and FHIR conformance; phased migration (PKB replacement); clinical safety regression; fortnightly release with CSO sign-off; exit plan |
 | **6. Governance** | 5 | Six constraints; five assumptions with evidence; twelve risks with mitigations (incl. clinical safety); nine dependencies; three issues; fifteen-item compliance traceability |
 | **7. Appendices** | 5 | Domain glossary (healthcare-specific); fourteen reference documents; ten standards; full approval sign-off with CSO and Caldicott Guardian |
-| **Overall** | **4.9** | **Comprehensive depth achieved. Exemplary documentation for a Tier 1 Critical NHS Trust clinical system.** |
+| **Overall** | **4.9** | **Comprehensive depth achieved. Exemplary documentation for a Tier 1 Critical MediCore Trust clinical system.** |
 
 </div>

@@ -10,6 +10,7 @@
     "astro": "astro",
     "generate:templates": "node scripts/generate-templates.cjs",
     "generate:diagrams": "bash scripts/generate-diagrams.sh",
+    "generate:cheat-cards-pdf": "node scripts/generate-cheat-cards-pdf.cjs",
     "generate:pdf": "node scripts/generate-pdf.cjs en",
     "generate:pdf:fr": "node scripts/generate-pdf.cjs fr",
     "generate:pdf:de": "node scripts/generate-pdf.cjs de",

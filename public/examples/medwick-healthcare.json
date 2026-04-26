@@ -13,16 +13,16 @@
       "lastUpdated": "2026-04-08",
       "classification": "restricted"
     },
-    "purpose": "Describe the architecture of the MyMedwick patient portal serving Medwick Healthcare Trust patients and clinical staff, with emphasis on patient safety, NHS DSPT compliance, and integration with NHS Spine, e-Referral Service, and the Trust EPR.",
-    "scope": "Patient-facing portal (web and mobile), associated API services, integration adapters to NHS national services and the Trust EPR, and clinical safety controls. Excludes the EPR itself and primary-care GP systems."
+    "purpose": "Describe the architecture of the MyMedwick patient portal serving Medwick Healthcare Trust patients and clinical staff, with emphasis on patient safety, MediCore DSPT compliance, and integration with MediCore Spine, e-Referral Service, and the Trust EPR.",
+    "scope": "Patient-facing portal (web and mobile), associated API services, integration adapters to MediCore national services and the Trust EPR, and clinical safety controls. Excludes the EPR itself and primary-care GP systems."
   },
   "executiveSummary": {
-    "solutionOverview": "MyMedwick is the patient-facing portal for Medwick Healthcare Trust, an NHS acute Trust serving ~580,000 patients across three hospital sites in the East of England. It provides appointment management, letters and results visibility, secure messaging with care teams, repeat prescription requests, and digital pre-assessment forms. It runs on Azure UK South (paired with UK West for DR), built on Azure App Service, Azure SQL, Azure Service Bus, and Azure API Management. NHS Spine integration uses FHIR R4 via MESH.",
+    "solutionOverview": "MyMedwick is the patient-facing portal for Medwick Healthcare Trust, a MediCore acute Trust serving ~580,000 patients across three hospital sites in the East of England. It provides appointment management, letters and results visibility, secure messaging with care teams, repeat prescription requests, and digital pre-assessment forms. It runs on Azure UK South (paired with UK West for DR), built on Azure App Service, Azure SQL, Azure Service Bus, and Azure API Management. MediCore Spine integration uses FHIR R4 via MESH.",
     "businessContext": [
       {"driver": "DNA reduction", "description": "DNA rate of 9.4% costs the Trust ~£4.8m/year; portal-based reminders target 2pp reduction"},
-      {"driver": "NHS Long Term Plan", "description": "Trust digital strategy commits to NHS Login and digital-first patient access"},
+      {"driver": "MediCore National Digital Health Plan", "description": "Trust digital strategy commits to MediCore Login and digital-first patient access"},
       {"driver": "PKB contract end", "description": "Patient Knows Best contract ends 2026-Q3; in-house build reduces run cost from £680k to £420k/year"},
-      {"driver": "Clinical safety", "description": "DCB0129/0160-compliant clinical safety case required for digital appointment communication"}
+      {"driver": "Clinical safety", "description": "CS-129/0160-compliant clinical safety case required for digital appointment communication"}
     ],
     "strategicAlignment": {
       "organisationStrategySupported": "Medwick HT Digital Strategy 2024-2027",
@@ -30,14 +30,14 @@
       "duplicatesExistingCapability": "no"
     },
     "inScope": [
-      "Patient registration and identity verification via NHS Login",
+      "Patient registration and identity verification via MediCore Login",
       "Appointment booking, rescheduling, cancellation, and reminders",
       "Letters and clinic results visibility",
       "Secure messaging with named clinical teams",
       "Repeat prescription requests",
       "Digital pre-operative assessment forms",
       "Carer / proxy access controls",
-      "NHS Spine, e-RS, and GP Connect integration"
+      "MediCore Spine, e-RS, and GP Connect integration"
     ],
     "outOfScope": [
       "Replacement of the EPR (EpicCare)",
@@ -45,13 +45,13 @@
       "Wearable / IoT integration",
       "Video consultations (existing AccuRx integration retained)"
     ],
-    "currentState": "Patient Knows Best (PKB) provides current portal capability via SaaS; ~40,000 patients enrolled. Limited NHS Login; no FHIR connectivity to Trust EPR. Trust pays £680k/year and faces contract end Q3 2026.",
+    "currentState": "Patient Knows Best (PKB) provides current portal capability via SaaS; ~40,000 patients enrolled. Limited MediCore Login; no FHIR connectivity to Trust EPR. Trust pays £680k/year and faces contract end Q3 2026.",
     "keyDecisions": [
-      {"decision": "Build vs buy: in-house build on Azure", "rationale": "PKB contract end + budget reduction; Azure landing zone; reuse of NHS Login and Spine integrations", "implication": "Higher capex; longer time to live; Trust accountability for clinical safety"},
+      {"decision": "Build vs buy: in-house build on Azure", "rationale": "PKB contract end + budget reduction; Azure landing zone; reuse of MediCore Login and Spine integrations", "implication": "Higher capex; longer time to live; Trust accountability for clinical safety"},
       {"decision": "Azure over AWS", "rationale": "Trust standard; Azure AD B2C tenant; UK Sovereign Cloud lineage", "implication": "All compute on Azure UK South + UK West"},
       {"decision": "Azure App Service over AKS", "rationale": "Lower ops burden for small platform team", "implication": "Simpler ops; some scaling ceiling"},
-      {"decision": "FHIR R4 + MESH for Spine", "rationale": "NHS Digital prescribed integration profile", "implication": "Adapter complexity contained in Spine integration service"},
-      {"decision": "Data residency: UK", "rationale": "Patient data must remain in UK per NHS DSPT", "implication": "All primary and DR regions in UK"}
+      {"decision": "FHIR R4 + MESH for Spine", "rationale": "MediCore Digital prescribed integration profile", "implication": "Adapter complexity contained in Spine integration service"},
+      {"decision": "Data residency: UK", "rationale": "Patient data must remain in UK per MediCore DSPT", "implication": "All primary and DR regions in UK"}
     ],
     "projectDetails": {
       "projectName": "MyMedwick — Patient Portal Replacement",
@@ -72,17 +72,17 @@
       {"name": "Sarah Bloggs", "role": "Clinical Safety Officer", "concerns": ["Clinical safety case", "Hazard log", "Post-deployment surveillance"]},
       {"name": "Dr Raj Doe", "role": "Solution Architect", "concerns": ["Design integrity", "FHIR conformance", "Maintainability"]},
       {"name": "Karen Bloggs", "role": "Data Protection Officer", "concerns": ["UK GDPR", "DPIA", "Confidentiality breach response"]},
-      {"name": "Mike Doe", "role": "Head of Information Security", "concerns": ["NHS DSPT", "Identity assurance", "Threat model"]},
+      {"name": "Mike Doe", "role": "Head of Information Security", "concerns": ["MediCore DSPT", "Identity assurance", "Threat model"]},
       {"name": "Patients (~280,000)", "role": "End Users", "concerns": ["Accessibility", "Trust", "Accuracy", "Privacy"]}
     ],
     "compliance": {
       "supportsRegulatedActivities": "yes",
-      "regulatedActivityDetails": "MyMedwick supports CQC-regulated activities including treatment and diagnostic services. NHS DSPT compliance is mandatory.",
+      "regulatedActivityDetails": "MyMedwick supports CQC-regulated activities including treatment and diagnostic services. MediCore DSPT compliance is mandatory.",
       "regulatoryRequirements": [
-        {"name": "NHS DSPT", "applicability": "Mandatory — NHS Trust", "impact": "Annual self-assessment; underpins NHS Spine connectivity"},
+        {"name": "MediCore DSPT", "applicability": "Mandatory — MediCore Trust", "impact": "Annual self-assessment; underpins MediCore Spine connectivity"},
         {"name": "UK GDPR / Data Protection Act 2018", "applicability": "Mandatory — special-category patient data", "impact": "DPIA; lawful basis Article 6(1)(e)/9(2)(h); restricted right-to-erasure due to clinical record retention"},
-        {"name": "DCB0129 / DCB0160", "applicability": "Mandatory — health IT system that may affect patient safety", "impact": "Clinical safety case, hazard log, post-deployment surveillance"},
-        {"name": "NHS Login Identity Assurance Level P9", "applicability": "Mandatory — patient access to clinical data", "impact": "All patient access requires NHS Login P9 verification"},
+        {"name": "CS-129 / CS-160", "applicability": "Mandatory — health IT system that may affect patient safety", "impact": "Clinical safety case, hazard log, post-deployment surveillance"},
+        {"name": "MediCore Login Identity Assurance Level P9", "applicability": "Mandatory — patient access to clinical data", "impact": "All patient access requires MediCore Login P9 verification"},
         {"name": "CQC Well-Led / Responsive", "applicability": "Inspection regime", "impact": "Accessibility, equity of access, governance evidence"}
       ]
     }
@@ -97,7 +97,7 @@
         {"name": "Letters & Results Service", "componentType": "api-service", "technology": ".NET 8 minimal API", "status": "new"},
         {"name": "Messaging Service", "componentType": "api-service", "technology": ".NET 8, SignalR", "status": "new"},
         {"name": "Pre-Assessment Service", "componentType": "api-service", "technology": ".NET 8, FHIR Questionnaire", "status": "new"},
-        {"name": "Spine Integration Service", "componentType": "api-service", "technology": ".NET 8, NHS FHIR client", "status": "new"},
+        {"name": "Spine Integration Service", "componentType": "api-service", "technology": ".NET 8, MediCore FHIR client", "status": "new"},
         {"name": "EPR Integration Service", "componentType": "api-service", "technology": ".NET 8, FHIR R4", "status": "new"},
         {"name": "Notifications Service", "componentType": "backend-service", "technology": ".NET 8 worker", "status": "new"},
         {"name": "Azure SQL (transactional)", "componentType": "database", "technology": "Azure SQL Database (Business Critical)", "status": "new"},
@@ -115,8 +115,8 @@
     },
     "integrationView": {
       "externalIntegrations": [
-        {"sourceApp": "Identity Service", "destinationApp": "NHS Login (P9)", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "oidc", "purpose": "Patient identity verification at NHS Login Identity Assurance Level P9"},
-        {"sourceApp": "Spine Integration Service", "destinationApp": "NHS Spine (PDS, e-RS, GP Connect)", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "mtls", "purpose": "Patient demographic lookup, e-Referral, GP Connect record summary"},
+        {"sourceApp": "Identity Service", "destinationApp": "MediCore Login (P9)", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "oidc", "purpose": "Patient identity verification at MediCore Login Identity Assurance Level P9"},
+        {"sourceApp": "Spine Integration Service", "destinationApp": "MediCore Spine (PDS, e-RS, GP Connect)", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "mtls", "purpose": "Patient demographic lookup, e-Referral, GP Connect record summary"},
         {"sourceApp": "Notifications Service", "destinationApp": "GOV.UK Notify", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "api-key", "purpose": "SMS appointment reminders and email notifications"},
         {"sourceApp": "EPR Integration Service", "destinationApp": "Trust EPR (EpicCare)", "integrationType": "internal-app", "protocol": "https", "encrypted": true, "authenticationMethod": "mtls", "purpose": "FHIR R4 read/write of appointments, observations, document references"}
       ]
@@ -153,7 +153,7 @@
         {"name": "Session Cache", "storeType": "in-memory", "technology": "Azure Cache for Redis", "containsPersonalData": true, "classification": "restricted", "retentionPeriod": "transient", "encryptionLevel": "storage-level"}
       ],
       "dataSovereigntyRequired": "yes",
-      "dataSovereigntyDetails": "All patient data held in Azure UK regions only. NHS Spine messages processed in UK only."
+      "dataSovereigntyDetails": "All patient data held in Azure UK regions only. MediCore Spine messages processed in UK only."
     },
     "securityView": {
       "businessImpact": {
@@ -207,32 +207,32 @@
   "riskGovernance": {
     "constraints": [
       {"id": "C-001", "constraint": "All patient data must remain in UK", "category": "regulatory", "impactOnDesign": "All Azure regions UK only"},
-      {"id": "C-002", "constraint": "NHS Login Identity Assurance Level P9 mandatory for patient access", "category": "regulatory", "impactOnDesign": "Identity flow must complete P9 verification before any clinical data is accessible"},
-      {"id": "C-003", "constraint": "DCB0129 clinical safety case required pre go-live", "category": "regulatory", "impactOnDesign": "Hazard log, mitigation, and CSO sign-off gate go-live"},
+      {"id": "C-002", "constraint": "MediCore Login Identity Assurance Level P9 mandatory for patient access", "category": "regulatory", "impactOnDesign": "Identity flow must complete P9 verification before any clinical data is accessible"},
+      {"id": "C-003", "constraint": "CS-129 clinical safety case required pre go-live", "category": "regulatory", "impactOnDesign": "Hazard log, mitigation, and CSO sign-off gate go-live"},
       {"id": "C-004", "constraint": "PKB contract ends 2026-Q3", "category": "time", "impactOnDesign": "Migration must complete with 3-month parallel run before contract end"}
     ],
     "assumptions": [
-      {"id": "A-001", "assumption": "NHS Spine FHIR APIs remain stable for the contract lifetime", "impactIfFalse": "Adapter rework required mid-life", "certainty": "high", "status": "open", "owner": "Dr Raj Doe"},
+      {"id": "A-001", "assumption": "MediCore Spine FHIR APIs remain stable for the contract lifetime", "impactIfFalse": "Adapter rework required mid-life", "certainty": "high", "status": "open", "owner": "Dr Raj Doe"},
       {"id": "A-002", "assumption": "Trust EPR (EpicCare) supports FHIR R4 export at sufficient throughput", "impactIfFalse": "Patient-facing latency missed", "certainty": "high", "status": "closed", "owner": "Dr Raj Doe"}
     ],
     "risks": [
       {"id": "R-001", "riskEvent": "Confidentiality breach exposes patient data", "riskCategory": "security", "severity": "critical", "likelihood": "low", "owner": "Karen Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "End-to-end encryption; field-level encryption for messaging; quarterly DSPT review; ICO breach response runbook (72h notification)", "residualRisk": "low", "lastAssessed": "2026-04-08"},
-      {"id": "R-002", "riskEvent": "Clinical harm from incorrect appointment / results display", "riskCategory": "security", "severity": "critical", "likelihood": "low", "owner": "Sarah Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "DCB0129/0160 clinical safety case; CSO oversight; hazard log MHT-HAZ-LOG-0208; idempotent ID matching; weekly Datix review", "residualRisk": "low", "lastAssessed": "2026-04-08"},
-      {"id": "R-003", "riskEvent": "NHS Spine outage degrades portal", "riskCategory": "operational", "severity": "high", "likelihood": "medium", "owner": "Dr Raj Doe", "mitigationStrategy": "mitigate", "mitigationPlan": "Cached recent demographics; degraded mode hides Spine-dependent features; status banner runbook within 5 minutes", "residualRisk": "medium", "lastAssessed": "2026-04-08"},
+      {"id": "R-002", "riskEvent": "Clinical harm from incorrect appointment / results display", "riskCategory": "security", "severity": "critical", "likelihood": "low", "owner": "Sarah Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "CS-129/0160 clinical safety case; CSO oversight; hazard log MHT-HAZ-LOG-0208; idempotent ID matching; weekly Datix review", "residualRisk": "low", "lastAssessed": "2026-04-08"},
+      {"id": "R-003", "riskEvent": "MediCore Spine outage degrades portal", "riskCategory": "operational", "severity": "high", "likelihood": "medium", "owner": "Dr Raj Doe", "mitigationStrategy": "mitigate", "mitigationPlan": "Cached recent demographics; degraded mode hides Spine-dependent features; status banner runbook within 5 minutes", "residualRisk": "medium", "lastAssessed": "2026-04-08"},
       {"id": "R-004", "riskEvent": "PKB-to-MyMedwick migration loses patient data or consent", "riskCategory": "delivery", "severity": "high", "likelihood": "low", "owner": "Claire Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "3-month parallel run; cohort migration with reconciliation; explicit re-consent for messaging carry-over; rollback to PKB available", "residualRisk": "low", "lastAssessed": "2026-04-08"},
       {"id": "R-005", "riskEvent": "DSPT non-compliance discovered during audit", "riskCategory": "compliance", "severity": "high", "likelihood": "low", "owner": "Mike Doe", "mitigationStrategy": "mitigate", "mitigationPlan": "Quarterly internal DSPT review; pre-audit gap analysis annually; evidence library maintained continuously", "residualRisk": "low", "lastAssessed": "2026-04-08"}
     ]
   },
   "appendices": {
     "glossary": [
-      {"term": "DCB0129", "definition": "Clinical Risk Management — manufacturer responsibilities for health IT systems"},
-      {"term": "DCB0160", "definition": "Clinical Risk Management — deployment and use of health IT systems"},
-      {"term": "DSPT", "definition": "Data Security and Protection Toolkit — annual NHS information governance assessment"},
+      {"term": "CS-129", "definition": "Clinical Risk Management — manufacturer responsibilities for health IT systems"},
+      {"term": "CS-160", "definition": "Clinical Risk Management — deployment and use of health IT systems"},
+      {"term": "DSPT", "definition": "Data Security and Protection Toolkit — annual MediCore information governance assessment"},
       {"term": "EPR", "definition": "Electronic Patient Record — Trust's clinical record system (EpicCare)"},
       {"term": "FHIR", "definition": "Fast Healthcare Interoperability Resources — HL7 standard"},
-      {"term": "MESH", "definition": "Message Exchange for Social and Health — NHS Digital messaging service"},
-      {"term": "PDS", "definition": "Personal Demographics Service — national NHS patient demographic register"},
-      {"term": "Spine", "definition": "NHS Spine — central national NHS infrastructure for clinical messaging and identity"}
+      {"term": "MESH", "definition": "Message Exchange for Social and Health — MediCore Digital messaging service"},
+      {"term": "PDS", "definition": "Personal Demographics Service — national MediCore patient demographic register"},
+      {"term": "Spine", "definition": "MediCore Spine — central national MediCore infrastructure for clinical messaging and identity"}
     ]
   }
 }
