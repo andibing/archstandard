@@ -168,6 +168,21 @@
 	color: var(--sl-color-accent);
 }
 
+/* Cheat-card "↓ PDF" download link — small, right-aligned, unobtrusive */
+.cheat-card-pdf-link {
+	margin: -0.5rem 0 1rem 0;
+	font-size: 0.875rem;
+}
+.cheat-card-pdf-link a {
+	color: var(--sl-color-text-accent);
+	text-decoration: none;
+	border-bottom: 1px dotted currentColor;
+}
+.cheat-card-pdf-link a:hover {
+	text-decoration: none;
+	border-bottom-style: solid;
+}
+
 /* Fictional-org logo on example pages */
 .example-org-logo {
 	display: block;
@@ -661,6 +676,11 @@
    Print Stylesheet
    Clean layout for printing or PDF export
    ───────────────────────────────────────────── */
+@page {
+	size: A4 landscape;
+	margin: 15mm;
+}
+
 @media print {
 	/* Hide navigation, sidebar, header, footer, search */
 	header,
@@ -674,6 +694,7 @@
 	starlight-menu-button,
 	[data-pagefind-ignore],
 	.sl-banner,
+	.cheat-card-pdf-link,
 	button {
 		display: none !important;
 	}

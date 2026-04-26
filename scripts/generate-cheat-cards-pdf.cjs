@@ -65,6 +65,11 @@ raw = raw.replace(/<style>\{`[\s\S]*?`\}<\/style>/g, '');
 raw = raw.replace(/<div class="cheat-card">/g, '');
 raw = raw.replace(/<\/div>/g, '');
 
+// 4a. Strip <p class="cheat-card-pdf-link">...</p> blocks — these are the
+// inline "↓ PDF" download links on the web page; they shouldn't appear in
+// the PDF (the PDF would be linking to itself).
+raw = raw.replace(/<p class="cheat-card-pdf-link">[\s\S]*?<\/p>\n*/g, '');
+
 // 5. Convert <span class="maturity-indicator …"> to plain bold
 raw = raw.replace(/<span class="maturity-indicator[^"]*">([^<]+)<\/span>/g, '**$1**');
 
@@ -106,7 +111,7 @@ console.log(`Parsed ${cards.length} cards.`);
 // and avoid raw header-includes (Windows shell escaping is fragile).
 const PANDOC_OPTS = [
   '--pdf-engine=pdflatex',
-  '-V', 'geometry:a4paper,margin=18mm',
+  '-V', 'geometry:a4paper,landscape,margin=15mm',
   '-V', 'fontsize=10pt',
   '-V', 'colorlinks=true',
   '-V', 'linkcolor=NavyBlue',
