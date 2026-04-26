@@ -90,10 +90,11 @@ export default defineConfig({
 					],
 				},
 				// About ADS — gains Overview and Conformance (both reference reading)
+				// Default-expanded so first-time visitors see the full breadth.
 				{
 					label: 'About ADS',
 					translations: { fr: 'À propos de ADS', de: 'Über ADS' },
-					collapsed: true,
+					collapsed: false,
 					items: [
 						{ label: 'Overview', slug: 'standard/overview', translations: { fr: 'Aperçu', de: 'Übersicht' } },
 						{ label: 'Why ADS?', slug: 'standard/why-ads', translations: { fr: 'Pourquoi ADS ?', de: 'Warum ADS?' } },
