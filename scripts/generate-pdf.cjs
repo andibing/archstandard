@@ -198,6 +198,7 @@ date: "${new Date().toISOString().split('T')[0]}"
     execSync(
       `"${pandoc}" "${OUTPUT_MD}" -o "${OUTPUT_DOCX}" ` +
       `--toc --toc-depth=3 ` +
+      `--metadata=lang:en-GB ` +
       `--highlight-style=tango`,
       { stdio: 'inherit' }
     );
@@ -221,6 +222,8 @@ date: "${new Date().toISOString().split('T')[0]}"
       `-V linkcolor=blue ` +
       `-V toccolor=blue ` +
       `-V mainfont="Segoe UI" ` +
+      `-V lang=en-GB ` +
+      `--metadata=lang:en-GB ` +
       `--highlight-style=tango`,
       { stdio: 'inherit' }
     );
@@ -237,6 +240,8 @@ date: "${new Date().toISOString().split('T')[0]}"
         `-V documentclass=report ` +
         `-V linkcolor=blue ` +
         `-V toccolor=blue ` +
+        `-V lang=en-GB ` +
+        `--metadata=lang:en-GB ` +
         `--highlight-style=tango`,
         { stdio: 'inherit' }
       );

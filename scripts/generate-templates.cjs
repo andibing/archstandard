@@ -96,6 +96,21 @@ const ACRONYM_FIXES = {
   // Resilience / DR (these only appear in schema-derived labels, not human prose)
   'Dr': 'DR', 'Rto': 'RTO', 'Rpo': 'RPO',
   'Ha': 'HA', 'Az': 'AZ',
+  // Operational roles
+  'Sre': 'SRE', 'Sres': 'SREs',
+  'Devops': 'DevOps', 'Secops': 'SecOps',
+  'Mlops': 'MLOps', 'Dataops': 'DataOps', 'Aiops': 'AIOps',
+  'Dba': 'DBA', 'Dbas': 'DBAs',
+  // More acronyms / proper nouns
+  'Cpu': 'CPU', 'Cpus': 'CPUs',
+  'Gpu': 'GPU', 'Gpus': 'GPUs',
+  'Ram': 'RAM',
+  'Rhel': 'RHEL', 'Suse': 'SUSE', 'Centos': 'CentOS',
+  'Qa': 'QA',
+  'Cyberark': 'CyberArk',
+  'Cicd': 'CI/CD',
+  // Hyphenation
+  'Tradeoff': 'Trade-off', 'Tradeoffs': 'Trade-offs',
   // Misc
   'It': 'IT',
 };
@@ -333,10 +348,11 @@ function generateYamlLines(schema, node, key, indent, lines) {
 function generateYamlTemplate(schema) {
   const lines = [
     '# ADS v1.3.0 — Solution Architecture Document Template',
-    '# Author: Andi Chandler',
-    '# Published by: ArchStandard (archstandard.org)',
-    '# Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
+    '# Standard published by: ArchStandard (archstandard.org)',
+    '# Standard licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
     '# Generated from: schema/ads.schema.json',
+    '#',
+    '# Document author / owner: complete in Section 0 (Document Control) below.',
     '#',
     '# DESIGN PRINCIPLE: Fields are atomic — use enums, booleans,',
     '# and structured options to reduce ambiguity and enable',
@@ -458,10 +474,11 @@ function generateMarkdownTemplate(schema) {
     '# Solution Architecture Document',
     '',
     '> **Standard:** ADS v1.3.0 (Architecture Description Standard)',
-    '> **Author:** Andi Chandler',
-    '> **Published by:** ArchStandard (archstandard.org)',
-    '> **Licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
+    '> **Standard published by:** ArchStandard (archstandard.org)',
+    '> **Standard licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
     '> **Generated from:** schema/ads.schema.json',
+    '',
+    '> *Document author and owner: complete in Section 0 (Document Control) below.*',
     '',
     '---',
     '',
@@ -573,20 +590,68 @@ function generateMdSection(schema, node, lines, headingLevel, contextKey) {
       if (itemNode && itemNode.type === 'object' && itemNode.properties) {
         lines.push(`${hPrefix} ${label}`);
         lines.push('');
-        // Generate a table with columns from the item properties
         const cols = Object.keys(itemNode.properties);
-        const headers = cols.map(c => getDisplayName(c));
-        lines.push(`| ${headers.join(' | ')} |`);
-        lines.push(`|${cols.map(() => '------').join('|')}|`);
-        // One sample row with checkboxes for enums
-        const cells = cols.map(c => {
-          const colNode = resolveNode(schema, itemNode.properties[c]);
-          if (colNode && colNode.enum) return enumToCheckboxes(itemNode.properties[c], schema);
-          if (colNode && colNode.type === 'boolean') return '[ ] Yes [ ] No';
-          return '';
-        });
-        lines.push(`| ${cells.join(' | ')} |`);
-        lines.push('');
+
+        // Wide-array threshold: tables with > 5 columns are illegible in
+        // A4 portrait Word output (cells become 1-2 chars wide). Render
+        // vertically as a Field/Value form per expected item instead.
+        const WIDE_TABLE_THRESHOLD = 5;
+
+        if (cols.length > WIDE_TABLE_THRESHOLD) {
+          // Vertical "form" layout: one Field/Value table per item, with
+          // a hint to repeat for additional items.
+          // Singularise the label for the "Repeat the table below for each X"
+          // hint. Tricky cases like "boxes" -> "box" (drop -es) are RARE in the
+          // schema's array names; safer to drop just the trailing "s" and accept
+          // a small risk of awkward output (e.g. "for each boxe") than to
+          // produce wrong outputs like "use cases" -> "use cas".
+          // Compound labels with a leading plural (e.g. "Apis & Interfaces")
+          // also get only the trailing -s stripped; a small explicit override
+          // map handles the awkward ones.
+          const explicitSingulars = {
+            'apis & interfaces': 'API or interface',
+            'data transfers': 'data transfer',
+            'change history': 'change record',
+            'reference documents': 'reference document',
+          };
+          const singularise = (s) => {
+            const explicit = explicitSingulars[s];
+            if (explicit) return explicit;
+            if (/ies$/.test(s)) return s.replace(/ies$/, 'y');
+            if (/s$/.test(s)) return s.replace(/s$/, '');
+            return s;
+          };
+          const itemNoun = singularise(label.toLowerCase().replace(/^[\d\.\s]+/, ''));
+          lines.push(`*Repeat the table below for each ${itemNoun}.*`);
+          lines.push('');
+          lines.push('| Field | Value |');
+          lines.push('|-------|-------|');
+          for (const c of cols) {
+            const colNode = resolveNode(schema, itemNode.properties[c]);
+            const colLabel = getDisplayName(c);
+            if (colNode && colNode.enum) {
+              lines.push(`| **${colLabel}** | ${enumToCheckboxes(itemNode.properties[c], schema)} |`);
+            } else if (colNode && colNode.type === 'boolean') {
+              lines.push(`| **${colLabel}** | [ ] Yes [ ] No |`);
+            } else {
+              lines.push(`| **${colLabel}** | |`);
+            }
+          }
+          lines.push('');
+        } else {
+          // Narrow-array layout: one row, columns across (existing behaviour).
+          const headers = cols.map(c => getDisplayName(c));
+          lines.push(`| ${headers.join(' | ')} |`);
+          lines.push(`|${cols.map(() => '------').join('|')}|`);
+          const cells = cols.map(c => {
+            const colNode = resolveNode(schema, itemNode.properties[c]);
+            if (colNode && colNode.enum) return enumToCheckboxes(itemNode.properties[c], schema);
+            if (colNode && colNode.type === 'boolean') return '[ ] Yes [ ] No';
+            return '';
+          });
+          lines.push(`| ${cells.join(' | ')} |`);
+          lines.push('');
+        }
       } else {
         // Simple array of strings
         lines.push(`**${label}:**`);
@@ -650,7 +715,8 @@ function getDisplayName(key, context) {
     securityMonitoring: 'Security Monitoring',
     useCases: 'Key Use Cases',
     adrs: 'Architecture Decision Records',
-    tradeoffs: 'Quality Attribute Tradeoffs',
+    tradeoffs: 'Quality Attribute Trade-offs',
+    qualityAttributeRefs: 'Quality Attribute References',
     constraints: '6.1 Constraints',
     assumptions: '6.2 Assumptions',
     risks: '6.3 Risks',
@@ -717,6 +783,46 @@ function main() {
   const mdPath = path.join(OUTPUT_DIR, 'sad-template.md');
   fs.writeFileSync(mdPath, mdTemplate, 'utf-8');
   console.log('  Generated:', mdPath);
+
+  // Generate DOCX template via Pandoc (en-GB language). Best-effort:
+  // requires Pandoc to be installed; skipped silently if not.
+  try {
+    const { execSync } = require('child_process');
+    const pandocCandidates = [
+      'pandoc',
+      path.join(process.env.LOCALAPPDATA || '', 'Pandoc', 'pandoc.exe'),
+      'C:\\Program Files\\Pandoc\\pandoc.exe',
+      '/usr/local/bin/pandoc',
+      '/usr/bin/pandoc',
+    ];
+    let pandoc = null;
+    for (const cand of pandocCandidates) {
+      try {
+        execSync(`"${cand}" --version`, { stdio: 'pipe' });
+        pandoc = cand;
+        break;
+      } catch (_) { /* keep trying */ }
+    }
+    if (pandoc) {
+      const docxPath = path.join(OUTPUT_DIR, 'sad-template.docx');
+      // Reference doc with narrower margins (15mm) so wide tables fit
+      // better — the SAD template has many many-column array tables.
+      const refDocxPath = path.join(__dirname, 'sad-template-reference.docx');
+      const refArg = fs.existsSync(refDocxPath) ? `--reference-doc="${refDocxPath}" ` : '';
+      execSync(
+        `"${pandoc}" "${mdPath}" -o "${docxPath}" ` +
+        refArg +
+        `--metadata=lang:en-GB ` +
+        `--metadata=title:"ADS — Solution Architecture Document Template"`,
+        { stdio: 'pipe' }
+      );
+      console.log('  Generated:', docxPath, '(en-GB)');
+    } else {
+      console.log('  Skipped DOCX generation (Pandoc not found)');
+    }
+  } catch (e) {
+    console.warn('  DOCX generation failed:', e.message);
+  }
 
   // Copy schema to public directory for serving at /schema/v1.0.0/ads.schema.json
   const publicSchemaDir = path.join(__dirname, '..', 'public', 'schema', 'v1.0.0');

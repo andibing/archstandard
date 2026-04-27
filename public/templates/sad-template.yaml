@@ -1,8 +1,9 @@
 # ADS v1.3.0 — Solution Architecture Document Template
-# Author: Andi Chandler
-# Published by: ArchStandard (archstandard.org)
-# Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+# Standard published by: ArchStandard (archstandard.org)
+# Standard licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
 # Generated from: schema/ads.schema.json
+#
+# Document author / owner: complete in Section 0 (Document Control) below.
 #
 # DESIGN PRINCIPLE: Fields are atomic — use enums, booleans,
 # and structured options to reduce ambiguity and enable

@@ -32,6 +32,10 @@ export default defineConfig({
 					attrs: { src: '/v1/scripts/reading-prefs.js', defer: true },
 				},
 				{
+					tag: 'script',
+					attrs: { src: '/v1/scripts/sidebar-scrollspy.js', defer: true },
+				},
+				{
 					tag: 'meta',
 					attrs: { property: 'og:type', content: 'website' },
 				},
