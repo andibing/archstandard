@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -56,7 +56,7 @@ jobs:
           retention-days: 7
 
 # Notes on action versions:
-# - actions/checkout@v5 and actions/setup-node@v5 use Node.js 24, addressing
+# - actions/checkout@v6 and actions/setup-node@v5 use Node.js 24, addressing
 #   the September 2025 Node 20 deprecation warning.
 # - actions/upload-artifact remains on v4 (the current major; v5 isn't out as
 #   of this write). It runs on Node 20 internally — when v5 ships supporting
