@@ -101,9 +101,16 @@
 
 #### Components
 
-| Name | Component Type | Description | Technology | Owner | Status |
-|------|------|------|------|------|------|
-|  | [ ] Web Application [ ] API Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] CDN [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] ML Model [ ] Other |  |  |  | [ ] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
+*Repeat the table below for each component.*
+
+| Field | Value |
+|-------|-------|
+| **Name** | |
+| **Component Type** | [ ] Web Application [ ] API Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] CDN [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] ML Model [ ] Other |
+| **Description** | |
+| **Technology** | |
+| **Owner** | |
+| **Status** | [ ] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
 
 #### Design Patterns
 
@@ -121,21 +128,46 @@
 
 #### Internal Component Connectivity
 
-| Source | Destination | Protocol | Encrypted | Authentication Method | Direction | Synchronicity | Purpose |
-|------|------|------|------|------|------|------|------|
-|  |  | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] MQTTS [ ] Kafka [ ] WebSocket [ ] WSS [ ] JDBC [ ] ODBC [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] LDAPS [ ] SSH [ ] Other | [ ] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] Kerberos [ ] None [ ] Other | [ ] Unidirectional [ ] Bidirectional | [ ] Synchronous [ ] Asynchronous [ ] Event Driven |  |
+*Repeat the table below for each internal component connectivity.*
+
+| Field | Value |
+|-------|-------|
+| **Source** | |
+| **Destination** | |
+| **Protocol** | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] MQTTS [ ] Kafka [ ] WebSocket [ ] WSS [ ] JDBC [ ] ODBC [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] LDAPS [ ] SSH [ ] Other |
+| **Encrypted** | [ ] Yes [ ] No |
+| **Authentication Method** | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] Kerberos [ ] None [ ] Other |
+| **Direction** | [ ] Unidirectional [ ] Bidirectional |
+| **Synchronicity** | [ ] Synchronous [ ] Asynchronous [ ] Event Driven |
+| **Purpose** | |
 
 #### External Integrations
 
-| Source App | Destination App | Integration Type | Protocol | Encrypted | Authentication Method | Purpose |
-|------|------|------|------|------|------|------|
-|  |  | [ ] Internal App [ ] External Service [ ] SaaS [ ] Partner [ ] Customer Facing | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] Kafka [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] Other | [ ] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] None [ ] Other |  |
+*Repeat the table below for each external integration.*
+
+| Field | Value |
+|-------|-------|
+| **Source App** | |
+| **Destination App** | |
+| **Integration Type** | [ ] Internal App [ ] External Service [ ] SaaS [ ] Partner [ ] Customer Facing |
+| **Protocol** | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] Kafka [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] Other |
+| **Encrypted** | [ ] Yes [ ] No |
+| **Authentication Method** | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] None [ ] Other |
+| **Purpose** | |
 
 #### APIs & Interfaces
 
-| Name | API Type | Direction | Data Format | Version | Authenticated | Rate Limited |
-|------|------|------|------|------|------|------|
-|  | [ ] REST [ ] GraphQL [ ] gRPC [ ] SOAP [ ] WebSocket [ ] Event Stream [ ] File Transfer [ ] Other | [ ] Exposed [ ] Consumed | [ ] JSON [ ] XML [ ] Protobuf [ ] Avro [ ] CSV [ ] Parquet [ ] Binary [ ] Other |  | [ ] Yes [ ] No | [ ] Yes [ ] No |
+*Repeat the table below for each apis & interface.*
+
+| Field | Value |
+|-------|-------|
+| **Name** | |
+| **API Type** | [ ] REST [ ] GraphQL [ ] gRPC [ ] SOAP [ ] WebSocket [ ] Event Stream [ ] File Transfer [ ] Other |
+| **Direction** | [ ] Exposed [ ] Consumed |
+| **Data Format** | [ ] JSON [ ] XML [ ] Protobuf [ ] Avro [ ] CSV [ ] Parquet [ ] Binary [ ] Other |
+| **Version** | |
+| **Authenticated** | [ ] Yes [ ] No |
+| **Rate Limited** | [ ] Yes [ ] No |
 
 **Quality Attribute Refs:**
 - 
@@ -166,9 +198,17 @@
 
 ##### Servers
 
-| Name | Instance Type | V Cpu | Memory Gb | Storage Tb | Quantity | OS |
-|------|------|------|------|------|------|------|
-|  |  |  |  |  |  | [ ] Rhel [ ] Amazon Linux [ ] Ubuntu [ ] Debian [ ] Centos [ ] Windows Server [ ] Suse [ ] Other |
+*Repeat the table below for each server.*
+
+| Field | Value |
+|-------|-------|
+| **Name** | |
+| **Instance Type** | |
+| **V Cpu** | |
+| **Memory Gb** | |
+| **Storage Tb** | |
+| **Quantity** | |
+| **OS** | [ ] Rhel [ ] Amazon Linux [ ] Ubuntu [ ] Debian [ ] Centos [ ] Windows Server [ ] Suse [ ] Other |
 
 ##### Containers
 
@@ -216,9 +256,21 @@
 
 #### Data Stores
 
-| Name | Store Type | Technology | Authoritative | Retention Period | Data Size Category | Classification | Contains Personal Data | Contains Sensitive Personal Data | Encryption Level | Key Management |
-|------|------|------|------|------|------|------|------|------|------|------|
-|  | [ ] Relational DB [ ] NoSQL Document [ ] NoSQL Key Value [ ] NoSQL Graph [ ] NoSQL Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time Series DB [ ] In Memory [ ] Other |  | [ ] Yes [ ] No | [ ] Transient [ ] Hours [ ] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [ ] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [ ] Under 1 GB [ ] 1 100 GB [ ] 100 GB 1 TB [ ] 1 10 TB [ ] 10 100 TB [ ] 100 TB 1 PB [ ] Over 1 PB | [ ] Public [ ] Internal [ ] Restricted [ ] Highly Restricted | [ ] Yes [ ] No | [ ] Yes [ ] No | [ ] None [ ] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [ ] Provider Managed [ ] Customer Managed KMS [ ] HSM [ ] BYOK [ ] Custom [ ] None |
+*Repeat the table below for each data store.*
+
+| Field | Value |
+|-------|-------|
+| **Name** | |
+| **Store Type** | [ ] Relational DB [ ] NoSQL Document [ ] NoSQL Key Value [ ] NoSQL Graph [ ] NoSQL Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time Series DB [ ] In Memory [ ] Other |
+| **Technology** | |
+| **Authoritative** | [ ] Yes [ ] No |
+| **Retention Period** | [ ] Transient [ ] Hours [ ] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [ ] 5 10 Years [ ] 10 Plus Years [ ] Indefinite |
+| **Data Size Category** | [ ] Under 1 GB [ ] 1 100 GB [ ] 100 GB 1 TB [ ] 1 10 TB [ ] 10 100 TB [ ] 100 TB 1 PB [ ] Over 1 PB |
+| **Classification** | [ ] Public [ ] Internal [ ] Restricted [ ] Highly Restricted |
+| **Contains Personal Data** | [ ] Yes [ ] No |
+| **Contains Sensitive Personal Data** | [ ] Yes [ ] No |
+| **Encryption Level** | [ ] None [ ] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level |
+| **Key Management** | [ ] Provider Managed [ ] Customer Managed KMS [ ] HSM [ ] BYOK [ ] Custom [ ] None |
 
 #### Data Transfers
 
@@ -301,15 +353,32 @@
 
 #### Key Use Cases
 
-| Id | Name | Actors | Trigger | Main Flow | Views Involved |
-|------|------|------|------|------|------|
-|  |  |  |  |  |  |
+*Repeat the table below for each key use case.*
+
+| Field | Value |
+|-------|-------|
+| **Id** | |
+| **Name** | |
+| **Actors** | |
+| **Trigger** | |
+| **Main Flow** | |
+| **Views Involved** | |
 
 #### Architecture Decision Records
 
-| Id | Title | Status | Date | Context | Decision | Alternatives | Consequences | Affected Attributes |
-|------|------|------|------|------|------|------|------|------|
-|  |  | [ ] Proposed [ ] Accepted [ ] Superseded [ ] Deprecated |  |  |  |  |  |  |
+*Repeat the table below for each architecture decision record.*
+
+| Field | Value |
+|-------|-------|
+| **Id** | |
+| **Title** | |
+| **Status** | [ ] Proposed [ ] Accepted [ ] Superseded [ ] Deprecated |
+| **Date** | |
+| **Context** | |
+| **Decision** | |
+| **Alternatives** | |
+| **Consequences** | |
+| **Affected Attributes** | |
 
 ---
 
@@ -430,27 +499,63 @@
 
 ### 6.2 Assumptions
 
-| Id | Assumption | Impact If False | Certainty | Status | Owner | Evidence |
-|------|------|------|------|------|------|------|
-|  |  |  | [ ] High [ ] Medium [ ] Low | [ ] Open [ ] Closed |  |  |
+*Repeat the table below for each assumption.*
+
+| Field | Value |
+|-------|-------|
+| **Id** | |
+| **Assumption** | |
+| **Impact If False** | |
+| **Certainty** | [ ] High [ ] Medium [ ] Low |
+| **Status** | [ ] Open [ ] Closed |
+| **Owner** | |
+| **Evidence** | |
 
 ### 6.3 Risks
 
-| Id | Risk Event | Risk Category | Severity | Likelihood | Mitigation Strategy | Mitigation Plan | Residual Risk | Owner | Last Assessed |
-|------|------|------|------|------|------|------|------|------|------|
-|  |  | [ ] Technical [ ] Security [ ] Operational [ ] Delivery [ ] Commercial [ ] Compliance [ ] Other | [ ] Critical [ ] High [ ] Medium [ ] Low [ ] Negligible | [ ] Critical [ ] High [ ] Medium [ ] Low [ ] Negligible | [ ] Accept [ ] Mitigate [ ] Transfer [ ] Avoid |  | [ ] Critical [ ] High [ ] Medium [ ] Low [ ] Negligible |  |  |
+*Repeat the table below for each risk.*
+
+| Field | Value |
+|-------|-------|
+| **Id** | |
+| **Risk Event** | |
+| **Risk Category** | [ ] Technical [ ] Security [ ] Operational [ ] Delivery [ ] Commercial [ ] Compliance [ ] Other |
+| **Severity** | [ ] Critical [ ] High [ ] Medium [ ] Low [ ] Negligible |
+| **Likelihood** | [ ] Critical [ ] High [ ] Medium [ ] Low [ ] Negligible |
+| **Mitigation Strategy** | [ ] Accept [ ] Mitigate [ ] Transfer [ ] Avoid |
+| **Mitigation Plan** | |
+| **Residual Risk** | [ ] Critical [ ] High [ ] Medium [ ] Low [ ] Negligible |
+| **Owner** | |
+| **Last Assessed** | |
 
 ### 6.4 Dependencies
 
-| Id | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
-|------|------|------|------|------|------|------|
-|  |  | [ ] Inbound [ ] Outbound | [ ] Committed [ ] Not Committed [ ] Resolved |  |  |  |
+*Repeat the table below for each dependencie.*
+
+| Field | Value |
+|-------|-------|
+| **Id** | |
+| **Dependency** | |
+| **Direction** | [ ] Inbound [ ] Outbound |
+| **Status** | [ ] Committed [ ] Not Committed [ ] Resolved |
+| **Owner** | |
+| **Evidence** | |
+| **Last Assessed** | |
 
 ### 6.5 Issues
 
-| Id | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
-|------|------|------|------|------|------|------|------|
-|  |  | [ ] Technical [ ] Security [ ] Operational [ ] Delivery [ ] Commercial | [ ] Critical [ ] High [ ] Medium [ ] Low [ ] Negligible |  |  | [ ] Open [ ] In Progress [ ] Resolved |  |
+*Repeat the table below for each issue.*
+
+| Field | Value |
+|-------|-------|
+| **Id** | |
+| **Issue** | |
+| **Category** | [ ] Technical [ ] Security [ ] Operational [ ] Delivery [ ] Commercial |
+| **Impact** | [ ] Critical [ ] High [ ] Medium [ ] Low [ ] Negligible |
+| **Owner** | |
+| **Resolution Plan** | |
+| **Status** | [ ] Open [ ] In Progress [ ] Resolved |
+| **Last Assessed** | |
 
 ### 6.8 Compliance Traceability
 

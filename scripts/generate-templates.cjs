@@ -573,20 +573,46 @@ function generateMdSection(schema, node, lines, headingLevel, contextKey) {
       if (itemNode && itemNode.type === 'object' && itemNode.properties) {
         lines.push(`${hPrefix} ${label}`);
         lines.push('');
-        // Generate a table with columns from the item properties
         const cols = Object.keys(itemNode.properties);
-        const headers = cols.map(c => getDisplayName(c));
-        lines.push(`| ${headers.join(' | ')} |`);
-        lines.push(`|${cols.map(() => '------').join('|')}|`);
-        // One sample row with checkboxes for enums
-        const cells = cols.map(c => {
-          const colNode = resolveNode(schema, itemNode.properties[c]);
-          if (colNode && colNode.enum) return enumToCheckboxes(itemNode.properties[c], schema);
-          if (colNode && colNode.type === 'boolean') return '[ ] Yes [ ] No';
-          return '';
-        });
-        lines.push(`| ${cells.join(' | ')} |`);
-        lines.push('');
+
+        // Wide-array threshold: tables with > 5 columns are illegible in
+        // A4 portrait Word output (cells become 1-2 chars wide). Render
+        // vertically as a Field/Value form per expected item instead.
+        const WIDE_TABLE_THRESHOLD = 5;
+
+        if (cols.length > WIDE_TABLE_THRESHOLD) {
+          // Vertical "form" layout: one Field/Value table per item, with
+          // a hint to repeat for additional items.
+          lines.push(`*Repeat the table below for each ${label.toLowerCase().replace(/^[\d\.\s]+/, '').replace(/s$/, '')}.*`);
+          lines.push('');
+          lines.push('| Field | Value |');
+          lines.push('|-------|-------|');
+          for (const c of cols) {
+            const colNode = resolveNode(schema, itemNode.properties[c]);
+            const colLabel = getDisplayName(c);
+            if (colNode && colNode.enum) {
+              lines.push(`| **${colLabel}** | ${enumToCheckboxes(itemNode.properties[c], schema)} |`);
+            } else if (colNode && colNode.type === 'boolean') {
+              lines.push(`| **${colLabel}** | [ ] Yes [ ] No |`);
+            } else {
+              lines.push(`| **${colLabel}** | |`);
+            }
+          }
+          lines.push('');
+        } else {
+          // Narrow-array layout: one row, columns across (existing behaviour).
+          const headers = cols.map(c => getDisplayName(c));
+          lines.push(`| ${headers.join(' | ')} |`);
+          lines.push(`|${cols.map(() => '------').join('|')}|`);
+          const cells = cols.map(c => {
+            const colNode = resolveNode(schema, itemNode.properties[c]);
+            if (colNode && colNode.enum) return enumToCheckboxes(itemNode.properties[c], schema);
+            if (colNode && colNode.type === 'boolean') return '[ ] Yes [ ] No';
+            return '';
+          });
+          lines.push(`| ${cells.join(' | ')} |`);
+          lines.push('');
+        }
       } else {
         // Simple array of strings
         lines.push(`**${label}:**`);
@@ -717,6 +743,41 @@ function main() {
   const mdPath = path.join(OUTPUT_DIR, 'sad-template.md');
   fs.writeFileSync(mdPath, mdTemplate, 'utf-8');
   console.log('  Generated:', mdPath);
+
+  // Generate DOCX template via Pandoc (en-GB language). Best-effort:
+  // requires Pandoc to be installed; skipped silently if not.
+  try {
+    const { execSync } = require('child_process');
+    const pandocCandidates = [
+      'pandoc',
+      path.join(process.env.LOCALAPPDATA || '', 'Pandoc', 'pandoc.exe'),
+      'C:\\Program Files\\Pandoc\\pandoc.exe',
+      '/usr/local/bin/pandoc',
+      '/usr/bin/pandoc',
+    ];
+    let pandoc = null;
+    for (const cand of pandocCandidates) {
+      try {
+        execSync(`"${cand}" --version`, { stdio: 'pipe' });
+        pandoc = cand;
+        break;
+      } catch (_) { /* keep trying */ }
+    }
+    if (pandoc) {
+      const docxPath = path.join(OUTPUT_DIR, 'sad-template.docx');
+      execSync(
+        `"${pandoc}" "${mdPath}" -o "${docxPath}" ` +
+        `--metadata=lang:en-GB ` +
+        `--metadata=title:"ADS — Solution Architecture Document Template"`,
+        { stdio: 'pipe' }
+      );
+      console.log('  Generated:', docxPath, '(en-GB)');
+    } else {
+      console.log('  Skipped DOCX generation (Pandoc not found)');
+    }
+  } catch (e) {
+    console.warn('  DOCX generation failed:', e.message);
+  }
 
   // Copy schema to public directory for serving at /schema/v1.0.0/ads.schema.json
   const publicSchemaDir = path.join(__dirname, '..', 'public', 'schema', 'v1.0.0');
