@@ -19,10 +19,11 @@ Each release of the standard ties to a specific JSON Schema version. Major versi
 
 | Standard Version | JSON Schema | URL | Status | Notes |
 |------------------|-------------|-----|--------|-------|
-| **v1.0.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.0 | Initial release; schema established |
-| **v1.1.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.0 | Content additions; schema unchanged |
-| **v1.2.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.0 | Public release; schema unchanged |
-| **v1.3.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | **Current** | Adoption release; schema unchanged |
+| **v1.0.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.1 | Initial release; schema established |
+| **v1.1.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.1 | Content additions; schema unchanged |
+| **v1.2.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.1 | Public release; schema unchanged |
+| **v1.3.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.1 | Adoption release; schema unchanged |
+| **v1.3.1** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | **Current** | Bug fixes and SAD template polish; schema unchanged |
 | v2.x (planned) | v2.0.0 (planned) | [archstandard.org/v2/](https://archstandard.org/v2/) | In development | First schema major bump |
 
 **Compatibility implication:** any SAD that validates against schema v1.0.0 is structurally valid against any v1.x.y release of the standard. Editorial improvements (new prompts, new guidance, new examples) do not invalidate prior SADs. A schema v2.0.0 would only ship alongside a standard v2.0.0 major release; the current `/v1/` URLs and the v1.0.0 schema would remain available permanently for backwards compatibility.
@@ -74,6 +75,30 @@ The first version of the Architecture Description Standard (ADS), synthesising y
 - Organisation customisation examples (YAML and JSON)
 - Full French and German translation parity (30 pages each)
 - Dual licence: CC BY 4.0 (content) + MIT (code)
+
+### v1.3.1 - Bug fixes and SAD template polish
+
+**Date:** 2026-04-27 · **JSON Schema:** v1.0.0 (unchanged)
+
+Patch release on top of v1.3.0. No content additions, no breaking changes — bug fixes and editorial polish from initial-review feedback.
+
+**Bug fixes:**
+- Fixed broken Mermaid diagram in Medwick example (3.3.1 deployment diagram had a node ID containing spaces after the NHS→MediCore substitution)
+- Fixed schema canonical URL: now correctly serves at `https://archstandard.org/schema/v1.0.0/ads.schema.json` (matching the `$id`)
+- Fixed schema validation code samples (must download then validate locally; earlier examples used the unsupported `-s URL` form)
+- Sidebar scroll-spy: anchor sub-items in single-file standard sections (0, 1, 2, 5, 6, 7) now show active state when the matching section is in view
+- Consolidated validation instructions to a single canonical home on the JSON Schema page (was duplicated across 4 pages)
+
+**SAD template improvements:**
+- Wide multi-column tables (e.g. Data Stores) now render as vertical Field/Value forms — readable in any output format
+- Word doc margins reduced to 15mm; `lang: en-GB` set so Word's spell-checker uses UK English
+- "Author: Andi Chandler" removed from auto-generated headers (template is for the user to fill in)
+- Acronym dictionary expanded: SRE, DevOps, MLOps, DBA, CPU, RHEL, SUSE, CentOS, QA, CyberArk, CI/CD, Trade-off
+- "Quality Attribute Refs" → "Quality Attribute References" (full word)
+- Banner items now render as separate paragraphs in the Word doc
+
+**Editorial polish:**
+- Stale NHS-flavoured Medwick descriptions updated across the site (now uses fictional "MediCore" framework consistently, including in the Medwick logo SVG)
 
 ### v1.3.0 - Adoption Release
 

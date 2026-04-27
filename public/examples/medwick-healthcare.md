@@ -1,6 +1,6 @@
 # Solution Architecture Document — Medwick Healthcare Trust -- MyMedwick Patient Portal
 
-> **Standard:** ADS v1.3.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.1 (Architecture Description Standard)
 > **Organisation:** Medwick Healthcare Trust
 > **Depth:** Comprehensive
 

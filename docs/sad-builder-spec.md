@@ -3,7 +3,7 @@
 **Specification ID:** ADS-BUILDER-SPEC v0.2
 **Author:** Andi Chandler
 **Date:** 2026-04-25
-**Conforms to:** ADS v1.3.0 (https://archstandard.org/v1/)
+**Conforms to:** ADS v1.3.1 (https://archstandard.org/v1/)
 **Status:** Draft — open for community feedback
 
 > This is a **specification for tooling**, not a product roadmap. It defines the
@@ -410,7 +410,7 @@ A builder SHOULD:
 - Offer the user a choice of UI language where translations exist
 - Render UI text from a translation catalogue, not hardcoded strings
 
-The ADS standard is available in English, French, and German at v1.3.0.
+The ADS standard is available in English, French, and German at v1.3.1.
 Builders SHOULD support these languages where translations of `description`,
 `x-ads-title`, and other user-facing schema strings are available.
 
@@ -742,7 +742,7 @@ README or documentation, in this format:
 
 **MyBuilder v1.0** declares **ADS Level 2** conformance.
 
-- ADS version targeted: v1.3.0
+- ADS version targeted: v1.3.1
 - Schema version: v1.0.0
 - Conformance test results: [link to test results document]
 - Last verified: 2026-05-15

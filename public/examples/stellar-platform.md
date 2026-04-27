@@ -1,6 +1,6 @@
 # Solution Architecture Document — Stellar Platform (Internal Developer Platform)
 
-> **Standard:** ADS v1.3.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.1 (Architecture Description Standard)
 > **Author:** Tom Bloggs, Principal Platform Engineer
 > **Organisation:** Stellar Engineering Ltd
 > **Status:** Approved

@@ -1,6 +1,6 @@
 # Solution Architecture Document — NorthWind Online
 
-> **Standard:** ADS v1.3.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.1 (Architecture Description Standard)
 > **Author:** Priya Doe (Solution Architect)
 > **Organisation:** NorthWind Retail Ltd
 > **Status:** Approved

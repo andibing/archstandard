@@ -145,14 +145,14 @@ function main() {
   // Title page
   sections.push(`---
 title: "Architecture Description Standard (ADS)"
-subtitle: "Version 1.3.0"
+subtitle: "Version 1.3.1"
 author: "Andi Chandler"
 date: "${new Date().toISOString().split('T')[0]}"
 ---
 
 # Architecture Description Standard
 
-**Version 1.3.0** | **Author:** Andi Chandler | **Licence:** CC BY 4.0
+**Version 1.3.1** | **Author:** Andi Chandler | **Licence:** CC BY 4.0
 
 **Published by:** ArchStandard ([archstandard.org](https://archstandard.org))
 

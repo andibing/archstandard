@@ -1,6 +1,6 @@
 # Solution Architecture Document — archstandard.org
 
-> **Standard:** ADS v1.3.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.1 (Architecture Description Standard)
 > **Author:** Andi Chandler
 > **Organisation:** ArchStandard
 > **Status:** Approved
