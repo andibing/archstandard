@@ -119,7 +119,7 @@
 |------|------|------|
 | [ ] Microservices [ ] Monolith [ ] Modular Monolith [ ] Event Driven [ ] CQRS [ ] Saga [ ] Strangler Fig [ ] Sidecar [ ] API Gateway [ ] BFF [ ] Circuit Breaker [ ] Pub Sub [ ] Request Response [ ] Batch Processing [ ] Stream Processing [ ] Data Lake [ ] Data Mesh [ ] Other |  |  |
 
-**Quality Attribute Refs:**
+**Quality Attribute References:**
 - 
 
 ### 3.2 Integration & Data Flow View
@@ -158,7 +158,7 @@
 
 #### APIs & Interfaces
 
-*Repeat the table below for each apis & interface.*
+*Repeat the table below for each API or interface.*
 
 | Field | Value |
 |-------|-------|
@@ -170,7 +170,7 @@
 | **Authenticated** | [ ] Yes [ ] No |
 | **Rate Limited** | [ ] Yes [ ] No |
 
-**Quality Attribute Refs:**
+**Quality Attribute References:**
 - 
 
 ### 3.3 Physical View
@@ -205,11 +205,11 @@
 |-------|-------|
 | **Name** | |
 | **Instance Type** | |
-| **V Cpu** | |
+| **V CPU** | |
 | **Memory Gb** | |
 | **Storage Tb** | |
 | **Quantity** | |
-| **OS** | [ ] Rhel [ ] Amazon Linux [ ] Ubuntu [ ] Debian [ ] Centos [ ] Windows Server [ ] Suse [ ] Other |
+| **OS** | [ ] RHEL [ ] Amazon Linux [ ] Ubuntu [ ] Debian [ ] CentOS [ ] Windows Server [ ] SUSE [ ] Other |
 
 ##### Containers
 
@@ -245,12 +245,12 @@
 
 | Environment Type | Count | Venue | Auto Scale Down |
 |------|------|------|------|
-| [ ] Development [ ] Test [ ] Qa [ ] Integration Test [ ] Staging [ ] Pre Production [ ] Production [ ] DR [ ] Sandbox [ ] Demo [ ] Performance Test |  |  | [ ] Yes [ ] No |
+| [ ] Development [ ] Test [ ] QA [ ] Integration Test [ ] Staging [ ] Pre Production [ ] Production [ ] DR [ ] Sandbox [ ] Demo [ ] Performance Test |  |  | [ ] Yes [ ] No |
 
 **Security Agents:**
 - 
 
-**Quality Attribute Refs:**
+**Quality Attribute References:**
 - 
 
 ### 3.4 Data View
@@ -279,7 +279,7 @@
 |------|------|------|------|------|
 |  | [ ] Internal [ ] Third Party [ ] Regulator [ ] Customer [ ] Partner | [ ] Public [ ] Internal [ ] Restricted [ ] Highly Restricted | [ ] API [ ] SFTP [ ] Email [ ] Message Queue [ ] Database Replication [ ] File Share [ ] Manual [ ] Other | [ ] Yes [ ] No |
 
-**Quality Attribute Refs:**
+**Quality Attribute References:**
 - 
 
 ### 3.5 Security View
@@ -334,7 +334,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Secret Store** | [ ] Hashicorp Vault [ ] AWS Secrets Manager [ ] Azure Key Vault [ ] GCP Secret Manager [ ] Cyberark [ ] Custom [ ] None |
+| **Secret Store** | [ ] Hashicorp Vault [ ] AWS Secrets Manager [ ] Azure Key Vault [ ] GCP Secret Manager [ ] CyberArk [ ] Custom [ ] None |
 | **Distribution** | [ ] Runtime Retrieval [ ] Deployment Time [ ] Environment Variable [ ] Mounted Volume [ ] Other |
 | **Rotation** | [ ] Automatic [ ] Manual Scheduled [ ] Manual Ad Hoc [ ] Not Rotated |
 
@@ -347,7 +347,7 @@
 | **Security Event Logging** | [ ] Yes [ ] No |
 | **Intrusion Detection** | [ ] Yes [ ] No |
 
-**Quality Attribute Refs:**
+**Quality Attribute References:**
 - 
 
 ### 3.6 Scenarios
@@ -451,7 +451,7 @@
 | **Workload Pattern** | [ ] Constant [ ] Variable Predictable [ ] Variable Unpredictable |
 | **Continuous Availability Required** | [ ] Yes [ ] No |
 
-### Quality Attribute Tradeoffs
+### Quality Attribute Trade-offs
 
 | Attributes Involved | Description | Chosen Priority | Rationale |
 |------|------|------|------|
@@ -482,7 +482,7 @@
 |-------|-------|
 | **Cloud Platform** | [ ] High [ ] Medium [ ] Low [ ] Not Applicable |
 | **Infrastructure As Code** | [ ] High [ ] Medium [ ] Low [ ] Not Applicable |
-| **Cicd Management** | [ ] High [ ] Medium [ ] Low [ ] Not Applicable |
+| **CI/CD Management** | [ ] High [ ] Medium [ ] Low [ ] Not Applicable |
 | **Application Stack** | [ ] High [ ] Medium [ ] Low [ ] Not Applicable |
 | **Database Administration** | [ ] High [ ] Medium [ ] Low [ ] Not Applicable |
 | **Security Compliance** | [ ] High [ ] Medium [ ] Low [ ] Not Applicable |
@@ -531,7 +531,7 @@
 
 ### 6.4 Dependencies
 
-*Repeat the table below for each dependencie.*
+*Repeat the table below for each dependency.*
 
 | Field | Value |
 |-------|-------|

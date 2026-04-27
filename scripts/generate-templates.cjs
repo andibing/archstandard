@@ -101,6 +101,16 @@ const ACRONYM_FIXES = {
   'Devops': 'DevOps', 'Secops': 'SecOps',
   'Mlops': 'MLOps', 'Dataops': 'DataOps', 'Aiops': 'AIOps',
   'Dba': 'DBA', 'Dbas': 'DBAs',
+  // More acronyms / proper nouns
+  'Cpu': 'CPU', 'Cpus': 'CPUs',
+  'Gpu': 'GPU', 'Gpus': 'GPUs',
+  'Ram': 'RAM',
+  'Rhel': 'RHEL', 'Suse': 'SUSE', 'Centos': 'CentOS',
+  'Qa': 'QA',
+  'Cyberark': 'CyberArk',
+  'Cicd': 'CI/CD',
+  // Hyphenation
+  'Tradeoff': 'Trade-off', 'Tradeoffs': 'Trade-offs',
   // Misc
   'It': 'IT',
 };
@@ -590,7 +600,29 @@ function generateMdSection(schema, node, lines, headingLevel, contextKey) {
         if (cols.length > WIDE_TABLE_THRESHOLD) {
           // Vertical "form" layout: one Field/Value table per item, with
           // a hint to repeat for additional items.
-          lines.push(`*Repeat the table below for each ${label.toLowerCase().replace(/^[\d\.\s]+/, '').replace(/s$/, '')}.*`);
+          // Singularise the label for the "Repeat the table below for each X"
+          // hint. Tricky cases like "boxes" -> "box" (drop -es) are RARE in the
+          // schema's array names; safer to drop just the trailing "s" and accept
+          // a small risk of awkward output (e.g. "for each boxe") than to
+          // produce wrong outputs like "use cases" -> "use cas".
+          // Compound labels with a leading plural (e.g. "Apis & Interfaces")
+          // also get only the trailing -s stripped; a small explicit override
+          // map handles the awkward ones.
+          const explicitSingulars = {
+            'apis & interfaces': 'API or interface',
+            'data transfers': 'data transfer',
+            'change history': 'change record',
+            'reference documents': 'reference document',
+          };
+          const singularise = (s) => {
+            const explicit = explicitSingulars[s];
+            if (explicit) return explicit;
+            if (/ies$/.test(s)) return s.replace(/ies$/, 'y');
+            if (/s$/.test(s)) return s.replace(/s$/, '');
+            return s;
+          };
+          const itemNoun = singularise(label.toLowerCase().replace(/^[\d\.\s]+/, ''));
+          lines.push(`*Repeat the table below for each ${itemNoun}.*`);
           lines.push('');
           lines.push('| Field | Value |');
           lines.push('|-------|-------|');
@@ -683,7 +715,8 @@ function getDisplayName(key, context) {
     securityMonitoring: 'Security Monitoring',
     useCases: 'Key Use Cases',
     adrs: 'Architecture Decision Records',
-    tradeoffs: 'Quality Attribute Tradeoffs',
+    tradeoffs: 'Quality Attribute Trade-offs',
+    qualityAttributeRefs: 'Quality Attribute References',
     constraints: '6.1 Constraints',
     assumptions: '6.2 Assumptions',
     risks: '6.3 Risks',

@@ -171,24 +171,13 @@
 /* Sidebar anchor scroll-spy active state.
    Applied by public/scripts/sidebar-scrollspy.js when a sidebar anchor
    sub-item (a link with #hash) matches the current URL hash or the
-   currently visible H2/H3 section as the user scrolls. */
+   currently visible H2/H3 section as the user scrolls.
+   Matches Starlight's own [aria-current=page] sidebar styling exactly
+   so anchor sub-items look identical to slug-matched current pages. */
 nav a[data-anchor-active="true"] {
-	color: var(--sl-color-text-accent) !important;
-	background: var(--sl-color-accent-low);
 	font-weight: 600;
-}
-nav a[data-anchor-active="true"]::before {
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 0.25em;
-	bottom: 0.25em;
-	width: 3px;
-	background: var(--sl-color-accent);
-	border-radius: 0 2px 2px 0;
-}
-nav a[data-anchor-active="true"] {
-	position: relative;
+	color: var(--sl-color-text-invert) !important;
+	background-color: var(--sl-color-text-accent) !important;
 }
 
 /* Cheat-card "↓ PDF" download link — small, right-aligned, unobtrusive */
