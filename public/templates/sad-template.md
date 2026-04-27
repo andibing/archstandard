@@ -1,10 +1,13 @@
 # Solution Architecture Document
 
 > **Standard:** ADS v1.3.0 (Architecture Description Standard)
+>
 > **Standard published by:** ArchStandard (archstandard.org)
+>
 > **Standard licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+>
 > **Generated from:** schema/ads.schema.json
-
+>
 > *Document author and owner: complete in Section 0 (Document Control) below.*
 
 ---

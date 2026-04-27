@@ -473,11 +473,19 @@ function generateMarkdownTemplate(schema) {
   const lines = [
     '# Solution Architecture Document',
     '',
+    // Empty blockquote lines (`>` with no content) between items force
+    // Pandoc to render each as a separate paragraph in DOCX/HTML output.
+    // Without these, all four lines would be joined into one run-on
+    // paragraph in the rendered output, even though they look separated
+    // in the Markdown source.
     '> **Standard:** ADS v1.3.0 (Architecture Description Standard)',
+    '>',
     '> **Standard published by:** ArchStandard (archstandard.org)',
+    '>',
     '> **Standard licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
+    '>',
     '> **Generated from:** schema/ads.schema.json',
-    '',
+    '>',
     '> *Document author and owner: complete in Section 0 (Document Control) below.*',
     '',
     '---',
