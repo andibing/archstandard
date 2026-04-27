@@ -112,19 +112,7 @@ Of course. Conformance to the standard means the document is complete and well-s
 
 ### How do I validate my SAD against the schema?
 
-```bash
-# Download the schema first (ajv-cli and jsonschema both expect a local file)
-curl -O https://archstandard.org/schema/v1.0.0/ads.schema.json
-
-# Using ajv-cli (Node)
-npx -p ajv-cli ajv validate -s ads.schema.json -d my-sad.json
-
-# Using Python jsonschema
-pip install jsonschema
-python -m jsonschema -i my-sad.json ads.schema.json
-```
-
-See the [JSON Schema page](/v1/standard/schema/) for more validation examples.
+Download the schema once with `curl`, then validate locally with `ajv-cli` (Node) or `jsonschema` (Python). Full step-by-step instructions are on the **[Validating a SAD against the Schema](/v1/standard/schema/#validating-a-sad-against-the-schema)** section of the JSON Schema page.
 
 ### How do I convert a Markdown SAD to DOCX?
 

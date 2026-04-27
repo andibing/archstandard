@@ -61,13 +61,7 @@ pandoc sad-template.md -o my-sad.docx --reference-doc=your-template.docx
 
 ## Validating Your SAD
 
-Validate a completed SAD (JSON or YAML) against the ADS schema:
-
-```bash
-npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d my-sad.json
-```
-
-See the [JSON Schema](/v1/standard/schema/) page for more validation options.
+Once you've completed your SAD in JSON or YAML, validate it against the ADS schema. See **[Validating a SAD against the Schema](/v1/standard/schema/#validating-a-sad-against-the-schema)** on the JSON Schema page for the full Node and Python instructions.
 
 ## Customising for Your Organisation
 

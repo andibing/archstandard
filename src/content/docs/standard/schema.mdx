@@ -135,22 +135,50 @@ The schema enforces only the **Minimum** documentation depth as required:
 
 All other fields are optional, allowing progressive adoption from Minimum through Comprehensive documentation depths.
 
-## Validation Example
+## Validating a SAD against the Schema
 
-Validate a SAD against the schema using local or remote references:
+This is the canonical home for validation instructions — pages elsewhere on the site (Examples, Templates, FAQ) cross-reference back here so the steps live in one place.
+
+### Step 1 — Download the schema
+
+Both `ajv-cli` and Python's `jsonschema` CLI expect a **local file path** for the schema (a remote URL won't work). Download it once and cache it locally:
 
 ```bash
-# Download the schema (ajv-cli and jsonschema both expect a local file path).
-# The schema's $id is the canonical URL — feel free to cache locally.
 curl -O https://archstandard.org/schema/v1.0.0/ads.schema.json
+```
 
-# Using ajv-cli (Node)
+The URL above is the schema's canonical `$id`. The same file is also available via the [Downloads page](/v1/standard/downloads/).
+
+### Step 2 — Validate your SAD
+
+#### Using `ajv-cli` (Node)
+
+```bash
 npx -p ajv-cli ajv validate -s ads.schema.json -d my-sad.json
+```
 
-# Using Python jsonschema
+The `-p ajv-cli` flag tells `npx` which package to install (the binary is `ajv`, the package is `ajv-cli`).
+
+#### Using Python `jsonschema`
+
+```bash
 pip install jsonschema
 python -m jsonschema -i my-sad.json ads.schema.json
 ```
+
+#### Validating a YAML SAD
+
+Convert to JSON first, then pipe through `ajv-cli`:
+
+```bash
+npx js-yaml my-sad.yaml | npx -p ajv-cli ajv validate -s ads.schema.json -d /dev/stdin
+```
+
+### What validation checks
+
+The schema validates **structure**, **required fields**, **`enum` values**, **`pattern` constraints**, and field types. It does **not** check whether the architecture itself is good — that's what the [compliance scoring](/v1/standard/how-to-use/#architecture-compliance-scoring) and [reviewer perspectives](/v1/guidance/reviewer-perspectives/) are for.
+
+Validation passes do not imply governance approval; they confirm that the SAD's structure conforms to the standard.
 
 The schema is hosted at: [`https://archstandard.org/schema/v1.0.0/ads.schema.json`](https://archstandard.org/schema/v1.0.0/ads.schema.json)
 
