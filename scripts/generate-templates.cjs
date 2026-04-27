@@ -96,6 +96,11 @@ const ACRONYM_FIXES = {
   // Resilience / DR (these only appear in schema-derived labels, not human prose)
   'Dr': 'DR', 'Rto': 'RTO', 'Rpo': 'RPO',
   'Ha': 'HA', 'Az': 'AZ',
+  // Operational roles
+  'Sre': 'SRE', 'Sres': 'SREs',
+  'Devops': 'DevOps', 'Secops': 'SecOps',
+  'Mlops': 'MLOps', 'Dataops': 'DataOps', 'Aiops': 'AIOps',
+  'Dba': 'DBA', 'Dbas': 'DBAs',
   // Misc
   'It': 'IT',
 };
@@ -767,8 +772,13 @@ function main() {
     }
     if (pandoc) {
       const docxPath = path.join(OUTPUT_DIR, 'sad-template.docx');
+      // Reference doc with narrower margins (15mm) so wide tables fit
+      // better — the SAD template has many many-column array tables.
+      const refDocxPath = path.join(__dirname, 'sad-template-reference.docx');
+      const refArg = fs.existsSync(refDocxPath) ? `--reference-doc="${refDocxPath}" ` : '';
       execSync(
         `"${pandoc}" "${mdPath}" -o "${docxPath}" ` +
+        refArg +
         `--metadata=lang:en-GB ` +
         `--metadata=title:"ADS — Solution Architecture Document Template"`,
         { stdio: 'pipe' }

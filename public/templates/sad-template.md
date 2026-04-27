@@ -81,7 +81,7 @@
 
 | Stakeholder | Role Type | Concerns | Relevant Views |
 |------|------|------|------|
-|  | [ ] Business Owner [ ] Solution Architect [ ] Enterprise Architect [ ] Security Architect [ ] Data Architect [ ] Infrastructure Engineer [ ] Developer [ ] Operations Sre [ ] Compliance [ ] Project Manager [ ] Vendor [ ] End User [ ] External Customer [ ] Other |  |  |
+|  | [ ] Business Owner [ ] Solution Architect [ ] Enterprise Architect [ ] Security Architect [ ] Data Architect [ ] Infrastructure Engineer [ ] Developer [ ] Operations SRE [ ] Compliance [ ] Project Manager [ ] Vendor [ ] End User [ ] External Customer [ ] Other |  |  |
 
 ### Compliance & Regulatory Context
 
