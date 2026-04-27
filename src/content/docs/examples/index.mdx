@@ -79,15 +79,18 @@ Each example was AI-generated against the standard, then edited and reviewed by 
 Once you've completed your SAD in JSON or YAML format, validate it against the ADS schema:
 
 ```bash
-# Validate a JSON SAD against the hosted schema
-npx ajv validate -s https://archstandard.org/v1/schema/v1.0.0/ads.schema.json -d my-sad.json
+# 1. Download the schema (ajv-cli and jsonschema both expect a local file)
+curl -O https://archstandard.org/schema/v1.0.0/ads.schema.json
+
+# 2. Validate a JSON SAD (Node + ajv-cli)
+npx -p ajv-cli ajv validate -s ads.schema.json -d my-sad.json
 
 # Validate a YAML SAD (convert to JSON first)
-npx js-yaml my-sad.yaml | npx ajv validate -s https://archstandard.org/v1/schema/v1.0.0/ads.schema.json -d /dev/stdin
+npx js-yaml my-sad.yaml | npx -p ajv-cli ajv validate -s ads.schema.json -d /dev/stdin
 
 # Using Python
 pip install jsonschema pyyaml
-python -m jsonschema -i my-sad.json https://archstandard.org/v1/schema/v1.0.0/ads.schema.json
+python -m jsonschema -i my-sad.json ads.schema.json
 ```
 
 The schema validates structure, required fields, and enum values — ensuring your SAD conforms to the standard. See the [JSON Schema page](/v1/standard/schema/) for full details.

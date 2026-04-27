@@ -113,8 +113,11 @@ Of course. Conformance to the standard means the document is complete and well-s
 ### How do I validate my SAD against the schema?
 
 ```bash
+# Download the schema first (ajv-cli and jsonschema both expect a local file)
+curl -O https://archstandard.org/schema/v1.0.0/ads.schema.json
+
 # Using ajv-cli (Node)
-npx ajv validate -s https://archstandard.org/v1/schema/v1.0.0/ads.schema.json -d my-sad.json
+npx -p ajv-cli ajv validate -s ads.schema.json -d my-sad.json
 
 # Using Python jsonschema
 pip install jsonschema

@@ -20,7 +20,12 @@ const TEMP = path.join(__dirname, '..', 'dist-temp');
 
 // Files/dirs that should stay at the root (not moved into /v1/)
 // root-landing.html is renamed to index.html at the root
-const ROOT_KEEP = ['_redirects', 'v2', 'robots.txt', 'og-image.png', 'og-image.svg', 'favicon.svg'];
+// Files / directories that stay at the root, not moved into /v1/.
+// 'schema' is here because the JSON Schema's own $id is the unversioned
+// URL https://archstandard.org/schema/v1.0.0/ads.schema.json — the schema
+// file is independently versioned from the site, and tooling resolves
+// the $id directly.
+const ROOT_KEEP = ['_redirects', 'v2', 'robots.txt', 'og-image.png', 'og-image.svg', 'favicon.svg', 'schema'];
 
 console.log('Post-build: Moving Astro output into /v1/ subdirectory...');
 
