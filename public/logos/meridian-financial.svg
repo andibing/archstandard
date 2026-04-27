@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" role="img" aria-label="Meridian Financial Services logo">
+  <title>Meridian Financial Services</title>
+  <desc>Fictional financial services company used in ADS examples.</desc>
+  <!-- Icon: stylised meridian (sphere with line) -->
+  <g transform="translate(8, 12)">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="#0f3a6b" stroke-width="2.5"/>
+    <ellipse cx="20" cy="20" rx="9" ry="18" fill="none" stroke="#0f3a6b" stroke-width="2"/>
+    <line x1="2" y1="20" x2="38" y2="20" stroke="#c9a14a" stroke-width="2.5"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="58" y="32" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-weight="600" fill="#0f3a6b" letter-spacing="1.5">MERIDIAN</text>
+  <text x="58" y="50" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#5a6b80" letter-spacing="2.5">FINANCIAL  SERVICES</text>
+</svg>

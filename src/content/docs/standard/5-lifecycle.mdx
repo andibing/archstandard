@@ -14,16 +14,16 @@ Lifecycle Management describes how the solution is developed, deployed, operated
 
 | Sub-section | Focus | Depth |
 |------------|-------|-------|
-| 5.1 Software Development & CI/CD | Build and deploy pipelines | Recommended |
-| 5.2 Service Transition & Migration | Migration strategy and cutover | Recommended |
-| 5.3 Test Strategy | Architecturally significant testing | Recommended |
-| 5.4 Release Management | Release frequency and process | Recommended |
-| 5.5 Operations & Support | Support model and SLAs | Recommended |
-| 5.6 Resourcing & Skills | Team capability and readiness | Recommended |
-| 5.7 Service Start | Start-up sequence and dependencies | Comprehensive |
-| 5.8 Maintainability | Patching, certificates, dependencies | Recommended |
-| 5.9 Decommissioning & Legacy Removal | End-of-life and disposal | Recommended |
-| 5.10 Exit Planning | Vendor lock-in and exit strategy | Recommended |
+| 5.1 Software Development & CI/CD | Build and deploy pipelines | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5.2 Service Transition & Migration | Migration strategy and cutover | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5.3 Test Strategy | Architecturally significant testing | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5.4 Release Management | Release frequency and process | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5.5 Operations & Support | Support model and SLAs | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5.6 Resourcing & Skills | Team capability and readiness | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5.7 Service Start | Start-up sequence and dependencies | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> |
+| 5.8 Maintainability | Patching, certificates, dependencies | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5.9 Decommissioning & Legacy Removal | End-of-life and disposal | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 5.10 Exit Planning | Vendor lock-in and exit strategy | <span class="maturity-indicator maturity-recommended">Recommended</span> |
 
 ## 5.1 Software Development & CI/CD
 
@@ -130,6 +130,20 @@ This section covers architecturally significant testing — not unit tests or fu
 | SLAs | *[internal or external service level agreements]* |
 | Escalation paths | *[how issues are escalated]* |
 
+### Sustainability in Operation
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+Operational practices have a continuous carbon impact. Document how sustainability is preserved over the life of the running solution; the metric and tooling detail belongs in [Section 4.5](/v1/standard/4-5-sustainability/).
+
+| Question | Response |
+|----------|----------|
+| Are non-production environments on an auto-shutdown schedule (e.g., evenings, weekends)? | Yes / No — *[schedule]* |
+| Is there a periodic review of compute right-sizing (typically quarterly)? | Yes / No — *[cadence]* |
+| Are unused resources (orphaned VMs, unattached disks, idle environments) actively identified and reclaimed? | Yes / No — *[process]* |
+| Is the carbon footprint reported alongside cost in operational reviews? | Yes / No |
+| Are environment retirements (e.g., a decommissioned dev cluster) actually deleted, not just stopped? | Yes / No |
+
 ## 5.6 Resourcing & Skills
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
@@ -209,7 +223,7 @@ Common items to decommission after migration or replacement:
 - **Documentation** — update or archive architecture documents for retired systems
 </div>
 
-Technical debt is tracked in [Section 6.6 — Technical Debt Register](/standard/6-decision-making/#66-technical-debt-register).
+Technical debt is tracked in [Section 6.6 — Technical Debt Register](/v1/standard/6-decision-making/#66-technical-debt-register).
 
 ### Data and Infrastructure Disposal
 

@@ -1,6 +1,6 @@
 # Solution Architecture Document — Employee Directory
 
-> **Standard:** ADS v1.1.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.0 (Architecture Description Standard)
 > **Author:** Fred Bloggs, Solution Architect
 > **Organisation:** Meridian Financial Services
 > **Status:** Approved
@@ -204,11 +204,11 @@ No -- the Employee Directory does not support any FCA-regulated activities. It i
 
 | Name | Component Type | Description | Technology | Owner | Status |
 |------|------|------|------|------|------|
-| Employee Directory Frontend | [x] Web Application [ ] Api Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] Cdn [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] Ml Model [ ] Other | Single-page application providing search, browse, and admin UI | React 18, TypeScript, Vite | Development Team | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
-| Employee Directory API | [ ] Web Application [ ] Api Service [x] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] Cdn [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] Ml Model [ ] Other | REST API serving employee data and handling admin operations | Node.js 20 LTS, Express, TypeScript | Development Team | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
-| Employee Database | [ ] Web Application [ ] Api Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [x] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] Cdn [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] Ml Model [ ] Other | Relational store for employee records and photographs | Azure SQL Database (Basic tier, 5 DTU) | IT Operations | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
-| CSV Staging Store | [ ] Web Application [ ] Api Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [x] File Storage [ ] Search Engine [ ] Cdn [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] Ml Model [ ] Other | Blob container receiving nightly HR export files | Azure Blob Storage | IT Operations | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
-| CSV Import Job | [ ] Web Application [ ] Api Service [ ] Backend Service [x] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] Cdn [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] Ml Model [ ] Other | Scheduled function that processes staged CSV files into the database | Node.js script triggered by Azure Functions timer | Development Team | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
+| Employee Directory Frontend | [x] Web Application [ ] API Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] CDN [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] ML Model [ ] Other | Single-page application providing search, browse, and admin UI | React 18, TypeScript, Vite | Development Team | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
+| Employee Directory API | [ ] Web Application [ ] API Service [x] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] CDN [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] ML Model [ ] Other | REST API serving employee data and handling admin operations | Node.js 20 LTS, Express, TypeScript | Development Team | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
+| Employee Database | [ ] Web Application [ ] API Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [x] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] CDN [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] ML Model [ ] Other | Relational store for employee records and photographs | Azure SQL Database (Basic tier, 5 DTU) | IT Operations | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
+| CSV Staging Store | [ ] Web Application [ ] API Service [ ] Backend Service [ ] Batch Job [ ] Message Broker [ ] Database [ ] Cache [x] File Storage [ ] Search Engine [ ] CDN [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] ML Model [ ] Other | Blob container receiving nightly HR export files | Azure Blob Storage | IT Operations | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
+| CSV Import Job | [ ] Web Application [ ] API Service [ ] Backend Service [x] Batch Job [ ] Message Broker [ ] Database [ ] Cache [ ] File Storage [ ] Search Engine [ ] CDN [ ] Gateway [ ] Load Balancer [ ] Queue [ ] Stream [ ] ML Model [ ] Other | Scheduled function that processes staged CSV files into the database | Node.js script triggered by Azure Functions timer | Development Team | [x] New [ ] Existing Unchanged [ ] Existing Modified [ ] To Be Decommissioned |
 
 #### Service & Capability Mapping
 
@@ -228,7 +228,7 @@ No -- the Employee Directory does not support any FCA-regulated activities. It i
 
 | Pattern | Where Applied | Rationale |
 |------|------|------|
-| [ ] Microservices [x] Monolith [ ] Modular Monolith [ ] Event Driven [ ] Cqrs [ ] Saga [ ] Strangler Fig [ ] Sidecar [ ] Api Gateway [ ] Bff [ ] Circuit Breaker [ ] Pub Sub [x] Request Response [x] Batch Processing [ ] Stream Processing [ ] Data Lake [ ] Data Mesh [ ] Other | Entire application (monolith); API request/response for user queries; batch processing for nightly CSV import | Simple application with low complexity; monolithic architecture is appropriate for the team size and system scope. Request/response for real-time user interactions. Batch processing for HR data synchronisation. |
+| [ ] Microservices [x] Monolith [ ] Modular Monolith [ ] Event Driven [ ] CQRS [ ] Saga [ ] Strangler Fig [ ] Sidecar [ ] API Gateway [ ] BFF [ ] Circuit Breaker [ ] Pub Sub [x] Request Response [x] Batch Processing [ ] Stream Processing [ ] Data Lake [ ] Data Mesh [ ] Other | Entire application (monolith); API request/response for user queries; batch processing for nightly CSV import | Simple application with low complexity; monolithic architecture is appropriate for the team size and system scope. Request/response for real-time user interactions. Batch processing for HR data synchronisation. |
 
 #### Technology & Vendor Lock-in Assessment
 
@@ -273,16 +273,16 @@ No -- the Employee Directory does not support any FCA-regulated activities. It i
 
 | Source | Destination | Protocol | Encrypted | Authentication Method | Direction | Synchronicity | Purpose |
 |------|------|------|------|------|------|------|------|
-| React SPA | Node.js API | [x] Https [ ] Http [ ] Grpc [ ] Grpc Tls [ ] Tcp [ ] Tcp Tls [ ] Amqp [ ] Amqps [ ] Mqtt [ ] Mqtts [ ] Kafka [ ] Websocket [ ] Wss [ ] Jdbc [ ] Odbc [ ] Sftp [ ] Ftps [ ] Smtp [ ] Smtps [ ] Ldaps [ ] Ssh [ ] Other | [x] Yes [ ] No | [ ] Mtls [ ] Oauth2 [ ] Api Key [x] Jwt [ ] Saml [ ] Oidc [ ] Basic Auth [ ] Certificate [ ] Iam Role [ ] Kerberos [ ] None [ ] Other | [x] Unidirectional [ ] Bidirectional | [x] Synchronous [ ] Asynchronous [ ] Event Driven | Employee search and admin operations |
-| Node.js API | Azure SQL Database | [ ] Https [ ] Http [ ] Grpc [ ] Grpc Tls [ ] Tcp [x] Tcp Tls [ ] Amqp [ ] Amqps [ ] Mqtt [ ] Mqtts [ ] Kafka [ ] Websocket [ ] Wss [ ] Jdbc [ ] Odbc [ ] Sftp [ ] Ftps [ ] Smtp [ ] Smtps [ ] Ldaps [ ] Ssh [ ] Other | [x] Yes [ ] No | [ ] Mtls [ ] Oauth2 [ ] Api Key [ ] Jwt [ ] Saml [ ] Oidc [ ] Basic Auth [ ] Certificate [x] Iam Role [ ] Kerberos [ ] None [ ] Other | [x] Unidirectional [ ] Bidirectional | [x] Synchronous [ ] Asynchronous [ ] Event Driven | Read/write employee records |
-| CSV Import Job | Azure Blob Storage | [x] Https [ ] Http [ ] Grpc [ ] Grpc Tls [ ] Tcp [ ] Tcp Tls [ ] Amqp [ ] Amqps [ ] Mqtt [ ] Mqtts [ ] Kafka [ ] Websocket [ ] Wss [ ] Jdbc [ ] Odbc [ ] Sftp [ ] Ftps [ ] Smtp [ ] Smtps [ ] Ldaps [ ] Ssh [ ] Other | [x] Yes [ ] No | [ ] Mtls [ ] Oauth2 [ ] Api Key [ ] Jwt [ ] Saml [ ] Oidc [ ] Basic Auth [ ] Certificate [x] Iam Role [ ] Kerberos [ ] None [ ] Other | [x] Unidirectional [ ] Bidirectional | [x] Synchronous [ ] Asynchronous [ ] Event Driven | Read staged CSV files |
-| CSV Import Job | Azure SQL Database | [ ] Https [ ] Http [ ] Grpc [ ] Grpc Tls [ ] Tcp [x] Tcp Tls [ ] Amqp [ ] Amqps [ ] Mqtt [ ] Mqtts [ ] Kafka [ ] Websocket [ ] Wss [ ] Jdbc [ ] Odbc [ ] Sftp [ ] Ftps [ ] Smtp [ ] Smtps [ ] Ldaps [ ] Ssh [ ] Other | [x] Yes [ ] No | [ ] Mtls [ ] Oauth2 [ ] Api Key [ ] Jwt [ ] Saml [ ] Oidc [ ] Basic Auth [ ] Certificate [x] Iam Role [ ] Kerberos [ ] None [ ] Other | [x] Unidirectional [ ] Bidirectional | [x] Synchronous [ ] Asynchronous [ ] Event Driven | Upsert employee records |
+| React SPA | Node.js API | [x] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] MQTTS [ ] Kafka [ ] WebSocket [ ] WSS [ ] JDBC [ ] ODBC [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] LDAPS [ ] SSH [ ] Other | [x] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [x] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] Kerberos [ ] None [ ] Other | [x] Unidirectional [ ] Bidirectional | [x] Synchronous [ ] Asynchronous [ ] Event Driven | Employee search and admin operations |
+| Node.js API | Azure SQL Database | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [x] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] MQTTS [ ] Kafka [ ] WebSocket [ ] WSS [ ] JDBC [ ] ODBC [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] LDAPS [ ] SSH [ ] Other | [x] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [x] IAM Role [ ] Kerberos [ ] None [ ] Other | [x] Unidirectional [ ] Bidirectional | [x] Synchronous [ ] Asynchronous [ ] Event Driven | Read/write employee records |
+| CSV Import Job | Azure Blob Storage | [x] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] MQTTS [ ] Kafka [ ] WebSocket [ ] WSS [ ] JDBC [ ] ODBC [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] LDAPS [ ] SSH [ ] Other | [x] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [x] IAM Role [ ] Kerberos [ ] None [ ] Other | [x] Unidirectional [ ] Bidirectional | [x] Synchronous [ ] Asynchronous [ ] Event Driven | Read staged CSV files |
+| CSV Import Job | Azure SQL Database | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [x] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] MQTTS [ ] Kafka [ ] WebSocket [ ] WSS [ ] JDBC [ ] ODBC [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] LDAPS [ ] SSH [ ] Other | [x] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [x] IAM Role [ ] Kerberos [ ] None [ ] Other | [x] Unidirectional [ ] Bidirectional | [x] Synchronous [ ] Asynchronous [ ] Event Driven | Upsert employee records |
 
 #### External Integrations
 
 | Source App | Destination App | Integration Type | Protocol | Encrypted | Authentication Method | Purpose |
 |------|------|------|------|------|------|------|
-| PeopleSync (APP-0112) | Azure Blob Storage (CSV staging) | [ ] Internal App [ ] External Service [ ] Saas [ ] Partner [ ] Customer Facing | [ ] Https [ ] Http [ ] Grpc [ ] Grpc Tls [ ] Tcp [ ] Tcp Tls [ ] Amqp [ ] Amqps [ ] Mqtt [ ] Kafka [x] Sftp [ ] Ftps [ ] Smtp [ ] Smtps [ ] Other | [x] Yes [ ] No | [ ] Mtls [ ] Oauth2 [ ] Api Key [ ] Jwt [ ] Saml [ ] Oidc [ ] Basic Auth [x] Certificate [ ] Iam Role [ ] None [ ] Other | Nightly employee data export |
+| PeopleSync (APP-0112) | Azure Blob Storage (CSV staging) | [ ] Internal App [ ] External Service [ ] SaaS [ ] Partner [ ] Customer Facing | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] Kafka [x] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] Other | [x] Yes [ ] No | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [x] Certificate [ ] IAM Role [ ] None [ ] Other | Nightly employee data export |
 
 ##### End User Access
 
@@ -293,11 +293,11 @@ No -- the Employee Directory does not support any FCA-regulated activities. It i
 
 #### APIs & Interfaces
 
-| Name | Api Type | Direction | Data Format | Version | Authenticated | Rate Limited |
+| Name | API Type | Direction | Data Format | Version | Authenticated | Rate Limited |
 |------|------|------|------|------|------|------|
-| Employee Search API | [x] Rest [ ] Graphql [ ] Grpc [ ] Soap [ ] Websocket [ ] Event Stream [ ] File Transfer [ ] Other | [x] Exposed [ ] Consumed | [x] Json [ ] Xml [ ] Protobuf [ ] Avro [ ] Csv [ ] Parquet [ ] Binary [ ] Other | 1.0 | [x] Yes [ ] No | [ ] Yes [x] No |
-| Employee Admin API | [x] Rest [ ] Graphql [ ] Grpc [ ] Soap [ ] Websocket [ ] Event Stream [ ] File Transfer [ ] Other | [x] Exposed [ ] Consumed | [x] Json [ ] Xml [ ] Protobuf [ ] Avro [ ] Csv [ ] Parquet [ ] Binary [ ] Other | 1.0 | [x] Yes [ ] No | [ ] Yes [x] No |
-| PeopleSync CSV Export | [ ] Rest [ ] Graphql [ ] Grpc [ ] Soap [ ] Websocket [ ] Event Stream [x] File Transfer [ ] Other | [ ] Exposed [x] Consumed | [ ] Json [ ] Xml [ ] Protobuf [ ] Avro [x] Csv [ ] Parquet [ ] Binary [ ] Other | N/A | [x] Yes [ ] No | [ ] Yes [x] No |
+| Employee Search API | [x] REST [ ] GraphQL [ ] gRPC [ ] SOAP [ ] WebSocket [ ] Event Stream [ ] File Transfer [ ] Other | [x] Exposed [ ] Consumed | [x] JSON [ ] XML [ ] Protobuf [ ] Avro [ ] CSV [ ] Parquet [ ] Binary [ ] Other | 1.0 | [x] Yes [ ] No | [ ] Yes [x] No |
+| Employee Admin API | [x] REST [ ] GraphQL [ ] gRPC [ ] SOAP [ ] WebSocket [ ] Event Stream [ ] File Transfer [ ] Other | [x] Exposed [ ] Consumed | [x] JSON [ ] XML [ ] Protobuf [ ] Avro [ ] CSV [ ] Parquet [ ] Binary [ ] Other | 1.0 | [x] Yes [ ] No | [ ] Yes [x] No |
+| PeopleSync CSV Export | [ ] REST [ ] GraphQL [ ] gRPC [ ] SOAP [ ] WebSocket [ ] Event Stream [x] File Transfer [ ] Other | [ ] Exposed [x] Consumed | [ ] JSON [ ] XML [ ] Protobuf [ ] Avro [x] CSV [ ] Parquet [ ] Binary [ ] Other | N/A | [x] Yes [ ] No | [ ] Yes [x] No |
 
 **Quality Attribute Refs:**
 - 4.3 Performance Efficiency
@@ -353,10 +353,10 @@ Not applicable -- PaaS services are fully managed by Microsoft. No OS-level agen
 | **Peak Ingress Mbps** | N/A (low-volume internal traffic) |
 | **Traffic Pattern** | [x] Constant [ ] Periodic [ ] Burst [ ] Seasonal [ ] Unpredictable |
 | **Latency Requirement** | [ ] Ultra Low Sub 1ms [ ] Low Sub 10ms [ ] Moderate Sub 100ms [x] Standard Sub 1s [ ] Tolerant Above 1s [ ] Not Applicable |
-| **Ddos Protection** | [ ] Yes [ ] No [x] Not Applicable |
-| **Ddos Provider** | [ ] Aws Shield [ ] Azure Ddos [ ] Cloudflare [ ] Akamai [ ] Gcp Cloud Armor [ ] Arbor [ ] Other [x] None |
-| **Waf Enabled** | [ ] Yes [ ] No [x] Not Applicable |
-| **Waf Provider** | [ ] Aws Waf [ ] Azure Waf [ ] Cloudflare Waf [ ] Gcp Cloud Armor [ ] F5 [ ] Imperva [ ] Other [x] None |
+| **DDoS Protection** | [ ] Yes [ ] No [x] Not Applicable |
+| **DDoS Provider** | [ ] AWS Shield [ ] Azure DDoS [ ] Cloudflare [ ] Akamai [ ] GCP Cloud Armor [ ] Arbor [ ] Other [x] None |
+| **WAF Enabled** | [ ] Yes [ ] No [x] Not Applicable |
+| **WAF Provider** | [ ] AWS WAF [ ] Azure WAF [ ] Cloudflare WAF [ ] GCP Cloud Armor [ ] F5 [ ] Imperva [ ] Other [x] None |
 | **Rate Limiting** | [ ] Yes [x] No |
 
 ##### User & Administrator Access
@@ -401,10 +401,10 @@ No staging, pre-production, or DR environments are provisioned. This is appropri
 
 | Name | Store Type | Technology | Authoritative | Retention Period | Data Size Category | Classification | Contains Personal Data | Contains Sensitive Personal Data | Encryption Level | Key Management |
 |------|------|------|------|------|------|------|------|------|------|------|
-| Employee records | [x] Relational Db [ ] Nosql Document [ ] Nosql Key Value [ ] Nosql Graph [ ] Nosql Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time Series Db [ ] In Memory [ ] Other | Azure SQL Database | [ ] Yes [x] No | [ ] Transient [ ] Hours [ ] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [x] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [ ] Under 1gb [x] 1 100gb [ ] 100gb 1tb [ ] 1 10tb [ ] 10 100tb [ ] 100tb 1pb [ ] Over 1pb | [ ] Public [x] Internal [ ] Restricted [ ] Highly Restricted | [x] Yes [ ] No | [ ] Yes [x] No | [ ] None [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [x] Provider Managed [ ] Customer Managed Kms [ ] Hsm [ ] Byok [ ] Custom [ ] None |
-| Employee photographs | [x] Relational Db [ ] Nosql Document [ ] Nosql Key Value [ ] Nosql Graph [ ] Nosql Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time Series Db [ ] In Memory [ ] Other | Azure SQL Database (varbinary) | [x] Yes [ ] No | [ ] Transient [ ] Hours [ ] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [x] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [ ] Under 1gb [x] 1 100gb [ ] 100gb 1tb [ ] 1 10tb [ ] 10 100tb [ ] 100tb 1pb [ ] Over 1pb | [ ] Public [x] Internal [ ] Restricted [ ] Highly Restricted | [x] Yes [ ] No | [ ] Yes [x] No | [ ] None [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [x] Provider Managed [ ] Customer Managed Kms [ ] Hsm [ ] Byok [ ] Custom [ ] None |
-| CSV staging files | [ ] Relational Db [ ] Nosql Document [ ] Nosql Key Value [ ] Nosql Graph [ ] Nosql Columnar [x] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time Series Db [ ] In Memory [ ] Other | Azure Blob Storage | [ ] Yes [x] No | [ ] Transient [ ] Hours [x] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [ ] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [x] Under 1gb [ ] 1 100gb [ ] 100gb 1tb [ ] 1 10tb [ ] 10 100tb [ ] 100tb 1pb [ ] Over 1pb | [ ] Public [x] Internal [ ] Restricted [ ] Highly Restricted | [x] Yes [ ] No | [ ] Yes [x] No | [ ] None [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [x] Provider Managed [ ] Customer Managed Kms [ ] Hsm [ ] Byok [ ] Custom [ ] None |
-| Application logs | [ ] Relational Db [ ] Nosql Document [ ] Nosql Key Value [ ] Nosql Graph [ ] Nosql Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time Series Db [ ] In Memory [x] Other | Application Insights (Log Analytics) | [x] Yes [ ] No | [ ] Transient [ ] Hours [x] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [ ] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [x] Under 1gb [ ] 1 100gb [ ] 100gb 1tb [ ] 1 10tb [ ] 10 100tb [ ] 100tb 1pb [ ] Over 1pb | [ ] Public [x] Internal [ ] Restricted [ ] Highly Restricted | [ ] Yes [x] No | [ ] Yes [x] No | [ ] None [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [x] Provider Managed [ ] Customer Managed Kms [ ] Hsm [ ] Byok [ ] Custom [ ] None |
+| Employee records | [x] Relational DB [ ] NoSQL Document [ ] NoSQL Key Value [ ] NoSQL Graph [ ] NoSQL Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time-Series DB [ ] In Memory [ ] Other | Azure SQL Database | [ ] Yes [x] No | [ ] Transient [ ] Hours [ ] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [x] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [ ] Under 1 GB [x] 1 100 GB [ ] 100 GB 1 TB [ ] 1 10 TB [ ] 10 100 TB [ ] 100 TB 1 PB [ ] Over 1 PB | [ ] Public [x] Internal [ ] Restricted [ ] Highly Restricted | [x] Yes [ ] No | [ ] Yes [x] No | [ ] None [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [x] Provider Managed [ ] Customer Managed KMS [ ] HSM [ ] BYOK [ ] Custom [ ] None |
+| Employee photographs | [x] Relational DB [ ] NoSQL Document [ ] NoSQL Key Value [ ] NoSQL Graph [ ] NoSQL Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time-Series DB [ ] In Memory [ ] Other | Azure SQL Database (varbinary) | [x] Yes [ ] No | [ ] Transient [ ] Hours [ ] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [x] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [ ] Under 1 GB [x] 1 100 GB [ ] 100 GB 1 TB [ ] 1 10 TB [ ] 10 100 TB [ ] 100 TB 1 PB [ ] Over 1 PB | [ ] Public [x] Internal [ ] Restricted [ ] Highly Restricted | [x] Yes [ ] No | [ ] Yes [x] No | [ ] None [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [x] Provider Managed [ ] Customer Managed KMS [ ] HSM [ ] BYOK [ ] Custom [ ] None |
+| CSV staging files | [ ] Relational DB [ ] NoSQL Document [ ] NoSQL Key Value [ ] NoSQL Graph [ ] NoSQL Columnar [x] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time-Series DB [ ] In Memory [ ] Other | Azure Blob Storage | [ ] Yes [x] No | [ ] Transient [ ] Hours [x] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [ ] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [x] Under 1 GB [ ] 1 100 GB [ ] 100 GB 1 TB [ ] 1 10 TB [ ] 10 100 TB [ ] 100 TB 1 PB [ ] Over 1 PB | [ ] Public [x] Internal [ ] Restricted [ ] Highly Restricted | [x] Yes [ ] No | [ ] Yes [x] No | [ ] None [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [x] Provider Managed [ ] Customer Managed KMS [ ] HSM [ ] BYOK [ ] Custom [ ] None |
+| Application logs | [ ] Relational DB [ ] NoSQL Document [ ] NoSQL Key Value [ ] NoSQL Graph [ ] NoSQL Columnar [ ] Object Storage [ ] Block Storage [ ] File Storage [ ] Data Warehouse [ ] Data Lake [ ] Cache [ ] Message Queue [ ] Search Index [ ] Time-Series DB [ ] In Memory [x] Other | Application Insights (Log Analytics) | [x] Yes [ ] No | [ ] Transient [ ] Hours [x] Days [ ] Weeks [ ] Months [ ] 1 Year [ ] 2 5 Years [ ] 5 10 Years [ ] 10 Plus Years [ ] Indefinite | [x] Under 1 GB [ ] 1 100 GB [ ] 100 GB 1 TB [ ] 1 10 TB [ ] 10 100 TB [ ] 100 TB 1 PB [ ] Over 1 PB | [ ] Public [x] Internal [ ] Restricted [ ] Highly Restricted | [ ] Yes [x] No | [ ] Yes [x] No | [ ] None [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level | [x] Provider Managed [ ] Customer Managed KMS [ ] HSM [ ] BYOK [ ] Custom [ ] None |
 
 #### Data Classification
 
@@ -497,8 +497,8 @@ Yes -- all data is stored in the Azure UK South region (London). This satisfies 
 
 | Access Type | Method | Uses Group Wide Auth |
 |------|------|------|
-| [x] End User Internal [ ] End User External [ ] It Operations [ ] Service Account [ ] Api Consumer | [x] Sso Saml [x] Sso Oidc [x] Mfa [ ] Certificate [ ] Api Key [ ] Oauth2 [ ] Basic Auth [ ] Kerberos [ ] Passwordless [ ] Custom | [x] Yes [ ] No |
-| [ ] End User Internal [ ] End User External [ ] It Operations [x] Service Account [ ] Api Consumer | [ ] Sso Saml [ ] Sso Oidc [ ] Mfa [ ] Certificate [ ] Api Key [ ] Oauth2 [ ] Basic Auth [ ] Kerberos [x] Passwordless [ ] Custom | [ ] Yes [x] No |
+| [x] End User Internal [ ] End User External [ ] IT Operations [ ] Service Account [ ] API Consumer | [x] SSO SAML [x] SSO OIDC [x] MFA [ ] Certificate [ ] API Key [ ] OAuth2 [ ] Basic Auth [ ] Kerberos [ ] Passwordless [ ] Custom | [x] Yes [ ] No |
+| [ ] End User Internal [ ] End User External [ ] IT Operations [x] Service Account [ ] API Consumer | [ ] SSO SAML [ ] SSO OIDC [ ] MFA [ ] Certificate [ ] API Key [ ] OAuth2 [ ] Basic Auth [ ] Kerberos [x] Passwordless [ ] Custom | [ ] Yes [x] No |
 
 ##### Authentication Details
 
@@ -525,9 +525,9 @@ Yes -- all data is stored in the Azure UK South region (London). This satisfies 
 
 | Field | Value |
 |-------|-------|
-| **Model** | [x] Rbac [ ] Abac [ ] Pbac [ ] Acl [ ] Custom |
+| **Model** | [x] RBAC [ ] ABAC [ ] PBAC [ ] ACL [ ] Custom |
 | **Entitlement Store** | Entra ID security groups |
-| **Provisioning Process** | [ ] Automated Idm [x] Manual Request [ ] Self Service [ ] Api Driven [ ] Other |
+| **Provisioning Process** | [ ] Automated IDM [x] Manual Request [ ] Self Service [ ] API Driven [ ] Other |
 | **Recertification Enabled** | [x] Yes [ ] No |
 | **Segregation Of Duties Enforced** | [ ] Yes [x] No |
 
@@ -541,7 +541,7 @@ Yes -- all data is stored in the Azure UK South region (London). This satisfies 
 
 | Field | Value |
 |-------|-------|
-| **Pam Solution** | Azure PIM (Privileged Identity Management) |
+| **PAM Solution** | Azure PIM (Privileged Identity Management) |
 | **Just In Time Access** | [x] Yes [ ] No |
 | **Session Recording** | [ ] Yes [x] No |
 | **Break Glass Process** | [x] Yes [ ] No |
@@ -560,7 +560,7 @@ Yes -- all data is stored in the Azure UK South region (London). This satisfies 
 | Egress filtering | Default Azure egress; no sensitive data leaves the application |
 | Encryption in transit | TLS 1.2 enforced on all connections (App Service, Azure SQL, Blob Storage) |
 
-#### Encryption at Rest
+#### Encryption at REST
 
 | Field | Value |
 |-------|-------|
@@ -568,8 +568,8 @@ Yes -- all data is stored in the Azure UK South region (London). This satisfies 
 | **Level** | [x] Storage Level [ ] Logical Container [ ] Application Level [ ] Field Level |
 | **Key Type** | [x] Symmetric [ ] Asymmetric |
 | **Algorithm** | AES-256 |
-| **Key Generation** | [ ] Hsm Fips140 L3 [ ] Hsm Fips140 L2 [ ] Kms [x] Software [ ] Other |
-| **Key Storage** | [ ] Hsm [x] Kms [ ] Software Keystore [ ] Other |
+| **Key Generation** | [ ] HSM Fips140 L3 [ ] HSM Fips140 L2 [ ] KMS [x] Software [ ] Other |
+| **Key Storage** | [ ] HSM [x] KMS [ ] Software Keystore [ ] Other |
 | **Key Rotation Days** | Automatic (Microsoft-managed) |
 
 Customer-managed keys are not required for Internal-classified data per Meridian policy (POL-0008 Section 4.3).
@@ -578,7 +578,7 @@ Customer-managed keys are not required for Internal-classified data per Meridian
 
 | Field | Value |
 |-------|-------|
-| **Secret Store** | [ ] Hashicorp Vault [ ] Aws Secrets Manager [ ] Azure Key Vault [ ] Gcp Secret Manager [ ] Cyberark [ ] Custom [x] None |
+| **Secret Store** | [ ] Hashicorp Vault [ ] AWS Secrets Manager [ ] Azure Key Vault [ ] GCP Secret Manager [ ] Cyberark [ ] Custom [x] None |
 | **Distribution** | [ ] Runtime Retrieval [ ] Deployment Time [ ] Environment Variable [ ] Mounted Volume [x] Other |
 | **Rotation** | [ ] Automatic [ ] Manual Scheduled [ ] Manual Ad Hoc [x] Not Rotated |
 
@@ -588,8 +588,8 @@ The use of Managed Identity for all service-to-service authentication eliminates
 
 | Field | Value |
 |-------|-------|
-| **Siem Integration** | [x] Yes [ ] No |
-| **Siem Tool** | Microsoft Sentinel (corporate workspace) |
+| **SIEM Integration** | [x] Yes [ ] No |
+| **SIEM Tool** | Microsoft Sentinel (corporate workspace) |
 | **Security Event Logging** | [x] Yes [ ] No |
 | **Intrusion Detection** | [ ] Yes [x] No |
 
@@ -666,10 +666,10 @@ Distributed tracing is not implemented. The application is a simple monolith wit
 
 | Field | Value |
 |-------|-------|
-| **Dr Strategy** | [ ] Active Active [ ] Active Passive [ ] Pilot Light [ ] Warm Standby [x] Backup Restore [ ] None |
+| **DR Strategy** | [ ] Active Active [ ] Active Passive [ ] Pilot Light [ ] Warm Standby [x] Backup Restore [ ] None |
 | **Multi Venue Deployment** | [ ] Yes [x] No |
-| **Rto Target** | 24 hours |
-| **Rpo Target** | 5-10 minutes |
+| **RTO Target** | 24 hours |
+| **RPO Target** | 5-10 minutes |
 | **Scalability** | [x] No Dynamic Scaling [ ] Manual Scaling [ ] Partial Auto Scaling [ ] Full Auto Scaling |
 | **Fault Tolerance Designed** | [ ] Yes [x] No |
 | **Chaos Testing Practised** | [ ] Yes [x] No |
@@ -1047,7 +1047,7 @@ No open issues at the time of writing.
 
 ### References
 
-| Title | Version | Url | Description |
+| Title | Version | URL | Description |
 |------|------|------|------|
 | HR System SAD (PeopleSync) | 2.1 | Meridian Confluence / Architecture / APP-0112 | Architecture of the corporate HR system |
 | Meridian Cloud Platform Standards | 2.0 | Meridian Confluence / Standards / STD-0023 | Azure naming conventions, tagging, region policy |

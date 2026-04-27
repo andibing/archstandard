@@ -1,0 +1,77 @@
+---
+title: "AI Prompts Library"
+description: "Ready-to-use LLM prompts for drafting, reviewing, scoring, and validating Solution Architecture Documents."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+A collection of prompts for using Large Language Models (ChatGPT, Claude, Copilot, Gemini) alongside the ADS standard. Each prompt is a self-contained Markdown file you can paste into any LLM.
+
+<Aside type="tip" title="AI as a teammate, not an author">
+These prompts help you draft, review, and improve SADs faster — they do not replace your judgement. Always review AI output for accuracy, check assumptions, and confirm with subject matter experts before submitting for governance.
+</Aside>
+
+## Drafting
+
+### First Draft from a Brief
+
+Take a short project description and produce a structured SAD first draft that follows the standard. The output clearly flags every assumption and gap the author must resolve.
+
+**[Download first-draft.md](/v1/prompts/first-draft.md)**
+
+## Reviewing
+
+### Validate a SAD
+
+Check a completed SAD for **completeness, consistency, clarity, and credibility**. Returns a structured report of critical findings, major and minor observations, and suggested compliance score adjustments.
+
+**[Download validate-sad.md](/v1/prompts/validate-sad.md)**
+
+### Score a SAD
+
+Apply the ADS 0-5 compliance scoring scale to each of the 14 scored sections, with justification and an overall weakest-link score. Returns structured JSON.
+
+**[Download score-sad.md](/v1/prompts/score-sad.md)**
+
+### Security Review
+
+CISO-office-style security review covering threat coverage, control gaps, regulatory alignment, and evidence. Produces a structured review with critical issues and conditions for approval.
+
+**[Download security-review.md](/v1/prompts/security-review.md)**
+
+### Governance Review
+
+Architecture Review Board (ARB) / Design Authority style review covering strategic fit, appropriateness of rigour, risk management, cost, lifecycle, and portfolio impact. Matches what a real ARB would consider.
+
+**[Download governance-review.md](/v1/prompts/governance-review.md)**
+
+## Improving
+
+### Suggest Improvements
+
+Concrete, section-by-section suggestions for raising the quality of a SAD to the next compliance scoring level. No rewriting — the author stays in control of their voice.
+
+**[Download improve-sad.md](/v1/prompts/improve-sad.md)**
+
+---
+
+## How to use
+
+Each prompt works the same way:
+
+1. Open the prompt file and copy the **System Prompt** section.
+2. Paste it into your preferred LLM as the system prompt (or as the first message).
+3. Attach or paste your SAD. Optionally attach the [JSON Schema](/v1/schema/v1.0.0/ads.schema.json) for stricter checking.
+4. Follow the usage instruction at the top of each prompt file.
+
+## LLM compatibility
+
+These prompts have been designed for Claude 3.5 / 4 / Opus, GPT-4 / 4o / 5, Gemini 2.x and later, and Copilot. They should work on any instruction-tuned LLM with a context window of at least 32k tokens — which covers all recent major models.
+
+## A note on confidentiality
+
+When pasting a SAD into an LLM, you are sharing that content with the LLM provider subject to their terms. For SADs containing sensitive or regulated information, use an enterprise-contracted LLM with data protection guarantees (e.g. Azure OpenAI with data residency, Claude via Bedrock, ChatGPT Enterprise, Gemini Enterprise). Never paste classified or personal data into a consumer LLM.
+
+## Contributing new prompts
+
+If you have an effective prompt for a use case we haven't covered — contract-lawyer review, FinOps review, accessibility review — please contribute via the [GitHub repository](https://github.com/andibing/archstandard).

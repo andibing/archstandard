@@ -1,0 +1,193 @@
+---
+title: "Anti-Patterns"
+description: "Common mistakes and formulaic filler in SADs, with before-and-after examples."
+---
+
+Patterns that consistently fail governance review or undermine a document's usefulness. Each anti-pattern has a "before" example (what not to do) and an "after" example (what to do instead).
+
+## 1. The Placeholder Document
+
+**Symptom:** Template fields left as `[...]`, `TBD`, `To be completed`, or `N/A` without explanation.
+
+**Why it fails:** A reviewer cannot assess the design; the document has not been written, only set up.
+
+**Before:**
+
+> | Field | Value |
+> |-------|-------|
+> | RTO | *[...]* |
+> | RPO | *[...]* |
+> | DR strategy | *[...]* |
+
+**After:**
+
+> | Field | Value |
+> |-------|-------|
+> | RTO | 4 hours (agreed with business owner Jane Doe, per email 2026-02-14) |
+> | RPO | 1 hour (driven by regulatory requirement: PCI-DSS audit log retention) |
+> | DR strategy | Warm standby in eu-west-1 with Aurora global replication |
+
+If you don't know a value, **say so and name who will provide it** — that's different from leaving it blank.
+
+## 2. The Wall of Adjectives
+
+**Symptom:** Qualitative claims without measurable targets.
+
+**Why it fails:** Nothing to test against; no way for operations to set thresholds or alerts.
+
+**Before:**
+
+> The solution must be highly available, performant, and secure.
+
+**After:**
+
+> The solution targets 99.9% availability measured monthly (excluding scheduled maintenance windows), P95 response time under 500ms for catalogue browse, and PCI-DSS v4.0 compliance for the payment flow.
+
+## 3. The Gold-Plated Tier 5
+
+**Symptom:** A simple internal tool with a threat model, compliance traceability matrix, carbon baseline, and 200-page SAD.
+
+**Why it fails:** Effort disproportionate to risk. Discourages future authors from writing any SAD at all. Hides real risks in a wall of unnecessary content.
+
+**Example:** A 15-user internal URL shortener written at Comprehensive depth, with STRIDE threat model, full quality attributes, lifecycle exit planning for each dependency, and 40 ADRs.
+
+**Fix:** Declare the solution Tier 5 (Minimal impact) and write at Minimum depth. Four pages is enough. Use the extra time on work that matters.
+
+## 4. The Under-Engineered Tier 1
+
+**Symptom:** A customer-facing, regulated, revenue-critical solution documented at Minimum depth with no security view, no threat model, no compliance mapping.
+
+**Why it fails:** The SAD is not evidence of adequate design; operational risk is invisible until something goes wrong.
+
+**Fix:** Match Documentation Depth to Business Criticality tier. Tier 1/2 → Comprehensive. Tier 3/4 → Recommended. Tier 5 → Minimum.
+
+## 5. The Optimistic Future Tense
+
+**Symptom:** Everything is described as something that "will" be done.
+
+**Why it fails:** A design document is a description of the designed system, not a wish-list. Reviewers cannot distinguish commitments from aspirations.
+
+**Before:**
+
+> The solution will use multi-factor authentication. Security events will be logged to SIEM. Secrets will be rotated regularly.
+
+**After:**
+
+> The solution enforces multi-factor authentication via Entra ID Conditional Access policy POL-MFA-01, applied to all users. Security events are forwarded to Microsoft Sentinel via the Entra ID and Azure Monitor connectors. Secrets in Azure Key Vault rotate on a 90-day schedule; the rotation is automated via Event Grid triggering Azure Functions (see SecretRotation runbook).
+
+Use present tense for what's in scope of this design. Use future tense **only** for what explicitly comes after this release.
+
+## 6. The Copy-Paste Component Table
+
+**Symptom:** Every component says "handles business logic". Every owner is "the engineering team". Every status is "new".
+
+**Why it fails:** The table carries no information. Reviewers cannot use it to understand the solution.
+
+**Before:**
+
+> | Component | Description | Owner | Status |
+> |-----------|-------------|-------|--------|
+> | Frontend | Handles UI | Engineering | New |
+> | Backend | Handles business logic | Engineering | New |
+> | Database | Stores data | Engineering | New |
+
+**After:**
+
+> | Component | Description | Owner | Status |
+> |-----------|-------------|-------|--------|
+> | Storefront (Next.js) | Customer-facing web UI for browsing, cart, checkout. Server-rendered for SEO. | Storefront Team (Claire Doe) | New |
+> | Order Service | Owns the order aggregate. Coordinates inventory reservation, payment, and fulfilment via saga pattern. | Orders Team (Fred Bloggs) | New |
+> | Aurora PostgreSQL | Transactional store for orders, inventory reservations, and payment records. | Data Team (Priya Doe) | New |
+
+Every row should tell the reader something specific.
+
+## 7. The Un-Owned Risk
+
+**Symptom:** Risks listed with no named owner, no mitigation plan, no date.
+
+**Why it fails:** Risks without ownership don't get mitigated. "Everyone's risk" is "no-one's risk".
+
+**Before:**
+
+> | ID | Risk | Mitigation |
+> |----|------|------------|
+> | R-001 | Performance issues at peak | Monitor and scale |
+
+**After:**
+
+> | ID | Risk | Severity | Likelihood | Owner | Mitigation |
+> |----|------|:---:|:---:|:---:|------------|
+> | R-001 | Peak Black Friday traffic (5-10× normal) may exhaust Aurora read replicas, causing browse latency above 3s | High | High | Jane Doe (SRE Lead) | Load test at 10× peak by 2026-10-14. Pre-scale read replicas 2026-11-20. ElastiCache in front of Aurora for top SKUs by 2026-10-30. |
+
+## 8. The Missing Integration Story
+
+**Symptom:** The Logical View shows 14 components. The Integration & Data Flow View shows no interactions between them.
+
+**Why it fails:** A system of components without described interactions is a pile of boxes, not an architecture. Most production problems happen at interfaces.
+
+**Fix:** For every edge between components in the Logical View, describe the interaction in the Integration & Data Flow View: protocol, authentication, direction, synchronicity, rate, error behaviour.
+
+## 9. The Orphaned ADR
+
+**Symptom:** An Architecture Decision Record in Section 3.6.2, but the decision is not reflected in the views.
+
+**Why it fails:** Documents contradict themselves. Either the ADR is not implemented, or the views are stale. Reviewers cannot tell which.
+
+**Fix:** When you write an ADR, update the views to reflect the decision. When you change the architecture, update the ADRs. The ADR log should tell the story of the design.
+
+## 10. The Cargo-Cult Threat Model
+
+**Symptom:** STRIDE table populated with generic threats ("Spoofing: attackers may impersonate users") that apply to every system ever built.
+
+**Why it fails:** Generic threats produce generic mitigations that don't make the system safer. The model is going through the motions without doing the work.
+
+**Before:**
+
+> | Threat | Category | Mitigation |
+> |--------|----------|------------|
+> | Spoofing | Spoofing | Authentication |
+> | Tampering | Tampering | Integrity controls |
+
+**After:**
+
+> | Threat | Attack Vector | Impact | Mitigation |
+> |--------|--------------|--------|------------|
+> | Stripe webhook spoofing | Attacker posts forged order completion webhook to `/api/stripe/webhook` | Orders created for unpaid transactions | Stripe-Signature header verified using webhook secret (rotated quarterly). Secret in AWS Secrets Manager. |
+> | Order ID enumeration | Attacker iterates order IDs in API calls to access other customers' orders | Personal data breach | Order access requires both authenticated user session AND order belonging to that customer. Tested as part of API integration tests. |
+
+Specific threats, specific attack vectors, specific mitigations that can be verified.
+
+## 11. The Cost Hallucination
+
+**Symptom:** Cost figures with no evidence ("approximately £50k/year") that turn out to be 5× wrong when the invoices arrive.
+
+**Why it fails:** Business cases approved on bad numbers cause downstream problems. Finance partners lose trust.
+
+**Fix:** Either show the workings (service × quantity × unit rate × 12), link to a cloud cost calculator output, or mark the figure as "indicative — to be confirmed by Finance partner before approval" (and track as an assumption).
+
+## 12. The Dead-End Exit Plan
+
+**Symptom:** "Exit plan: re-platform to alternative provider if needed."
+
+**Why it fails:** This is a non-plan. It does not tell you how long it would take, what it would cost, or what the risks are.
+
+**Fix:** Exit plans need enough substance to be credible. A Recommended-depth exit plan covers: data portability (can we extract everything, in what formats, how long), vendor lock-in (list the proprietary services used, alternatives), realistic timeline estimate, cost estimate, and one-line description of the trigger (regulatory, cost, service quality, acquisition).
+
+---
+
+## Self-review checklist
+
+Before submitting, scan your SAD against these ten questions:
+
+1. Are any fields still `[...]` or `TBD`?
+2. Are non-functional targets measurable (numbers, not adjectives)?
+3. Does the depth match the criticality tier?
+4. Is content written in present tense where the design is committed?
+5. Do all tables carry information (not boilerplate)?
+6. Does every risk have a named owner and dated mitigation?
+7. Are interactions between components described?
+8. Do ADRs match the rest of the document?
+9. Is the threat model (if present) specific to this system?
+10. Is the exit plan (if present) credible?
+
+If any answer is "no", fix before submitting.

@@ -1,6 +1,6 @@
 # Solution Architecture Document — PayrollPro Cloud Migration
 
-> **Standard:** ADS v1.1.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.0 (Architecture Description Standard)
 > **Author:** Fred Bloggs, Lead Solution Architect
 > **Organisation:** Meridian Financial Services
 > **Status:** In Review
@@ -598,7 +598,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 
 #### 3.5.4 Data Protection
 
-##### Encryption at Rest
+##### Encryption at REST
 
 | Attribute | Detail |
 |-----------|--------|

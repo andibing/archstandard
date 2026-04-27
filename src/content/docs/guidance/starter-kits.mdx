@@ -1,0 +1,198 @@
+---
+title: "Starter Kits"
+description: "Pre-scoped starting points for common project types: new cloud app, migration, and legacy integration."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Not every SAD needs to start from a blank template. These starter kits suggest which sections matter most and which decisions to capture up front — depending on the type of project.
+
+<Aside type="tip" title="Read the matching example too">
+Each starter kit points to a worked example. Read the example alongside your draft — pattern-match the structure and level of detail.
+</Aside>
+
+## Starter Kit 1: New Cloud-Native Application
+
+**Best for:** Greenfield solutions built on cloud-native services (AWS, Azure, GCP, OCI), no legacy to replace.
+
+**Typical depth:** Recommended. Comprehensive if customer-facing or regulated.
+
+**Matching example:** [Customer API Platform](/v1/examples/customer-api-platform/) (Comprehensive) or [NorthWind Retail](/v1/examples/northwind-retail/) (Recommended).
+
+### Priority sections
+
+Focus your first two weeks on getting these sections right:
+
+1. **Section 1.1 Solution Overview** — Two paragraphs. What, why, high-level approach.
+2. **Section 1.2 Business Context** — Specific drivers with priority.
+3. **Section 1.8 Business Criticality Tier** — Choose deliberately; it drives rigour.
+4. **Section 3.1 Logical View** — Component decomposition. Use Domain-Driven Design if the domain is complex.
+5. **Section 3.2 Integration & Data Flow** — Every interface documented with protocol, auth, direction.
+6. **Section 3.3 Physical View** — Cloud deployment topology, environments.
+7. **Section 3.5 Security View** — Authentication, authorisation, encryption at rest and in transit at minimum.
+8. **Section 6.1-6.5 RAID log** — Capture early, refine weekly.
+
+### Early decisions to capture as ADRs
+
+Cloud-native projects accumulate decisions quickly. Write ADRs for:
+
+- **Compute platform** — containers on Kubernetes vs serverless vs managed VMs
+- **Datastore** — relational vs document vs key-value, managed vs self-hosted
+- **Authentication** — identity provider, SSO strategy, MFA
+- **Integration pattern** — REST vs GraphQL vs gRPC vs events
+- **CI/CD platform** — GitHub Actions, Azure DevOps, GitLab
+- **Observability stack** — Datadog, Grafana Cloud, native cloud tools
+
+### Common risks to track
+
+- Vendor lock-in to managed services — quantify the exit cost
+- New technology the team hasn't run in production — name the operational readiness risk
+- Skills gap — name it honestly in Section 5.6 Resourcing
+- Third-party service SLAs — do they meet your RTO/RPO?
+
+### Common shortcuts to avoid
+
+- Skipping Section 4 Quality Attributes because "we'll deal with it later" — bake in the targets now, test against them early
+- Using "will be" language throughout — the SAD describes the current design, not a wish list
+- Gold-plating Section 3.5 Security View with every possible control — match effort to risk tier
+
+---
+
+## Starter Kit 2: Cloud Migration
+
+**Best for:** Moving an existing workload from on-premises, legacy hosting, or another cloud to a modern cloud platform.
+
+**Typical depth:** Recommended. Comprehensive for Tier 1/2 regulated systems.
+
+**Matching example:** [Cloud Migration](/v1/examples/cloud-migration/) — a PayrollPro migration to Azure.
+
+### Priority sections
+
+Migrations have unique focus areas:
+
+1. **Section 1.5 Current State / As-Is Architecture** — Be precise. Name the components, versions, integrations, data volumes. A migration without a clear baseline often fails.
+2. **Section 1.6 Key Decisions** — The 6 R's migration classification (Retain / Retire / Rehost / Replatform / Refactor / Replace) belongs here.
+3. **Section 3.2 Integration & Data Flow** — Every external integration needs a cutover plan.
+4. **Section 3.4 Data View** — Migration approach, data volumes, integrity checks, cutover windows.
+5. **Section 5.2 Service Transition & Migration** — This section is where migrations live. Populate it fully.
+6. **Section 5.3 Test Strategy** — Regression of business-critical paths is the biggest risk.
+7. **Section 5.9 Decommissioning & Legacy Removal** — Don't leave legacy infrastructure running and costing money.
+
+### Early decisions to capture as ADRs
+
+- **Migration approach** — big-bang vs phased vs strangler fig
+- **Data migration method** — offline export/import vs online replication vs change data capture
+- **Downtime tolerance** — zero-downtime vs acceptable outage window
+- **Target region** — data residency, latency, cost
+- **Keep or replace** third-party integrations that travel with the workload
+
+### Common risks to track
+
+- Unknown dependencies discovered mid-migration
+- Data corruption during transfer
+- Performance differences between source and target
+- Reduced function during transition (is this acceptable?)
+- Rollback — is it actually possible once cutover completes?
+- Decommissioning delayed — cost stacks up if both environments run in parallel too long
+
+### Common shortcuts to avoid
+
+- Assuming the existing documentation is accurate — validate with the operating team
+- Skipping performance testing at target load
+- Leaving the As-Is architecture as a placeholder
+- Underestimating the decommissioning phase — often takes longer than the migration itself
+
+---
+
+## Starter Kit 3: Legacy Integration / Point Solution
+
+**Best for:** Modest solutions that extend or integrate with an existing large platform — reporting layers, thin clients, departmental tools, adapters.
+
+**Typical depth:** Minimum or Recommended depending on criticality.
+
+**Matching example:** [Employee Directory](/v1/examples/employee-directory/) — a simple internal directory integrating with the HR system and Entra ID.
+
+### Priority sections
+
+Keep the SAD focused and small:
+
+1. **Section 1.1 Solution Overview** — What does this thing do? One paragraph.
+2. **Section 2.1 Stakeholder Register** — Name the owner of each upstream/downstream system.
+3. **Section 3.1 Logical View** — The new components only. Reference the existing platform rather than re-documenting it.
+4. **Section 3.2 Integration & Data Flow** — Most of the action happens here. Every integration point has: protocol, auth, direction, volume, frequency, error handling.
+5. **Section 3.5 Security View** — Data classification of what flows across the integration, authentication, audit.
+6. **Section 5.5 Operations & Support** — Whose on-call catches the calls? The new team's? The host system's?
+
+### Early decisions to capture as ADRs
+
+- **Integration style** — synchronous API vs events vs file transfer vs database read
+- **Data ownership** — who is the source of truth for each data element?
+- **Failure handling** — fail closed vs fail open, retries, dead letter queues
+- **Identity model** — federated with the host platform or standalone?
+
+### Common risks to track
+
+- Upstream system changes breaking your integration
+- Data quality issues from the source system
+- Rate limits and throttling
+- Host system upgrade timelines misaligned with yours
+- Ownership disputes when something breaks
+
+### Common shortcuts to avoid
+
+- Copying the host platform's SAD wholesale — reference it, don't duplicate it
+- Leaving data flow volumes and peak loads unspecified
+- Ignoring failure scenarios — they're almost always the interesting part
+- Under-documenting operational hand-off — who owns this once it's live?
+
+---
+
+## Starter Kit 4: Platform / Internal Developer Tool
+
+**Best for:** Solutions that serve other teams as customers — IDPs, shared services, CI/CD platforms, common libraries, paved roads.
+
+**Typical depth:** Recommended.
+
+**Matching example:** [Stellar Platform](/v1/examples/stellar-platform/) — an Internal Developer Platform.
+
+### Priority sections
+
+Platform solutions have a different shape — the "customers" are internal teams:
+
+1. **Section 1.3 Strategic Alignment** — Platform-as-a-product framing. Named customer teams.
+2. **Section 2.1 Stakeholder Register** — Customer teams, platform team, portfolio architect.
+3. **Section 3.6 Scenarios** — Golden paths as use cases. What does the customer team's journey look like?
+4. **Section 4.1 Operational Excellence** — Self-service is a platform requirement. Observability for the platform itself.
+5. **Section 4.3 Performance** — Platform SLOs matter to every customer team.
+6. **Section 5.6 Resourcing** — Platform teams are usually small; skills coverage is a risk.
+7. **Section 6.3 Risks** — Platform-specific: bottleneck, paved-road fatigue, shadow IT, vendor lock-in.
+
+### Early decisions to capture as ADRs
+
+- **Build vs buy** — e.g., Backstage vs Port.io vs bespoke
+- **Multi-tenant model** — strict isolation vs shared infrastructure with quotas
+- **Opinionation** — prescriptive golden paths vs flexible building blocks
+- **Deprecation policy** — how do you retire a platform feature that customer teams depend on?
+
+### Common risks to track
+
+- Platform team becomes the bottleneck for every product release
+- Golden paths are too restrictive; customer teams route around
+- Feature requests outpace capacity
+- Platform itself needs governance — who approves platform-team changes?
+- "Who monitors the monitor?" — platform failures affect every customer team
+
+### Common shortcuts to avoid
+
+- Designing the platform without talking to the customer teams
+- Under-investing in documentation for platform users
+- Ignoring developer experience (DevEx) metrics — measure time-to-first-commit, time-to-production
+- Skipping a deprecation policy until you need one
+
+---
+
+## Picking the right starter kit
+
+If your project doesn't fit neatly into one category, pick the closest and adapt. The sections aren't mutually exclusive — a new cloud app that replaces a legacy system combines kits 1 and 2.
+
+When in doubt, start with the Customer API Platform or NorthWind Retail example as a reference — they cover the broadest set of sections well.

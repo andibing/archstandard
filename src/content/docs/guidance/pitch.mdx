@@ -1,0 +1,153 @@
+---
+title: "The 2-Minute Pitch"
+description: "Short speaker notes for introducing ADS internally — slide cues, talking points, and follow-up resources."
+---
+
+Notes for someone introducing ADS to their team, a management forum, or an Architecture Review Board. Pitch designed to fit two minutes — adapt for your audience and time slot.
+
+---
+
+## 30-second elevator version
+
+> **The Architecture Description Standard (ADS)** is a free, open standard for writing Solution Architecture Documents. It gives us a consistent structure across every project, from a one-page PoC to a regulated, enterprise-critical system.
+>
+> It's prescriptive where it should be — you know exactly what to fill in — and extensible where it should be. It comes with worked examples, downloadable templates, AI prompts for review, and a machine-readable JSON Schema.
+>
+> It replaces the blank-page problem and the patchwork of home-grown templates with one shared vocabulary.
+
+## 2-minute version (with talking points)
+
+### Slide 1: The problem (20 seconds)
+
+**Talking points:**
+- Every SA has their own template. Every project describes itself differently.
+- Reviewers spend their time figuring out what they're reading, not whether it's right.
+- New team members learn a different dialect on every project.
+- We can't compare SADs, score them consistently, or roll up portfolio risk.
+
+> "We have a pattern-matching problem. Every document is unique, and that's the wrong kind of unique."
+
+### Slide 2: What ADS is (30 seconds)
+
+**Talking points:**
+- Free, open-source standard. CC BY 4.0 content; MIT code.
+- Prescriptive structure: 8 sections, 3 documentation depths, 14 scored areas.
+- Built on industry standards: ISO 42010, 4+1 model, AWS/Azure/GCP/Oracle/IBM Well-Architected Frameworks, TOGAF.
+- Machine-readable JSON Schema drives templates, validation, and tooling.
+- Four worked examples from simple (a URL shortener) to complex (a regulated healthcare portal).
+
+> "It's not a new framework. It's the useful parts of the existing frameworks, wired together into something you can actually use."
+
+### Slide 3: What you get in the box (30 seconds)
+
+**Talking points:**
+- **Templates** in Word, Markdown, YAML, and JSON — same content, your choice of format
+- **Worked examples** across seven project types: simple web app, cloud-native API, migration, retail e-commerce, healthcare portal, developer platform, and this website itself
+- **AI prompt library** — ready-to-use prompts for LLM-assisted drafting, validation, scoring, and review (security, governance)
+- **Guidance** — "what good looks like", anti-patterns, decision guides, industry mappings (GDS, NIST, PCI-DSS, ISO 27001, NHS DSPT)
+- **Printable cheat cards** for desk reference
+
+> "You don't start from a blank page. You start from something that already works — then adapt."
+
+### Slide 4: What's in it for us (30 seconds)
+
+**Audience-specific versions:**
+
+**For architects:**
+- Blank-page problem solved. Start from a structure that asks the right questions.
+- Your work becomes portable. A new team can continue where you left off.
+- AI prompts give you a peer-review partner available 24/7.
+
+**For governance:**
+- Consistent structure = faster reviews.
+- 0–5 scoring = a common language with authors.
+- Compliance traceability mapped to major frameworks.
+
+**For engineering leadership:**
+- Lower cost per SAD. Less debate about form, more focus on substance.
+- Portfolio visibility. Aggregate quality and risk across solutions.
+- Faster onboarding for new architects.
+
+**For the business:**
+- Decisions recorded — no more "why did we build it that way?"
+- Clear audit trail. Clear compliance story.
+- Cost and exit plans visible before they become problems.
+
+### Slide 5: How to adopt (10 seconds)
+
+**Talking points:**
+- Start with one SAD. Pick a new project or a next-version of an existing one.
+- Choose the depth that matches the criticality.
+- Use the Quickstart — 5 minutes to a skeleton.
+- Use the AI prompts for drafting and review.
+
+> "You don't need to boil the ocean. Pick one project, use the template, see how it feels."
+
+---
+
+## Pitch variants
+
+### For a sceptical audience
+
+Open with a pain point they have, not with the standard:
+
+> "How long did your last architecture review take? How many versions of the SAD went through? How many times did the reviewer ask 'where's the security view?' — and you couldn't tell if you'd put it in a section or missed it entirely?
+>
+> That's the problem ADS solves. Consistent structure. You know exactly where to put the security view, and so does the reviewer. Let me show you..."
+
+### For a time-pressured audience
+
+Skip the framework discussion, lead with the artefacts:
+
+> "Three things. First, here's a template — fill in the boxes, have a SAD. Second, here's an example — see what good looks like. Third, here's an AI prompt — paste your draft and an LLM will review it for completeness before you send to the ARB.
+>
+> That's the whole thing. Questions?"
+
+### For a strategic audience
+
+Frame as portfolio-level value, not individual-SAD value:
+
+> "Today every team writes a different kind of SAD. We can't aggregate them. We can't do portfolio-level analysis. We can't score compliance against a consistent scale.
+>
+> ADS gives us a machine-readable structure. A schema. A scoring scale. That means in two years, when the CISO asks 'show me every Tier-1 system that's still running unsupported software,' we can actually answer.
+>
+> This isn't about the individual SAD. It's about making the portfolio visible."
+
+---
+
+## Common questions, prepared answers
+
+**"Doesn't this just add overhead?"**
+
+> Only if you over-apply it. The Minimum-depth version takes one to three hours. Tier 5 solutions stay at Minimum. The overhead scales with the criticality — which is what you want.
+
+**"Why not TOGAF?"**
+
+> TOGAF covers the full enterprise architecture lifecycle — capability planning, ADM phases, repository. It doesn't prescribe a SAD template. ADS is the solution-level artefact that sits within a TOGAF-shaped programme.
+
+**"Why not arc42?"**
+
+> arc42 is a software architecture template. ADS is broader — it covers infrastructure, data, security, operations, governance as first-class views. If your "solution" is pure software, arc42 works well. If it's a full system, ADS fits better.
+
+**"Will I need to rewrite our existing SADs?"**
+
+> No. Adopt it for new work. Existing SADs are fine as-is — don't create work for the sake of it. Over time, as systems get updated, you can migrate to the new structure.
+
+**"What if our organisation has specific requirements?"**
+
+> The schema has `customSections` and `organisationProfile` extension points. Add your internal tool mappings, governance gates, or bespoke sections without forking the standard.
+
+**"Who owns this? What if it goes away?"**
+
+> It's open-source. Andi Chandler maintains it currently. If that changed, the standard is forkable — any organisation can continue it. Your SADs are just Markdown / YAML / JSON; they don't depend on the website being live.
+
+---
+
+## Links to share
+
+- **Website:** [archstandard.org](https://archstandard.org)
+- **Quickstart:** [archstandard.org/v1/standard/quickstart/](https://archstandard.org/v1/standard/quickstart/)
+- **Depth Cheat Sheet:** [archstandard.org/v1/standard/cheat-sheet/](https://archstandard.org/v1/standard/cheat-sheet/)
+- **Templates:** [archstandard.org/v1/standard/downloads/](https://archstandard.org/v1/standard/downloads/)
+- **Examples:** [archstandard.org/v1/examples/](https://archstandard.org/v1/examples/)
+- **GitHub:** [github.com/andibing/archstandard](https://github.com/andibing/archstandard)

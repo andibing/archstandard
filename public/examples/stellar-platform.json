@@ -1,0 +1,235 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document — Stellar Internal Developer Platform",
+      "solutionName": "Stellar Platform (Internal Developer Platform)",
+      "applicationId": "SE-IDP-001",
+      "authors": ["Tom Bloggs (Principal Platform Engineer)"],
+      "owner": "Tom Bloggs",
+      "version": "1.0",
+      "status": "approved",
+      "createdDate": "2025-11-04",
+      "lastUpdated": "2026-04-12",
+      "classification": "internal"
+    },
+    "purpose": "Describe the architecture of Stellar Engineering's Internal Developer Platform (IDP) — a Backstage-based developer portal and the platform services it composes (golden paths, paved roads, cost insights, scorecards) — designed to reduce cognitive load on stream-aligned teams and shorten lead time for change.",
+    "scope": "Backstage portal, platform services (Scaffolder, TechDocs, scorecards, cost insights), the underlying Kubernetes platform-as-a-service, and supporting tooling (Tekton, ArgoCD, Vault, Datadog integration). Excludes the workloads built on the platform."
+  },
+  "executiveSummary": {
+    "solutionOverview": "The Stellar Platform is an internal developer platform serving ~340 engineers across 28 stream-aligned teams at Stellar Engineering Ltd, a B2B SaaS company. It centres on a Backstage developer portal that catalogues services, owners, runbooks, and dashboards; provides Software Templates (Scaffolder) for golden-path service creation; and surfaces scorecards for production readiness, security, cost, and reliability. The portal composes platform capabilities including a paved-road Kubernetes runtime (EKS + GKE), Tekton CI/CD with signed artefacts, ArgoCD GitOps, Vault-managed secrets, and unified Datadog observability.",
+    "businessContext": [
+      {"driver": "Developer productivity", "description": "Lead time for changes stretched from 2 days to 9 days; new service bootstrapping takes 3-6 weeks across SRE/Security/Platform"},
+      {"driver": "Cognitive load", "description": "Product teams carry too much accidental responsibility (clusters, pipelines, IAM, alerting) instead of customer value"},
+      {"driver": "Fragmentation", "description": "14 different CI patterns, 6 Terraform module styles, 4 K8s deployment approaches, 3 observability stacks across teams"},
+      {"driver": "Reliability", "description": "Change failure rate at 18% (DORA high-performer threshold 15%); incidents rooted in drift and unclear ownership"},
+      {"driver": "Security supply chain", "description": "Inconsistent supply-chain controls and secret handling; SOC 2 Type II audit findings"},
+      {"driver": "Cost", "description": "Cloud spend grew 42% YoY against 18% revenue growth; no unified FinOps view"}
+    ],
+    "strategicAlignment": {
+      "organisationStrategySupported": "Stellar Engineering Platform Strategy 2026-2028",
+      "reviewedAgainstCapabilityModel": "yes",
+      "duplicatesExistingCapability": "no"
+    },
+    "inScope": [
+      "Backstage developer portal and first-party plugins",
+      "Software templates (golden paths) for net-new services",
+      "Paved-road Kubernetes runtime (EKS + GKE multi-cluster)",
+      "Tekton CI/CD pipelines with signed artefacts (cosign + SLSA L3)",
+      "ArgoCD GitOps deployment",
+      "HashiCorp Vault federation for workload secrets",
+      "Service ownership and on-call routing via Backstage",
+      "Production readiness scorecards (DORA, security, cost)"
+    ],
+    "outOfScope": [
+      "Product workloads themselves",
+      "Replacing Datadog APM, synthetics, or on-call routing",
+      "Replacing GitHub Actions for source-repo-level checks",
+      "Snowflake data platform"
+    ],
+    "currentState": "Each team operates independently. 14 CI patterns, 6 Terraform module styles, 4 K8s deployment approaches, 3 observability stacks. New service bootstrap involves 3-6 weeks of coordination. Configuration drift common; runbooks fragmented across team wikis.",
+    "keyDecisions": [
+      {"decision": "Backstage as the developer portal", "rationale": "CNCF graduated; vibrant plugin ecosystem; team familiarity", "implication": "Backstage upgrade cadence becomes platform team responsibility"},
+      {"decision": "Multi-cloud (AWS + GCP) Kubernetes paved road", "rationale": "Existing workload distribution; portability optionality", "implication": "Higher complexity in pipeline templates"},
+      {"decision": "Tekton over GitHub Actions for build pipelines", "rationale": "Native Kubernetes; signed artefacts (SLSA L3) align with security audit findings", "implication": "Two-tier CI: GHA for source checks, Tekton for build/sign/publish"},
+      {"decision": "ArgoCD GitOps for deployment", "rationale": "Pull-based deployment improves security; declarative state visible in Git", "implication": "All deployments via Git PRs; rollback via revert"},
+      {"decision": "Vault Workload Identity federation", "rationale": "Eliminates static secrets; aligns with SOC 2 remediation", "implication": "Vault becomes critical-path dependency"}
+    ],
+    "projectDetails": {
+      "projectName": "Stellar Platform — Phase 1 (Foundation)",
+      "projectCode": "PLAT-2026-001",
+      "projectManager": "Sarah Doe",
+      "estimatedCapex": 1100000,
+      "estimatedOpex": 480000,
+      "currency": "GBP",
+      "targetGoLive": "2026-09-30"
+    },
+    "businessCriticality": "tier-3-medium"
+  },
+  "stakeholders": {
+    "register": [
+      {"name": "Tom Bloggs", "role": "Principal Platform Engineer / Solution Architect", "concerns": ["Design integrity", "Platform extensibility", "Migration path"]},
+      {"name": "Lara Doe", "role": "VP Engineering", "concerns": ["DORA metrics", "Engineer satisfaction", "Time-to-market"]},
+      {"name": "Stream-aligned teams (28)", "role": "Platform users / customers", "concerns": ["Self-service", "Low friction", "Stable interfaces"]},
+      {"name": "Security team", "role": "Platform stakeholder", "concerns": ["Supply chain", "Identity boundaries", "Audit evidence"]},
+      {"name": "FinOps lead", "role": "Cost stakeholder", "concerns": ["Cost allocation", "Showback", "Anomaly detection"]},
+      {"name": "Heads of Engineering (4)", "role": "Sponsors", "concerns": ["ROI", "Adoption rate", "Team migration cost"]}
+    ],
+    "compliance": {
+      "supportsRegulatedActivities": "no",
+      "regulatedActivityDetails": "The platform is a supporting system but not directly customer-facing.",
+      "regulatoryRequirements": [
+        {"name": "SOC 2 Type II", "applicability": "Group commitment to customers", "impact": "Supply chain, change control, access control evidence"},
+        {"name": "ISO 27001", "applicability": "Group ISMS scope", "impact": "Asset inventory, RBAC, audit logs"},
+        {"name": "UK GDPR", "applicability": "Limited — platform metadata only, no customer PII", "impact": "Engineer identity from Okta treated as personal data under DPA"}
+      ]
+    }
+  },
+  "architecturalViews": {
+    "logicalView": {
+      "components": [
+        {"name": "Backstage Portal (UI)", "componentType": "web-application", "technology": "Backstage (React + Node.js)", "status": "new"},
+        {"name": "Backstage Catalogue Backend", "componentType": "api-service", "technology": "Node.js, PostgreSQL", "status": "new"},
+        {"name": "Scaffolder Service", "componentType": "api-service", "technology": "Backstage Scaffolder, GitHub APIs", "status": "new"},
+        {"name": "TechDocs Service", "componentType": "api-service", "technology": "Backstage TechDocs, S3", "status": "new"},
+        {"name": "Scorecards Service", "componentType": "api-service", "technology": "Custom Backstage plugin, Node.js", "status": "new"},
+        {"name": "Cost Insights Service", "componentType": "api-service", "technology": "Custom Backstage plugin", "status": "new"},
+        {"name": "Tekton Pipelines", "componentType": "backend-service", "technology": "Tekton on EKS", "status": "new"},
+        {"name": "ArgoCD", "componentType": "backend-service", "technology": "ArgoCD on EKS + GKE", "status": "existing-modified"},
+        {"name": "Cosign Signing Service", "componentType": "backend-service", "technology": "Sigstore cosign + Fulcio", "status": "new"},
+        {"name": "Catalogue Database", "componentType": "database", "technology": "Aurora PostgreSQL 15", "status": "new"},
+        {"name": "Object Store (TechDocs, artefacts)", "componentType": "file-storage", "technology": "AWS S3", "status": "new"},
+        {"name": "Container Registry", "componentType": "file-storage", "technology": "GitHub Packages + Artifact Registry", "status": "existing-modified"}
+      ],
+      "designPatterns": [
+        {"pattern": "modular-monolith", "rationale": "Backstage's plugin model gives modular boundaries within a single deployable"},
+        {"pattern": "event-driven", "rationale": "Catalogue change events drive scorecard re-evaluation and notifications"},
+        {"pattern": "api-gateway", "rationale": "Cloudflare in front of Backstage for global edge and Okta integration"},
+        {"pattern": "sidecar", "rationale": "Vault Agent sidecar in workloads for federated secret retrieval"}
+      ]
+    },
+    "integrationView": {
+      "externalIntegrations": [
+        {"sourceApp": "Backstage", "destinationApp": "GitHub Enterprise", "integrationType": "internal-app", "protocol": "https", "encrypted": true, "authenticationMethod": "oauth2", "purpose": "Source repo metadata, PR creation by Scaffolder, code search, ownership"},
+        {"sourceApp": "Backstage", "destinationApp": "Okta", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "saml", "purpose": "User authentication and SCIM-provisioned groups for RBAC"},
+        {"sourceApp": "Cost Insights", "destinationApp": "Snowflake", "integrationType": "internal-app", "protocol": "https", "encrypted": true, "authenticationMethod": "oauth2", "purpose": "Cost telemetry by team and service"},
+        {"sourceApp": "Backstage", "destinationApp": "Datadog", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "api-key", "purpose": "Service health, on-call rota, incident links"},
+        {"sourceApp": "Tekton", "destinationApp": "HashiCorp Vault", "integrationType": "internal-app", "protocol": "https", "encrypted": true, "authenticationMethod": "jwt", "purpose": "Workload identity federation; signing keys; deploy credentials"},
+        {"sourceApp": "ArgoCD", "destinationApp": "GitHub Enterprise", "integrationType": "internal-app", "protocol": "https", "encrypted": true, "authenticationMethod": "oauth2", "purpose": "GitOps source of truth; manifest pull"}
+      ]
+    },
+    "physicalView": {
+      "hosting": {
+        "venueTypes": ["public-cloud"],
+        "regions": ["us-east", "uk-south"],
+        "serviceModels": ["paas", "iaas"],
+        "cloudProviders": ["aws", "gcp"]
+      },
+      "compute": {
+        "computeTypes": ["container"],
+        "containers": {"platform": "eks", "clusterSize": "11-50-nodes"},
+        "serverless": {"used": false}
+      },
+      "networking": {
+        "internetFacing": true,
+        "outboundInternet": true,
+        "thirdPartyConnectivity": true,
+        "ddosProtection": "yes",
+        "ddosProvider": "cloudflare",
+        "wafEnabled": "yes",
+        "wafProvider": "cloudflare-waf",
+        "rateLimiting": true,
+        "trafficPattern": "constant"
+      }
+    },
+    "dataView": {
+      "dataStores": [
+        {"name": "Backstage Catalogue", "storeType": "relational-db", "technology": "Aurora PostgreSQL", "containsPersonalData": true, "classification": "internal", "retentionPeriod": "5-10-years", "encryptionLevel": "storage-level"},
+        {"name": "TechDocs Object Storage", "storeType": "object-storage", "technology": "AWS S3", "containsPersonalData": false, "classification": "internal", "retentionPeriod": "indefinite", "encryptionLevel": "storage-level"},
+        {"name": "Pipeline Artefact Storage", "storeType": "object-storage", "technology": "Artifact Registry + GitHub Packages", "containsPersonalData": false, "classification": "internal", "retentionPeriod": "1-year", "encryptionLevel": "storage-level"},
+        {"name": "Audit Log", "storeType": "object-storage", "technology": "S3 + Datadog Logs", "containsPersonalData": true, "classification": "internal", "retentionPeriod": "5-10-years", "encryptionLevel": "storage-level"}
+      ],
+      "dataSovereigntyRequired": "no",
+      "dataSovereigntyDetails": "Platform-internal metadata only; no customer data; engineer PII (name, email) limited and held in EEA-permissible regions"
+    },
+    "securityView": {
+      "businessImpact": {
+        "confidentiality": "medium",
+        "integrity": "high",
+        "availability": "high",
+        "nonRepudiation": "high"
+      },
+      "authentication": [
+        {"accessType": "end-user-internal", "method": "sso-saml", "usesGroupWideAuth": true},
+        {"accessType": "service-account", "method": "certificate", "usesGroupWideAuth": true},
+        {"accessType": "api-consumer", "method": "oauth2", "usesGroupWideAuth": false}
+      ],
+      "encryptionAtRest": {
+        "implemented": true,
+        "level": "storage-level",
+        "keyType": "symmetric",
+        "algorithm": "AES-256-GCM",
+        "keyStorage": "kms",
+        "keyRotationDays": 365
+      }
+    }
+  },
+  "qualityAttributes": {
+    "operationalExcellence": {
+      "loggingCentralised": true,
+      "loggingTool": "Datadog Logs",
+      "monitoringTool": "Datadog APM + Prometheus / Grafana",
+      "tracingEnabled": true
+    },
+    "reliability": {
+      "drStrategy": "warm-standby",
+      "scalability": "full-auto-scaling"
+    }
+  },
+  "lifecycleManagement": {
+    "internallyDeveloped": true,
+    "sourceControl": "github",
+    "cicdPlatform": "tekton",
+    "sast": "snyk-code",
+    "dast": "yes",
+    "sca": "snyk",
+    "containerScanning": "yes",
+    "releaseFrequency": "continuous",
+    "supportModel": "internal-team",
+    "supportHours": "business-hours",
+    "intendedLifespan": "5-10-years",
+    "exitPlanDocumented": true,
+    "vendorLockInLevel": "low"
+  },
+  "riskGovernance": {
+    "constraints": [
+      {"id": "C-001", "constraint": "Multi-cloud requirement (AWS + GCP)", "category": "technical", "impactOnDesign": "Pipeline templates and manifests must be cloud-agnostic where reasonable; cluster federation required"},
+      {"id": "C-002", "constraint": "Must integrate with existing corporate IdP (Okta), Datadog, Vault, Snowflake", "category": "organisational", "impactOnDesign": "Replacement of any of these is out of scope"},
+      {"id": "C-003", "constraint": "SOC 2 Type II evidence requirements", "category": "regulatory", "impactOnDesign": "Auditable change control, access boundaries, supply chain controls"}
+    ],
+    "assumptions": [
+      {"id": "A-001", "assumption": "Backstage upstream remains active and CNCF-governed", "impactIfFalse": "Platform team takes greater fork maintenance burden", "certainty": "high", "status": "open", "owner": "Tom Bloggs"},
+      {"id": "A-002", "assumption": "Stream-aligned teams will adopt golden paths once published", "impactIfFalse": "Adoption rate falls; ROI delayed; fragmentation persists", "certainty": "medium", "status": "open", "owner": "Lara Doe"}
+    ],
+    "risks": [
+      {"id": "R-001", "riskEvent": "Low team adoption of golden paths and Backstage scorecards", "riskCategory": "delivery", "severity": "high", "likelihood": "medium", "owner": "Lara Doe", "mitigationStrategy": "mitigate", "mitigationPlan": "Pilot with 3 friendly teams; embedded platform engineers; quarterly DORA review; UX research; carrot-not-stick adoption", "residualRisk": "medium", "lastAssessed": "2026-04-12"},
+      {"id": "R-002", "riskEvent": "Vault outage disrupts deployments and workload secret access", "riskCategory": "operational", "severity": "high", "likelihood": "low", "owner": "Tom Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "Active-passive Vault HA across two AZs; performance-replica; cached short-lived credentials minimise on-path dependency", "residualRisk": "low", "lastAssessed": "2026-04-12"},
+      {"id": "R-003", "riskEvent": "Platform becomes a bottleneck for product teams", "riskCategory": "operational", "severity": "medium", "likelihood": "medium", "owner": "Tom Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "Self-service first principle; clear escalation paths; explicit platform SLOs (golden-path PR merge < 24h)", "residualRisk": "low", "lastAssessed": "2026-04-12"},
+      {"id": "R-004", "riskEvent": "Supply chain attack via signed artefact bypass", "riskCategory": "security", "severity": "high", "likelihood": "low", "owner": "Tom Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "Cosign + SLSA L3 enforced; Fulcio short-lived certs; admission webhooks reject unsigned images; quarterly red-team test", "residualRisk": "low", "lastAssessed": "2026-04-12"},
+      {"id": "R-005", "riskEvent": "Multi-cloud complexity outweighs benefits", "riskCategory": "technical", "severity": "medium", "likelihood": "medium", "owner": "Tom Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "Quarterly platform retrospective; willingness to consolidate to single cloud if data shows complexity tax > benefit", "residualRisk": "medium", "lastAssessed": "2026-04-12"}
+    ]
+  },
+  "appendices": {
+    "glossary": [
+      {"term": "Backstage", "definition": "CNCF-graduated open-source developer portal framework"},
+      {"term": "Cosign", "definition": "Sigstore signing tool for container images and artefacts"},
+      {"term": "DORA", "definition": "DevOps Research & Assessment — software delivery performance metrics"},
+      {"term": "Golden path", "definition": "Opinionated, supported route for accomplishing a common task on the platform"},
+      {"term": "IDP", "definition": "Internal Developer Platform"},
+      {"term": "Paved road", "definition": "Standard, well-supported solution that takes the easy path"},
+      {"term": "Scaffolder", "definition": "Backstage Software Templates feature for creating new components from golden paths"},
+      {"term": "Scorecard", "definition": "Automated evaluation of services against criteria"},
+      {"term": "SLSA", "definition": "Supply-chain Levels for Software Artifacts — security framework"}
+    ]
+  }
+}

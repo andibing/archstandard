@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" role="img" aria-label="NorthWind Retail logo">
+  <title>NorthWind Retail</title>
+  <desc>Fictional retail company used in ADS examples.</desc>
+  <!-- Icon: wind / arrow north -->
+  <g transform="translate(8, 8)">
+    <path d="M 24 2 L 36 22 L 28 22 L 28 46 L 20 46 L 20 22 L 12 22 Z" fill="#0d7a5f"/>
+    <path d="M 6 30 Q 14 28 22 30" fill="none" stroke="#0d7a5f" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 4 36 Q 14 34 24 36" fill="none" stroke="#0d7a5f" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 6 42 Q 14 40 22 42" fill="none" stroke="#0d7a5f" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="58" y="34" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#0d7a5f">North<tspan fill="#1a8d72">Wind</tspan></text>
+  <text x="58" y="50" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#5a6b80" letter-spacing="3">RETAIL  GROUP</text>
+</svg>

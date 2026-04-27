@@ -9,6 +9,7 @@ import Mermaid from '../../../components/Mermaid.astro';
 
 
 <div class="guidance-box">
+<img src="/v1/logos/meridian-financial.svg" alt="Meridian Financial Services logo (fictional)" class="example-org-logo" />
 <h4>About This Example</h4>
 
 This is a **fictional but realistic** Solution Architecture Document for Meridian Financial Services' Customer API Platform. It demonstrates the Architecture Description Standard at **Comprehensive** depth -- the highest level of documentation rigour. Every section is completed with realistic content to show what a mature, well-documented SAD looks like for a Tier 1 Critical, regulated financial services API platform.
@@ -344,6 +345,15 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 | S3 | AWS S3 | Low | Standard object storage API | Portable to any S3-compatible storage (MinIO, Azure Blob with S3 gateway) |
 | IAM & KMS | AWS IAM / KMS | High | Core to security architecture; deeply integrated | Would require significant re-engineering for alternative cloud; mitigated by Terraform IaC |
 
+#### 3.1.7 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Caching to avoid recomputation / repeated downstream calls | Yes -- ElastiCache Redis used for session state, partner JWT verification keys, and short-lived rate-limiter counters; ~85% cache hit rate on partner authentication, eliminating ~12M Cognito calls per month |
+| Batch processes consolidated rather than continuously polling | Yes -- transaction enrichment runs as nightly batch (00:30 UTC) rather than per-event; Featurespace ARIC fraud signals consumed via webhook (push) rather than polling |
+| Async / event-driven patterns to flatten peak load | Yes -- EventBridge + SQS for transaction events, partner notifications, and audit log shipping; consumer pods scale on queue depth via Karpenter, releasing capacity when idle |
+| Heavy framework choices weighed against lighter alternatives | Considered -- Spring Boot retained for the core API (existing team skill, mature ecosystem); Lambda evaluated and rejected for synchronous APIs (cold-start latency would breach P95 < 200ms SLA) |
+
 ---
 
 ### 3.2 Integration & Data Flow View
@@ -557,6 +567,16 @@ Partner applications access the API programmatically; there are no end-user comp
 
 Not applicable -- no IoT devices are part of this solution.
 
+#### 3.3.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Hosting regions chosen for low carbon intensity | eu-west-2 (London) chosen primarily for UK data residency. AWS London is on track for 100% renewable energy matching by 2025 (AWS commitment). DR region eu-west-1 (Ireland) operates at lower carbon intensity than the AWS European average. |
+| Non-production environments auto-shutdown out of hours | Yes -- dev and staging EKS clusters scale to zero application pods 19:00-07:00 weekdays and all weekend (system pods remain). Non-prod RDS instances paused on the same schedule. Estimated saving: 62% of non-prod compute and 55% of non-prod RDS spend. |
+| Compute family chosen for performance-per-watt | Yes -- Graviton3 (c7g.xlarge / m7g.xlarge) throughout. AWS published data shows ~60% better performance-per-watt vs equivalent x86 m6i; Graviton3 was the dominant factor in the 2025-Q3 cost reduction. |
+| Auto-scaling configured to release capacity when idle | Yes -- Karpenter consolidates underutilised nodes within 5 minutes of becoming idle; HPA scales pods on CPU and queue depth; idle workloads return resources to the pool rather than being held. |
+| DR strategy proportionate to recovery objective | Warm standby in eu-west-1 (RDS read replica + S3 cross-region replication; EKS cluster scaled to minimum). Hot active-active was considered and rejected: would have doubled compute footprint for an RTO improvement (4h -> 1h) that the business sponsor confirmed was unnecessary. |
+
 ---
 
 ### 3.4 Data View
@@ -643,6 +663,17 @@ Production data used in staging environment only, with all PII fields masked usi
 ##### Data Sovereignty
 
 - Yes -- all customer data (PII and transaction data) must remain within the United Kingdom (eu-west-2 London region). The DR region (eu-west-1 Ireland) stores only non-PII operational data (metrics, redacted logs). Cross-region replication for RDS is configured to exclude PII columns (custom replication using CDC with PII filtering). Audit logs in S3 are replicated to eu-west-1 with PII fields encrypted using a region-specific KMS key that prevents decryption outside eu-west-2.
+
+#### 3.4.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Retention periods minimised to regulator + business need | Yes -- transaction data retained for 7 years (FCA SYSC requirement); audit logs 7 years; access logs 13 months (regulatory minimum); ephemeral session data ≤ 24 hours. Lifecycle policies enforce expiry automatically; no "indefinite" retention. |
+| Older data tiered to cold/archive storage | Yes -- audit logs and transaction archives transition S3 Standard → Standard-IA (30 days) → Glacier Instant Retrieval (90 days) → Glacier Deep Archive (1 year). RDS snapshots > 35 days exported to S3 Glacier. ~78% of historical data sits in archive tiers. |
+| Unused or duplicate replicas identified and removed | Yes -- weekly orphaned-snapshot job; quarterly review of read replicas (currently 2, justified by read traffic distribution). No legacy unused buckets (verified via AWS Trusted Advisor). |
+| Compression applied to reduce storage and transfer | Yes -- Brotli compression on HTTPS responses (~70% reduction on JSON payloads); gzip on S3 audit log uploads; Parquet (with Snappy) for analytics exports to Snowflake. |
+| Cross-region replication justified by recovery requirement | Yes -- only audit logs and operational metrics replicate cross-region. Customer PII does not (data sovereignty + reduced cross-region transfer carbon cost). DR for the RDS primary is via daily encrypted backup snapshots restored on-demand, not continuous replication. |
+| Large data transfers scheduled to off-peak windows | Yes -- nightly Snowflake export runs 02:00-04:00 UTC; weekly partner reconciliation transfers run Sunday 03:00 UTC; both deliberately scheduled when UK grid carbon intensity is lowest (per [carbonintensity.org.uk](https://carbonintensity.org.uk/) historical data). |
 
 ---
 
@@ -755,7 +786,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 
 #### 3.5.4 Data Protection
 
-##### Encryption at Rest
+##### Encryption at REST
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1253,6 +1284,16 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Support hours | 24x7 (SRE on-call rotation); development team: UK business hours (09:00-17:30) with on-call for P1 escalations |
 | SLAs | External (partner-facing): 99.95% monthly availability, P95 response time < 200ms, incident notification within 15 minutes. Internal: P1 response < 15 min, P2 < 30 min, P3 < 4 hours |
 | Escalation paths | L1 --> L2 (15 min for P1, 1 hour for P2) --> L3 (30 min for P1, 4 hours for P2) --> L4 (1 hour for P1). Security incidents: immediate CISO notification. |
+
+#### Sustainability in Operation
+
+| Question | Response |
+|----------|----------|
+| Non-prod auto-shutdown schedule and enforcement | Karpenter scale-to-zero on dev/stage EKS clusters 19:00-07:00 weekdays + all weekend; non-prod RDS paused via Lambda cron; enforced by AWS Config rule (alerts FinOps if a non-prod resource runs continuously > 24h without a documented exception) |
+| Periodic right-sizing review cadence | Quarterly via AWS Compute Optimizer + Datadog. Last review (Q1 2026) downgraded 18 over-provisioned pods, recovering ~£2,400/month |
+| Unused / orphaned resource reclamation | Weekly Lambda job tags resources idle > 14 days; FinOps reviews and confirms before deletion. Scope: snapshots, EBS volumes, ELB targets, unused security groups |
+| Carbon footprint reported alongside cost | Yes -- monthly FinOps review includes AWS Customer Carbon Footprint Tool output; reported to ARB and Sustainability committee quarterly |
+| Environment retirement actually deletes (vs stops) | Yes -- decommissioning runbook requires Terraform destroy + S3 bucket emptying + KMS key scheduled-deletion; CMDB entry marked Retired only after AWS Cost Explorer confirms zero spend for 30 days |
 
 ### 5.6 Resourcing & Skills
 

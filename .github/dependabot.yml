@@ -1,0 +1,44 @@
+version: 2
+
+updates:
+  # npm dependencies (Astro, Starlight, build tooling)
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Europe/London
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - npm
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      # Group Astro + Starlight bumps so we get one PR for the whole ecosystem
+      astro-starlight:
+        patterns:
+          - astro
+          - "@astrojs/*"
+          - "@astrojs/starlight*"
+      # Group dev tooling (linters, type defs, build scripts)
+      dev-dependencies:
+        dependency-type: development
+    ignore:
+      # Stay on Node 20 LTS-aligned majors for now; review manually before bumping
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+
+  # GitHub Actions used in workflows
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+      - github-actions
+    commit-message:
+      prefix: chore
+      include: scope

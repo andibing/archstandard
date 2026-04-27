@@ -1,0 +1,172 @@
+---
+title: "Frequently Asked Questions"
+description: "Common questions about adopting and using the Architecture Description Standard."
+---
+
+## About the standard
+
+### Does ADS replace TOGAF, ISO 42010, or arc42?
+
+No. ADS is **complementary** to these frameworks, not a replacement.
+
+- **ISO/IEC/IEEE 42010** defines the conceptual model (stakeholders, concerns, viewpoints). ADS applies that model to a specific, prescriptive template.
+- **TOGAF** is an enterprise-wide framework covering the ADM lifecycle, architecture capability, and governance. ADS provides the solution-level artefact — the SAD — that complements TOGAF deliverables.
+- **arc42** is a software architecture template. ADS is broader: it covers solution architecture (infrastructure, data, security, lifecycle, governance) beyond just software.
+
+See the [Framework Alignment](/v1/standard/framework-alignment/) page for the detailed mapping.
+
+### Why should I use ADS instead of my organisation's template?
+
+Maybe you shouldn't. ADS works well if:
+- Your organisation does not have an established SAD template.
+- The existing template is inconsistent, outdated, or not machine-readable.
+- You want to benchmark your template against an open, published standard.
+- You want to share architecture documents between organisations (e.g., with vendors, partners, auditors).
+
+If your organisation has a working template your team likes, there's no urgency to switch. You can still use the ADS ideas (atomic fields, compliance scoring, documentation depths) to improve it.
+
+### Is ADS free? Can I use it commercially?
+
+Yes. The standard content is licensed under [Creative Commons Attribution 4.0 (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). The source code of the website is licensed under [MIT](https://opensource.org/licenses/MIT). You can use, adapt, and redistribute both for any purpose including commercial use, provided you give credit to the original author.
+
+### Who maintains ADS?
+
+[Andi Chandler](https://andi.me/) maintains the standard. Contributions are welcomed via the [GitHub repository](https://github.com/andibing/archstandard).
+
+## Adopting the standard
+
+### Do I have to fill in every section?
+
+No. You fill in the sections required for your chosen Documentation Depth:
+
+- **Minimum** — required for all SADs, enough for dev/test reviews
+- **Recommended** — required for production-bound solutions
+- **Comprehensive** — required for critical, regulated, or enterprise-scale solutions
+
+See the [Depth Cheat Sheet](/v1/standard/cheat-sheet/) for what's required at each level.
+
+### What if a section doesn't apply to my solution?
+
+Omit it. Empty sections filled with "N/A" waste reviewers' time. If the section genuinely doesn't apply (e.g., IoT Devices for a cloud API), skip it entirely. If it might apply but you've decided not to address it, capture that decision in the Guardrail Exceptions (6.6) or as an ADR.
+
+### Can I add organisation-specific sections?
+
+Yes. Use the `customSections` extension point in the JSON Schema, or add new Markdown sections for your organisation's specific needs. ADS is designed to be extended, not forked. See [Conformance and Usage](/v1/standard/how-to-use/#organisation-customisation).
+
+### Can I modify the standard itself?
+
+You can adapt it under the CC BY 4.0 licence. But consider: if your change would be useful to others, [contribute it back](https://github.com/andibing/archstandard) via a pull request. Shared improvements help the whole community.
+
+### How long does it take to write a SAD?
+
+With the templates, examples, and AI prompts:
+- **Minimum-depth SAD** — 1-3 hours
+- **Recommended-depth SAD** — 1-2 days of drafting + review cycles
+- **Comprehensive-depth SAD** — 1-2 weeks of drafting + review cycles
+
+Most of the time is conversation with stakeholders and capturing decisions — not writing text. The template structure means you know exactly what to ask.
+
+## Using the templates
+
+### Which format should I use: DOCX, Markdown, YAML, or JSON?
+
+- **DOCX** if you work primarily in Word, want track-changes review, or need to hand the document to non-technical reviewers.
+- **Markdown** if you want to store the SAD in git alongside the code, use Confluence / Notion / wikis, or generate other formats via Pandoc.
+- **YAML** if you want to process the SAD programmatically in CI/CD, or find it more readable than JSON for humans.
+- **JSON** if you're feeding the SAD to tooling (validators, the SAD Builder, LLMs) and want strict schema conformance.
+
+All four contain the same structure and fields. They're interchangeable — start with the format that suits your workflow.
+
+### Can I use AI to help me write the SAD?
+
+Yes, and we recommend it. See the [AI Prompts Library](/v1/standard/prompts/) for ready-to-use prompts for drafting, reviewing, scoring, and improving SADs. The JSON Schema means LLMs can produce structured output that conforms to the standard.
+
+Ensure you review AI output for accuracy and don't paste sensitive organisational data into consumer LLMs without appropriate data protection.
+
+### Is there a GUI / form-based tool for completing SADs?
+
+Not on this site. A separate tool called the **SAD Builder** is in development — a web app that reads the JSON Schema and generates a form wizard. It will live at a separate URL once ready.
+
+## Reviews and governance
+
+### How does ADS work with my ARB / Design Authority?
+
+ADS provides a consistent structure and vocabulary for review. The 0-5 compliance scoring gives reviewers a common scale. The depth levels let reviewers calibrate expectations to criticality. Your ARB can use the scoring page as part of their review record.
+
+See the [Reviewer Perspectives](/v1/guidance/reviewer-perspectives/) guide for what different reviewers look for.
+
+### What should the compliance score be for approval?
+
+That's an organisational choice. A reasonable default:
+- All sections must score **3 or higher** for production approval
+- **4 or higher** for Tier 1/2 critical systems
+- No individual section can be **0 or 1** without a remediation plan
+
+Organisations should publish their own thresholds as part of their governance policy.
+
+### Can I fail a SAD at governance review if it conforms to ADS?
+
+Of course. Conformance to the standard means the document is complete and well-structured. It does not mean the architecture is good. Reviewers assess the design — ADS helps them assess it efficiently.
+
+## Technical questions
+
+### How do I validate my SAD against the schema?
+
+```bash
+# Using ajv-cli (Node)
+npx ajv validate -s https://archstandard.org/v1/schema/v1.0.0/ads.schema.json -d my-sad.json
+
+# Using Python jsonschema
+pip install jsonschema
+python -m jsonschema -i my-sad.json ads.schema.json
+```
+
+See the [JSON Schema page](/v1/standard/schema/) for more validation examples.
+
+### How do I convert a Markdown SAD to DOCX?
+
+[Pandoc](https://pandoc.org/) handles this:
+
+```bash
+pandoc my-sad.md -o my-sad.docx
+```
+
+### Can ADS versions change? What about old SADs?
+
+ADS follows [semantic versioning](https://semver.org/). Major versions (v1 → v2) may introduce structural changes. Old SADs remain valid under their original version — archived versions of the standard stay available at versioned URLs (e.g., `/v1/`, `/v2/`).
+
+The version history is published at [Version History](/v1/standard/version-history/).
+
+### How do I contribute?
+
+- **Content corrections, new guidance, example SADs** — Pull request on [GitHub](https://github.com/andibing/archstandard)
+- **Translation improvements** — Pull request with changes to `src/content/docs/fr/` or `src/content/docs/de/`
+- **New AI prompts** — Pull request to `public/prompts/`
+- **Feature ideas** — [GitHub issue](https://github.com/andibing/archstandard/issues)
+
+See [CONTRIBUTING.md](https://github.com/andibing/archstandard/blob/main/CONTRIBUTING.md).
+
+## About SADs in general
+
+### Who writes a SAD?
+
+The Solution Architect leads, but writes collaboratively with:
+- The engineering lead (for technology detail)
+- The security architect (for Section 3.5)
+- The data architect (for Section 3.4, if personal or regulated data is in scope)
+- The operations or SRE lead (for Section 4.1, 4.2, 5)
+- The business owner (for Section 1, 2)
+
+A well-written SAD is usually 20% the architect's writing and 80% captured decisions from these stakeholders.
+
+### When do I start writing?
+
+**Early.** Start the SAD with the project, not before approval. The draft document becomes the conversation structure for design decisions. Filling in the template prompts you to ask the right questions of stakeholders at the right time.
+
+### What happens to the SAD after approval?
+
+It becomes a **living document**. Update it whenever the architecture materially changes. A current SAD is the reference truth of how the solution is actually built — not a snapshot of what was proposed at approval time.
+
+### Can I reuse a SAD for a similar future solution?
+
+Yes, and you should. Copy the SAD, update the metadata, and adapt the content. The structural consistency across SADs is one of the adoption benefits — common patterns become visible across the portfolio.

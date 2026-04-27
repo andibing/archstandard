@@ -1,0 +1,235 @@
+{
+  "schemaVersion": "1.0.0",
+  "documentControl": {
+    "metadata": {
+      "title": "Solution Architecture Document — NorthWind Online",
+      "solutionName": "NorthWind Online",
+      "applicationId": "NW-ECOM-001",
+      "authors": ["Priya Doe (Solution Architect)"],
+      "owner": "Priya Doe",
+      "version": "1.0",
+      "status": "approved",
+      "createdDate": "2026-01-20",
+      "lastUpdated": "2026-03-18",
+      "classification": "internal"
+    },
+    "purpose": "Describe the architecture of the NorthWind Online e-commerce platform replacing the legacy Umbraco storefront before its end-of-support deadline and PCI-DSS v4.0 compliance gate.",
+    "scope": "Customer-facing web and mobile commerce platform, associated microservices, data stores, and third-party integrations. Excludes in-store EPOS systems and the corporate ERP."
+  },
+  "executiveSummary": {
+    "solutionOverview": "NorthWind Online is the customer-facing e-commerce platform for NorthWind Retail, serving approximately 2.3 million active monthly customers across the UK. It replaces the legacy Umbraco-based storefront (deployed 2017, end-of-support 2026) with a microservices architecture running on AWS EKS in eu-west-2. The solution comprises a Next.js storefront, 14 Node.js microservices organised by bounded context, Aurora PostgreSQL for transactional data, OpenSearch for product discovery, and Redis for session state. Payments are processed via Stripe; fulfilment integrates with the existing Manhattan WMS. Peak capacity target is £30M of transactions per day during Black Friday.",
+    "businessContext": [
+      {"driver": "Legacy platform end-of-support", "description": "Umbraco 7.x reaches end-of-support December 2026 with no in-place upgrade path"},
+      {"driver": "PCI-DSS v4.0 compliance", "description": "Current platform cannot meet PCI-DSS v4.0 requirements without substantial re-engineering"},
+      {"driver": "Peak resilience", "description": "2024 Black Friday outage (43 min) cost £4.7M revenue and triggered board mandate for resilience improvements"},
+      {"driver": "Mobile growth", "description": "Mobile commerce grew from 38% to 64% of traffic in three years with no native app"}
+    ],
+    "strategicAlignment": {
+      "organisationStrategySupported": "Digital-first commerce strategy 2025-2028",
+      "reviewedAgainstCapabilityModel": "yes",
+      "duplicatesExistingCapability": "no"
+    },
+    "inScope": [
+      "Customer-facing storefront (web and mobile app)",
+      "Account management and order history",
+      "Search and product discovery",
+      "Cart, checkout, and payment integration via Stripe",
+      "Order capture and integration with Manhattan WMS",
+      "Personalisation and recommendation services",
+      "Marketing event capture for analytics"
+    ],
+    "outOfScope": [
+      "In-store EPOS systems",
+      "Corporate ERP (SAP) and finance integrations",
+      "Loyalty programme back-end (separate roadmap)",
+      "B2B trade portal",
+      "Buy Now Pay Later integrations (deferred to Phase 2)"
+    ],
+    "currentState": "Legacy Umbraco 7 storefront on Windows Server 2016 in NorthWind co-location DC. Monolithic .NET application; no horizontal scaling; recurring memory issues at peak. Customer database in MS SQL Server 2014 with synchronous replica.",
+    "keyDecisions": [
+      {"decision": "AWS over Azure or on-premises", "rationale": "Existing AWS landing zone; team skills; better managed-DB ecosystem", "implication": "All net-new infrastructure on AWS eu-west-2"},
+      {"decision": "EKS for container orchestration", "rationale": "Existing team skills; corporate standard; portability", "implication": "Microservices deployed as Kubernetes pods"},
+      {"decision": "Aurora PostgreSQL", "rationale": "Superior JSONB support; stronger consistency; better observability", "implication": "RDS Aurora PostgreSQL for transactional data"},
+      {"decision": "Stripe for payments", "rationale": "Group-wide contract; reduces PCI scope to SAQ A-EP via tokenisation", "implication": "Dependency on Stripe; PCI scope reduced"},
+      {"decision": "Data residency: UK", "rationale": "UK GDPR and corporate data policy require customer PII in the UK", "implication": "eu-west-2 (London) primary; eu-west-1 (Ireland) DR for non-PII only"}
+    ],
+    "projectDetails": {
+      "projectName": "NorthWind Online Re-platform",
+      "projectCode": "PRJ-2025-112",
+      "projectManager": "Fiona Bloggs",
+      "estimatedCapex": 2000000,
+      "estimatedOpex": 800000,
+      "currency": "GBP",
+      "targetGoLive": "2026-10-01"
+    },
+    "businessCriticality": "tier-2-high"
+  },
+  "stakeholders": {
+    "register": [
+      {"name": "Raj Bloggs", "role": "Head of Digital Commerce (Business Owner)", "concerns": ["Revenue", "Conversion", "Time-to-market", "Peak resilience"]},
+      {"name": "Helen Doe", "role": "CTO", "concerns": ["Strategic alignment", "Technology direction", "Cost"]},
+      {"name": "Jane Doe", "role": "Principal Security Architect", "concerns": ["PCI-DSS", "Threat model", "Customer PII protection"]},
+      {"name": "Tom Bloggs", "role": "Data Protection Officer", "concerns": ["UK GDPR", "Data sovereignty", "DPIA", "Retention"]},
+      {"name": "Priya Doe", "role": "Solution Architect", "concerns": ["Design integrity", "Standards compliance", "Maintainability"]},
+      {"name": "Sally Doe", "role": "SRE Lead", "concerns": ["Observability", "Incident response", "Peak readiness"]},
+      {"name": "Fred Bloggs", "role": "Head of Digital Engineering", "concerns": ["Microservice design", "Developer experience", "CI/CD"]},
+      {"name": "Customers", "role": "End Users (~12M)", "concerns": ["Speed", "Availability", "Security", "Trust"]}
+    ],
+    "compliance": {
+      "supportsRegulatedActivities": "no",
+      "regulatedActivityDetails": "No FCA-regulated activities. Payment regulation (PSD2 SCA) satisfied by Stripe acting as the acquirer.",
+      "regulatoryRequirements": [
+        {"name": "PCI-DSS v4.0", "applicability": "Mandatory — platform accepts card payments", "impact": "Scope reduced to SAQ A-EP via Stripe Elements tokenisation"},
+        {"name": "UK GDPR / Data Protection Act 2018", "applicability": "Mandatory — platform processes customer PII at scale", "impact": "DPIA completed; retention policies enforced; right-to-erasure supported"},
+        {"name": "PSD2 / Strong Customer Authentication", "applicability": "Card payments above £30 require 3DS2", "impact": "Stripe handles SCA challenge flow"},
+        {"name": "WCAG 2.2 AA", "applicability": "Corporate accessibility policy", "impact": "Storefront and mobile app must meet AA"}
+      ]
+    }
+  },
+  "architecturalViews": {
+    "logicalView": {
+      "components": [
+        {"name": "Storefront (Web + Mobile)", "componentType": "web-application", "technology": "Next.js, React Native", "status": "new"},
+        {"name": "Identity Service", "componentType": "api-service", "technology": "Node.js / Fastify, Cognito", "status": "new"},
+        {"name": "Catalogue Service", "componentType": "api-service", "technology": "Node.js / Fastify", "status": "new"},
+        {"name": "Search Service", "componentType": "api-service", "technology": "Node.js, OpenSearch client", "status": "new"},
+        {"name": "Cart Service", "componentType": "api-service", "technology": "Node.js / Fastify, Redis", "status": "new"},
+        {"name": "Checkout Service", "componentType": "api-service", "technology": "Node.js, Stripe SDK", "status": "new"},
+        {"name": "Order Service", "componentType": "api-service", "technology": "Node.js / Fastify", "status": "new"},
+        {"name": "Inventory Reservation Service", "componentType": "api-service", "technology": "Node.js / Fastify", "status": "new"},
+        {"name": "Pricing & Promotions Service", "componentType": "api-service", "technology": "Node.js / Fastify", "status": "new"},
+        {"name": "Recommendations Service", "componentType": "api-service", "technology": "Node.js, Personalize SDK", "status": "new"},
+        {"name": "Notifications Service", "componentType": "backend-service", "technology": "Node.js, SES/SNS", "status": "new"},
+        {"name": "Aurora PostgreSQL", "componentType": "database", "technology": "Aurora PostgreSQL 15", "status": "new"},
+        {"name": "OpenSearch (product index)", "componentType": "search-engine", "technology": "AWS OpenSearch", "status": "new"},
+        {"name": "Redis (session, cart, cache)", "componentType": "cache", "technology": "ElastiCache Redis 7", "status": "new"},
+        {"name": "Event Bus", "componentType": "stream", "technology": "MSK Kafka", "status": "new"}
+      ],
+      "designPatterns": [
+        {"pattern": "microservices", "rationale": "Independent deployment and scaling per business domain"},
+        {"pattern": "event-driven", "rationale": "Decouple order capture from fulfilment via Kafka choreography"},
+        {"pattern": "api-gateway", "rationale": "CloudFront + ALB for edge caching, rate limiting, WAF"},
+        {"pattern": "circuit-breaker", "rationale": "Resilience around third-party calls (Stripe, Manhattan, SendGrid)"}
+      ]
+    },
+    "integrationView": {
+      "externalIntegrations": [
+        {"sourceApp": "Checkout Service", "destinationApp": "Stripe", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "api-key", "purpose": "Card payments via Stripe Elements tokenisation"},
+        {"sourceApp": "Order Service", "destinationApp": "Manhattan WMS", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "mtls", "purpose": "Order capture and fulfilment status sync"},
+        {"sourceApp": "Notifications Service", "destinationApp": "SendGrid", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "api-key", "purpose": "Transactional email delivery"},
+        {"sourceApp": "Notifications Service", "destinationApp": "Klaviyo", "integrationType": "saas", "protocol": "https", "encrypted": true, "authenticationMethod": "api-key", "purpose": "Marketing email and customer journey orchestration"},
+        {"sourceApp": "Checkout Service", "destinationApp": "Adyen 3DS Server", "integrationType": "external-service", "protocol": "https", "encrypted": true, "authenticationMethod": "oauth2", "purpose": "3D-Secure 2 fallback authentication"}
+      ]
+    },
+    "physicalView": {
+      "hosting": {
+        "venueTypes": ["public-cloud"],
+        "regions": ["uk-south", "ireland"],
+        "serviceModels": ["paas", "iaas"],
+        "cloudProviders": ["aws"]
+      },
+      "compute": {
+        "computeTypes": ["container", "serverless-function"],
+        "containers": {"platform": "eks", "clusterSize": "51-100-nodes"},
+        "serverless": {"used": true}
+      },
+      "networking": {
+        "internetFacing": true,
+        "outboundInternet": true,
+        "thirdPartyConnectivity": true,
+        "ddosProtection": "yes",
+        "ddosProvider": "aws-shield",
+        "wafEnabled": "yes",
+        "wafProvider": "aws-waf",
+        "rateLimiting": true,
+        "trafficPattern": "seasonal"
+      }
+    },
+    "dataView": {
+      "dataStores": [
+        {"name": "Customer & Order DB", "storeType": "relational-db", "technology": "Aurora PostgreSQL", "containsPersonalData": true, "classification": "restricted", "retentionPeriod": "5-10-years", "encryptionLevel": "storage-level"},
+        {"name": "Product Catalogue DB", "storeType": "relational-db", "technology": "Aurora PostgreSQL", "containsPersonalData": false, "classification": "internal", "retentionPeriod": "indefinite", "encryptionLevel": "storage-level"},
+        {"name": "Session & Cart Store", "storeType": "in-memory", "technology": "ElastiCache Redis", "containsPersonalData": true, "classification": "restricted", "retentionPeriod": "days", "encryptionLevel": "storage-level"},
+        {"name": "Product Search Index", "storeType": "search-index", "technology": "OpenSearch", "containsPersonalData": false, "classification": "internal", "retentionPeriod": "transient", "encryptionLevel": "storage-level"},
+        {"name": "Event Stream", "storeType": "message-queue", "technology": "MSK Kafka", "containsPersonalData": true, "classification": "restricted", "retentionPeriod": "days", "encryptionLevel": "storage-level"}
+      ],
+      "dataSovereigntyRequired": "yes",
+      "dataSovereigntyDetails": "All customer PII held in eu-west-2 (London). Non-PII operational data may replicate to eu-west-1 (Ireland) for DR. No data leaves the UK/EEA."
+    },
+    "securityView": {
+      "businessImpact": {
+        "confidentiality": "high",
+        "integrity": "high",
+        "availability": "high",
+        "nonRepudiation": "high"
+      },
+      "authentication": [
+        {"accessType": "end-user-external", "method": "passwordless", "usesGroupWideAuth": false},
+        {"accessType": "it-operations", "method": "sso-saml", "usesGroupWideAuth": true}
+      ],
+      "encryptionAtRest": {
+        "implemented": true,
+        "level": "storage-level",
+        "keyType": "symmetric",
+        "algorithm": "AES-256-GCM",
+        "keyStorage": "kms",
+        "keyRotationDays": 365
+      }
+    }
+  },
+  "qualityAttributes": {
+    "operationalExcellence": {
+      "loggingCentralised": true,
+      "loggingTool": "CloudWatch + Splunk",
+      "monitoringTool": "Datadog + AWS CloudWatch",
+      "tracingEnabled": true
+    },
+    "reliability": {
+      "drStrategy": "warm-standby",
+      "scalability": "full-auto-scaling"
+    }
+  },
+  "lifecycleManagement": {
+    "internallyDeveloped": true,
+    "sourceControl": "github",
+    "cicdPlatform": "github-actions",
+    "sast": "snyk-code",
+    "dast": "yes",
+    "sca": "snyk",
+    "containerScanning": "yes",
+    "releaseFrequency": "continuous",
+    "supportModel": "internal-team",
+    "supportHours": "24x7",
+    "intendedLifespan": "5-10-years",
+    "exitPlanDocumented": true,
+    "vendorLockInLevel": "moderate"
+  },
+  "riskGovernance": {
+    "constraints": [
+      {"id": "C-001", "constraint": "All customer PII must remain in UK", "category": "regulatory", "impactOnDesign": "All primary data stores in eu-west-2; DR limited to non-PII"},
+      {"id": "C-002", "constraint": "Go-live before Black Friday 2026", "category": "time", "impactOnDesign": "7-week pre-peak buffer; phased migration"},
+      {"id": "C-003", "constraint": "Group standard: AWS for cloud", "category": "organisational", "impactOnDesign": "Azure/GCP not considered"}
+    ],
+    "assumptions": [
+      {"id": "A-001", "assumption": "Stripe SLA of 99.99% holds during peak", "impactIfFalse": "Card payment failures during Black Friday", "certainty": "high", "status": "open", "owner": "Priya Doe"},
+      {"id": "A-002", "assumption": "Manhattan WMS API supports projected order volume", "impactIfFalse": "Order capture decoupled but fulfilment backlog", "certainty": "medium", "status": "closed", "owner": "Fred Bloggs"}
+    ],
+    "risks": [
+      {"id": "R-001", "riskEvent": "Migration cut-over fails during peak window", "riskCategory": "delivery", "severity": "high", "likelihood": "low", "owner": "Fiona Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "Phased percentage-based rollout from June 2026; full automated rollback to legacy via DNS within 5 minutes; freeze window from 1 Nov", "residualRisk": "low", "lastAssessed": "2026-03-18"},
+      {"id": "R-002", "riskEvent": "Stripe outage during peak trading", "riskCategory": "operational", "severity": "high", "likelihood": "low", "owner": "Jane Doe", "mitigationStrategy": "mitigate", "mitigationPlan": "Adyen 3DS fallback for SCA; documented manual reconciliation; status page communication runbook", "residualRisk": "medium", "lastAssessed": "2026-03-18"},
+      {"id": "R-003", "riskEvent": "PCI-DSS v4.0 audit fails", "riskCategory": "compliance", "severity": "critical", "likelihood": "low", "owner": "Jane Doe", "mitigationStrategy": "mitigate", "mitigationPlan": "Quarterly internal audit; QSA early-engagement Q2 2026; ASV scans monthly; tokenisation reduces scope", "residualRisk": "low", "lastAssessed": "2026-03-18"},
+      {"id": "R-004", "riskEvent": "OpenSearch cluster degrades search relevance during peak", "riskCategory": "technical", "severity": "medium", "likelihood": "medium", "owner": "Fred Bloggs", "mitigationStrategy": "mitigate", "mitigationPlan": "Pre-peak load test; read-replica autoscaling; relevance fallback to PostgreSQL FTS", "residualRisk": "low", "lastAssessed": "2026-03-18"},
+      {"id": "R-005", "riskEvent": "Aurora write capacity exhausted at peak", "riskCategory": "technical", "severity": "high", "likelihood": "low", "owner": "Sally Doe", "mitigationStrategy": "mitigate", "mitigationPlan": "Pre-warmed Aurora Serverless v2; read-replica usage; queue-based write absorption for non-critical writes", "residualRisk": "low", "lastAssessed": "2026-03-18"}
+    ]
+  },
+  "appendices": {
+    "glossary": [
+      {"term": "EKS", "definition": "Amazon Elastic Kubernetes Service"},
+      {"term": "PCI-DSS", "definition": "Payment Card Industry Data Security Standard"},
+      {"term": "PII", "definition": "Personally Identifiable Information"},
+      {"term": "SAQ A-EP", "definition": "PCI Self-Assessment Questionnaire A-EP — for merchants outsourcing card processing while controlling payment page"},
+      {"term": "SCA", "definition": "Strong Customer Authentication (PSD2 requirement)"},
+      {"term": "WMS", "definition": "Warehouse Management System (Manhattan Active WM)"}
+    ]
+  }
+}

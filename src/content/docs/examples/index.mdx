@@ -7,32 +7,51 @@ import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
 
 ## Learning by Example
 
-These example SADs demonstrate how to apply the Architecture Description Standard to real-world solutions. Each example is a completed (fictional) Solution Architecture Document showing what good looks like across different project types.
+These example SADs demonstrate how to apply the Architecture Description Standard to real-world solutions. Each example is a completed (fictional) Solution Architecture Document showing what good looks like across different project types and depths.
 
 <Aside type="tip" title="Not Real Projects">
-These examples are fictional but realistic. They are designed to demonstrate the standard's sections, fields, and scoring — not to prescribe specific technology choices.
+These examples are fictional but realistic. They are designed to demonstrate the standard's sections, fields, and scoring — not to prescribe specific technology choices or represent any real organisation.
+</Aside>
+
+<Aside type="note" title="AI-Generated Content">
+Each example was AI-generated against the standard, then edited and reviewed by the maintainer. The architectures, organisations, fictional team members, and figures (cost estimates, scoring rationales, RTO/RPO targets) are illustrative — they're plausible patterns for the scenario, not validated production figures. Use them to understand how to populate the standard, not as references for real architectural decisions.
 </Aside>
 
 <CardGrid>
   <Card title="Employee Directory" icon="open-book">
-    A simple internal web application. Demonstrates a straightforward SAD at **Recommended** depth — ideal for understanding the basics.
+    A simple internal web application on Azure PaaS. Demonstrates a straightforward SAD at **Recommended** depth — ideal for understanding the basics.
 
-    [View Example SAD](/examples/employee-directory/) | [Markdown](/examples/employee-directory.md) | [JSON](/examples/employee-directory.json)
+    [View Example SAD](/v1/examples/employee-directory/) | [Markdown](/v1/examples/employee-directory.md) | [JSON](/v1/examples/employee-directory.json)
   </Card>
   <Card title="Customer API Platform" icon="rocket">
     A cloud-native, customer-facing REST API on AWS. Demonstrates a **Comprehensive** SAD with full quality attributes, security, and governance.
 
-    [View Example SAD](/examples/customer-api-platform/) | [Markdown](/examples/customer-api-platform.md) | [JSON](/examples/customer-api-platform.json)
+    [View Example SAD](/v1/examples/customer-api-platform/) | [Markdown](/v1/examples/customer-api-platform.md) | [JSON](/v1/examples/customer-api-platform.json)
   </Card>
   <Card title="Cloud Migration" icon="setting">
-    An on-premises legacy application migrating to Azure. Demonstrates the migration sections (6 R's), current-state architecture, and transition planning.
+    An on-premises legacy application migrating to Azure. Demonstrates the migration sections (6 R's), current-state architecture, and transition planning at **Recommended** depth.
 
-    [View Example SAD](/examples/cloud-migration/) | [Markdown](/examples/cloud-migration.md) | [JSON](/examples/cloud-migration.json)
+    [View Example SAD](/v1/examples/cloud-migration/) | [Markdown](/v1/examples/cloud-migration.md) | [JSON](/v1/examples/cloud-migration.json)
   </Card>
   <Card title="archstandard.org" icon="star">
-    This website. A meta-example showing how ADS documents a simple static site — demonstrating that even small projects benefit from structured architecture documentation.
+    This website. A meta-example showing how ADS documents a simple static site at **Minimum** depth — proving even small projects benefit from structured architecture documentation.
 
-    [View Example SAD](/examples/archstandard-org/) | [Markdown](/examples/archstandard-org.md) | [JSON](/examples/archstandard-org.json)
+    [View Example SAD](/v1/examples/archstandard-org/) | [Markdown](/v1/examples/archstandard-org.md) | [JSON](/v1/examples/archstandard-org.json)
+  </Card>
+  <Card title="NorthWind Retail" icon="list-format">
+    A B2C e-commerce platform replacing a legacy storefront on AWS. Demonstrates a **Recommended**-depth SAD for a Tier 2 PCI-DSS-regulated retail platform with peak Black Friday capacity requirements.
+
+    [View Example SAD](/v1/examples/northwind-retail/) | [Markdown](/v1/examples/northwind-retail.md) | [JSON](/v1/examples/northwind-retail.json)
+  </Card>
+  <Card title="Medwick Healthcare" icon="heart">
+    A fictional national-healthcare patient portal on Azure UK. Demonstrates a **Comprehensive**-depth SAD for a Tier 1 clinical system with clinical safety assurance, healthcare data security governance, and UK data residency.
+
+    [View Example SAD](/v1/examples/medwick-healthcare/) | [Markdown](/v1/examples/medwick-healthcare.md) | [JSON](/v1/examples/medwick-healthcare.json)
+  </Card>
+  <Card title="Stellar Platform" icon="puzzle">
+    An Internal Developer Platform (IDP) on multi-cloud Kubernetes with Backstage. Demonstrates a **Recommended**-depth SAD for a Tier 3 platform-engineering solution focused on developer experience and DORA metrics.
+
+    [View Example SAD](/v1/examples/stellar-platform/) | [Markdown](/v1/examples/stellar-platform.md) | [JSON](/v1/examples/stellar-platform.json)
   </Card>
 </CardGrid>
 
@@ -44,13 +63,16 @@ These examples are fictional but realistic. They are designed to demonstrate the
 | **Customer API Platform** | Comprehensive | Tier 1 (Critical) | AWS EKS | Full security view, threat model, extensive integrations, compliance traceability | 5 |
 | **Cloud Migration** | Recommended | Tier 2 (High) | Azure PaaS | Current-state architecture, 6 R's migration, transition plan, resourcing | 3 |
 | **archstandard.org** | Minimum | Tier 5 (Minimal) | Cloudflare Pages | Minimal viable SAD, proving even simple projects benefit from structure | 3 |
+| **NorthWind Retail** | Recommended | Tier 2 (High) | AWS EKS | PCI-DSS regulated retail, Black Friday capacity planning, Strangler Fig migration | 4 |
+| **Medwick Healthcare** | Comprehensive | Tier 1 (Critical) | Azure UK | Healthcare DSPT-equivalent governance, clinical safety standards, FHIR R4 integration, full threat model | 4.9 |
+| **Stellar Platform** | Recommended | Tier 3 (Medium) | Multi-cloud Kubernetes | Internal Developer Platform, DORA metrics, Team Topologies, golden paths | 3 |
 
 ## How to Use These Examples
 
 1. **Read one that matches your project type** — pick the example closest to your solution
 2. **Note the depth** — each example states its documentation depth (Minimum, Recommended, or Comprehensive)
 3. **Check the scoring** — each example includes a compliance scoring table showing how it was assessed
-4. **Copy the structure** — download a [blank template](/standard/templates/) and use the example as a reference while completing your own SAD
+4. **Copy the structure** — download a [blank template](/v1/standard/templates/) and use the example as a reference while completing your own SAD
 
 ## Validating Your SAD Against the Schema
 
@@ -58,14 +80,14 @@ Once you've completed your SAD in JSON or YAML format, validate it against the A
 
 ```bash
 # Validate a JSON SAD against the hosted schema
-npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d my-sad.json
+npx ajv validate -s https://archstandard.org/v1/schema/v1.0.0/ads.schema.json -d my-sad.json
 
 # Validate a YAML SAD (convert to JSON first)
-npx js-yaml my-sad.yaml | npx ajv validate -s https://archstandard.org/schema/v1.0.0/ads.schema.json -d /dev/stdin
+npx js-yaml my-sad.yaml | npx ajv validate -s https://archstandard.org/v1/schema/v1.0.0/ads.schema.json -d /dev/stdin
 
 # Using Python
 pip install jsonschema pyyaml
-python -m jsonschema -i my-sad.json https://archstandard.org/schema/v1.0.0/ads.schema.json
+python -m jsonschema -i my-sad.json https://archstandard.org/v1/schema/v1.0.0/ads.schema.json
 ```
 
-The schema validates structure, required fields, and enum values — ensuring your SAD conforms to the standard. See the [JSON Schema page](/standard/schema/) for full details.
+The schema validates structure, required fields, and enum values — ensuring your SAD conforms to the standard. See the [JSON Schema page](/v1/standard/schema/) for full details.

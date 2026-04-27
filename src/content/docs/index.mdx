@@ -1,24 +1,9 @@
 ---
 title: "ADS: The Architecture Description Standard"
 description: "ADS: Architecture Description Standard — a free, open-source standard for Solution Architecture Documents (SADs) and High Level Design (HLD). Schema-driven, AI-ready, with templates in Markdown, YAML, and JSON."
-template: splash
-hero:
-  tagline: "A free, open-source standard for writing clear, consistent architecture documents. Schema-driven. AI-ready. Adoptable today."
-  actions:
-    - text: Quickstart
-      link: /standard/quickstart/
-      icon: right-arrow
-    - text: Read the Standard
-      link: /standard/overview/
-      variant: minimal
-      icon: document
-    - text: Download Templates
-      link: /standard/templates/
-      variant: minimal
-      icon: document
 ---
 
-import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid, Aside, LinkButton } from '@astrojs/starlight/components';
 
 <div class="ads-hero-title">
   <img src="/v1/ads-logo-256.png" alt="ADS logo" class="ads-hero-logo" />
@@ -26,6 +11,14 @@ import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
     <span class="ads-hero-name">ADS</span>
     <span class="ads-hero-subtitle">The Architecture Description Standard</span>
   </div>
+</div>
+
+**A free, open-source standard for writing clear, consistent architecture documents. Schema-driven. AI-ready. Adoptable today.**
+
+<div class="ads-hero-buttons">
+  <LinkButton href="/v1/standard/quickstart/" icon="right-arrow">Quickstart</LinkButton>
+  <LinkButton href="/v1/standard/overview/" variant="minimal" icon="document">Read the Standard</LinkButton>
+  <LinkButton href="/v1/standard/templates/" variant="minimal" icon="document">Download Templates</LinkButton>
 </div>
 
 *For solution architects, enterprise architects, and architecture governance teams.*
@@ -60,10 +53,10 @@ ADS defines exactly what sections, content, and quality criteria a Solution Arch
 - **Templates** — ready-to-use in Markdown, YAML, and JSON — importable into LLMs, wikis, editors, or analysis tooling
 - **Open** — [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to use, adapt, and redistribute
 
-For a detailed comparison with other frameworks, see [Why ADS?](/standard/why-ads/) and [Framework Alignment](/standard/framework-alignment/).
+For a detailed comparison with other frameworks, see [Why ADS?](/v1/standard/why-ads/) and [Framework Alignment](/v1/standard/framework-alignment/). The full structure of the standard is in the navigation on the left.
 
 <Aside type="note" title="Standard Identifier">
-**ADS v1.2.0** | Author: **[Andi Chandler](https://andi.me/)** | Published by: **ArchStandard** | Licence: **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)** | [Contribute on GitHub](https://github.com/andibing/archstandard)
+**ADS v1.3.0** | Author: **[Andi Chandler](https://andi.me/)** | Published by: **ArchStandard** | Licence: **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)** | [Contribute on GitHub](https://github.com/andibing/archstandard)
 </Aside>
 
 ---

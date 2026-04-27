@@ -209,6 +209,26 @@ Document any IoT devices (printers, scanners, cameras, sensors, etc.):
 
 *[...]*
 
+## 3.3.6 Sustainability Considerations
+
+<span class="maturity-indicator maturity-recommended">Recommended</span>
+
+The Physical View is where most carbon-impact decisions are made. Document the sustainability stance for the infrastructure choices above — full detail belongs in [Section 4.5](/v1/standard/4-5-sustainability/), but capture the headline decisions here.
+
+| Question | Response |
+|----------|----------|
+| Have hosting regions been chosen for low carbon intensity (e.g., regions with high renewable energy)? | Yes / No — *[which regions and why]* |
+| Are non-production environments configured to auto-shutdown out of hours? | Yes / No — *[schedule]* |
+| Has the compute family been chosen for performance-per-watt (e.g., ARM/Graviton, latest-generation)? | Yes / No — *[details]* |
+| Is auto-scaling configured to release capacity when idle? | Yes / No — *[trigger thresholds]* |
+| Is the DR strategy proportionate (cold standby vs warm vs hot) to the actual recovery objective? | *[describe and rationale]* |
+
+<div class="guidance-box">
+<h4>Why this matters</h4>
+
+Always-on production at peak-sized infrastructure 24×7 is the most common sustainability anti-pattern. Three decisions in this view dominate carbon footprint: **region selection** (carbon intensity varies 5-10× across cloud regions), **non-production auto-shutdown** (typically 60-70% saving on dev/test compute), and **right-sizing** (over-provisioned VMs waste energy regardless of load).
+</div>
+
 <div class="guidance-box">
 <h4>Scoring Guidance</h4>
 
@@ -216,7 +236,7 @@ Document any IoT devices (printers, scanners, cameras, sensors, etc.):
 |:-----:|---------------------|
 | **1** | Hosting venue identified but infrastructure not specified |
 | **3** | Deployment diagram complete, compute sized, networking documented, environments listed |
-| **5** | All of the above plus connectivity protocols specified, user/admin access methods documented, security agents listed, bandwidth and latency requirements quantified |
+| **5** | All of the above plus connectivity protocols specified, user/admin access methods documented, security agents listed, bandwidth and latency requirements quantified, sustainability decisions captured |
 </div>
 
 <div class="quality-attribute-ref">

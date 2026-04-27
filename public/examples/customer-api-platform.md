@@ -1,6 +1,6 @@
 # Solution Architecture Document — Customer API Platform
 
-> **Standard:** ADS v1.1.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.0 (Architecture Description Standard)
 > **Author:** Fred Bloggs, Lead Solution Architect
 > **Organisation:** Meridian Financial Services
 > **Status:** Approved
@@ -687,7 +687,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 
 #### 3.5.4 Data Protection
 
-##### Encryption at Rest
+##### Encryption at REST
 
 | Attribute | Detail |
 |-----------|--------|

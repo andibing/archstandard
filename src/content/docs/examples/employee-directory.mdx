@@ -9,6 +9,7 @@ import Mermaid from '../../../components/Mermaid.astro';
 
 
 <div class="guidance-box">
+<img src="/v1/logos/meridian-financial.svg" alt="Meridian Financial Services logo (fictional)" class="example-org-logo" />
 <h4>About This Example</h4>
 
 This is a **fictional but realistic** Solution Architecture Document for an internal employee directory at Meridian Financial Services. It demonstrates the ADS standard at **Recommended** documentation depth, appropriate for a straightforward Tier 4 internal application heading to production.
@@ -384,6 +385,16 @@ Not applicable -- PaaS services are fully managed by Microsoft. No OS-level agen
 
 No staging, pre-production, or DR environments are provisioned. This is appropriate for a Tier 4 application with no DR requirement. Deployments are validated in the development environment before promoting to production.
 
+#### 3.3.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Hosting region chosen for low carbon intensity | Azure UK South — chosen primarily for data residency. Microsoft's UK regions are tracking towards 100% renewable energy matching by 2025. |
+| Non-production environments auto-shutdown out of hours | The dev environment uses B1 Basic SKU which is already low-cost; no auto-shutdown is configured because the environment is shared with developers across time zones. Estimated additional saving < £20/month, judged not worth the operational complexity. |
+| Compute family chosen for performance-per-watt | App Service B1 Basic uses Azure's standard managed-VM hardware. For a Tier 4 internal directory, sizing was selected for sufficiency rather than peak efficiency; an upgrade to Pv3 would over-provision. |
+| Auto-scaling configured to release capacity when idle | Not applicable at B1 Basic — no auto-scaling. Scaled vertically if usage outgrows the SKU. |
+| DR strategy proportionate | None — the system is non-critical (Tier 4), 8-hour outage tolerable. A DR replica would double compute footprint without business benefit. |
+
 ### 3.4 Data View
 
 #### 3.4.1 Data Architecture & Storage
@@ -451,6 +462,17 @@ No employee data is transferred to third parties. All data remains within the Me
 ##### Data Sovereignty
 
 - Yes -- all data is stored in the Azure UK South region (London). This satisfies Meridian's data residency policy requiring employee personal data to remain within the UK.
+
+#### 3.4.6 Sustainability Considerations
+
+| Question | Response |
+|----------|----------|
+| Retention periods minimised | Employee records retained for the duration of employment + 6 years (HMRC, NI, and Meridian HR policy alignment); transient session data ≤ 24 hours. No "indefinite" retention. |
+| Older data tiered to cold/archive storage | Not applicable at this scale (~£40/month of database storage); tiering complexity outweighs the saving. |
+| Unused or duplicate replicas | Single Azure SQL S1 instance, no read replicas. No legacy unused storage. |
+| Compression applied | gzip on HTTP responses; Azure SQL uses page-level compression on the primary tables (default for S1+). |
+| Cross-region replication | None — appropriate for Tier 4. |
+| Large data transfers off-peak | Not applicable — no scheduled bulk transfers. |
 
 ### 3.5 Security View
 
@@ -533,7 +555,7 @@ No external users access this application.
 
 #### 3.5.4 Data Protection
 
-##### Encryption at Rest
+##### Encryption at REST
 
 | Attribute | Detail |
 |-----------|--------|
@@ -859,6 +881,16 @@ The application includes internally developed software.
 | Support hours | Business hours (08:00-18:00 weekdays). No out-of-hours support for a Tier 4 system. |
 | SLAs | Internal: 99% availability during business hours (measured monthly). No formal SLA with end users. |
 | Escalation paths | Service Desk -> IT Operations -> Development Lead -> Solution Architect |
+
+#### Sustainability in Operation
+
+| Question | Response |
+|----------|----------|
+| Non-prod auto-shutdown schedule | Not implemented — see 3.3.6 rationale. |
+| Right-sizing review cadence | Annual SKU review aligned to the renewal cycle of the Azure spend governance process. |
+| Unused / orphaned resource reclamation | Reviewed during annual SKU review. |
+| Carbon footprint reporting | Tracked at department level via Microsoft Sustainability Manager; not separately reported for this single application. |
+| Environment retirement | Decommissioning runbook (would apply at end-of-life) requires resource group deletion, not just app stop. |
 
 ### 5.6 Resourcing & Skills
 
