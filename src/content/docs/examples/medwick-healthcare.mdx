@@ -560,9 +560,9 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
     SB1 -- Geo-DR Pairing --> SB2
     ADLS1 -- GRS / RA-GRS --> ADLS2[ADLS Gen2 - UK West]
     AppSvc -. HL7v2 over IPsec VPN .-> EPR[Cerner EPR - Trust Data Centre]
-    AppSvc -. TLS-MA over national healthcare secure network .-> national healthcare secure network[National Healthcare Secure Network]
-    national healthcare secure network --> Spine[MediCore Spine]
-    national healthcare secure network --> eRS[MediCore e-Referral]`} />
+    AppSvc -. TLS-MA via secure network .-> SecNet[National Healthcare Secure Network]
+    SecNet --> Spine[MediCore Spine]
+    SecNet --> eRS[MediCore e-Referral]`} />
 
 #### 3.3.2 Hosting & Infrastructure
 
