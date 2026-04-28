@@ -68,7 +68,8 @@ const requiredFiles = [
   'src/content/docs/examples/customer-api-platform.mdx',
   'src/content/docs/examples/cloud-migration.mdx',
   'src/content/docs/examples/archstandard-org.mdx',
-  'LICENSE',
+  'LICENSE-CODE',
+  'LICENSE-CONTENT',
   'README.md',
 ];
 
