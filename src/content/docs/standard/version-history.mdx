@@ -15,19 +15,19 @@ The **standard version** (e.g. v1.3.0) and the **[JSON Schema](/v1/standard/sche
 
 ## Versions and Schema Compatibility
 
-Each release of the standard ties to a specific JSON Schema version. Major versions of the standard live at permanent versioned URLs so SADs and tooling targeting a previous version remain valid.
+Every v1.x release of the standard targets [JSON Schema v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) and is published at [archstandard.org/v1/](https://archstandard.org/v1/). Major versions live at permanent versioned URLs so SADs and tooling targeting a previous version remain valid. A future v2.0.0 of the standard would ship a v2.0.0 schema at `/v2/`, with `/v1/` and the v1.0.0 schema preserved indefinitely.
 
-| Standard Version | JSON Schema | URL | Status | Notes |
-|------------------|-------------|-----|--------|-------|
-| **v1.0.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.2 | Initial release; schema established |
-| **v1.1.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.2 | Content additions; schema unchanged |
-| **v1.2.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.2 | Public release; schema unchanged |
-| **v1.3.0** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.2 | Adoption release; schema unchanged |
-| **v1.3.1** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | Superseded by v1.3.2 | Bug fixes and SAD template polish; schema unchanged |
-| **v1.3.2** | [v1.0.0](https://archstandard.org/schema/v1.0.0/ads.schema.json) | [archstandard.org/v1/](https://archstandard.org/v1/) | **Current** | Schema consistency fixes and section 6.6/6.8/6.10 additions; schema unchanged |
-| v2.x (planned) | v2.0.0 (planned) | [archstandard.org/v2/](https://archstandard.org/v2/) | In development | First schema major bump |
+| Version | Status | Notes |
+|---------|--------|-------|
+| **v1.3.2** | **Current** | Schema consistency fixes and section 6.6/6.8/6.10 additions |
+| v1.3.1 | Superseded | Bug fixes and SAD template polish |
+| v1.3.0 | Superseded | Adoption release |
+| v1.2.0 | Superseded | Public release |
+| v1.1.0 | Superseded | Content additions |
+| v1.0.0 | Superseded | Initial release; schema established |
+| v2.x | Planned | First schema major bump (v2.0.0) |
 
-**Compatibility implication:** any SAD that validates against schema v1.0.0 is structurally valid against any v1.x.y release of the standard. Editorial improvements (new prompts, new guidance, new examples) do not invalidate prior SADs. A schema v2.0.0 would only ship alongside a standard v2.0.0 major release; the current `/v1/` URLs and the v1.0.0 schema would remain available permanently for backwards compatibility.
+**Compatibility implication:** any SAD that validates against schema v1.0.0 is structurally valid against any v1.x.y release of the standard. Editorial improvements (new prompts, new guidance, new examples) do not invalidate prior SADs.
 
 Third-party builders ([see specification](https://github.com/andibing/archstandard/blob/main/docs/sad-builder-spec.md)) should declare which schema version they target.
 
