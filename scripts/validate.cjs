@@ -84,6 +84,19 @@ for (const f of requiredFiles) {
 // ─────────────────────────────────────────────
 console.log('\n=== 2. Translation Parity ===\n');
 
+// Project policy (see src/content/docs/fr/index.mdx for rationale):
+// English is the normative version. Only a small essential set of orientation
+// pages is translated to French and German. The full standard, examples, and
+// templates remain English-only.
+//
+// Update this list if the translation policy changes.
+const TRANSLATED_STANDARD_PAGES = [
+  'cheat-sheet.mdx',
+  'how-to-use.mdx',
+  'quickstart.mdx',
+  'why-ads.mdx',
+];
+
 const enDir = 'src/content/docs/standard';
 const frDir = 'src/content/docs/fr/standard';
 const deDir = 'src/content/docs/de/standard';
@@ -93,12 +106,23 @@ const frFiles = fs.existsSync(frDir) ? fs.readdirSync(frDir).filter(f => f.endsW
 const deFiles = fs.existsSync(deDir) ? fs.readdirSync(deDir).filter(f => f.endsWith('.mdx')).sort() : [];
 
 pass(`English: ${enFiles.length} pages`);
-pass(`French:  ${frFiles.length} pages`);
-pass(`German:  ${deFiles.length} pages`);
+pass(`French:  ${frFiles.length} translated (of ${TRANSLATED_STANDARD_PAGES.length} required)`);
+pass(`German:  ${deFiles.length} translated (of ${TRANSLATED_STANDARD_PAGES.length} required)`);
 
-for (const f of enFiles) {
-  if (!frFiles.includes(f)) warn(`French missing: ${f}`);
-  if (!deFiles.includes(f)) warn(`German missing: ${f}`);
+// Required translations — fail the build if the policy-listed pages drift out of sync.
+for (const f of TRANSLATED_STANDARD_PAGES) {
+  if (!enFiles.includes(f)) error(`Translation policy lists "${f}" but the English source is missing`);
+  if (!frFiles.includes(f)) error(`French translation missing: ${f}`);
+  if (!deFiles.includes(f)) error(`German translation missing: ${f}`);
+}
+
+// Orphan translations — fr/de pages that don't have an English equivalent (likely
+// rename drift or stale copies).
+for (const f of frFiles) {
+  if (!enFiles.includes(f)) warn(`Orphan French translation (no English source): ${f}`);
+}
+for (const f of deFiles) {
+  if (!enFiles.includes(f)) warn(`Orphan German translation (no English source): ${f}`);
 }
 
 // ─────────────────────────────────────────────
@@ -256,13 +280,15 @@ for (const f of scoredSections) {
 console.log('\n=== 9. Depth Badges ===\n');
 
 for (const f of enFiles) {
+  // Skip navigational overview/index pages — they don't carry depth badges by design.
+  if (f.endsWith('-overview.mdx')) continue;
+  // Only check numbered standard sections (0-7).
+  if (!/^[0-7]/.test(f)) continue;
+
   const fp = path.join(enDir, f);
   const content = fs.readFileSync(fp, 'utf-8');
-  // Only check numbered sections (0-7)
-  if (/^[0-7]/.test(f) || f.startsWith('3-') || f.startsWith('4-') || f.startsWith('5-') || f.startsWith('6-')) {
-    if (content.includes('maturity-indicator')) pass(`${f}: has depth badge(s)`);
-    else warn(`${f}: no depth badges found`);
-  }
+  if (content.includes('maturity-indicator')) pass(`${f}: has depth badge(s)`);
+  else warn(`${f}: no depth badges found`);
 }
 
 // ─────────────────────────────────────────────

@@ -32,12 +32,15 @@ jobs:
         run: npm ci
 
       - name: Validate schema
+        # The `|| echo` fallback already prevents missing-ajv-cli from failing
+        # the step, so continue-on-error isn't needed here.
         run: npx ajv compile -s schema/ads.schema.json --spec=draft2020 --strict=false || echo "ajv-cli not present; skipping schema validation"
-        continue-on-error: true
 
       - name: Run project validate
+        # Fails the build on hard errors (missing required files, deprecated
+        # terms, broken JSON template, missing required translations, etc.).
+        # Warnings still surface in the log but don't fail the build.
         run: npm run validate
-        continue-on-error: true
 
       - name: Build site
         run: npm run build
