@@ -5,7 +5,9 @@
       "title": "Solution Architecture Document -- Employee Directory",
       "solutionName": "Employee Directory",
       "applicationId": "APP-0347",
-      "authors": ["Fred Bloggs, Solution Architect"],
+      "authors": [
+        "Fred Bloggs, Solution Architect"
+      ],
       "owner": "Fred Bloggs, Solution Architect",
       "version": "1.0",
       "status": "approved",
@@ -200,44 +202,92 @@
       {
         "stakeholder": "Jane Doe",
         "roleType": "business-owner",
-        "concerns": ["Data accuracy", "Ease of use", "Reduction in manual queries"],
-        "relevantViews": ["data"]
+        "concerns": [
+          "Data accuracy",
+          "Ease of use",
+          "Reduction in manual queries"
+        ],
+        "relevantViews": [
+          "data"
+        ]
       },
       {
         "stakeholder": "Fred Bloggs",
         "roleType": "solution-architect",
-        "concerns": ["Design integrity", "Standards compliance", "Maintainability"],
-        "relevantViews": ["logical", "integration", "physical", "data", "security", "scenarios"]
+        "concerns": [
+          "Design integrity",
+          "Standards compliance",
+          "Maintainability"
+        ],
+        "relevantViews": [
+          "logical",
+          "integration",
+          "physical",
+          "data",
+          "security",
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Joe Bloggs",
         "roleType": "security-architect",
-        "concerns": ["Data protection", "Access control", "Authentication"],
-        "relevantViews": ["security", "data"]
+        "concerns": [
+          "Data protection",
+          "Access control",
+          "Authentication"
+        ],
+        "relevantViews": [
+          "security",
+          "data"
+        ]
       },
       {
         "stakeholder": "Dave Bloggs",
         "roleType": "operations-sre",
-        "concerns": ["Deployment", "Monitoring", "Support burden"],
-        "relevantViews": ["physical"]
+        "concerns": [
+          "Deployment",
+          "Monitoring",
+          "Support burden"
+        ],
+        "relevantViews": [
+          "physical"
+        ]
       },
       {
         "stakeholder": "Tom Bloggs",
         "roleType": "developer",
-        "concerns": ["Technology stack", "Build pipeline", "Code maintainability"],
-        "relevantViews": ["logical"]
+        "concerns": [
+          "Technology stack",
+          "Build pipeline",
+          "Code maintainability"
+        ],
+        "relevantViews": [
+          "logical"
+        ]
       },
       {
         "stakeholder": "All Employees (c.450)",
         "roleType": "end-user",
-        "concerns": ["Fast search", "Up-to-date information", "Usability"],
-        "relevantViews": ["scenarios"]
+        "concerns": [
+          "Fast search",
+          "Up-to-date information",
+          "Usability"
+        ],
+        "relevantViews": [
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "HR Team (8 staff)",
         "roleType": "end-user",
-        "concerns": ["Admin interface for corrections", "Photo uploads"],
-        "relevantViews": ["scenarios", "logical"]
+        "concerns": [
+          "Admin interface for corrections",
+          "Photo uploads"
+        ],
+        "relevantViews": [
+          "scenarios",
+          "logical"
+        ]
       }
     ],
     "compliance": {
@@ -404,13 +454,24 @@
     },
     "physicalView": {
       "hosting": {
-        "venueTypes": ["public-cloud"],
-        "regions": ["uk-south"],
-        "serviceModels": ["paas", "faas"],
-        "cloudProviders": ["azure"]
+        "venueTypes": [
+          "public-cloud"
+        ],
+        "regions": [
+          "uk-south"
+        ],
+        "serviceModels": [
+          "paas",
+          "faas"
+        ],
+        "cloudProviders": [
+          "azure"
+        ]
       },
       "compute": {
-        "computeTypes": ["serverless-function"],
+        "computeTypes": [
+          "serverless-function"
+        ],
         "servers": [
           {
             "name": "Azure App Service",
@@ -421,7 +482,9 @@
           }
         ],
         "serverless": {
-          "services": ["Azure Functions (Consumption plan)"],
+          "services": [
+            "Azure Functions (Consumption plan)"
+          ],
           "used": true
         }
       },
@@ -575,18 +638,33 @@
         {
           "id": "UC-01",
           "name": "Search for an Employee",
-          "actors": ["Any authenticated Meridian employee (Viewer role)"],
+          "actors": [
+            "Any authenticated Meridian employee (Viewer role)"
+          ],
           "trigger": "User needs to find a colleague's contact details",
           "mainFlow": "1. User navigates to the Employee Directory URL. 2. Browser completes OIDC authentication silently (or prompts for sign-in). 3. User types a name, department, or job title into the search box. 4. Frontend sends GET /api/employees?q={query} with bearer token. 5. API validates the token, queries Azure SQL using parameterised search. 6. API returns matching employee records as JSON. 7. Frontend displays results with name, photo, department, phone, and email. 8. User clicks an employee card to view full details.",
-          "viewsInvolved": ["logical", "integration", "physical", "security"]
+          "viewsInvolved": [
+            "logical",
+            "integration",
+            "physical",
+            "security"
+          ]
         },
         {
           "id": "UC-02",
           "name": "HR Administrator Updates an Employee Record",
-          "actors": ["HR Administrator (Admin role)"],
+          "actors": [
+            "HR Administrator (Admin role)"
+          ],
           "trigger": "An employee's photograph needs updating, or a correction is needed before the next nightly sync",
           "mainFlow": "1. Admin navigates to the Employee Directory and authenticates. 2. Admin searches for the employee. 3. Admin clicks \"Edit\" on the employee record (button visible only to Admin role). 4. Admin updates the field(s) or uploads a new photograph. 5. Frontend sends PUT /api/employees/{id} with updated data and bearer token. 6. API verifies the user's Admin role claim in the JWT. 7. API validates the input and updates Azure SQL. 8. API returns the updated record. 9. Frontend confirms the update to the admin.",
-          "viewsInvolved": ["logical", "integration", "physical", "data", "security"]
+          "viewsInvolved": [
+            "logical",
+            "integration",
+            "physical",
+            "data",
+            "security"
+          ]
         }
       ],
       "adrs": [
@@ -599,7 +677,10 @@
           "decision": "Use Azure SQL Database (Basic tier, 5 DTU).",
           "alternatives": "Azure Cosmos DB: Globally distributed NoSQL database. Offers high availability and horizontal scaling, but this application has a single-region, low-volume workload with a relational data model. Cosmos DB's minimum cost exceeds Azure SQL Basic for this use case, and the team has no Cosmos DB experience.",
           "consequences": "Positive: Lower cost, simpler operations, team familiarity with T-SQL. Negative: Limited to single-region deployment (acceptable for Tier 4).",
-          "affectedAttributes": ["cost-optimisation", "operational-excellence"]
+          "affectedAttributes": [
+            "cost-optimisation",
+            "operational-excellence"
+          ]
         },
         {
           "id": "ADR-002",
@@ -610,7 +691,10 @@
           "decision": "Implement a nightly batch import of the full employee dataset via CSV file transfer to Azure Blob Storage, processed by an Azure Functions timer trigger.",
           "alternatives": "Real-time API integration: Not available from PeopleSync. Would require a custom middleware layer or changes to the HR system, which is out of scope and budget. Manual data entry: Rejected as it replicates the existing problem of stale data and manual effort.",
           "consequences": "Positive: Simple, reliable, uses existing PeopleSync capability. Negative: Data can be up to 24 hours stale. HR stakeholder has accepted this latency as sufficient for a directory.",
-          "affectedAttributes": ["cost-optimisation", "reliability"]
+          "affectedAttributes": [
+            "cost-optimisation",
+            "reliability"
+          ]
         }
       ]
     }
@@ -784,22 +868,78 @@
     "issues": [],
     "policyExceptions": "no",
     "processExceptions": "no",
-    "riskProfileImpact": "no"
+    "riskProfileImpact": "no",
+    "approvals": [
+      {
+        "role": "Solution Architect",
+        "name": "Fred Bloggs",
+        "date": "2025-11-18",
+        "decision": "approved"
+      },
+      {
+        "role": "Information Security",
+        "name": "Joe Bloggs",
+        "date": "2025-11-19",
+        "decision": "approved"
+      },
+      {
+        "role": "Architecture Review Board",
+        "name": "ARB Panel",
+        "date": "2025-11-20",
+        "decision": "approved"
+      }
+    ]
   },
   "appendices": {
     "glossary": [
-      { "term": "CSV", "definition": "Comma-Separated Values -- a plain-text file format for tabular data" },
-      { "term": "DTU", "definition": "Database Transaction Unit -- Azure SQL performance measurement unit" },
-      { "term": "Entra ID", "definition": "Microsoft Entra ID (formerly Azure Active Directory) -- cloud identity and access management service" },
-      { "term": "GAL", "definition": "Global Address List -- the Outlook/Exchange directory of email addresses" },
-      { "term": "JWT", "definition": "JSON Web Token -- a compact token format used in OIDC authentication" },
-      { "term": "Managed Identity", "definition": "An Azure feature that provides Azure services with an automatically managed identity in Entra ID, eliminating the need for credentials" },
-      { "term": "OIDC", "definition": "OpenID Connect -- an authentication protocol built on top of OAuth 2.0" },
-      { "term": "PeopleSync", "definition": "Meridian's corporate HR system (third-party SaaS product)" },
-      { "term": "PKCE", "definition": "Proof Key for Code Exchange -- a security extension to the OAuth 2.0 authorisation code flow, recommended for SPAs" },
-      { "term": "RBAC", "definition": "Role-Based Access Control -- a method of restricting access based on user roles" },
-      { "term": "SPA", "definition": "Single-Page Application -- a web application that loads a single HTML page and dynamically updates content" },
-      { "term": "TDE", "definition": "Transparent Data Encryption -- Azure SQL feature that encrypts database files at rest" }
+      {
+        "term": "CSV",
+        "definition": "Comma-Separated Values -- a plain-text file format for tabular data"
+      },
+      {
+        "term": "DTU",
+        "definition": "Database Transaction Unit -- Azure SQL performance measurement unit"
+      },
+      {
+        "term": "Entra ID",
+        "definition": "Microsoft Entra ID (formerly Azure Active Directory) -- cloud identity and access management service"
+      },
+      {
+        "term": "GAL",
+        "definition": "Global Address List -- the Outlook/Exchange directory of email addresses"
+      },
+      {
+        "term": "JWT",
+        "definition": "JSON Web Token -- a compact token format used in OIDC authentication"
+      },
+      {
+        "term": "Managed Identity",
+        "definition": "An Azure feature that provides Azure services with an automatically managed identity in Entra ID, eliminating the need for credentials"
+      },
+      {
+        "term": "OIDC",
+        "definition": "OpenID Connect -- an authentication protocol built on top of OAuth 2.0"
+      },
+      {
+        "term": "PeopleSync",
+        "definition": "Meridian's corporate HR system (third-party SaaS product)"
+      },
+      {
+        "term": "PKCE",
+        "definition": "Proof Key for Code Exchange -- a security extension to the OAuth 2.0 authorisation code flow, recommended for SPAs"
+      },
+      {
+        "term": "RBAC",
+        "definition": "Role-Based Access Control -- a method of restricting access based on user roles"
+      },
+      {
+        "term": "SPA",
+        "definition": "Single-Page Application -- a web application that loads a single HTML page and dynamically updates content"
+      },
+      {
+        "term": "TDE",
+        "definition": "Transparent Data Encryption -- Azure SQL feature that encrypts database files at rest"
+      }
     ],
     "references": [
       {
@@ -822,26 +962,6 @@
         "version": "1.0",
         "description": "Data Protection Impact Assessment"
       }
-    ],
-    "approvals": [
-      {
-        "role": "Solution Architect",
-        "name": "Fred Bloggs",
-        "date": "2025-11-18",
-        "decision": "approved"
-      },
-      {
-        "role": "Information Security",
-        "name": "Joe Bloggs",
-        "date": "2025-11-19",
-        "decision": "approved"
-      },
-      {
-        "role": "Architecture Review Board",
-        "name": "ARB Panel",
-        "date": "2025-11-20",
-        "decision": "approved"
-      }
     ]
   },
   "organisationProfile": {
@@ -851,13 +971,18 @@
         "id": "POL-0008",
         "name": "Meridian Information Security Policy",
         "version": "3.1",
-        "mappedSections": ["3.5", "3.4"]
+        "mappedSections": [
+          "3.5",
+          "3.4"
+        ]
       },
       {
         "id": "STD-0023",
         "name": "Meridian Cloud Platform Standards",
         "version": "2.0",
-        "mappedSections": ["3.3"]
+        "mappedSections": [
+          "3.3"
+        ]
       }
     ],
     "tooling": {

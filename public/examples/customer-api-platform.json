@@ -5,7 +5,9 @@
       "title": "Solution Architecture Document -- Customer API Platform",
       "solutionName": "Customer API Platform (CAP)",
       "applicationId": "APP-0472",
-      "authors": ["Fred Bloggs (Lead Solution Architect)"],
+      "authors": [
+        "Fred Bloggs (Lead Solution Architect)"
+      ],
       "owner": "Fred Bloggs",
       "version": "2.1",
       "status": "approved",
@@ -79,14 +81,46 @@
       }
     ],
     "contributors": [
-      { "name": "Fred Bloggs", "role": "Lead Solution Architect", "contributionType": "author" },
-      { "name": "Joe Bloggs", "role": "Principal Security Architect", "contributionType": "reviewer" },
-      { "name": "Jane Doe", "role": "Data Architect", "contributionType": "reviewer" },
-      { "name": "Tom Bloggs", "role": "SRE Lead", "contributionType": "reviewer" },
-      { "name": "Dr. Helen Zhao", "role": "CTO", "contributionType": "approver" },
-      { "name": "Marcus Doe", "role": "CISO", "contributionType": "approver" },
-      { "name": "Alice Doe", "role": "Head of Compliance", "contributionType": "approver" },
-      { "name": "Dave Bloggs", "role": "ARB Chair", "contributionType": "approver" }
+      {
+        "name": "Fred Bloggs",
+        "role": "Lead Solution Architect",
+        "contributionType": "author"
+      },
+      {
+        "name": "Joe Bloggs",
+        "role": "Principal Security Architect",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Jane Doe",
+        "role": "Data Architect",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Tom Bloggs",
+        "role": "SRE Lead",
+        "contributionType": "reviewer"
+      },
+      {
+        "name": "Dr. Helen Zhao",
+        "role": "CTO",
+        "contributionType": "approver"
+      },
+      {
+        "name": "Marcus Doe",
+        "role": "CISO",
+        "contributionType": "approver"
+      },
+      {
+        "name": "Alice Doe",
+        "role": "Head of Compliance",
+        "contributionType": "approver"
+      },
+      {
+        "name": "Dave Bloggs",
+        "role": "ARB Chair",
+        "contributionType": "approver"
+      }
     ],
     "purpose": "This SAD describes the architecture of the Customer API Platform (CAP), Meridian Financial Services' Open Banking and partner API solution. It replaces the legacy SOAP-based Partner Integration Layer (PIL) and provides secure, high-performance RESTful APIs exposing account information and transaction data to authorised third-party providers (TPPs) and partner fintech applications.",
     "scope": "In scope: API Gateway and all microservices (Account, Transaction, Auth, Notification); AWS infrastructure across all environments (dev, test, staging, production, DR); Integration with core banking system, fraud detection, and notification services; Security architecture including OAuth 2.0, mTLS, and encryption; Operational tooling (monitoring, alerting, logging, tracing). Out of scope: Core banking system internals (SAD APP-0102), Mobile banking application (SAD APP-0389), Partner onboarding business processes (OPS-0055), Detailed API specification (Swagger/OpenAPI on internal developer portal)."
@@ -234,80 +268,182 @@
       {
         "stakeholder": "Dr. Helen Zhao",
         "roleType": "business-owner",
-        "concerns": ["Strategic alignment", "Technology direction", "Cost justification"],
-        "relevantViews": ["logical", "integration"]
+        "concerns": [
+          "Strategic alignment",
+          "Technology direction",
+          "Cost justification"
+        ],
+        "relevantViews": [
+          "logical",
+          "integration"
+        ]
       },
       {
         "stakeholder": "Marcus Doe",
         "roleType": "security-architect",
-        "concerns": ["Threat model", "Data protection", "PCI-DSS compliance", "Incident response"],
-        "relevantViews": ["security"]
+        "concerns": [
+          "Threat model",
+          "Data protection",
+          "PCI-DSS compliance",
+          "Incident response"
+        ],
+        "relevantViews": [
+          "security"
+        ]
       },
       {
         "stakeholder": "Alice Doe",
         "roleType": "compliance",
-        "concerns": ["Open Banking compliance", "FCA regulations", "Audit trail", "Data sovereignty"],
-        "relevantViews": ["security", "data"]
+        "concerns": [
+          "Open Banking compliance",
+          "FCA regulations",
+          "Audit trail",
+          "Data sovereignty"
+        ],
+        "relevantViews": [
+          "security",
+          "data"
+        ]
       },
       {
         "stakeholder": "Fred Bloggs",
         "roleType": "solution-architect",
-        "concerns": ["Design integrity", "Standards compliance", "Technical debt", "Scalability"],
-        "relevantViews": ["logical", "integration", "physical", "data", "security", "scenarios"]
+        "concerns": [
+          "Design integrity",
+          "Standards compliance",
+          "Technical debt",
+          "Scalability"
+        ],
+        "relevantViews": [
+          "logical",
+          "integration",
+          "physical",
+          "data",
+          "security",
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Joe Bloggs",
         "roleType": "security-architect",
-        "concerns": ["Authentication", "Encryption", "Network security", "Penetration testing"],
-        "relevantViews": ["security", "physical"]
+        "concerns": [
+          "Authentication",
+          "Encryption",
+          "Network security",
+          "Penetration testing"
+        ],
+        "relevantViews": [
+          "security",
+          "physical"
+        ]
       },
       {
         "stakeholder": "Jane Doe",
         "roleType": "data-architect",
-        "concerns": ["Data classification", "PII handling", "Data sovereignty", "Retention"],
-        "relevantViews": ["data"]
+        "concerns": [
+          "Data classification",
+          "PII handling",
+          "Data sovereignty",
+          "Retention"
+        ],
+        "relevantViews": [
+          "data"
+        ]
       },
       {
         "stakeholder": "Tom Bloggs",
         "roleType": "operations-sre",
-        "concerns": ["Observability", "Incident response", "Reliability", "On-call"],
-        "relevantViews": ["physical"]
+        "concerns": [
+          "Observability",
+          "Incident response",
+          "Reliability",
+          "On-call"
+        ],
+        "relevantViews": [
+          "physical"
+        ]
       },
       {
         "stakeholder": "Amir Doe",
         "roleType": "developer",
-        "concerns": ["Component design", "API contracts", "CI/CD", "Developer experience"],
-        "relevantViews": ["logical", "integration"]
+        "concerns": [
+          "Component design",
+          "API contracts",
+          "CI/CD",
+          "Developer experience"
+        ],
+        "relevantViews": [
+          "logical",
+          "integration"
+        ]
       },
       {
         "stakeholder": "Nelly Bloggs",
         "roleType": "project-manager",
-        "concerns": ["Delivery timeline", "Cost", "Dependencies", "Risks"],
-        "relevantViews": ["logical"]
+        "concerns": [
+          "Delivery timeline",
+          "Cost",
+          "Dependencies",
+          "Risks"
+        ],
+        "relevantViews": [
+          "logical"
+        ]
       },
       {
         "stakeholder": "Sally Doe",
         "roleType": "other",
-        "concerns": ["Partner onboarding experience", "API availability", "SLA commitments"],
-        "relevantViews": ["integration"]
+        "concerns": [
+          "Partner onboarding experience",
+          "API availability",
+          "SLA commitments"
+        ],
+        "relevantViews": [
+          "integration"
+        ]
       },
       {
         "stakeholder": "External API consumers",
         "roleType": "external-customer",
-        "concerns": ["API documentation", "Latency", "Uptime", "Versioning", "Error handling"],
-        "relevantViews": ["integration"]
+        "concerns": [
+          "API documentation",
+          "Latency",
+          "Uptime",
+          "Versioning",
+          "Error handling"
+        ],
+        "relevantViews": [
+          "integration"
+        ]
       },
       {
         "stakeholder": "Dave Bloggs",
         "roleType": "enterprise-architect",
-        "concerns": ["Architecture standards compliance", "Reuse assessment", "Governance"],
-        "relevantViews": ["logical", "integration", "physical", "data", "security", "scenarios"]
+        "concerns": [
+          "Architecture standards compliance",
+          "Reuse assessment",
+          "Governance"
+        ],
+        "relevantViews": [
+          "logical",
+          "integration",
+          "physical",
+          "data",
+          "security",
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Finance team",
         "roleType": "other",
-        "concerns": ["Cost forecasting", "Reserved instance optimisation", "Budget adherence"],
-        "relevantViews": ["physical"]
+        "concerns": [
+          "Cost forecasting",
+          "Reserved instance optimisation",
+          "Budget adherence"
+        ],
+        "relevantViews": [
+          "physical"
+        ]
       }
     ],
     "compliance": {
@@ -717,16 +853,32 @@
     },
     "physicalView": {
       "hosting": {
-        "venueTypes": ["public-cloud", "hybrid"],
-        "regions": ["eu-west-2", "eu-west-1"],
-        "serviceModels": ["paas", "saas"],
-        "cloudProviders": ["aws"]
+        "venueTypes": [
+          "public-cloud",
+          "hybrid"
+        ],
+        "regions": [
+          "eu-west-2",
+          "eu-west-1"
+        ],
+        "serviceModels": [
+          "paas",
+          "saas"
+        ],
+        "cloudProviders": [
+          "aws"
+        ]
       },
       "compute": {
-        "computeTypes": ["container"],
+        "computeTypes": [
+          "container"
+        ],
         "containers": {
           "platform": "eks",
-          "baseImages": ["amazoncorretto:21-alpine", "node:20-alpine"],
+          "baseImages": [
+            "amazoncorretto:21-alpine",
+            "node:20-alpine"
+          ],
           "clusterSize": "11-50-nodes"
         }
       },
@@ -992,26 +1144,47 @@
         {
           "id": "UC-01",
           "name": "Partner Retrieves Account Balance",
-          "actors": ["Partner fintech application (authorised TPP)"],
+          "actors": [
+            "Partner fintech application (authorised TPP)"
+          ],
           "trigger": "Partner app sends GET /accounts/{accountId}/balance request",
           "mainFlow": "1. Partner sends HTTPS request with Bearer token and mTLS client certificate to API Gateway. 2. API Gateway validates request structure and routes to Auth Service. 3. Auth Service validates OAuth token, verifies mTLS certificate binding, checks consent record in PostgreSQL. 4. Auth Service returns authorisation decision to API Gateway. 5. API Gateway routes to Account Service. 6. Account Service checks Redis cache for balance (60s TTL). 7. Cache hit: return cached balance. Cache miss: Account Service queries core banking read replica via JDBC, caches result, returns balance. 8. API Gateway returns JSON response to partner. 9. Audit event emitted to EventBridge.",
-          "viewsInvolved": ["logical", "integration", "physical", "data", "security"]
+          "viewsInvolved": [
+            "logical",
+            "integration",
+            "physical",
+            "data",
+            "security"
+          ]
         },
         {
           "id": "UC-02",
           "name": "Rate Limit Exceeded",
-          "actors": ["Partner fintech application"],
+          "actors": [
+            "Partner fintech application"
+          ],
           "trigger": "Partner exceeds 100 req/s rate limit",
           "mainFlow": "1. Partner sends request to API Gateway. 2. API Gateway rate-limiting check identifies partner has exceeded 100 req/s quota. 3. API Gateway returns HTTP 429 Too Many Requests with Retry-After header. 4. Rate limit event logged and counted. 5. If sustained (>5 min), Splunk alert triggers notification to Partner Manager. 6. Notification Service sends email to partner's registered technical contact.",
-          "viewsInvolved": ["logical", "integration", "security"]
+          "viewsInvolved": [
+            "logical",
+            "integration",
+            "security"
+          ]
         },
         {
           "id": "UC-03",
           "name": "Fraud Alert Triggered During Transaction Retrieval",
-          "actors": ["Partner fintech application", "Featurespace ARIC"],
+          "actors": [
+            "Partner fintech application",
+            "Featurespace ARIC"
+          ],
           "trigger": "Partner requests transaction history for an account flagged for suspected fraud",
           "mainFlow": "1. Partner sends GET /accounts/{accountId}/transactions. 2. Request authenticated and authorised as per UC-01 flow. 3. Transaction Service queries Featurespace ARIC fraud scoring API for account risk score. 4. ARIC returns high-risk score (>0.85). 5. Transaction Service applies fraud response policy: returns limited transaction data (last 30 days only, no pending transactions), adds X-Fraud-Review: true header. 6. High-priority security event emitted to EventBridge. 7. Splunk alert fires immediately; PagerDuty pages on-call fraud analyst. 8. Notification Service sends webhook to MFS internal fraud team channel (Slack).",
-          "viewsInvolved": ["logical", "integration", "security"]
+          "viewsInvolved": [
+            "logical",
+            "integration",
+            "security"
+          ]
         }
       ],
       "adrs": [
@@ -1024,7 +1197,11 @@
           "decision": "Use Amazon EKS (Kubernetes).",
           "alternatives": "ECS Fargate: Lower operational overhead, but limited pod-level networking control and no support for Envoy sidecar injection needed for mTLS mesh. ECS on EC2: More control but still lacks Kubernetes ecosystem (Helm, Argo CD, Calico network policies). Self-managed Kubernetes on EC2: Maximum control but unacceptable operational burden for a 6-person platform team.",
           "consequences": "Positive: rich ecosystem (Helm, Argo CD, Calico, Prometheus), strong portability to other clouds, existing team Kubernetes skills. Negative: higher operational complexity than ECS Fargate, Kubernetes version upgrade overhead every 12-14 months.",
-          "affectedAttributes": ["operational-excellence", "reliability", "cost-optimisation"]
+          "affectedAttributes": [
+            "operational-excellence",
+            "reliability",
+            "cost-optimisation"
+          ]
         },
         {
           "id": "ADR-002",
@@ -1035,7 +1212,11 @@
           "decision": "Use Amazon RDS PostgreSQL 16.",
           "alternatives": "DynamoDB: Excellent scalability and operational simplicity, but poor fit for relational queries (joins across accounts/transactions/consent), no native support for field-level encryption patterns used for PII, and team has limited DynamoDB experience. Aurora PostgreSQL: Considered, but standard RDS PostgreSQL meets performance requirements at lower cost; Aurora's distributed storage overhead is unnecessary at current data volumes.",
           "consequences": "Positive: strong relational model for financial data, excellent ecosystem (pg_cron, pgcrypto for field-level encryption), team expertise, straightforward backup/recovery. Negative: vertical scaling limits (mitigated by read replicas and Redis caching), operational overhead of PostgreSQL tuning.",
-          "affectedAttributes": ["performance", "reliability", "cost-optimisation"]
+          "affectedAttributes": [
+            "performance",
+            "reliability",
+            "cost-optimisation"
+          ]
         },
         {
           "id": "ADR-003",
@@ -1046,7 +1227,12 @@
           "decision": "Use Amazon EventBridge with SQS for asynchronous notification and audit processing.",
           "alternatives": "Synchronous processing: Simple but adds 50-100ms to every API response for audit writes and notification dispatch; unacceptable for P95 < 200ms target. Amazon SNS + SQS: Works but lacks EventBridge's content-based filtering and schema registry. Apache Kafka (MSK): Powerful but over-engineered for current throughput (5,000 events/s); operational overhead of Kafka cluster management not justified.",
           "consequences": "Positive: API response latency unaffected by notification/audit processing, natural decoupling enables independent scaling of Notification Service, EventBridge schema registry aids contract evolution. Negative: eventual consistency for audit logs (acceptable: audit logs are written within seconds), added infrastructure complexity.",
-          "affectedAttributes": ["performance", "reliability", "operational-excellence", "cost-optimisation"]
+          "affectedAttributes": [
+            "performance",
+            "reliability",
+            "operational-excellence",
+            "cost-optimisation"
+          ]
         }
       ]
     }
@@ -1110,13 +1296,19 @@
     },
     "tradeoffs": [
       {
-        "attributesInvolved": ["reliability", "cost-optimisation"],
+        "attributesInvolved": [
+          "reliability",
+          "cost-optimisation"
+        ],
         "description": "Multi-AZ RDS and Redis cluster mode chosen for reliability over single-AZ, incurring a 30% cost premium",
         "chosenPriority": "reliability",
         "rationale": "Tier 1 Critical platform with 99.95% SLA commitment to partners; cost premium justified by regulatory obligation and revenue impact of downtime"
       },
       {
-        "attributesInvolved": ["performance", "operational-excellence"],
+        "attributesInvolved": [
+          "performance",
+          "operational-excellence"
+        ],
         "description": "EKS chosen over ECS Fargate for richer ecosystem despite higher operational complexity",
         "chosenPriority": "performance",
         "rationale": "Kubernetes ecosystem provides superior observability, networking control (Calico, Envoy), and portability; team has existing Kubernetes skills"
@@ -1395,25 +1587,114 @@
         "evidenceSection": "3.3 Physical View, 3.5 Security View",
         "complianceStatus": "compliant"
       }
+    ],
+    "approvals": [
+      {
+        "role": "Lead Solution Architect",
+        "name": "Fred Bloggs",
+        "date": "2025-11-20",
+        "decision": "approved"
+      },
+      {
+        "role": "Principal Security Architect",
+        "name": "Joe Bloggs",
+        "date": "2025-11-18",
+        "decision": "approved"
+      },
+      {
+        "role": "Data Architect",
+        "name": "Jane Doe",
+        "date": "2025-11-15",
+        "decision": "approved"
+      },
+      {
+        "role": "Head of Compliance",
+        "name": "Alice Doe",
+        "date": "2025-11-19",
+        "decision": "approved"
+      },
+      {
+        "role": "CISO",
+        "name": "Marcus Doe",
+        "date": "2025-11-19",
+        "decision": "approved"
+      },
+      {
+        "role": "CTO",
+        "name": "Dr. Helen Zhao",
+        "date": "2025-11-20",
+        "decision": "approved"
+      },
+      {
+        "role": "ARB Chair",
+        "name": "Dave Bloggs",
+        "date": "2025-11-20",
+        "decision": "approved"
+      }
     ]
   },
   "appendices": {
     "glossary": [
-      { "term": "ARIC", "definition": "Adaptive, Real-time, Individual, Contextual -- Featurespace's fraud detection platform" },
-      { "term": "CAP", "definition": "Customer API Platform -- the solution described in this SAD" },
-      { "term": "CDC", "definition": "Change Data Capture -- a pattern for capturing and replicating data changes" },
-      { "term": "CMA", "definition": "Competition and Markets Authority -- UK regulator that mandated Open Banking" },
-      { "term": "EKS", "definition": "Elastic Kubernetes Service -- AWS managed Kubernetes" },
-      { "term": "FAPI", "definition": "Financial-grade API -- an OAuth 2.0 security profile for financial services" },
-      { "term": "HPA", "definition": "Horizontal Pod Autoscaler -- Kubernetes auto-scaling mechanism" },
-      { "term": "IRSA", "definition": "IAM Roles for Service Accounts -- EKS feature for pod-level IAM" },
-      { "term": "MFS", "definition": "Meridian Financial Services -- the fictional organisation in this example" },
-      { "term": "mTLS", "definition": "Mutual TLS -- two-way TLS authentication where both client and server present certificates" },
-      { "term": "OBIE", "definition": "Open Banking Implementation Entity -- the UK body governing Open Banking standards" },
-      { "term": "PIL", "definition": "Partner Integration Layer -- the legacy SOAP-based system being replaced" },
-      { "term": "PSD2", "definition": "Payment Services Directive 2 -- EU directive mandating open banking" },
-      { "term": "SCA", "definition": "Strong Customer Authentication -- PSD2 requirement for multi-factor authentication" },
-      { "term": "TPP", "definition": "Third-Party Provider -- an authorised fintech that accesses bank APIs under Open Banking" }
+      {
+        "term": "ARIC",
+        "definition": "Adaptive, Real-time, Individual, Contextual -- Featurespace's fraud detection platform"
+      },
+      {
+        "term": "CAP",
+        "definition": "Customer API Platform -- the solution described in this SAD"
+      },
+      {
+        "term": "CDC",
+        "definition": "Change Data Capture -- a pattern for capturing and replicating data changes"
+      },
+      {
+        "term": "CMA",
+        "definition": "Competition and Markets Authority -- UK regulator that mandated Open Banking"
+      },
+      {
+        "term": "EKS",
+        "definition": "Elastic Kubernetes Service -- AWS managed Kubernetes"
+      },
+      {
+        "term": "FAPI",
+        "definition": "Financial-grade API -- an OAuth 2.0 security profile for financial services"
+      },
+      {
+        "term": "HPA",
+        "definition": "Horizontal Pod Autoscaler -- Kubernetes auto-scaling mechanism"
+      },
+      {
+        "term": "IRSA",
+        "definition": "IAM Roles for Service Accounts -- EKS feature for pod-level IAM"
+      },
+      {
+        "term": "MFS",
+        "definition": "Meridian Financial Services -- the fictional organisation in this example"
+      },
+      {
+        "term": "mTLS",
+        "definition": "Mutual TLS -- two-way TLS authentication where both client and server present certificates"
+      },
+      {
+        "term": "OBIE",
+        "definition": "Open Banking Implementation Entity -- the UK body governing Open Banking standards"
+      },
+      {
+        "term": "PIL",
+        "definition": "Partner Integration Layer -- the legacy SOAP-based system being replaced"
+      },
+      {
+        "term": "PSD2",
+        "definition": "Payment Services Directive 2 -- EU directive mandating open banking"
+      },
+      {
+        "term": "SCA",
+        "definition": "Strong Customer Authentication -- PSD2 requirement for multi-factor authentication"
+      },
+      {
+        "term": "TPP",
+        "definition": "Third-Party Provider -- an authorised fintech that accesses bank APIs under Open Banking"
+      }
     ],
     "references": [
       {
@@ -1465,15 +1746,6 @@
         "version": "DPIA-2024-047",
         "description": "Data Protection Impact Assessment"
       }
-    ],
-    "approvals": [
-      { "role": "Lead Solution Architect", "name": "Fred Bloggs", "date": "2025-11-20", "decision": "approved" },
-      { "role": "Principal Security Architect", "name": "Joe Bloggs", "date": "2025-11-18", "decision": "approved" },
-      { "role": "Data Architect", "name": "Jane Doe", "date": "2025-11-15", "decision": "approved" },
-      { "role": "Head of Compliance", "name": "Alice Doe", "date": "2025-11-19", "decision": "approved" },
-      { "role": "CISO", "name": "Marcus Doe", "date": "2025-11-19", "decision": "approved" },
-      { "role": "CTO", "name": "Dr. Helen Zhao", "date": "2025-11-20", "decision": "approved" },
-      { "role": "ARB Chair", "name": "Dave Bloggs", "date": "2025-11-20", "decision": "approved" }
     ]
   },
   "organisationProfile": {
@@ -1483,19 +1755,27 @@
         "id": "SEC-POL-001",
         "name": "MFS Information Security Policy",
         "version": "4.2",
-        "mappedSections": ["3.5", "6.8"]
+        "mappedSections": [
+          "3.5",
+          "6.8"
+        ]
       },
       {
         "id": "DATA-STD-001",
         "name": "MFS Data Classification Standard",
         "version": "2.0",
-        "mappedSections": ["3.4"]
+        "mappedSections": [
+          "3.4"
+        ]
       },
       {
         "id": "CLOUD-STD-001",
         "name": "MFS Cloud Security Standard",
         "version": "1.3",
-        "mappedSections": ["3.3", "3.5"]
+        "mappedSections": [
+          "3.3",
+          "3.5"
+        ]
       }
     ],
     "tooling": {
@@ -1507,23 +1787,91 @@
   },
   "complianceScoring": {
     "assessments": [
-      { "section": "0. Document Control", "score": 5, "notes": "Full version history, multiple contributors and approvers, clear scope, related documents referenced" },
-      { "section": "1. Executive Summary", "score": 5, "notes": "Clear business drivers with priority, strategic alignment with reuse assessment, current-state architecture documented, business criticality justified with revenue impact" },
-      { "section": "2. Stakeholders & Concerns", "score": 5, "notes": "Comprehensive stakeholder register including external parties, concerns matrix fully mapped to sections, regulatory context with five applicable regulations" },
-      { "section": "3.1 Logical View", "score": 5, "notes": "Full component decomposition with technology choices, design patterns documented with rationale, vendor lock-in assessed for all components, service-to-capability mapping complete" },
-      { "section": "3.2 Integration & Data Flow", "score": 5, "notes": "All internal and external integrations documented with protocols and authentication, API contracts versioned, end user access patterns documented, SLAs defined per interface" },
-      { "section": "3.3 Physical View", "score": 5, "notes": "Deployment diagram described, compute fully specified (Graviton instances, pod sizing), full networking documented including Direct Connect, environments listed with sizing, security agents deployed" },
-      { "section": "3.4 Data View", "score": 5, "notes": "All data stores classified with retention and encryption, field-level encryption for PII, data sovereignty addressed with cross-region filtering, DPIA completed, data integrity controls evidenced" },
-      { "section": "3.5 Security View", "score": 5, "notes": "STRIDE threat model with 7 threats and mitigations, comprehensive IAM (internal + external + privileged), mTLS and OAuth 2.0 FAPI, HSM-backed encryption, SIEM integration with correlation rules" },
-      { "section": "3.6 Scenarios", "score": 5, "notes": "Three architecturally significant use cases crossing all views, three ADRs with alternatives and quality attribute tradeoffs" },
-      { "section": "4.1 Operational Excellence", "score": 5, "notes": "Centralised logging with Splunk, Grafana dashboards, PagerDuty alerting with escalation, Jaeger distributed tracing, comprehensive runbooks, capacity planning process" },
-      { "section": "4.2 Reliability", "score": 5, "notes": "Multi-AZ with active-passive DR, RTO 1hr / RPO 15min validated through quarterly testing, chaos testing with Gremlin, fault tolerance with circuit breakers, immutable backups" },
-      { "section": "4.3 Performance", "score": 5, "notes": "P50/P95/P99 targets defined, 5,000 req/s throughput target, automated performance testing with k6, caching strategy documented, 3-year growth projections" },
-      { "section": "4.4 Cost Optimisation", "score": 5, "notes": "Detailed monthly cost breakdown by component, reserved instance analysis, CloudHealth monitoring, FinOps practices documented, tagging strategy, rightsizing reviews" },
-      { "section": "4.5 Sustainability", "score": 4, "notes": "Graviton instances for energy efficiency, non-prod auto-shutdown, auto-scaling for demand matching. Score reduced from 5: no carbon metrics baselined, no formal sustainability KPIs." },
-      { "section": "5. Lifecycle", "score": 5, "notes": "Full CI/CD with security scanning, Strangler Fig migration plan, test strategy covering all types, weekly releases with blue-green and canary, team skills assessed, exit plan documented" },
-      { "section": "6. Governance", "score": 5, "notes": "4 constraints, 3 assumptions (with evidence), 4 risks with mitigation plans, 3 dependencies tracked to resolution, 2 issues tracked, compliance traceability table mapping 10 requirements" },
-      { "section": "7. Appendices", "score": 5, "notes": "Domain-specific glossary, 9 reference documents, 6 standards/patterns referenced, full approval sign-off with JIRA references" }
+      {
+        "section": "0. Document Control",
+        "score": 5,
+        "notes": "Full version history, multiple contributors and approvers, clear scope, related documents referenced"
+      },
+      {
+        "section": "1. Executive Summary",
+        "score": 5,
+        "notes": "Clear business drivers with priority, strategic alignment with reuse assessment, current-state architecture documented, business criticality justified with revenue impact"
+      },
+      {
+        "section": "2. Stakeholders & Concerns",
+        "score": 5,
+        "notes": "Comprehensive stakeholder register including external parties, concerns matrix fully mapped to sections, regulatory context with five applicable regulations"
+      },
+      {
+        "section": "3.1 Logical View",
+        "score": 5,
+        "notes": "Full component decomposition with technology choices, design patterns documented with rationale, vendor lock-in assessed for all components, service-to-capability mapping complete"
+      },
+      {
+        "section": "3.2 Integration & Data Flow",
+        "score": 5,
+        "notes": "All internal and external integrations documented with protocols and authentication, API contracts versioned, end user access patterns documented, SLAs defined per interface"
+      },
+      {
+        "section": "3.3 Physical View",
+        "score": 5,
+        "notes": "Deployment diagram described, compute fully specified (Graviton instances, pod sizing), full networking documented including Direct Connect, environments listed with sizing, security agents deployed"
+      },
+      {
+        "section": "3.4 Data View",
+        "score": 5,
+        "notes": "All data stores classified with retention and encryption, field-level encryption for PII, data sovereignty addressed with cross-region filtering, DPIA completed, data integrity controls evidenced"
+      },
+      {
+        "section": "3.5 Security View",
+        "score": 5,
+        "notes": "STRIDE threat model with 7 threats and mitigations, comprehensive IAM (internal + external + privileged), mTLS and OAuth 2.0 FAPI, HSM-backed encryption, SIEM integration with correlation rules"
+      },
+      {
+        "section": "3.6 Scenarios",
+        "score": 5,
+        "notes": "Three architecturally significant use cases crossing all views, three ADRs with alternatives and quality attribute tradeoffs"
+      },
+      {
+        "section": "4.1 Operational Excellence",
+        "score": 5,
+        "notes": "Centralised logging with Splunk, Grafana dashboards, PagerDuty alerting with escalation, Jaeger distributed tracing, comprehensive runbooks, capacity planning process"
+      },
+      {
+        "section": "4.2 Reliability",
+        "score": 5,
+        "notes": "Multi-AZ with active-passive DR, RTO 1hr / RPO 15min validated through quarterly testing, chaos testing with Gremlin, fault tolerance with circuit breakers, immutable backups"
+      },
+      {
+        "section": "4.3 Performance",
+        "score": 5,
+        "notes": "P50/P95/P99 targets defined, 5,000 req/s throughput target, automated performance testing with k6, caching strategy documented, 3-year growth projections"
+      },
+      {
+        "section": "4.4 Cost Optimisation",
+        "score": 5,
+        "notes": "Detailed monthly cost breakdown by component, reserved instance analysis, CloudHealth monitoring, FinOps practices documented, tagging strategy, rightsizing reviews"
+      },
+      {
+        "section": "4.5 Sustainability",
+        "score": 4,
+        "notes": "Graviton instances for energy efficiency, non-prod auto-shutdown, auto-scaling for demand matching. Score reduced from 5: no carbon metrics baselined, no formal sustainability KPIs."
+      },
+      {
+        "section": "5. Lifecycle",
+        "score": 5,
+        "notes": "Full CI/CD with security scanning, Strangler Fig migration plan, test strategy covering all types, weekly releases with blue-green and canary, team skills assessed, exit plan documented"
+      },
+      {
+        "section": "6. Governance",
+        "score": 5,
+        "notes": "4 constraints, 3 assumptions (with evidence), 4 risks with mitigation plans, 3 dependencies tracked to resolution, 2 issues tracked, compliance traceability table mapping 10 requirements"
+      },
+      {
+        "section": "7. Appendices",
+        "score": 5,
+        "notes": "Domain-specific glossary, 9 reference documents, 6 standards/patterns referenced, full approval sign-off with JIRA references"
+      }
     ],
     "overallScore": 5,
     "overallNotes": "Comprehensive depth achieved across all sections. Exemplary documentation for a Tier 1 Critical regulated platform. Overall weighted score: 4.9/5."

@@ -347,7 +347,7 @@ function generateYamlLines(schema, node, key, indent, lines) {
 
 function generateYamlTemplate(schema) {
   const lines = [
-    '# ADS v1.3.0 — Solution Architecture Document Template',
+    '# ADS v1.3.2 — Solution Architecture Document Template',
     '# Standard published by: ArchStandard (archstandard.org)',
     '# Standard licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
     '# Generated from: schema/ads.schema.json',
@@ -473,11 +473,19 @@ function generateMarkdownTemplate(schema) {
   const lines = [
     '# Solution Architecture Document',
     '',
-    '> **Standard:** ADS v1.3.0 (Architecture Description Standard)',
+    // Empty blockquote lines (`>` with no content) between items force
+    // Pandoc to render each as a separate paragraph in DOCX/HTML output.
+    // Without these, all four lines would be joined into one run-on
+    // paragraph in the rendered output, even though they look separated
+    // in the Markdown source.
+    '> **Standard:** ADS v1.3.2 (Architecture Description Standard)',
+    '>',
     '> **Standard published by:** ArchStandard (archstandard.org)',
+    '>',
     '> **Standard licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
+    '>',
     '> **Generated from:** schema/ads.schema.json',
-    '',
+    '>',
     '> *Document author and owner: complete in Section 0 (Document Control) below.*',
     '',
     '---',
@@ -722,13 +730,19 @@ function getDisplayName(key, context) {
     risks: '6.3 Risks',
     dependencies: '6.4 Dependencies',
     issues: '6.5 Issues',
-    complianceTraceability: '6.8 Compliance Traceability',
+    technicalDebt: '6.6 Technical Debt Register',
+    policyExceptions: '6.7 Policy Exceptions',
+    policyExceptionsAccepted: '6.7 Policy Exceptions Accepted',
+    processExceptions: '6.7 Process Exceptions',
+    riskProfileImpact: '6.7 Risk Profile Impact',
+    architectureDecisionsLog: '6.8 Architectural Decisions Log',
+    complianceTraceability: '6.9 Compliance Traceability',
     migration: 'Migration',
     resourcing: 'Resourcing & Skills',
     growthProjections: 'Capacity & Growth Projections',
-    glossary: 'Glossary',
-    references: 'References',
-    approvals: 'Approvals',
+    glossary: '7.1 Glossary',
+    references: '7.2 References',
+    approvals: '6.10 Approval Sign-Off',
     // Awkward auto-labels — explicit overrides
     resourcesRightsized: 'Resources Right-Sized',
     hostingLocationOptimisedForCarbon: 'Hosting Location Optimised for Carbon',

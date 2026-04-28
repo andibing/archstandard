@@ -1,4 +1,4 @@
-# ADS v1.3.0 — Solution Architecture Document Template
+# ADS v1.3.2 — Solution Architecture Document Template
 # Standard published by: ArchStandard (archstandard.org)
 # Standard licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
 # Generated from: schema/ads.schema.json
@@ -25,7 +25,7 @@ documentControl:  # Section 0: Document Control
     status: draft  # draft | in-review | approved | superseded
     createdDate: ""  # YYYY-MM-DD
     lastUpdated: ""  # YYYY-MM-DD
-    classification: public  # public | internal | confidential | restricted
+    classification: public  # public | internal | restricted | highly-restricted
   changeHistory:
     - version: ""
       date: ""  # YYYY-MM-DD
@@ -128,9 +128,9 @@ architecturalViews:  # Section 3: Architectural Views
       - sourceApp: ""
         destinationApp: ""
         integrationType: internal-app  # internal-app | external-service | saas | partner | customer-facing
-        protocol: https  # https | http | grpc | grpc-tls | tcp | tcp-tls | amqp | amqps | mqtt | kafka | sftp | ftps | smtp | smtps | other
+        protocol: https  # https | http | grpc | grpc-tls | tcp | tcp-tls | amqp | amqps | mqtt | mqtts | kafka | websocket | wss | jdbc | odbc | sftp | ftps | smtp | smtps | ldaps | ssh | other
         encrypted: false
-        authenticationMethod: mtls  # mtls | oauth2 | api-key | jwt | saml | oidc | basic-auth | certificate | iam-role | none | other
+        authenticationMethod: mtls  # mtls | oauth2 | api-key | jwt | saml | oidc | basic-auth | certificate | iam-role | kerberos | none | other
         purpose: ""
     apis:
       - name: ""
@@ -417,16 +417,36 @@ riskGovernance:  # Section 6: Decision Making & Governance
       resolutionPlan: ""
       status: open  # open | in-progress | resolved
       lastAssessed: ""  # YYYY-MM-DD
+  technicalDebt:  # Section 6.6 — Technical debt introduced or inherited by this solution
+    - id: ""  # pattern: ^TD-\d+$
+      description: ""
+      category: design  # design | code | infrastructure | security | operational
+      impact: high  # high | medium | low
+      remediationPlan: ""
+      targetDate: ""  # YYYY-MM-DD
+      owner: ""
   policyExceptions: yes  # yes | no | not-applicable
   policyExceptionsAccepted: yes  # yes | no | not-applicable
   processExceptions: yes  # yes | no | not-applicable
   riskProfileImpact: yes  # yes | no | not-applicable
+  architectureDecisionsLog:  # Section 6.8 — Governance summary index of architecture decisions. The full ADRs (with context, alternatives, consequences) live in architecturalViews.scenarios.adrs (Section 3.6.2). Entries here should reference those by id and provide a one-line impact summary suitable for governance review.
+    - adrId: ""  # pattern: ^ADR-\d+$
+      title: ""
+      status: proposed  # proposed | accepted | superseded | deprecated
+      date: ""  # YYYY-MM-DD
+      impact: ""
   complianceTraceability:
     - standard: ""
       requirement: ""
       howSatisfied: ""
       evidenceSection: ""
       complianceStatus: compliant  # compliant | partially-compliant | non-compliant | not-applicable
+  approvals:  # Approval sign-off records. Section 6.10 places sign-off as the closing governance act of Section 6. Fields are intentionally not required so a draft document can list expected sign-off roles before decisions are recorded.
+    - role: ""
+      name: ""
+      date: ""  # YYYY-MM-DD
+      decision: approved  # approved | approved-with-conditions | rejected | deferred
+      conditions: ""
 
 # ---------------------------------------------
 # Section 7: Appendices
@@ -440,11 +460,6 @@ appendices:  # Section 7: Appendices
       version: ""
       url: ""
       description: ""
-  approvals:
-    - role: ""
-      name: ""
-      date: ""  # YYYY-MM-DD
-      decision: approved  # approved | approved-with-conditions | rejected | deferred
 
 # ---------------------------------------------
 # Compliance Scoring (0-5 per section)

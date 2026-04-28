@@ -6,7 +6,9 @@
       "title": "Solution Architecture Document — archstandard.org",
       "solutionName": "archstandard.org",
       "applicationId": "N/A (independent project)",
-      "authors": ["Andi Chandler"],
+      "authors": [
+        "Andi Chandler"
+      ],
       "owner": "Andi Chandler",
       "version": "1.0",
       "status": "approved",
@@ -114,26 +116,54 @@
       {
         "stakeholder": "Andi Chandler",
         "roleType": "solution-architect",
-        "concerns": ["Content accuracy", "Site reliability", "Cost"],
-        "relevantViews": ["logical", "integration", "physical", "data", "security", "scenarios"]
+        "concerns": [
+          "Content accuracy",
+          "Site reliability",
+          "Cost"
+        ],
+        "relevantViews": [
+          "logical",
+          "integration",
+          "physical",
+          "data",
+          "security",
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Solution Architects",
         "roleType": "end-user",
-        "concerns": ["Standard clarity", "Template usability", "Searchability"],
-        "relevantViews": ["logical", "scenarios"]
+        "concerns": [
+          "Standard clarity",
+          "Template usability",
+          "Searchability"
+        ],
+        "relevantViews": [
+          "logical",
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Enterprise Architects",
         "roleType": "end-user",
-        "concerns": ["Framework alignment", "Governance applicability"],
-        "relevantViews": ["scenarios"]
+        "concerns": [
+          "Framework alignment",
+          "Governance applicability"
+        ],
+        "relevantViews": [
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Governance Teams",
         "roleType": "compliance",
-        "concerns": ["Compliance scoring", "Template completeness"],
-        "relevantViews": ["scenarios"]
+        "concerns": [
+          "Compliance scoring",
+          "Template completeness"
+        ],
+        "relevantViews": [
+          "scenarios"
+        ]
       }
     ],
     "compliance": {
@@ -204,13 +234,23 @@
     },
     "physicalView": {
       "hosting": {
-        "venueTypes": ["saas"],
-        "regions": ["global"],
-        "serviceModels": ["saas"],
-        "cloudProviders": ["other"]
+        "venueTypes": [
+          "saas"
+        ],
+        "regions": [
+          "global"
+        ],
+        "serviceModels": [
+          "saas"
+        ],
+        "cloudProviders": [
+          "other"
+        ]
       },
       "compute": {
-        "computeTypes": ["none"]
+        "computeTypes": [
+          "none"
+        ]
       },
       "networking": {
         "internetFacing": true,
@@ -294,18 +334,28 @@
         {
           "id": "UC-01",
           "name": "Architect Reads the Standard",
-          "actors": ["Solution Architect"],
+          "actors": [
+            "Solution Architect"
+          ],
           "trigger": "Navigates to archstandard.org",
           "mainFlow": "1. User opens browser and navigates to archstandard.org. 2. Cloudflare CDN serves static HTML. 3. User browses standard sections, uses search, and reads content.",
-          "viewsInvolved": ["logical", "physical"]
+          "viewsInvolved": [
+            "logical",
+            "physical"
+          ]
         },
         {
           "id": "UC-02",
           "name": "Architect Downloads a Template",
-          "actors": ["Solution Architect"],
+          "actors": [
+            "Solution Architect"
+          ],
           "trigger": "Clicks a template download link",
           "mainFlow": "1. User navigates to the Templates page. 2. User selects a format (Markdown, YAML, JSON, or DOCX). 3. Browser downloads the static file from Cloudflare CDN.",
-          "viewsInvolved": ["logical", "physical"]
+          "viewsInvolved": [
+            "logical",
+            "physical"
+          ]
         }
       ],
       "adrs": [
@@ -318,7 +368,10 @@
           "decision": "Use Astro with the Starlight documentation theme.",
           "alternatives": "Docusaurus (React-based, heavier JS bundle, less flexible i18n), MkDocs (Python-based, limited component model), Hugo (Go-based, no native MDX support).",
           "consequences": "Fast build times, small JS payload, built-in i18n routing, built-in search. Requires Node.js for development. Astro ecosystem is newer and smaller than React/Docusaurus.",
-          "affectedAttributes": ["performance", "sustainability"]
+          "affectedAttributes": [
+            "performance",
+            "sustainability"
+          ]
         },
         {
           "id": "ADR-002",
@@ -329,7 +382,10 @@
           "decision": "Use Cloudflare Pages with GitHub integration.",
           "alternatives": "AWS S3 + CloudFront (more complex setup, potential cost beyond free tier), GitHub Pages (limited build customisation, no edge functions for Basic Auth middleware), Netlify (comparable but Cloudflare offers better global edge coverage on free tier).",
           "consequences": "Zero-cost hosting with automatic builds on git push. Custom domain with automatic SSL. Basic Auth middleware possible via Cloudflare Pages Functions. Vendor dependency on Cloudflare, but site is fully portable static HTML.",
-          "affectedAttributes": ["cost-optimisation", "reliability"]
+          "affectedAttributes": [
+            "cost-optimisation",
+            "reliability"
+          ]
         }
       ]
     }
@@ -429,7 +485,15 @@
       }
     ],
     "policyExceptions": "no",
-    "processExceptions": "no"
+    "processExceptions": "no",
+    "approvals": [
+      {
+        "role": "Solution Architect",
+        "name": "Andi Chandler",
+        "date": "2025-06-15",
+        "decision": "approved"
+      }
+    ]
   },
   "appendices": {
     "glossary": [
@@ -476,14 +540,6 @@
         "version": "Latest",
         "url": "https://starlight.astro.build/",
         "description": "Theme documentation"
-      }
-    ],
-    "approvals": [
-      {
-        "role": "Solution Architect",
-        "name": "Andi Chandler",
-        "date": "2025-06-15",
-        "decision": "approved"
       }
     ]
   },

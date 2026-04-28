@@ -1,9 +1,36 @@
-# Cloudflare Pages redirects
-# Preserves old URLs from before the /v1/ base path migration
+# Cloudflare Pages redirects.
+#
+# Two purposes:
+#   1. Catch bare-directory landings that would otherwise 404 (e.g., a user
+#      typing "archstandard.org/standard/" from intuition).
+#   2. Forward pre-/v1/-migration paths to their /v1/-prefixed equivalents.
+#
+# Order matters — first match wins. Specific rules go before wildcards.
+#
+# NOTE: /schema/* is intentionally NOT redirected. The JSON Schema's own $id
+# is `https://archstandard.org/schema/v1.0.0/ads.schema.json` and the file
+# is served at the dist root (per scripts/post-build.cjs ROOT_KEEP) so the
+# canonical URL resolves directly. A wildcard redirect here would break
+# the schema's self-referencing $id.
 
+# 1. Bare-directory landings — intuitive guesses that would otherwise 404
+#    because the directory contains assets, not an index.html.
+/v1/standard/         /v1/standard/overview/        301
+/v1/templates/        /v1/standard/templates/       301
+/v1/cheat-cards/      /v1/guidance/cheat-cards/     301
+/v1/prompts/          /v1/standard/prompts/         301
+/v1/schema/           /v1/standard/schema/          301
+/standard/            /v1/standard/overview/        301
+/templates/           /v1/standard/templates/       301
+/cheat-cards/         /v1/guidance/cheat-cards/     301
+/prompts/             /v1/standard/prompts/         301
+
+# 2. Pre-/v1/-migration: forward old sub-paths to /v1/-prefixed.
+#    These match anything BELOW the listed paths (e.g. /standard/3-1-...)
+#    and are placed after the specific bare-landing rules so they don't
+#    shadow them.
 /standard/*    /v1/standard/:splat    301
 /examples/*    /v1/examples/:splat    301
 /fr/*          /v1/fr/:splat          301
 /de/*          /v1/de/:splat          301
 /templates/*   /v1/templates/:splat   301
-/schema/*      /v1/schema/:splat      301

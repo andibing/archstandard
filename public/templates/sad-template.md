@@ -1,10 +1,13 @@
 # Solution Architecture Document
 
-> **Standard:** ADS v1.3.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.2 (Architecture Description Standard)
+>
 > **Standard published by:** ArchStandard (archstandard.org)
+>
 > **Standard licence:** CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+>
 > **Generated from:** schema/ads.schema.json
-
+>
 > *Document author and owner: complete in Section 0 (Document Control) below.*
 
 ---
@@ -151,9 +154,9 @@
 | **Source App** | |
 | **Destination App** | |
 | **Integration Type** | [ ] Internal App [ ] External Service [ ] SaaS [ ] Partner [ ] Customer Facing |
-| **Protocol** | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] Kafka [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] Other |
+| **Protocol** | [ ] HTTPS [ ] HTTP [ ] gRPC [ ] gRPC TLS [ ] TCP [ ] TCP TLS [ ] AMQP [ ] AMQPS [ ] MQTT [ ] MQTTS [ ] Kafka [ ] WebSocket [ ] WSS [ ] JDBC [ ] ODBC [ ] SFTP [ ] FTPS [ ] SMTP [ ] SMTPS [ ] LDAPS [ ] SSH [ ] Other |
 | **Encrypted** | [ ] Yes [ ] No |
-| **Authentication Method** | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] None [ ] Other |
+| **Authentication Method** | [ ] mTLS [ ] OAuth2 [ ] API Key [ ] JWT [ ] SAML [ ] OIDC [ ] Basic Auth [ ] Certificate [ ] IAM Role [ ] Kerberos [ ] None [ ] Other |
 | **Purpose** | |
 
 #### APIs & Interfaces
@@ -558,33 +561,53 @@
 | **Status** | [ ] Open [ ] In Progress [ ] Resolved |
 | **Last Assessed** | |
 
-### 6.8 Compliance Traceability
+### 6.6 Technical Debt Register
+
+*Repeat the table below for each technical debt register.*
+
+| Field | Value |
+|-------|-------|
+| **Id** | |
+| **Description** | |
+| **Category** | [ ] Design [ ] Code [ ] Infrastructure [ ] Security [ ] Operational |
+| **Impact** | [ ] High [ ] Medium [ ] Low |
+| **Remediation Plan** | |
+| **Target Date** | |
+| **Owner** | |
+
+### 6.8 Architectural Decisions Log
+
+| Adr Id | Title | Status | Date | Impact |
+|------|------|------|------|------|
+|  |  | [ ] Proposed [ ] Accepted [ ] Superseded [ ] Deprecated |  |  |
+
+### 6.9 Compliance Traceability
 
 | Standard | Requirement | How Satisfied | Evidence Section | Compliance Status |
 |------|------|------|------|------|
 |  |  |  |  | [ ] Compliant [ ] Partially Compliant [ ] Non Compliant [ ] Not Applicable |
 
+### 6.10 Approval Sign-Off
+
+| Role | Name | Date | Decision | Conditions |
+|------|------|------|------|------|
+|  |  |  | [ ] Approved [ ] Approved With Conditions [ ] Rejected [ ] Deferred |  |
+
 ---
 
 ## 7. Appendices
 
-### Glossary
+### 7.1 Glossary
 
 | Term | Definition |
 |------|------|
 |  |  |
 
-### References
+### 7.2 References
 
 | Title | Version | URL | Description |
 |------|------|------|------|
 |  |  |  |  |
-
-### Approvals
-
-| Role | Name | Date | Decision |
-|------|------|------|------|
-|  |  |  | [ ] Approved [ ] Approved With Conditions [ ] Rejected [ ] Deferred |
 
 ---
 

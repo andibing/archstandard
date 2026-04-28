@@ -5,7 +5,9 @@
       "title": "Solution Architecture Document — PayrollPro Azure Migration",
       "solutionName": "PayrollPro",
       "applicationId": "APP-0347",
-      "authors": ["Fred Bloggs, Lead Solution Architect"],
+      "authors": [
+        "Fred Bloggs, Lead Solution Architect"
+      ],
       "owner": "Fred Bloggs",
       "version": "1.0",
       "status": "in-review",
@@ -253,55 +255,116 @@
       {
         "stakeholder": "Betty Bloggs — HR Director (Business Sponsor)",
         "roleType": "business-owner",
-        "concerns": ["Payroll continuity", "Zero missed payments", "Minimal user disruption during cutover"],
-        "relevantViews": ["scenarios"]
+        "concerns": [
+          "Payroll continuity",
+          "Zero missed payments",
+          "Minimal user disruption during cutover"
+        ],
+        "relevantViews": [
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Mary Bloggs — Payroll Team Lead",
         "roleType": "end-user",
-        "concerns": ["System performance at month-end", "Training on any UI changes", "Data accuracy after migration"],
-        "relevantViews": ["scenarios"]
+        "concerns": [
+          "System performance at month-end",
+          "Training on any UI changes",
+          "Data accuracy after migration"
+        ],
+        "relevantViews": [
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Fred Bloggs — Lead Solution Architect",
         "roleType": "solution-architect",
-        "concerns": ["Design integrity", "Standards compliance", "Migration risk"],
-        "relevantViews": ["logical", "integration", "physical", "data", "security", "scenarios"]
+        "concerns": [
+          "Design integrity",
+          "Standards compliance",
+          "Migration risk"
+        ],
+        "relevantViews": [
+          "logical",
+          "integration",
+          "physical",
+          "data",
+          "security",
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "Joe Bloggs — Infrastructure Architect",
         "roleType": "infrastructure-engineer",
-        "concerns": ["Azure infrastructure", "Networking", "VPN", "Environments"],
-        "relevantViews": ["physical"]
+        "concerns": [
+          "Azure infrastructure",
+          "Networking",
+          "VPN",
+          "Environments"
+        ],
+        "relevantViews": [
+          "physical"
+        ]
       },
       {
         "stakeholder": "Jane Doe — Security Architect",
         "roleType": "security-architect",
-        "concerns": ["Data protection (PII/SPI)", "Access controls", "Encryption", "SIEM integration"],
-        "relevantViews": ["security", "data"]
+        "concerns": [
+          "Data protection (PII/SPI)",
+          "Access controls",
+          "Encryption",
+          "SIEM integration"
+        ],
+        "relevantViews": [
+          "security",
+          "data"
+        ]
       },
       {
         "stakeholder": "Claire Doe — DBA Lead",
         "roleType": "data-architect",
-        "concerns": ["Database migration", "Azure SQL compatibility", "Stored procedure rework", "Data integrity"],
-        "relevantViews": ["data", "logical"]
+        "concerns": [
+          "Database migration",
+          "Azure SQL compatibility",
+          "Stored procedure rework",
+          "Data integrity"
+        ],
+        "relevantViews": [
+          "data",
+          "logical"
+        ]
       },
       {
         "stakeholder": "Polly Doe — Project Manager",
         "roleType": "project-manager",
-        "concerns": ["Timeline", "Budget", "Resource availability", "Dependencies"],
+        "concerns": [
+          "Timeline",
+          "Budget",
+          "Resource availability",
+          "Dependencies"
+        ],
         "relevantViews": []
       },
       {
         "stakeholder": "Sarah Bloggs — Change Manager",
         "roleType": "other",
-        "concerns": ["End-user communications", "Training plan", "Go/no-go criteria"],
-        "relevantViews": ["scenarios"]
+        "concerns": [
+          "End-user communications",
+          "Training plan",
+          "Go/no-go criteria"
+        ],
+        "relevantViews": [
+          "scenarios"
+        ]
       },
       {
         "stakeholder": "IT Operations — Infrastructure & Support",
         "roleType": "operations-sre",
-        "concerns": ["Ongoing monitoring", "Incident management", "On-call support"],
+        "concerns": [
+          "Ongoing monitoring",
+          "Incident management",
+          "On-call support"
+        ],
         "relevantViews": []
       }
     ],
@@ -538,13 +601,24 @@
     },
     "physicalView": {
       "hosting": {
-        "venueTypes": ["public-cloud"],
-        "regions": ["UK South", "UK West"],
-        "serviceModels": ["paas"],
-        "cloudProviders": ["azure"]
+        "venueTypes": [
+          "public-cloud"
+        ],
+        "regions": [
+          "UK South",
+          "UK West"
+        ],
+        "serviceModels": [
+          "paas"
+        ],
+        "cloudProviders": [
+          "azure"
+        ]
       },
       "compute": {
-        "computeTypes": ["paas-app-service"],
+        "computeTypes": [
+          "paas-app-service"
+        ],
         "servers": [
           {
             "name": "App Service Plan (Production)",
@@ -603,7 +677,11 @@
           "autoScaleDown": false
         }
       ],
-      "securityAgents": ["anti-malware", "edr", "vulnerability-management"]
+      "securityAgents": [
+        "anti-malware",
+        "edr",
+        "vulnerability-management"
+      ]
     },
     "dataView": {
       "dataStores": [
@@ -767,18 +845,32 @@
         {
           "id": "UC-01",
           "name": "Monthly Payroll Run",
-          "actors": ["Payroll Operator (Mary Bloggs or team member)"],
+          "actors": [
+            "Payroll Operator (Mary Bloggs or team member)"
+          ],
           "trigger": "Scheduled monthly payroll processing date (typically day 22 of each month)",
           "mainFlow": "1. Payroll Operator logs in via Citrix, authenticated by Entra ID (MFA). 2. Operator initiates payroll run via PayrollPro UI. 3. Payroll Batch Processor (Azure WebJob) executes on App Service, reading employee and configuration data from Azure SQL. 4. Batch calculates gross pay, tax deductions (PAYE), NI contributions, pension deductions, student loan repayments for all 2,400 employees. 5. Payslip PDFs are generated and stored in Azure Blob Storage. 6. BACS Standard 18 payment file is generated. 7. Operator reviews summary report and approves. 8. BACS file is submitted via SFTP. 9. HMRC FPS is submitted via Government Gateway API. 10. Pension contributions are submitted to Crestfield via REST API.",
-          "viewsInvolved": ["logical", "integration", "physical", "data", "security"]
+          "viewsInvolved": [
+            "logical",
+            "integration",
+            "physical",
+            "data",
+            "security"
+          ]
         },
         {
           "id": "UC-02",
           "name": "New Starter Onboarding",
-          "actors": ["HR Administrator"],
+          "actors": [
+            "HR Administrator"
+          ],
           "trigger": "New employee joining Meridian",
           "mainFlow": "1. HR Administrator logs in via Citrix, authenticated by Entra ID (MFA). 2. Administrator creates new employee record in PayrollPro: personal details, contract terms, salary, tax code, bank details, pension opt-in. 3. Bank details and NI number are encrypted at field level before storage (AES-256-GCM via Key Vault). 4. Employee is included in the next payroll run. 5. Employee gains access to self-service portal via Entra ID group membership.",
-          "viewsInvolved": ["logical", "data", "security"]
+          "viewsInvolved": [
+            "logical",
+            "data",
+            "security"
+          ]
         }
       ],
       "adrs": [
@@ -791,7 +883,12 @@
           "decision": "Replatform — upgrade the application to .NET 6 and deploy to Azure PaaS services (App Service + Azure SQL Database).",
           "alternatives": "(1) Rehost to Azure VMs: Lower initial effort but perpetuates manual patching burden, does not address performance issues, and incurs higher ongoing IaaS costs. (2) Refactor to microservices: Best long-term architecture but timeline exceeds hardware EOL deadline; estimated 18+ months vs. 10 months for replatform. (3) Replace with SaaS payroll: Evaluated Workday and ADP; neither met Meridian's bespoke BACS and pension integration requirements without significant customisation and data migration risk.",
           "consequences": "Positive: Managed patching, built-in geo-replication, auto-scaling, reduced OpEx. Negative: .NET 6 upgrade requires development effort (~6 weeks); some legacy stored procedures must be reworked for Azure SQL compatibility.",
-          "affectedAttributes": ["reliability", "operational-excellence", "performance", "cost-optimisation"]
+          "affectedAttributes": [
+            "reliability",
+            "operational-excellence",
+            "performance",
+            "cost-optimisation"
+          ]
         },
         {
           "id": "ADR-002",
@@ -802,7 +899,11 @@
           "decision": "Use Azure SQL Database (Business Critical tier) as the primary data store.",
           "alternatives": "(1) SQL Server on Azure VM: Full SQL Server feature parity but requires manual patching, backup configuration, and HA setup (Always On Availability Groups). (2) Azure SQL Managed Instance: Closer to on-prem feature parity than Azure SQL DB but higher cost and slower provisioning; features not needed by PayrollPro.",
           "consequences": "Positive: Built-in automated backups (PITR 35 days), geo-replication, automatic patching, zone redundancy. Negative: SQL Agent jobs must be replaced with Azure Data Factory or WebJobs; some cross-database queries must be refactored; DBA team requires Azure SQL training.",
-          "affectedAttributes": ["reliability", "operational-excellence", "cost-optimisation"]
+          "affectedAttributes": [
+            "reliability",
+            "operational-excellence",
+            "cost-optimisation"
+          ]
         },
         {
           "id": "ADR-003",
@@ -813,7 +914,11 @@
           "decision": "Retain Citrix access for Phase 1. Users will access the Azure-hosted PayrollPro via Citrix, routed through a site-to-site VPN. Phase 2 will replace Citrix with direct browser access or Azure Virtual Desktop.",
           "alternatives": "(1) Direct browser access from Phase 1: Eliminates Citrix dependency but requires WAF deployment, public endpoint exposure, and additional security review — adding 6-8 weeks. (2) Azure Virtual Desktop from Phase 1: Replaces Citrix but is a separate infrastructure project with its own timeline and budget.",
           "consequences": "Positive: Reduces migration scope and risk; maintains familiar user experience. Negative: Requires transitional VPN; Citrix becomes a dependency and single point of access; VPN adds latency for Azure-hosted application.",
-          "affectedAttributes": ["performance", "reliability", "cost-optimisation"]
+          "affectedAttributes": [
+            "performance",
+            "reliability",
+            "cost-optimisation"
+          ]
         }
       ]
     }
@@ -878,13 +983,19 @@
     },
     "tradeoffs": [
       {
-        "attributesInvolved": ["reliability", "cost-optimisation"],
+        "attributesInvolved": [
+          "reliability",
+          "cost-optimisation"
+        ],
         "description": "Azure SQL Business Critical tier selected for built-in HA and zone redundancy, despite being more expensive than General Purpose. This decision is driven by the Tier 2 reliability requirement.",
         "chosenPriority": "reliability",
         "rationale": "Payroll processing is a statutory obligation; the additional cost of Business Critical tier is justified by the need for sub-30-second failover and zone redundancy."
       },
       {
-        "attributesInvolved": ["performance", "cost-optimisation"],
+        "attributesInvolved": [
+          "performance",
+          "cost-optimisation"
+        ],
         "description": "Azure SQL Serverless evaluated for production but rejected due to cold-start latency incompatible with payroll batch SLA. Used for dev environment only.",
         "chosenPriority": "performance",
         "rationale": "Payroll batch must complete within 2 hours; cold-start latency of serverless tier would add unpredictable delays."
@@ -1149,26 +1260,97 @@
     "policyExceptions": "no",
     "policyExceptionsAccepted": "not-applicable",
     "processExceptions": "no",
-    "riskProfileImpact": "no"
+    "riskProfileImpact": "no",
+    "approvals": [
+      {
+        "role": "Lead Solution Architect",
+        "name": "Fred Bloggs",
+        "date": "2026-03-28"
+      },
+      {
+        "role": "Security Architect",
+        "name": "Jane Doe"
+      },
+      {
+        "role": "DBA Lead",
+        "name": "Claire Doe"
+      },
+      {
+        "role": "ARB / Design Authority",
+        "name": "Architecture Review Board"
+      },
+      {
+        "role": "Business Sponsor",
+        "name": "Betty Bloggs"
+      }
+    ]
   },
   "appendices": {
     "glossary": [
-      { "term": "6 R's", "definition": "Six common migration strategies: Retain, Retire, Rehost, Replatform, Refactor, Replace" },
-      { "term": "BACS", "definition": "Bankers' Automated Clearing Services — the UK electronic payment system used for salary payments" },
-      { "term": "Bicep", "definition": "A domain-specific language for deploying Azure resources declaratively (Infrastructure as Code)" },
-      { "term": "Blue-Green Deployment", "definition": "A release strategy using two identical environments; traffic is switched from the old (blue) to the new (green) after validation" },
-      { "term": "DMS", "definition": "Azure Database Migration Service — a managed service for migrating databases to Azure" },
-      { "term": "Entra ID", "definition": "Microsoft Entra ID (formerly Azure Active Directory) — cloud-based identity and access management service" },
-      { "term": "Entra ID Connect", "definition": "A tool that synchronises on-premises Active Directory identities to Entra ID" },
-      { "term": "FPS", "definition": "Full Payment Submission — the HMRC Real Time Information submission made each time employees are paid" },
-      { "term": "NI Number", "definition": "National Insurance Number — a unique identifier used in the UK tax and benefits system (Sensitive Personal Information)" },
-      { "term": "PAYE", "definition": "Pay As You Earn — the UK system for collecting income tax and National Insurance from employment" },
-      { "term": "PIM", "definition": "Privileged Identity Management — Entra ID feature providing just-in-time privileged access" },
-      { "term": "PITR", "definition": "Point-In-Time Restore — Azure SQL feature allowing database restoration to any point within the retention period" },
-      { "term": "Replatform", "definition": "A migration strategy that moves a workload to a new platform with targeted optimisations (e.g., adopting managed database services) without re-architecting the application" },
-      { "term": "RTI", "definition": "Real Time Information — HMRC system requiring employers to report payroll data in real time" },
-      { "term": "Standard 18", "definition": "The BACS file format specification for payment instruction files" },
-      { "term": "TDE", "definition": "Transparent Data Encryption — SQL Server and Azure SQL feature that encrypts data at rest" }
+      {
+        "term": "6 R's",
+        "definition": "Six common migration strategies: Retain, Retire, Rehost, Replatform, Refactor, Replace"
+      },
+      {
+        "term": "BACS",
+        "definition": "Bankers' Automated Clearing Services — the UK electronic payment system used for salary payments"
+      },
+      {
+        "term": "Bicep",
+        "definition": "A domain-specific language for deploying Azure resources declaratively (Infrastructure as Code)"
+      },
+      {
+        "term": "Blue-Green Deployment",
+        "definition": "A release strategy using two identical environments; traffic is switched from the old (blue) to the new (green) after validation"
+      },
+      {
+        "term": "DMS",
+        "definition": "Azure Database Migration Service — a managed service for migrating databases to Azure"
+      },
+      {
+        "term": "Entra ID",
+        "definition": "Microsoft Entra ID (formerly Azure Active Directory) — cloud-based identity and access management service"
+      },
+      {
+        "term": "Entra ID Connect",
+        "definition": "A tool that synchronises on-premises Active Directory identities to Entra ID"
+      },
+      {
+        "term": "FPS",
+        "definition": "Full Payment Submission — the HMRC Real Time Information submission made each time employees are paid"
+      },
+      {
+        "term": "NI Number",
+        "definition": "National Insurance Number — a unique identifier used in the UK tax and benefits system (Sensitive Personal Information)"
+      },
+      {
+        "term": "PAYE",
+        "definition": "Pay As You Earn — the UK system for collecting income tax and National Insurance from employment"
+      },
+      {
+        "term": "PIM",
+        "definition": "Privileged Identity Management — Entra ID feature providing just-in-time privileged access"
+      },
+      {
+        "term": "PITR",
+        "definition": "Point-In-Time Restore — Azure SQL feature allowing database restoration to any point within the retention period"
+      },
+      {
+        "term": "Replatform",
+        "definition": "A migration strategy that moves a workload to a new platform with targeted optimisations (e.g., adopting managed database services) without re-architecting the application"
+      },
+      {
+        "term": "RTI",
+        "definition": "Real Time Information — HMRC system requiring employers to report payroll data in real time"
+      },
+      {
+        "term": "Standard 18",
+        "definition": "The BACS file format specification for payment instruction files"
+      },
+      {
+        "term": "TDE",
+        "definition": "Transparent Data Encryption — SQL Server and Azure SQL feature that encrypts data at rest"
+      }
     ],
     "references": [
       {
@@ -1196,29 +1378,6 @@
         "version": "1.0",
         "description": "T-SQL compatibility analysis results"
       }
-    ],
-    "approvals": [
-      {
-        "role": "Lead Solution Architect",
-        "name": "Fred Bloggs",
-        "date": "2026-03-28"
-      },
-      {
-        "role": "Security Architect",
-        "name": "Jane Doe"
-      },
-      {
-        "role": "DBA Lead",
-        "name": "Claire Doe"
-      },
-      {
-        "role": "ARB / Design Authority",
-        "name": "Architecture Review Board"
-      },
-      {
-        "role": "Business Sponsor",
-        "name": "Betty Bloggs"
-      }
     ]
   },
   "organisationProfile": {
@@ -1228,19 +1387,27 @@
         "id": "MSIS-3.2",
         "name": "Meridian Information Security Standard",
         "version": "3.2",
-        "mappedSections": ["3.4", "3.5"]
+        "mappedSections": [
+          "3.4",
+          "3.5"
+        ]
       },
       {
         "id": "MCSB-1.0",
         "name": "Meridian Cloud Security Baseline",
         "version": "1.0",
-        "mappedSections": ["3.3", "3.5"]
+        "mappedSections": [
+          "3.3",
+          "3.5"
+        ]
       },
       {
         "id": "MDCP-2.1",
         "name": "Meridian Data Classification Policy",
         "version": "2.1",
-        "mappedSections": ["3.4"]
+        "mappedSections": [
+          "3.4"
+        ]
       }
     ],
     "tooling": {
@@ -1252,20 +1419,104 @@
   },
   "complianceScoring": {
     "assessments": [
-      { "section": "1. Executive Summary", "score": 4, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Strong business context, current state well-documented, strategic alignment demonstrated. Scored 4 not 5: reuse assessment could include more detail on rejected platforms." },
-      { "section": "3.1 Logical View", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Components documented with technology choices; vendor lock-in assessed. Scored 3 not 4: component interactions could be more formally specified. Monolithic architecture limits decomposition detail." },
-      { "section": "3.2 Integration & Data Flow", "score": 4, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "All internal and external integrations documented with protocols and authentication. End user access documented." },
-      { "section": "3.3 Physical View", "score": 4, "assessor": "Joe Bloggs", "date": "2026-03-28", "notes": "Deployment architecture complete, compute sized, networking documented, environments listed. Connectivity protocols specified." },
-      { "section": "3.4 Data View", "score": 4, "assessor": "Jane Doe", "date": "2026-03-28", "notes": "All data stores classified, retention and encryption specified, PII/SPI identified, data sovereignty addressed, data transfers documented." },
-      { "section": "3.5 Security View", "score": 4, "assessor": "Jane Doe", "date": "2026-03-28", "notes": "Business impact assessed, authentication and authorisation fully documented, encryption at rest and in transit specified, secrets management documented, SIEM integration confirmed. Scored 4 not 5: formal threat model (STRIDE) not yet completed." },
-      { "section": "3.6 Scenarios", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Key use cases documented with flows; ADRs capture significant decisions with rationale and alternatives. Scored 3 not 4: use cases could cross-reference views more explicitly." },
-      { "section": "4.1 Operational Excellence", "score": 3, "assessor": "Joe Bloggs", "date": "2026-03-28", "notes": "Centralised logging, monitoring, and alerting in place. Scored 3 not 4: operational runbooks not yet fully documented (in progress)." },
-      { "section": "4.2 Reliability", "score": 4, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "DR strategy documented with RTO/RPO targets, backup configured with immutability, auto-scaling defined, fault tolerance designed with failure modes." },
-      { "section": "4.3 Performance", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Targets defined, growth projected. Scored 3 not 4: performance testing not yet executed (planned for May-Jun 2026)." },
-      { "section": "4.4 Cost Optimisation", "score": 3, "assessor": "Polly Doe", "date": "2026-03-28", "notes": "Cost analysis performed using Azure Pricing Calculator, TCO comparison documented. Scored 3 not 4: FinOps practices (tagging, rightsizing reviews) not yet formalised." },
-      { "section": "4.5 Sustainability", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Non-production auto-shutdown enabled, resources right-sized, demand patterns documented." },
-      { "section": "5. Lifecycle", "score": 4, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "CI/CD documented, migration plan detailed with 6 R's classification, phased timeline, rollback plan, skills assessment with training plan. Strong migration section." },
-      { "section": "6. Decision Making", "score": 3, "assessor": "Fred Bloggs", "date": "2026-03-28", "notes": "Constraints, assumptions, risks, and dependencies documented with ownership. ADRs captured. Scored 3 not 4: some assumptions still open; compliance traceability not yet complete." }
+      {
+        "section": "1. Executive Summary",
+        "score": 4,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "Strong business context, current state well-documented, strategic alignment demonstrated. Scored 4 not 5: reuse assessment could include more detail on rejected platforms."
+      },
+      {
+        "section": "3.1 Logical View",
+        "score": 3,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "Components documented with technology choices; vendor lock-in assessed. Scored 3 not 4: component interactions could be more formally specified. Monolithic architecture limits decomposition detail."
+      },
+      {
+        "section": "3.2 Integration & Data Flow",
+        "score": 4,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "All internal and external integrations documented with protocols and authentication. End user access documented."
+      },
+      {
+        "section": "3.3 Physical View",
+        "score": 4,
+        "assessor": "Joe Bloggs",
+        "date": "2026-03-28",
+        "notes": "Deployment architecture complete, compute sized, networking documented, environments listed. Connectivity protocols specified."
+      },
+      {
+        "section": "3.4 Data View",
+        "score": 4,
+        "assessor": "Jane Doe",
+        "date": "2026-03-28",
+        "notes": "All data stores classified, retention and encryption specified, PII/SPI identified, data sovereignty addressed, data transfers documented."
+      },
+      {
+        "section": "3.5 Security View",
+        "score": 4,
+        "assessor": "Jane Doe",
+        "date": "2026-03-28",
+        "notes": "Business impact assessed, authentication and authorisation fully documented, encryption at rest and in transit specified, secrets management documented, SIEM integration confirmed. Scored 4 not 5: formal threat model (STRIDE) not yet completed."
+      },
+      {
+        "section": "3.6 Scenarios",
+        "score": 3,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "Key use cases documented with flows; ADRs capture significant decisions with rationale and alternatives. Scored 3 not 4: use cases could cross-reference views more explicitly."
+      },
+      {
+        "section": "4.1 Operational Excellence",
+        "score": 3,
+        "assessor": "Joe Bloggs",
+        "date": "2026-03-28",
+        "notes": "Centralised logging, monitoring, and alerting in place. Scored 3 not 4: operational runbooks not yet fully documented (in progress)."
+      },
+      {
+        "section": "4.2 Reliability",
+        "score": 4,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "DR strategy documented with RTO/RPO targets, backup configured with immutability, auto-scaling defined, fault tolerance designed with failure modes."
+      },
+      {
+        "section": "4.3 Performance",
+        "score": 3,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "Targets defined, growth projected. Scored 3 not 4: performance testing not yet executed (planned for May-Jun 2026)."
+      },
+      {
+        "section": "4.4 Cost Optimisation",
+        "score": 3,
+        "assessor": "Polly Doe",
+        "date": "2026-03-28",
+        "notes": "Cost analysis performed using Azure Pricing Calculator, TCO comparison documented. Scored 3 not 4: FinOps practices (tagging, rightsizing reviews) not yet formalised."
+      },
+      {
+        "section": "4.5 Sustainability",
+        "score": 3,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "Non-production auto-shutdown enabled, resources right-sized, demand patterns documented."
+      },
+      {
+        "section": "5. Lifecycle",
+        "score": 4,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "CI/CD documented, migration plan detailed with 6 R's classification, phased timeline, rollback plan, skills assessment with training plan. Strong migration section."
+      },
+      {
+        "section": "6. Decision Making",
+        "score": 3,
+        "assessor": "Fred Bloggs",
+        "date": "2026-03-28",
+        "notes": "Constraints, assumptions, risks, and dependencies documented with ownership. ADRs captured. Scored 3 not 4: some assumptions still open; compliance traceability not yet complete."
+      }
     ],
     "overallScore": 3,
     "overallAssessor": "Fred Bloggs",

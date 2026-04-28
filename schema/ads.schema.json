@@ -114,6 +114,16 @@
       ],
       "description": "Atomic tri-state for yes/no questions with an N/A option"
     },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "public",
+        "internal",
+        "restricted",
+        "highly-restricted"
+      ],
+      "description": "Sensitivity classification for documents and data"
+    },
     "complianceScore": {
       "type": "integer",
       "minimum": 0,
@@ -202,13 +212,7 @@
               "format": "date"
             },
             "classification": {
-              "type": "string",
-              "enum": [
-                "public",
-                "internal",
-                "confidential",
-                "restricted"
-              ]
+              "$ref": "#/$defs/classification"
             }
           }
         },
@@ -819,11 +823,18 @@
                       "amqp",
                       "amqps",
                       "mqtt",
+                      "mqtts",
                       "kafka",
+                      "websocket",
+                      "wss",
+                      "jdbc",
+                      "odbc",
                       "sftp",
                       "ftps",
                       "smtp",
                       "smtps",
+                      "ldaps",
+                      "ssh",
                       "other"
                     ]
                   },
@@ -842,6 +853,7 @@
                       "basic-auth",
                       "certificate",
                       "iam-role",
+                      "kerberos",
                       "none",
                       "other"
                     ]
@@ -996,6 +1008,7 @@
                       "virtual-machine",
                       "container",
                       "serverless-function",
+                      "paas-app-service",
                       "edge-compute",
                       "hpc",
                       "gpu",
@@ -1313,13 +1326,7 @@
                     ]
                   },
                   "classification": {
-                    "type": "string",
-                    "enum": [
-                      "public",
-                      "internal",
-                      "restricted",
-                      "highly-restricted"
-                    ]
+                    "$ref": "#/$defs/classification"
                   },
                   "containsPersonalData": {
                     "type": "boolean"
@@ -1392,13 +1399,7 @@
                     ]
                   },
                   "classification": {
-                    "type": "string",
-                    "enum": [
-                      "public",
-                      "internal",
-                      "restricted",
-                      "highly-restricted"
-                    ]
+                    "$ref": "#/$defs/classification"
                   },
                   "transferMethod": {
                     "type": "string",
@@ -2562,17 +2563,123 @@
           "x-ads-title": "Issues",
           "x-ads-depth": "recommended"
         },
+        "technicalDebt": {
+          "type": "array",
+          "description": "Section 6.6 — Technical debt introduced or inherited by this solution",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "description",
+              "impact"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^TD-\\d+$"
+              },
+              "description": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "design",
+                  "code",
+                  "infrastructure",
+                  "security",
+                  "operational"
+                ]
+              },
+              "impact": {
+                "type": "string",
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ]
+              },
+              "remediationPlan": {
+                "type": "string"
+              },
+              "targetDate": {
+                "type": "string",
+                "format": "date"
+              },
+              "owner": {
+                "type": "string"
+              }
+            }
+          },
+          "x-ads-section": "6.6",
+          "x-ads-title": "Technical Debt Register",
+          "x-ads-depth": "recommended"
+        },
         "policyExceptions": {
-          "$ref": "#/$defs/yesNoNa"
+          "$ref": "#/$defs/yesNoNa",
+          "x-ads-section": "6.7",
+          "x-ads-title": "Policy Exceptions",
+          "x-ads-depth": "recommended"
         },
         "policyExceptionsAccepted": {
-          "$ref": "#/$defs/yesNoNa"
+          "$ref": "#/$defs/yesNoNa",
+          "x-ads-section": "6.7",
+          "x-ads-title": "Policy Exceptions Accepted",
+          "x-ads-depth": "recommended"
         },
         "processExceptions": {
-          "$ref": "#/$defs/yesNoNa"
+          "$ref": "#/$defs/yesNoNa",
+          "x-ads-section": "6.7",
+          "x-ads-title": "Process Exceptions",
+          "x-ads-depth": "recommended"
         },
         "riskProfileImpact": {
-          "$ref": "#/$defs/yesNoNa"
+          "$ref": "#/$defs/yesNoNa",
+          "x-ads-section": "6.7",
+          "x-ads-title": "Risk Profile Impact",
+          "x-ads-depth": "recommended"
+        },
+        "architectureDecisionsLog": {
+          "type": "array",
+          "description": "Section 6.8 — Governance summary index of architecture decisions. The full ADRs (with context, alternatives, consequences) live in architecturalViews.scenarios.adrs (Section 3.6.2). Entries here should reference those by id and provide a one-line impact summary suitable for governance review.",
+          "items": {
+            "type": "object",
+            "required": [
+              "adrId",
+              "title",
+              "status"
+            ],
+            "properties": {
+              "adrId": {
+                "type": "string",
+                "pattern": "^ADR-\\d+$",
+                "description": "References an ADR id from architecturalViews.scenarios.adrs"
+              },
+              "title": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "proposed",
+                  "accepted",
+                  "superseded",
+                  "deprecated"
+                ]
+              },
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "impact": {
+                "type": "string",
+                "description": "One-line impact summary for governance review"
+              }
+            }
+          },
+          "x-ads-section": "6.8",
+          "x-ads-title": "Architectural Decisions Log",
+          "x-ads-depth": "recommended"
         },
         "complianceTraceability": {
           "type": "array",
@@ -2602,9 +2709,44 @@
               }
             }
           },
-          "x-ads-section": "6.8",
+          "x-ads-section": "6.9",
           "x-ads-title": "Compliance Traceability",
           "x-ads-depth": "comprehensive"
+        },
+        "approvals": {
+          "type": "array",
+          "description": "Approval sign-off records. Section 6.10 places sign-off as the closing governance act of Section 6. Fields are intentionally not required so a draft document can list expected sign-off roles before decisions are recorded.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "decision": {
+                "type": "string",
+                "enum": [
+                  "approved",
+                  "approved-with-conditions",
+                  "rejected",
+                  "deferred"
+                ]
+              },
+              "conditions": {
+                "type": "string",
+                "description": "Any conditions attached to the approval (required when decision is approved-with-conditions)"
+              }
+            }
+          },
+          "x-ads-section": "6.10",
+          "x-ads-title": "Approval Sign-Off",
+          "x-ads-depth": "minimum"
         }
       },
       "x-ads-section": "6",
@@ -2627,7 +2769,10 @@
                 "type": "string"
               }
             }
-          }
+          },
+          "x-ads-section": "7.1",
+          "x-ads-title": "Glossary",
+          "x-ads-depth": "recommended"
         },
         "references": {
           "type": "array",
@@ -2648,34 +2793,10 @@
                 "type": "string"
               }
             }
-          }
-        },
-        "approvals": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "role": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "date": {
-                "type": "string",
-                "format": "date"
-              },
-              "decision": {
-                "type": "string",
-                "enum": [
-                  "approved",
-                  "approved-with-conditions",
-                  "rejected",
-                  "deferred"
-                ]
-              }
-            }
-          }
+          },
+          "x-ads-section": "7.2",
+          "x-ads-title": "Reference Documents",
+          "x-ads-depth": "recommended"
         }
       },
       "x-ads-section": "7",

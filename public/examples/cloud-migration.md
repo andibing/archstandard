@@ -1,6 +1,6 @@
 # Solution Architecture Document — PayrollPro Cloud Migration
 
-> **Standard:** ADS v1.3.0 (Architecture Description Standard)
+> **Standard:** ADS v1.3.2 (Architecture Description Standard)
 > **Author:** Fred Bloggs, Lead Solution Architect
 > **Organisation:** Meridian Financial Services
 > **Status:** In Review

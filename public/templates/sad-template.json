@@ -489,10 +489,30 @@
         "lastAssessed": ""
       }
     ],
+    "technicalDebt": [
+      {
+        "id": "",
+        "description": "",
+        "category": "design",
+        "impact": "high",
+        "remediationPlan": "",
+        "targetDate": "",
+        "owner": ""
+      }
+    ],
     "policyExceptions": "yes",
     "policyExceptionsAccepted": "yes",
     "processExceptions": "yes",
     "riskProfileImpact": "yes",
+    "architectureDecisionsLog": [
+      {
+        "adrId": "",
+        "title": "",
+        "status": "proposed",
+        "date": "",
+        "impact": ""
+      }
+    ],
     "complianceTraceability": [
       {
         "standard": "",
@@ -500,6 +520,15 @@
         "howSatisfied": "",
         "evidenceSection": "",
         "complianceStatus": "compliant"
+      }
+    ],
+    "approvals": [
+      {
+        "role": "",
+        "name": "",
+        "date": "",
+        "decision": "approved",
+        "conditions": ""
       }
     ]
   },
@@ -516,14 +545,6 @@
         "version": "",
         "url": "",
         "description": ""
-      }
-    ],
-    "approvals": [
-      {
-        "role": "",
-        "name": "",
-        "date": "",
-        "decision": "approved"
       }
     ]
   },
