@@ -20,6 +20,7 @@
 ### Document Metadata
 
 **Authors:**
+
 - 
 
 ### Change History
@@ -53,9 +54,11 @@
 |  |  | [ ] Yes [ ] No |  |
 
 **In Scope:**
+
 - 
 
 **Out Of Scope:**
+
 - 
 
 ### Key Decisions & Constraints
@@ -101,6 +104,7 @@
 ### 3.1 Logical View
 
 **Diagrams:**
+
 - 
 
 #### Components
@@ -123,11 +127,13 @@
 | [ ] Microservices [ ] Monolith [ ] Modular Monolith [ ] Event Driven [ ] CQRS [ ] Saga [ ] Strangler Fig [ ] Sidecar [ ] API Gateway [ ] BFF [ ] Circuit Breaker [ ] Pub Sub [ ] Request Response [ ] Batch Processing [ ] Stream Processing [ ] Data Lake [ ] Data Mesh [ ] Other |  |  |
 
 **Quality Attribute References:**
+
 - 
 
 ### 3.2 Integration & Data Flow View
 
 **Diagrams:**
+
 - 
 
 #### Internal Component Connectivity
@@ -174,30 +180,37 @@
 | **Rate Limited** | [ ] Yes [ ] No |
 
 **Quality Attribute References:**
+
 - 
 
 ### 3.3 Physical View
 
 **Diagrams:**
+
 - 
 
 #### Hosting & Infrastructure
 
 **Venue Types:**
+
 - 
 
 **Regions:**
+
 - 
 
 **Service Models:**
+
 - 
 
 **Cloud Providers:**
+
 - 
 
 #### Compute
 
 **Compute Types:**
+
 - 
 
 ##### Servers
@@ -217,11 +230,13 @@
 ##### Containers
 
 **Base Images:**
+
 - 
 
 ##### Serverless
 
 **Services:**
+
 - 
 
 #### Network Connectivity
@@ -251,9 +266,11 @@
 | [ ] Development [ ] Test [ ] QA [ ] Integration Test [ ] Staging [ ] Pre Production [ ] Production [ ] DR [ ] Sandbox [ ] Demo [ ] Performance Test |  |  | [ ] Yes [ ] No |
 
 **Security Agents:**
+
 - 
 
 **Quality Attribute References:**
+
 - 
 
 ### 3.4 Data View
@@ -283,6 +300,7 @@
 |  | [ ] Internal [ ] Third Party [ ] Regulator [ ] Customer [ ] Partner | [ ] Public [ ] Internal [ ] Restricted [ ] Highly Restricted | [ ] API [ ] SFTP [ ] Email [ ] Message Queue [ ] Database Replication [ ] File Share [ ] Manual [ ] Other | [ ] Yes [ ] No |
 
 **Quality Attribute References:**
+
 - 
 
 ### 3.5 Security View
@@ -351,6 +369,7 @@
 | **Intrusion Detection** | [ ] Yes [ ] No |
 
 **Quality Attribute References:**
+
 - 
 
 ### 3.6 Scenarios

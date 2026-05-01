@@ -42,7 +42,7 @@ Then list what is **in scope** and **out of scope** as bullet points.
 
 ### Step 4: Describe the Architecture
 
-Complete the three core views at Minimum depth:
+Complete the five views required at Minimum depth (see the [Depth Cheat Sheet](/v1/standard/cheat-sheet/) for the full rules):
 
 **Logical View (Section 3.1)** — List the main components:
 
@@ -52,6 +52,16 @@ Complete the three core views at Minimum depth:
 | API | API Service | Node.js | New |
 | Database | Database | PostgreSQL | New |
 
+**Integration & Data Flow View (Section 3.2)** — Show how components talk to each other and to anything outside the solution:
+
+| From | To | Protocol | Encrypted | Purpose |
+|------|----|---------|-----------|---------|
+| Frontend | API | HTTPS | Yes | User actions |
+| API | Database | TCP-TLS | Yes | Reads/writes |
+| API | Identity Provider | HTTPS | Yes | SSO |
+
+A simple data-flow diagram (Mermaid, draw.io, or hand-drawn) helps too.
+
 **Physical View (Section 3.3)** — State where it runs:
 
 | Field | Value |
@@ -60,11 +70,19 @@ Complete the three core views at Minimum depth:
 | Service Model | PaaS |
 | Region | UK South |
 
+**Data View (Section 3.4)** — List the data stores and how the data is classified:
+
+| Data Store | Store Type | Classification |
+|------------|------------|----------------|
+| Application database | Relational DB | Internal |
+| Object storage | Object storage | Internal |
+
 **Security View (Section 3.5)** — State how users authenticate and how data is protected:
 
 | Field | Value |
 |-------|-------|
 | Authentication | SSO via Entra ID / Okta |
+| Authorisation | Role-based, enforced at the API |
 | Encryption at Rest | Yes (provider-managed keys) |
 | Encryption in Transit | Yes (TLS 1.2+) |
 

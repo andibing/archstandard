@@ -661,8 +661,13 @@ function generateMdSection(schema, node, lines, headingLevel, contextKey) {
           lines.push('');
         }
       } else {
-        // Simple array of strings
+        // Simple array of strings.
+        // Note the blank line after the bold label: without it, Pandoc's docx
+        // writer interprets `**Authors:**\n- ` as a section heading followed
+        // by a list and styles "Authors:" as Heading 2. The blank line
+        // separates them into two distinct blocks.
         lines.push(`**${label}:**`);
+        lines.push('');
         lines.push('- ');
         lines.push('');
       }
@@ -823,14 +828,68 @@ function main() {
       // better — the SAD template has many many-column array tables.
       const refDocxPath = path.join(__dirname, 'sad-template-reference.docx');
       const refArg = fs.existsSync(refDocxPath) ? `--reference-doc="${refDocxPath}" ` : '';
-      execSync(
-        `"${pandoc}" "${mdPath}" -o "${docxPath}" ` +
-        refArg +
-        `--metadata=lang:en-GB ` +
-        `--metadata=title:"ADS — Solution Architecture Document Template"`,
-        { stdio: 'pipe' }
-      );
-      console.log('  Generated:', docxPath, '(en-GB)');
+
+      // Generate the cover-page logo PNG from the SVG (regenerated each run
+      // so SVG edits propagate). Sharp is a transitive Astro dep — already
+      // available via npm install.
+      const logoPngPath = path.join(__dirname, 'ads-logo-cover.png');
+      try {
+        const sharp = require('sharp');
+        const svgPath = path.join(__dirname, '..', 'src', 'assets', 'ads-logo.svg');
+        // Use synchronous-ish wait — sharp returns a Promise; we resolve it
+        // before invoking Pandoc. Done at module load via execSync of a small
+        // node command to keep this codepath synchronous.
+        execSync(
+          `node -e "require('sharp')(require('fs').readFileSync('${svgPath.replace(/\\/g, '/')}'),{density:300}).resize(280,280,{fit:'contain',background:{r:0,g:0,b:0,alpha:0}}).png().toFile('${logoPngPath.replace(/\\/g, '/')}')"`,
+          { stdio: 'pipe' }
+        );
+      } catch (e) {
+        console.warn('  Logo PNG generation failed (docx will have no logo):', e.message);
+      }
+
+      // Build a Pandoc-only wrapper markdown that adds a title page (logo +
+      // title metadata) before the body. The canonical sad-template.md stays
+      // unchanged so people downloading just the markdown get clean content.
+      const bodyMd = fs.readFileSync(mdPath, 'utf-8');
+      // Strip the leading H1 — Pandoc renders metadata title in its place.
+      const bodyWithoutH1 = bodyMd.replace(/^# Solution Architecture Document\s*\n+/, '');
+      // Cover page: Pandoc renders title/subtitle metadata at the top of the
+      // body using the reference doc's Title/Subtitle styles. We follow them
+      // with a small logo and a \newpage so the cover sits on page 1 alone
+      // and the rest of the template starts on page 2.
+      // Pandoc's `\newpage` is silently ignored for docx output; raw OOXML
+      // is the reliable way to inject a page break in a docx target.
+      const pageBreak =
+        '```{=openxml}\n' +
+        '<w:p><w:r><w:br w:type="page"/></w:r></w:p>\n' +
+        '```\n\n';
+
+      const wrapperMd =
+        `---\n` +
+        `title: "Solution Architecture Document"\n` +
+        `subtitle: "ADS v1.3.2 — Architecture Description Standard Template"\n` +
+        `lang: en-GB\n` +
+        `---\n\n` +
+        (fs.existsSync(logoPngPath)
+          ? `![ADS](${logoPngPath.replace(/\\/g, '/')}){width=1.6in}\n\n`
+          : ``) +
+        pageBreak +
+        bodyWithoutH1;
+      const wrapperPath = path.join(__dirname, '.docx-wrapper.md');
+      fs.writeFileSync(wrapperPath, wrapperMd, 'utf-8');
+
+      try {
+        execSync(
+          `"${pandoc}" "${wrapperPath}" -o "${docxPath}" ` +
+          refArg +
+          `--metadata=lang:en-GB`,
+          { stdio: 'pipe' }
+        );
+        console.log('  Generated:', docxPath, '(en-GB, with cover page)');
+      } finally {
+        // Tidy up the temp wrapper. Leave the PNG — it's gitignored.
+        try { fs.unlinkSync(wrapperPath); } catch (_) { /* best-effort */ }
+      }
     } else {
       console.log('  Skipped DOCX generation (Pandoc not found)');
     }
