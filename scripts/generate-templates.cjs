@@ -864,17 +864,33 @@ function main() {
         '<w:p><w:r><w:br w:type="page"/></w:r></w:p>\n' +
         '```\n\n';
 
-      const wrapperMd =
-        `---\n` +
-        `title: "Solution Architecture Document"\n` +
-        `subtitle: "ADS v1.3.2 — Architecture Description Standard Template"\n` +
-        `lang: en-GB\n` +
-        `---\n\n` +
-        (fs.existsSync(logoPngPath)
-          ? `![ADS](${logoPngPath.replace(/\\/g, '/')}){width=1.6in}\n\n`
-          : ``) +
-        pageBreak +
-        bodyWithoutH1;
+      // Build the cover page using Pandoc custom-style divs that map to
+      // existing styles in scripts/sad-template-reference.docx:
+      //   - "Author" is centred (basedOn Title) — used to centre the logo,
+      //     since it's the only ready-made centred paragraph style
+      //   - "Title" / "Subtitle" are the standard reference-doc title styles
+      // Empty alt text on the image prevents Pandoc from rendering a
+      // figure caption ("ADS") below it.
+      // Logo first, then title/subtitle, then page break — letterhead order.
+      const logoBlock = fs.existsSync(logoPngPath)
+        ? `:::{custom-style="Author"}\n` +
+          `![](${logoPngPath.replace(/\\/g, '/')}){width=1.4in}\n` +
+          `:::\n\n`
+        : ``;
+      const cover =
+        logoBlock +
+        `:::{custom-style="Title"}\n` +
+        `Solution Architecture Document\n` +
+        `:::\n\n` +
+        `:::{custom-style="Subtitle"}\n` +
+        `ADS v1.3.2 — Architecture Description Standard Template\n` +
+        `:::\n\n` +
+        pageBreak;
+
+      // We don't use Pandoc's frontmatter title metadata any more — the
+      // cover above replaces it. Keep `lang` as a CLI flag for the
+      // remainder of the doc.
+      const wrapperMd = cover + bodyWithoutH1;
       const wrapperPath = path.join(__dirname, '.docx-wrapper.md');
       fs.writeFileSync(wrapperPath, wrapperMd, 'utf-8');
 
