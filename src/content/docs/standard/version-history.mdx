@@ -33,49 +33,58 @@ Third-party builders ([see specification](https://github.com/andibing/archstanda
 
 ## Releases
 
-### v1.0.0 - Initial Release
+Releases are listed newest-first.
 
-**Date:** 2026-03-27 · **JSON Schema:** v1.0.0
+### v1.3.2 - Schema consistency and Section 6 additions
 
-The first version of the Architecture Description Standard (ADS), synthesising years of practical experience in solution architecture with established frameworks:
+**Date:** 2026-04-28 · **JSON Schema:** v1.0.0 (additions only — backwards compatible)
 
-- **ISO/IEC/IEEE 42010** - Architecture Description meta-model (stakeholders, concerns, viewpoints, views)
-- **4+1 Architectural View Model** - Six architectural views (extended from 5 with dedicated Data and Security views)
-- **Cloud Well-Architected Frameworks** - Quality attributes derived from AWS, Azure, GCP, Oracle, and IBM Well-Architected Frameworks
-- **TOGAF** - Architecture domain alignment (Business, Data, Application, Technology)
-- **Industry SAD/HLD templates** - Best practices from arc42, ServiceNow, NHS SAF, ALMBoK, and enterprise templates
+Patch release closing internal-consistency gaps between the schema, the standard text, and the worked examples. All seven examples now validate clean against the schema.
 
-**Structure:**
-- 8 top-level sections (0-7)
-- 6 Architectural Views
-- 5 Quality Attributes
-- 3 Documentation Depths (Minimum, Recommended, Comprehensive)
-- JSON Schema for multi-format generation
-- Framework alignment traceability
+**Schema additions (additive — old SADs remain valid):**
+- `riskGovernance.technicalDebt` — array of TD-NNN entries (id, description, category, impact, remediation plan, target date, owner) for **Section 6.6 Technical Debt Register**
+- `riskGovernance.architectureDecisionsLog` — governance summary index for **Section 6.8 Architectural Decisions Log**, referencing full ADRs in `architecturalViews.scenarios.adrs` (Section 3.6.2) by id
+- `approvals[].conditions` — optional string capturing conditions on a sign-off
 
-### v1.1 - Examples and Guidance
+**Schema corrections:**
+- New canonical `$defs/classification` (public, internal, restricted, highly-restricted) replaces three inline duplicate enums; removes the stray "confidential" value that had drifted into Document Control
+- Added `paas-app-service` to physicalView compute types (Cloud Migration example was using it)
+- External integrations protocol enum brought to parity with internal protocol: added jdbc, odbc, mqtts, websocket, wss, ldaps, ssh; added kerberos to authentication methods (Customer API Platform example was using jdbc)
 
-**Date:** 2026-03-31 · **JSON Schema:** v1.0.0 (unchanged)
+**Structural fix:**
+- `approvals` relocated from `appendices.approvals` to `riskGovernance.approvals`. Per the standard, **Section 6.10 Approval Sign-Off** is the closing governance act of Section 6, not an appendix. Examples migrated; templates and the rendered SAD now correctly place 6.10 under Section 6.
 
-- Four completed example SADs (Employee Directory, Customer API Platform, Cloud Migration, archstandard.org)
-- Scoring guidance (1/3/5) added to all section pages
-- Accessibility and neurodiversity improvements
-- French and German translations
-- Template generator script (schema as single source of truth)
+**Section-tag corrections:**
+- Compliance Traceability is now correctly tagged 6.9 (was 6.8)
+- Guardrail-exception fields (policyExceptions, policyExceptionsAccepted, processExceptions, riskProfileImpact) tagged 6.7
+- Glossary tagged 7.1, References tagged 7.2
 
-### v1.2.0 - Public Release
+**Template / SAD-builder polish:**
+- Section headings in the generated `sad-template.{md,yaml,docx}` now show numbered prefixes for 6.6, 6.7, 6.8, 6.9, 6.10, 7.1, 7.2 — matching the standard
 
-**Date:** 2026-04-13 · **JSON Schema:** v1.0.0 (unchanged)
+### v1.3.1 - Bug fixes and SAD template polish
 
-- Public launch of archstandard.org and GitHub repository
-- All example SADs available in JSON and Markdown download formats
-- Reading preferences toolbar (font choice, line spacing, focus mode, colour overlay)
-- Security hardening (CSP headers, Mermaid strict mode, dependency updates)
-- Depth Cheat Sheet for quick reference
-- Quickstart guide
-- Organisation customisation examples (YAML and JSON)
-- Full French and German translation parity (30 pages each)
-- Dual licence: CC BY 4.0 (content) + MIT (code)
+**Date:** 2026-04-27 · **JSON Schema:** v1.0.0 (unchanged)
+
+Patch release on top of v1.3.0. No content additions, no breaking changes — bug fixes and editorial polish from initial-review feedback.
+
+**Bug fixes:**
+- Fixed broken Mermaid diagram in Medwick example (3.3.1 deployment diagram had a node ID containing spaces after the NHS→MediCore substitution)
+- Fixed schema canonical URL: now correctly serves at `https://archstandard.org/schema/v1.0.0/ads.schema.json` (matching the `$id`)
+- Fixed schema validation code samples (must download then validate locally; earlier examples used the unsupported `-s URL` form)
+- Sidebar scroll-spy: anchor sub-items in single-file standard sections (0, 1, 2, 5, 6, 7) now show active state when the matching section is in view
+- Consolidated validation instructions to a single canonical home on the JSON Schema page (was duplicated across 4 pages)
+
+**SAD template improvements:**
+- Wide multi-column tables (e.g. Data Stores) now render as vertical Field/Value forms — readable in any output format
+- Word doc margins reduced to 15mm; `lang: en-GB` set so Word's spell-checker uses UK English
+- "Author: Andi Chandler" removed from auto-generated headers (template is for the user to fill in)
+- Acronym dictionary expanded: SRE, DevOps, MLOps, DBA, CPU, RHEL, SUSE, CentOS, QA, CyberArk, CI/CD, Trade-off
+- "Quality Attribute Refs" → "Quality Attribute References" (full word)
+- Banner items now render as separate paragraphs in the Word doc
+
+**Editorial polish:**
+- Stale NHS-flavoured Medwick descriptions updated across the site (now uses fictional "MediCore" framework consistently, including in the Medwick logo SVG)
 
 ### v1.3.2 - Schema consistency and Section 6 additions
 
@@ -166,6 +175,50 @@ Focus on making ADS easier to adopt, easier to review, and easier to teach.
 **Other:**
 - FAQ page answering common adoption questions
 - Examples index expanded to show all seven examples with downloadable Markdown and JSON
+
+### v1.2.0 - Public Release
+
+**Date:** 2026-04-13 · **JSON Schema:** v1.0.0 (unchanged)
+
+- Public launch of archstandard.org and GitHub repository
+- All example SADs available in JSON and Markdown download formats
+- Reading preferences toolbar (font choice, line spacing, focus mode, colour overlay)
+- Security hardening (CSP headers, Mermaid strict mode, dependency updates)
+- Depth Cheat Sheet for quick reference
+- Quickstart guide
+- Organisation customisation examples (YAML and JSON)
+- Full French and German translation parity (30 pages each)
+- Dual licence: CC BY 4.0 (content) + MIT (code)
+
+### v1.1 - Examples and Guidance
+
+**Date:** 2026-03-31 · **JSON Schema:** v1.0.0 (unchanged)
+
+- Four completed example SADs (Employee Directory, Customer API Platform, Cloud Migration, archstandard.org)
+- Scoring guidance (1/3/5) added to all section pages
+- Accessibility and neurodiversity improvements
+- French and German translations
+- Template generator script (schema as single source of truth)
+
+### v1.0.0 - Initial Release
+
+**Date:** 2026-03-27 · **JSON Schema:** v1.0.0
+
+The first version of the Architecture Description Standard (ADS), synthesising years of practical experience in solution architecture with established frameworks:
+
+- **ISO/IEC/IEEE 42010** - Architecture Description meta-model (stakeholders, concerns, viewpoints, views)
+- **4+1 Architectural View Model** - Six architectural views (extended from 5 with dedicated Data and Security views)
+- **Cloud Well-Architected Frameworks** - Quality attributes derived from AWS, Azure, GCP, Oracle, and IBM Well-Architected Frameworks
+- **TOGAF** - Architecture domain alignment (Business, Data, Application, Technology)
+- **Industry SAD/HLD templates** - Best practices from arc42, ServiceNow, NHS SAF, ALMBoK, and enterprise templates
+
+**Structure:**
+- 8 top-level sections (0-7)
+- 6 Architectural Views
+- 5 Quality Attributes
+- 3 Documentation Depths (Minimum, Recommended, Comprehensive)
+- JSON Schema for multi-format generation
+- Framework alignment traceability
 
 ## Roadmap
 

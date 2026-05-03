@@ -13,7 +13,11 @@
 # canonical URL resolves directly. A wildcard redirect here would break
 # the schema's self-referencing $id.
 
-# 1. Bare-directory landings — intuitive guesses that would otherwise 404
+# 1. Renamed pages — preserve old bookmarks after a content rename.
+/v1/standard/3-2-process-view/   /v1/standard/3-2-integration-view/   301
+/standard/3-2-process-view/      /v1/standard/3-2-integration-view/   301
+
+# 2. Bare-directory landings — intuitive guesses that would otherwise 404
 #    because the directory contains assets, not an index.html.
 /v1/standard/         /v1/standard/overview/        301
 /v1/templates/        /v1/standard/templates/       301
@@ -25,7 +29,7 @@
 /cheat-cards/         /v1/guidance/cheat-cards/     301
 /prompts/             /v1/standard/prompts/         301
 
-# 2. Pre-/v1/-migration: forward old sub-paths to /v1/-prefixed.
+# 3. Pre-/v1/-migration: forward old sub-paths to /v1/-prefixed.
 #    These match anything BELOW the listed paths (e.g. /standard/3-1-...)
 #    and are placed after the specific bare-landing rules so they don't
 #    shadow them.

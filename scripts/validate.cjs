@@ -45,7 +45,7 @@ const requiredFiles = [
   'src/content/docs/standard/2-stakeholders.mdx',
   'src/content/docs/standard/3-views-overview.mdx',
   'src/content/docs/standard/3-1-logical-view.mdx',
-  'src/content/docs/standard/3-2-process-view.mdx',
+  'src/content/docs/standard/3-2-integration-view.mdx',
   'src/content/docs/standard/3-3-physical-view.mdx',
   'src/content/docs/standard/3-4-data-view.mdx',
   'src/content/docs/standard/3-5-security-view.mdx',
@@ -260,7 +260,7 @@ if (!corpFound) pass('No corporate references found');
 console.log('\n=== 8. Scoring Guidance ===\n');
 
 const scoredSections = [
-  '1-executive-summary.mdx', '3-1-logical-view.mdx', '3-2-process-view.mdx',
+  '1-executive-summary.mdx', '3-1-logical-view.mdx', '3-2-integration-view.mdx',
   '3-3-physical-view.mdx', '3-4-data-view.mdx', '3-5-security-view.mdx',
   '3-6-scenarios.mdx', '4-1-operational-excellence.mdx', '4-2-reliability.mdx',
   '4-3-performance.mdx', '4-4-cost-optimisation.mdx', '4-5-sustainability.mdx',

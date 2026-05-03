@@ -58,7 +58,7 @@ const PAGES = [
   '2-stakeholders.mdx',
   '3-views-overview.mdx',
   '3-1-logical-view.mdx',
-  '3-2-process-view.mdx',
+  '3-2-integration-view.mdx',
   '3-3-physical-view.mdx',
   '3-4-data-view.mdx',
   '3-5-security-view.mdx',
