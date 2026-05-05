@@ -61,7 +61,11 @@ pandoc sad-template.md -o my-sad.docx --reference-doc=your-template.docx
 
 ## Validating Your SAD
 
-Once you've completed your SAD in JSON or YAML, validate it against the ADS schema. See **[Validating a SAD against the Schema](/v1/standard/schema/#validating-a-sad-against-the-schema)** on the JSON Schema page for the full Node and Python instructions.
+ADS is backed by a formal **[JSON Schema](https://archstandard.org/schema/v1.0.0/ads.schema.json)** — a machine-readable definition of every section, field, enum, and required relationship in a SAD. If you author your SAD in JSON or YAML, you can run an off-the-shelf validator against the schema to confirm the document is structurally complete and the values are within the expected vocabularies (e.g. that `classification` is one of `public / internal / restricted / highly-restricted`).
+
+The validator catches the kinds of mistake that survive a casual review: a missing required field, a typo in an enum value, the wrong type for a field, or a section structurally in the wrong place. It complements human review — it doesn't replace it.
+
+See **[Validating a SAD against the Schema](/v1/standard/schema/#validating-a-sad-against-the-schema)** on the JSON Schema page for the full Node and Python instructions, plus what a validation error looks like and how to read it. Markdown and Word SADs aren't directly validatable in this way, but you can convert them to YAML or JSON via Pandoc or a builder tool and validate the result.
 
 ## Customising for Your Organisation
 

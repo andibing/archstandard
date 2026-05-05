@@ -13,6 +13,12 @@ This guide walks you through producing a minimal Solution Architecture Document.
 A text editor and a basic understanding of the solution you are documenting. No tools or installations required.
 </Aside>
 
+<Aside type="note" title="What 'Minimum' means">
+ADS defines three documentation depths — **Minimum**, **Recommended**, and **Comprehensive** — using the requirement keywords from [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119): SHALL (Minimum: must include), SHOULD (Recommended: should include), MAY (Comprehensive: optional but useful for critical systems).
+
+This Quickstart targets **Minimum** depth — the right level for early-stage designs, proofs of concept, and dev/test reviews. You'll fill in only the sections marked Yes in the Minimum column of the [Depth Cheat Sheet](/v1/standard/cheat-sheet/). Quality Attributes, Lifecycle, and most of the deeper governance sections start at Recommended depth and aren't required here.
+</Aside>
+
 ### Step 1: Download a Template
 
 Download the [Markdown template](/v1/standard/templates/) — or copy it to your clipboard for pasting into Confluence or a wiki.
@@ -40,7 +46,20 @@ Answer three questions in a short paragraph:
 
 Then list what is **in scope** and **out of scope** as bullet points.
 
-### Step 4: Describe the Architecture
+### Step 4: Identify the Stakeholders
+
+List the people whose decisions or concerns the design must address. Even a Minimum SAD needs this — a design with no identified stakeholders has nobody to review it:
+
+| Stakeholder | Role | Key Concern |
+|-------------|------|-------------|
+| Product Owner | Sponsor | Business outcomes, timeline |
+| Engineering Lead | Builder | Maintainability, team skills fit |
+| Security | Reviewer | Authentication, data protection |
+| SRE / Operations | Operator | Reliability, on-call burden |
+
+Three to six stakeholders is normal at Minimum depth. The full Section 2 covers concerns matrices and compliance context — not required here.
+
+### Step 5: Describe the Architecture
 
 Complete the five views required at Minimum depth (see the [Depth Cheat Sheet](/v1/standard/cheat-sheet/) for the full rules):
 
@@ -86,7 +105,7 @@ A simple data-flow diagram (Mermaid, draw.io, or hand-drawn) helps too.
 | Encryption at Rest | Yes (provider-managed keys) |
 | Encryption in Transit | Yes (TLS 1.2+) |
 
-### Step 5: Capture Key Risks
+### Step 6: Capture Key Risks
 
 Add at least one risk to the Decision Making section:
 
@@ -116,6 +135,14 @@ It replaces a legacy PHP application that is end-of-life.
 **In Scope:** Portal frontend, API backend, database.
 **Out of Scope:** CRM integration (Phase 2), mobile app.
 
+## 2. Stakeholders
+| Stakeholder | Role | Key Concern |
+|-------------|------|-------------|
+| Product Owner | Sponsor | Customer adoption, timeline |
+| Engineering Lead | Builder | Maintainability |
+| Security | Reviewer | Authentication, data protection |
+| SRE | Operator | Reliability, on-call burden |
+
 ## 3.1 Logical View
 | Component | Type | Technology | Status |
 |-----------|------|-----------|--------|
@@ -123,13 +150,26 @@ It replaces a legacy PHP application that is end-of-life.
 | API       | API Service | Node.js | New |
 | Database  | Database | PostgreSQL | New |
 
+## 3.2 Integration & Data Flow
+| From | To | Protocol | Encrypted |
+|------|----|---------|-----------|
+| Frontend | API | HTTPS | Yes |
+| API | Database | TCP-TLS | Yes |
+| API | Okta | HTTPS | Yes |
+
 ## 3.3 Physical View
 | Hosting | Cloud (AWS) |
 | Service Model | PaaS |
 | Region | eu-west-2 |
 
+## 3.4 Data View
+| Data Store | Type | Classification |
+|------------|------|----------------|
+| Application DB | Relational DB | Internal |
+
 ## 3.5 Security View
 | Authentication | SSO via Okta |
+| Authorisation | Role-based, enforced at API |
 | Encryption at Rest | Yes (AWS KMS) |
 | Encryption in Transit | Yes (TLS 1.2+) |
 
@@ -150,8 +190,9 @@ The quickstart covers only the **Minimum** sections — enough for early-stage d
 - **See what's needed for your depth** — check the [Depth Cheat Sheet](/v1/standard/cheat-sheet/) for a single-page view of what to fill in
 - **See a completed example** — review the [Employee Directory example](/v1/examples/employee-directory/) to see what a full Recommended-depth SAD looks like
 - **Expand to Recommended depth** — add quality attributes (Section 4), lifecycle (Section 5), and scenarios (Section 3.6) before production approval
+- **Score your design before review** — use the 0–5 [Compliance Scoring](/v1/standard/how-to-use/#architecture-compliance-scoring) rubric to self-assess each section's maturity. Reviewers expect this on Recommended and Comprehensive submissions
 - **Use AI assistance** — import a [template](/v1/standard/templates/) into ChatGPT, Claude, or Copilot along with your project brief to generate a more detailed first draft
 
 <Aside type="note" title="Time to production?">
-A Minimum SAD takes around 30 minutes. A Recommended SAD (production-ready) typically takes 1-2 hours. A Comprehensive SAD for a critical system takes 1-2 days. The documentation depth levels ensure you invest time proportional to the solution's criticality.
+A Minimum SAD takes around **15–30 minutes** if you already understand the solution. A Recommended SAD (production-ready) typically takes **1–2 hours** for a single architect, longer for collaborative drafts. A Comprehensive SAD for a critical or regulated system takes **1–2 days** including threat modelling and capacity planning. The documentation depth levels ensure you invest time proportional to the solution's criticality.
 </Aside>

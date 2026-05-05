@@ -9,12 +9,12 @@ Use this table to see exactly which sections are required at your chosen documen
 
 | Section | <span class="maturity-indicator maturity-minimum">Minimum</span> | <span class="maturity-indicator maturity-recommended">Recommended</span> | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> |
 |---------|:-------:|:-----------:|:-------------:|
-| **0. Document Control** | | | |
+| **0. Document Control** *— title, version, classification, sign-offs* | | | |
 | Document metadata | **Yes** | **Yes** | **Yes** |
 | Change history | **Yes** | **Yes** | **Yes** |
 | Contributors & approvals | No | **Yes** | **Yes** |
 | Purpose & scope | **Yes** | **Yes** | **Yes** |
-| **1. Executive Summary** | | | |
+| **1. Executive Summary** *— what the solution does and why* | | | |
 | Solution overview | **Yes** | **Yes** | **Yes** |
 | Business context & drivers | **Yes** | **Yes** | **Yes** |
 | Strategic alignment & reuse | No | **Yes** | **Yes** |
@@ -23,22 +23,22 @@ Use this table to see exactly which sections are required at your chosen documen
 | Key decisions & constraints | **Yes** | **Yes** | **Yes** |
 | Project details | No | **Yes** | **Yes** |
 | Business criticality | No | **Yes** | **Yes** |
-| **2. Stakeholders** | | | |
+| **2. Stakeholders** *— who the design is for and what they care about* | | | |
 | Stakeholder register | **Yes** | **Yes** | **Yes** |
 | Concerns matrix | No | **Yes** | **Yes** |
 | Compliance & regulatory | No | **Yes** | **Yes** |
-| **3.1 Logical View** | | | |
+| **3.1 Logical View** *— components, capabilities, design patterns* | | | |
 | Architecture diagram | **Yes** | **Yes** | **Yes** |
 | Component decomposition | **Yes** | **Yes** | **Yes** |
 | Design patterns | No | **Yes** | **Yes** |
 | Service & capability mapping | No | No | **Yes** |
 | Vendor lock-in assessment | No | **Yes** | **Yes** |
-| **3.2 Integration & Data Flow** | | | |
+| **3.2 Integration & Data Flow** *— how components talk to each other and the outside world* | | | |
 | Data flow diagram | **Yes** | **Yes** | **Yes** |
 | Internal connectivity | **Yes** | **Yes** | **Yes** |
 | External integrations | **Yes** | **Yes** | **Yes** |
 | API & interface contracts | No | **Yes** | **Yes** |
-| **3.3 Physical View** | | | |
+| **3.3 Physical View** *— where it runs (cloud, regions, compute, networks)* | | | |
 | Deployment diagram | **Yes** | **Yes** | **Yes** |
 | Hosting & infrastructure | **Yes** | **Yes** | **Yes** |
 | Compute | No | **Yes** | **Yes** |
@@ -46,12 +46,12 @@ Use this table to see exactly which sections are required at your chosen documen
 | Network connectivity | **Yes** | **Yes** | **Yes** |
 | Environments | No | **Yes** | **Yes** |
 | End user compute & IoT | No | No | **Yes** |
-| **3.4 Data View** | | | |
+| **3.4 Data View** *— what data exists, how it's classified, where it flows* | | | |
 | Data stores | **Yes** | **Yes** | **Yes** |
 | Data classification | **Yes** | **Yes** | **Yes** |
 | Data transfers | No | **Yes** | **Yes** |
 | Data lifecycle | No | No | **Yes** |
-| **3.5 Security View** | | | |
+| **3.5 Security View** *— authentication, authorisation, encryption, monitoring* | | | |
 | Business impact assessment | **Yes** | **Yes** | **Yes** |
 | Authentication | **Yes** | **Yes** | **Yes** |
 | Authorisation | **Yes** | **Yes** | **Yes** |
@@ -60,17 +60,17 @@ Use this table to see exactly which sections are required at your chosen documen
 | Security monitoring | No | **Yes** | **Yes** |
 | Threat model | No | No | **Yes** |
 | Network security | No | **Yes** | **Yes** |
-| **3.6 Scenarios** | | | |
+| **3.6 Scenarios** *— key use cases and the architecture decisions (ADRs) that shaped the design* | | | |
 | Key use cases | No | **Yes** | **Yes** |
 | Architecture decision records | No | **Yes** | **Yes** |
-| **4. Quality Attributes** | | | |
+| **4. Quality Attributes** *— operability, reliability, performance, cost, sustainability* | | | |
 | Operational excellence | No | **Yes** | **Yes** |
 | Reliability & resilience | No | **Yes** | **Yes** |
 | Performance efficiency | No | **Yes** | **Yes** |
 | Cost optimisation | No | **Yes** | **Yes** |
 | Sustainability | No | **Yes** | **Yes** |
 | Quality attribute tradeoffs | No | **Yes** | **Yes** |
-| **5. Lifecycle** | | | |
+| **5. Lifecycle** *— how the solution is built, released, run, and eventually retired* | | | |
 | CI/CD & development | No | **Yes** | **Yes** |
 | Migration (if applicable) | No | **Yes** | **Yes** |
 | Test strategy | No | **Yes** | **Yes** |
@@ -81,7 +81,7 @@ Use this table to see exactly which sections are required at your chosen documen
 | Maintainability | No | **Yes** | **Yes** |
 | Decommissioning | No | **Yes** | **Yes** |
 | Exit planning | No | **Yes** | **Yes** |
-| **6. Decision Making** | | | |
+| **6. Decision Making & Governance** *— constraints, RAID (risks, assumptions, issues, dependencies), exceptions, sign-off* | | | |
 | Constraints | **Yes** | **Yes** | **Yes** |
 | Assumptions | **Yes** | **Yes** | **Yes** |
 | Risks | **Yes** | **Yes** | **Yes** |
@@ -92,7 +92,7 @@ Use this table to see exactly which sections are required at your chosen documen
 | Architectural decisions log | No | **Yes** | **Yes** |
 | Compliance traceability | No | No | **Yes** |
 | Approval sign-off | **Yes** | **Yes** | **Yes** |
-| **7. Appendices** | | | |
+| **7. Appendices** *— glossary, references, supporting standards* | | | |
 | Glossary | No | **Yes** | **Yes** |
 | Reference documents | No | **Yes** | **Yes** |
 | Standards referenced | No | **Yes** | **Yes** |
@@ -109,3 +109,5 @@ Use this table to see exactly which sections are required at your chosen documen
 | <span class="maturity-indicator maturity-minimum">Minimum</span> | Early-stage designs, proofs of concept, dev/test reviews | 15-30 min | Development review |
 | <span class="maturity-indicator maturity-recommended">Recommended</span> | Production-bound designs, formal governance | 1-2 hours | Production approval |
 | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | Critical, regulated, or enterprise-scale systems | 1-2 days | Enterprise architecture review |
+
+Time estimates assume you already understand the solution and are drafting solo. **Add 50–100% for collaborative drafting**, and again for diagrams that need polishing for an external audience. Comprehensive timings include threat modelling, capacity planning, and full traceability — not just typing.
