@@ -135,7 +135,7 @@ CAP replaces the legacy SOAP-based Partner Integration Layer, which suffered fro
 - Customer API Platform microservices: API Gateway configuration, Account Service, Transaction Service, Auth Service, Notification Service
 - AWS infrastructure: EKS cluster, RDS PostgreSQL, ElastiCache Redis, S3, CloudFront, WAF, Shield
 - All environments: development, test, staging, production, DR
-- Integration with core banking (Oracle DB via Direct Connect), fraud detection (Featurespace ARIC), notification service (SES)
+- Integration with core banking (Oracle DB via Direct Connect), fraud detection (Sentari Pulse), notification service (SES)
 - Partner authentication and authorisation (OAuth 2.0, mTLS)
 - Internal authentication (Okta SSO)
 - Operational tooling: Splunk, Grafana, PagerDuty, Jaeger
@@ -314,7 +314,7 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 | Application Name | Application ID | Impact Type | Change Details | Comments |
 |-----------------|---------------|-------------|----------------|----------|
 | Core Banking System | APP-0102 | Use | Read-only access to Oracle DB read replicas via Direct Connect | No changes to core banking; new read replica provisioned |
-| Fraud Detection (Featurespace ARIC) | APP-0310 | Use | Consume fraud scoring API for high-value transaction requests | Existing API; new integration client |
+| Fraud Detection (Sentari Pulse) | APP-0310 | Use | Consume fraud scoring API for high-value transaction requests | Existing API; new integration client |
 | Partner Onboarding Portal | APP-0456 | Create | New web portal for partner self-service registration and API key management | Dependent on CAP Auth Service APIs |
 | Legacy Partner Integration Layer | APP-0198 | Decommission | Will be retired after 6-month parallel run | Migration of 8 existing partners required |
 | Corporate Splunk Instance | APP-0067 | Use | All logs and security events forwarded to Splunk | Existing HEC endpoints used |
@@ -350,7 +350,7 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 | Question | Response |
 |----------|----------|
 | Caching to avoid recomputation / repeated downstream calls | Yes -- ElastiCache Redis used for session state, partner JWT verification keys, and short-lived rate-limiter counters; ~85% cache hit rate on partner authentication, eliminating ~12M Cognito calls per month |
-| Batch processes consolidated rather than continuously polling | Yes -- transaction enrichment runs as nightly batch (00:30 UTC) rather than per-event; Featurespace ARIC fraud signals consumed via webhook (push) rather than polling |
+| Batch processes consolidated rather than continuously polling | Yes -- transaction enrichment runs as nightly batch (00:30 UTC) rather than per-event; Sentari Pulse fraud signals consumed via webhook (push) rather than polling |
 | Async / event-driven patterns to flatten peak load | Yes -- EventBridge + SQS for transaction events, partner notifications, and audit log shipping; consumer pods scale on queue depth via Karpenter, releasing capacity when idle |
 | Heavy framework choices weighed against lighter alternatives | Considered -- Spring Boot retained for the core API (existing team skill, mature ecosystem); Lambda evaluated and rejected for synchronous APIs (cold-start latency would breach P95 < 200ms SLA) |
 
@@ -398,7 +398,7 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 |-------------------|------------------------|----------------------|---------------|---------------|---------|
 | Partner fintech apps | CAP API Gateway | HTTPS / TLS 1.3 + mTLS | OAuth 2.0 (FAPI profile) | AWS WAF, Shield Advanced | Account and transaction API requests |
 | CAP (Core Banking Adapter) | Core Banking Oracle DB | JDBC / TLS 1.2 | Oracle DB credentials (Secrets Manager) | N/A (Direct Connect private link) | Read account and transaction data from read replicas |
-| CAP (Transaction Service) | Featurespace ARIC | HTTPS / TLS 1.3 | API key + IP allowlist | NAT Gateway (fixed IP) | Fraud score requests for high-value transactions |
+| CAP (Transaction Service) | Sentari Pulse | HTTPS / TLS 1.3 | API key + IP allowlist | NAT Gateway (fixed IP) | Fraud score requests for high-value transactions |
 | CAP (Notification Service) | Partner webhook endpoints | HTTPS / TLS 1.3 | HMAC-SHA256 signed payloads | NAT Gateway | Event notifications to partners |
 | Internal administrators | CAP admin APIs | HTTPS / TLS 1.3 | Okta SSO (OIDC) | Corporate VPN | Partner management, configuration, monitoring |
 
@@ -419,7 +419,7 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 | Consent Management API | REST | Exposed | JSON | v1.0 (internal) | Internal developer portal (Swagger) |
 | Partner Webhook Notifications | REST (callback) | Exposed (outbound) | JSON | v1.0 (internal) | Partner integration guide |
 | Core Banking Data API | JDBC | Consumed | SQL/ResultSet | N/A | DBA team wiki |
-| Featurespace ARIC Fraud API | REST | Consumed | JSON | v2.4 | Featurespace developer docs |
+| Sentari Pulse Fraud API | REST | Consumed | JSON | v2.4 | Sentari developer docs |
 | Splunk HTTP Event Collector | REST | Consumed | JSON | N/A | Splunk docs |
 | PagerDuty Events API | REST | Consumed | JSON | v2 | PagerDuty docs |
 
@@ -494,10 +494,10 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 | Question | Response |
 |----------|----------|
 | Is this an Internet-facing application? | Yes -- API Gateway is Internet-facing for partner access |
-| Outbound Internet connectivity required? | Yes -- for partner webhook delivery and Featurespace ARIC API calls (via NAT Gateway with fixed Elastic IPs) |
+| Outbound Internet connectivity required? | Yes -- for partner webhook delivery and Sentari Pulse API calls (via NAT Gateway with fixed Elastic IPs) |
 | Cloud-to-on-premises connectivity required? | Yes -- AWS Direct Connect (1 Gbps dedicated, with VPN backup) to MFS Slough data centre for core banking Oracle DB access |
 | Wireless networking required? | No |
-| Third-party / co-location connectivity required? | No -- third-party integrations (Featurespace) are over public Internet via TLS |
+| Third-party / co-location connectivity required? | No -- third-party integrations (Sentari) are over public Internet via TLS |
 | Cloud network peering required? | Yes -- VPC peering to MFS Shared Services VPC (for Splunk forwarding, Okta agent) |
 
 ##### User & Administrator Access
@@ -657,7 +657,7 @@ Production data used in staging environment only, with all PII fields masked usi
 | Destination | Data Type | Classification | Transfer Method | Protection |
 |------------|-----------|---------------|----------------|------------|
 | Authorised TPPs (partner fintech apps) | Account balances, transaction history | Restricted | REST API over HTTPS / TLS 1.3 | OAuth 2.0 scope enforcement, mTLS, PII minimisation, consent-based access only |
-| Featurespace ARIC | Transaction metadata (no PII) | Internal | REST API over HTTPS / TLS 1.3 | API key authentication, IP allowlist, PII stripped before transmission |
+| Sentari Pulse | Transaction metadata (no PII) | Internal | REST API over HTTPS / TLS 1.3 | API key authentication, IP allowlist, PII stripped before transmission |
 | Splunk (corporate instance) | Application and security logs | Internal | HTTPS (Splunk HEC) | PII redacted at source by logging framework; TLS 1.3 in transit |
 
 ##### Data Sovereignty
@@ -687,7 +687,7 @@ Production data used in staging environment only, with all PII fields masked usi
 |----------|----------|
 | Does the solution support regulated activities? | Yes -- PSD2 Account Information Services (AIS) and PCI-DSS-scoped transaction data processing |
 | Is the solution SaaS or third-party hosted? | No -- self-managed on AWS (IaaS/PaaS) |
-| Has a third-party risk assessment been completed? | Yes -- AWS: MFS-TRA-2023-012 (approved); Featurespace: MFS-TRA-2024-008 (approved) |
+| Has a third-party risk assessment been completed? | Yes -- AWS: MFS-TRA-2023-012 (approved); Sentari: MFS-TRA-2024-008 (approved) |
 
 ##### Business Impact Assessment
 
@@ -781,7 +781,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 |---------|---------------|
 | Network segmentation | VPC with public, private, and isolated subnets across 2 AZs; security groups per service (allow only required ports/protocols); NACLs as secondary layer; EKS pods use Calico network policies for pod-to-pod segmentation |
 | Ingress filtering | AWS WAF v2 (OWASP Top 10 rules, rate limiting, geo-restriction to permitted countries), Shield Advanced, API Gateway throttling; NLB in public subnet routes to API Gateway |
-| Egress filtering | NAT Gateway with fixed Elastic IPs for outbound (partner webhooks, Featurespace); egress security groups restrict destinations to known endpoints; VPC Flow Logs for monitoring |
+| Egress filtering | NAT Gateway with fixed Elastic IPs for outbound (partner webhooks, Sentari); egress security groups restrict destinations to known endpoints; VPC Flow Logs for monitoring |
 | Encryption in transit | TLS 1.3 enforced for partner API traffic; TLS 1.2 minimum for all other connections; certificates managed by AWS Certificate Manager (ACM) for public endpoints; private CA for internal mTLS |
 
 #### 3.5.4 Data Protection
@@ -847,12 +847,12 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 
 | Attribute | Detail |
 |-----------|--------|
-| **Actor(s)** | Partner fintech application, Featurespace ARIC |
+| **Actor(s)** | Partner fintech application, Sentari Pulse |
 | **Trigger** | Partner requests transaction history for an account flagged for suspected fraud |
-| **Pre-conditions** | Partner has valid token with transactions:read scope; account has active fraud flag in Featurespace |
-| **Main Flow** | 1. Partner sends GET /accounts/&#123;accountId&#125;/transactions. 2. Request authenticated and authorised as per UC-01 flow. 3. Transaction Service queries Featurespace ARIC fraud scoring API for account risk score. 4. ARIC returns high-risk score (>0.85). 5. Transaction Service applies fraud response policy: returns limited transaction data (last 30 days only, no pending transactions), adds X-Fraud-Review: true header. 6. High-priority security event emitted to EventBridge. 7. Splunk alert fires immediately; PagerDuty pages on-call fraud analyst. 8. Notification Service sends webhook to MFS internal fraud team channel (Slack). |
+| **Pre-conditions** | Partner has valid token with transactions:read scope; account has active fraud flag in Sentari |
+| **Main Flow** | 1. Partner sends GET /accounts/&#123;accountId&#125;/transactions. 2. Request authenticated and authorised as per UC-01 flow. 3. Transaction Service queries Sentari Pulse fraud scoring API for account risk score. 4. Pulse returns high-risk score (>0.85). 5. Transaction Service applies fraud response policy: returns limited transaction data (last 30 days only, no pending transactions), adds X-Fraud-Review: true header. 6. High-priority security event emitted to EventBridge. 7. Splunk alert fires immediately; PagerDuty pages on-call fraud analyst. 8. Notification Service sends webhook to MFS internal fraud team channel (Slack). |
 | **Post-conditions** | Partner receives restricted data set; fraud team alerted; full audit trail recorded; account flagged for manual review |
-| **Views Involved** | Logical (Transaction Service, Notification Service), Integration & Data Flow (Featurespace integration), Security (fraud detection, data restriction), Operational Excellence (alerting, escalation) |
+| **Views Involved** | Logical (Transaction Service, Notification Service), Integration & Data Flow (Sentari integration), Security (fraud detection, data restriction), Operational Excellence (alerting, escalation) |
 
 #### 3.6.2 Architecture Decision Records (ADRs)
 
@@ -924,7 +924,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Cost anomaly | > 20% increase in daily spend | Email | Platform team + Finance |
 | Partner rate limit sustained breach | Partner exceeds limit for > 5 minutes | Slack + Email | Partner Manager |
 | Disk utilisation (RDS) | > 80% storage used | PagerDuty (P3) + Slack | DBA + SRE |
-| Fraud alert (high-risk score) | ARIC score > 0.85 | PagerDuty (P1) + Slack | Fraud team + SRE |
+| Fraud alert (high-risk score) | Pulse score > 0.85 | PagerDuty (P1) + Slack | Fraud team + SRE |
 
 ##### Monitoring Tools
 
@@ -982,15 +982,15 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 
 | Attribute | Response |
 |-----------|----------|
-| **Dependencies adequately sized?** | Yes (confirmed) -- core banking read replicas tested at 3x current peak load; Featurespace ARIC SLA guarantees 10,000 req/s |
-| **Dependency details** | Core banking Oracle read replicas: 2 replicas in eu-west-2, confirmed to handle 15,000 queries/s. Direct Connect: 1 Gbps dedicated with VPN backup. Featurespace ARIC: SLA-backed at 10,000 req/s with &lt;100ms P95. |
+| **Dependencies adequately sized?** | Yes (confirmed) -- core banking read replicas tested at 3x current peak load; Sentari Pulse SLA targets 10,000 req/s |
+| **Dependency details** | Core banking Oracle read replicas: 2 replicas in eu-west-2, confirmed to handle 15,000 queries/s. Direct Connect: 1 Gbps dedicated with VPN backup. Sentari Pulse: SLA-backed at 10,000 req/s with &lt;100ms P95. |
 
 #### 4.2.3 Fault Tolerance
 
 - [x] **Yes**
   - **Component failures:** Each microservice runs 4+ replicas across 2 AZs; Kubernetes automatically reschedules failed pods. Pod disruption budgets ensure minimum 2 replicas during rolling updates.
-  - **Graceful degradation:** If core banking is unavailable, Account Service returns cached data from Redis (with staleness indicator). If Featurespace ARIC is unavailable, Transaction Service returns full data without fraud scoring (with logged exception).
-  - **Circuit breaker patterns:** Resilience4j circuit breakers on Core Banking Adapter (open after 5 consecutive failures, half-open after 30s) and Featurespace client (open after 3 failures, half-open after 15s).
+  - **Graceful degradation:** If core banking is unavailable, Account Service returns cached data from Redis (with staleness indicator). If Sentari Pulse is unavailable, Transaction Service returns full data without fraud scoring (with logged exception).
+  - **Circuit breaker patterns:** Resilience4j circuit breakers on Core Banking Adapter (open after 5 consecutive failures, half-open after 30s) and Sentari client (open after 3 failures, half-open after 15s).
   - **Health checks:** Kubernetes liveness probes (HTTP /health/live, 10s interval), readiness probes (HTTP /health/ready, 5s interval, checks DB connectivity). Failed readiness removes pod from service.
   - **Testing practices:** Monthly chaos testing with Gremlin (pod kill, AZ failure simulation, network latency injection). Quarterly DR failover drill. Annual game day exercise simulating multi-component failure.
 
@@ -1003,7 +1003,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | RDS primary instance | Database failure | RDS Multi-AZ automatic health check | Automatic failover to standby (60-120 seconds); application reconnects via DNS endpoint | 60-120 second interruption; connection pool recovers automatically |
 | ElastiCache Redis | Cache node failure | Redis cluster health check | Automatic failover to replica; cluster mode redistributes slots | Brief cache miss spike; requests fall through to database (increased latency for 30-60 seconds) |
 | Core Banking (Oracle DB) | Read replica unavailable | JDBC connection timeout (5s), circuit breaker | Circuit breaker opens; Account Service returns cached data from Redis with X-Data-Freshness: stale header | Degraded: stale data returned (up to 60s old); partners notified via status page |
-| Featurespace ARIC | API timeout or error | HTTP timeout (2s), circuit breaker | Circuit breaker opens; Transaction Service returns unscored data with X-Fraud-Check: bypassed header; security alert raised | Degraded: full data returned without fraud filtering; manual fraud review triggered |
+| Sentari Pulse | API timeout or error | HTTP timeout (2s), circuit breaker | Circuit breaker opens; Transaction Service returns unscored data with X-Fraud-Check: bypassed header; security alert raised | Degraded: full data returned without fraud filtering; manual fraud review triggered |
 | Direct Connect | Link failure | CloudWatch Direct Connect metrics, BGP session monitoring | Automatic failover to site-to-site VPN backup (pre-configured, 30s convergence) | Increased latency to core banking (5-15ms additional); throughput reduced |
 | API Gateway | Service disruption | Route 53 health checks | DNS failover to DR region (if activated); CloudFront serves cached error page during brief disruption | Potential 1-5 minute disruption during regional failover |
 
@@ -1374,7 +1374,7 @@ Application start-up sequence:
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
 | A-001 | Core banking Oracle read replicas will support 15,000 queries/s at peak | Platform cannot meet performance targets; would require caching redesign or additional read replicas | High | Closed | Jane Doe | Load test results (TEST-2025-031) confirmed 18,000 queries/s sustained |
-| A-002 | Featurespace ARIC API will maintain &lt;100ms P95 latency under our projected load | Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently | Medium | Open | Fred Bloggs | Featurespace SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at our projected 3-year volume |
+| A-002 | Sentari Pulse API will maintain &lt;100ms P95 latency under our projected load | Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently | Medium | Open | Fred Bloggs | Sentari SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at our projected 3-year volume |
 | A-003 | Partner adoption will grow linearly to 80 partners over 3 years | Non-linear growth could exceed capacity plans; under-adoption would mean over-provisioned infrastructure (cost waste) | Medium | Open | Sally Doe | Business development pipeline shows 50 partners in negotiation; growth rate tracking to plan |
 
 ### 6.3 Risks
@@ -1402,7 +1402,7 @@ Application start-up sequence:
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
 | D-001 | Core banking Oracle DB read replicas provisioned in eu-west-2 via Direct Connect | Inbound | Resolved | DBA team | Direct Connect live; read replicas operational since 2025-01-15 | 2025-11-01 |
-| D-002 | Featurespace ARIC API available and contracted for CAP usage | Inbound | Committed | Procurement | Contract MFS-VENDOR-2024-089 signed; API access provisioned | 2025-09-01 |
+| D-002 | Sentari Pulse API available and contracted for CAP usage | Inbound | Committed | Procurement | Contract MFS-VENDOR-2024-089 signed; API access provisioned | 2025-09-01 |
 | D-003 | Partner Onboarding Portal (APP-0456) consuming Auth Service APIs for partner registration | Outbound | Resolved | Partner Portal team | Integration live since 2025-06-01 | 2025-11-01 |
 
 ### 6.5 Issues
@@ -1466,7 +1466,7 @@ Application start-up sequence:
 
 | Term | Definition |
 |------|-----------|
-| ARIC | Adaptive, Real-time, Individual, Contextual -- Featurespace's fraud detection platform |
+| Sentari Pulse | Sentari Risk Analytics' real-time fraud-scoring platform; consumed by the Transaction Service via REST API for risk scoring on high-value transactions |
 | CAP | Customer API Platform -- the solution described in this SAD |
 | CDC | Change Data Capture -- a pattern for capturing and replicating data changes |
 | CMA | Competition and Markets Authority -- UK regulator that mandated Open Banking |

@@ -213,7 +213,7 @@
       "Customer API Platform microservices: API Gateway configuration, Account Service, Transaction Service, Auth Service, Notification Service",
       "AWS infrastructure: EKS cluster, RDS PostgreSQL, ElastiCache Redis, S3, CloudFront, WAF, Shield",
       "All environments: development, test, staging, production, DR",
-      "Integration with core banking (Oracle DB via Direct Connect), fraud detection (Featurespace ARIC), notification service (SES)",
+      "Integration with core banking (Oracle DB via Direct Connect), fraud detection (Sentari Pulse), notification service (SES)",
       "Partner authentication and authorisation (OAuth 2.0, mTLS)",
       "Internal authentication (Okta SSO)",
       "Operational tooling: Splunk, Grafana, PagerDuty, Jaeger"
@@ -750,7 +750,7 @@
         },
         {
           "sourceApp": "CAP (Transaction Service)",
-          "destinationApp": "Featurespace ARIC",
+          "destinationApp": "Sentari Pulse",
           "integrationType": "external-service",
           "protocol": "https",
           "encrypted": true,
@@ -823,7 +823,7 @@
           "rateLimited": false
         },
         {
-          "name": "Featurespace ARIC Fraud API",
+          "name": "Sentari Pulse Fraud API",
           "apiType": "rest",
           "direction": "consumed",
           "dataFormat": "json",
@@ -1059,7 +1059,7 @@
           "encrypted": true
         },
         {
-          "destination": "Featurespace ARIC",
+          "destination": "Sentari Pulse",
           "destinationType": "third-party",
           "classification": "internal",
           "transferMethod": "api",
@@ -1176,10 +1176,10 @@
           "name": "Fraud Alert Triggered During Transaction Retrieval",
           "actors": [
             "Partner fintech application",
-            "Featurespace ARIC"
+            "Sentari Pulse"
           ],
           "trigger": "Partner requests transaction history for an account flagged for suspected fraud",
-          "mainFlow": "1. Partner sends GET /accounts/{accountId}/transactions. 2. Request authenticated and authorised as per UC-01 flow. 3. Transaction Service queries Featurespace ARIC fraud scoring API for account risk score. 4. ARIC returns high-risk score (>0.85). 5. Transaction Service applies fraud response policy: returns limited transaction data (last 30 days only, no pending transactions), adds X-Fraud-Review: true header. 6. High-priority security event emitted to EventBridge. 7. Splunk alert fires immediately; PagerDuty pages on-call fraud analyst. 8. Notification Service sends webhook to MFS internal fraud team channel (Slack).",
+          "mainFlow": "1. Partner sends GET /accounts/{accountId}/transactions. 2. Request authenticated and authorised as per UC-01 flow. 3. Transaction Service queries Sentari Pulse fraud scoring API for account risk score. 4. Pulse returns high-risk score (>0.85). 5. Transaction Service applies fraud response policy: returns limited transaction data (last 30 days only, no pending transactions), adds X-Fraud-Review: true header. 6. High-priority security event emitted to EventBridge. 7. Splunk alert fires immediately; PagerDuty pages on-call fraud analyst. 8. Notification Service sends webhook to MFS internal fraud team channel (Slack).",
           "viewsInvolved": [
             "logical",
             "integration",
@@ -1394,12 +1394,12 @@
       },
       {
         "id": "A-002",
-        "assumption": "Featurespace ARIC API will maintain <100ms P95 latency under our projected load",
+        "assumption": "Sentari Pulse API will maintain <100ms P95 latency under our projected load",
         "impactIfFalse": "Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently",
         "certainty": "medium",
         "status": "open",
         "owner": "Fred Bloggs",
-        "evidence": "Featurespace SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at projected 3-year volume"
+        "evidence": "Vendor's published SLA targets sub-100ms P95 at our projected throughput; no independent verification at our projected 3-year volume"
       },
       {
         "id": "A-003",
@@ -1473,7 +1473,7 @@
       },
       {
         "id": "D-002",
-        "dependency": "Featurespace ARIC API available and contracted for CAP usage",
+        "dependency": "Sentari Pulse API available and contracted for CAP usage",
         "direction": "inbound",
         "status": "committed",
         "owner": "Procurement",
@@ -1636,8 +1636,8 @@
   "appendices": {
     "glossary": [
       {
-        "term": "ARIC",
-        "definition": "Adaptive, Real-time, Individual, Contextual -- Featurespace's fraud detection platform"
+        "term": "Sentari Pulse",
+        "definition": "Sentari Risk Analytics' real-time fraud-scoring platform; consumed by the Transaction Service via REST API for risk scoring on high-value transactions"
       },
       {
         "term": "CAP",
