@@ -29,7 +29,7 @@ const TEMP = path.join(__dirname, '..', 'dist-temp');
 // take effect when present at the dist root. Without them in ROOT_KEEP this
 // post-build step would move them into `/v1/` and Cloudflare would ignore
 // them silently.
-const ROOT_KEEP = ['_redirects', '_headers', 'v2', 'robots.txt', 'og-image.png', 'og-image.svg', 'favicon.svg', 'schema'];
+const ROOT_KEEP = ['_redirects', '_headers', 'v2', 'robots.txt', 'og-image.png', 'og-image.svg', 'favicon.svg', 'schema', 'llms.txt'];
 
 console.log('Post-build: Moving Astro output into /v1/ subdirectory...');
 
