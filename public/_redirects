@@ -14,8 +14,14 @@
 # the schema's self-referencing $id.
 
 # 1. Renamed pages — preserve old bookmarks after a content rename.
-/v1/standard/3-2-process-view/   /v1/standard/3-2-integration-view/   301
-/standard/3-2-process-view/      /v1/standard/3-2-integration-view/   301
+#    The localised /fr/ and /de/ rules cover URLs that Google indexed
+#    pre-rename. Starlight serves English content under localised paths
+#    when no translation exists, so the integration-view target resolves
+#    cleanly in fr/de.
+/v1/standard/3-2-process-view/      /v1/standard/3-2-integration-view/      301
+/standard/3-2-process-view/         /v1/standard/3-2-integration-view/      301
+/v1/fr/standard/3-2-process-view/   /v1/fr/standard/3-2-integration-view/   301
+/v1/de/standard/3-2-process-view/   /v1/de/standard/3-2-integration-view/   301
 
 # 2. Bare-directory landings — intuitive guesses that would otherwise 404
 #    because the directory contains assets, not an index.html.
