@@ -216,6 +216,7 @@ date: "${new Date().toISOString().split('T')[0]}"
       `"${pandoc}" "${OUTPUT_MD}" -o "${OUTPUT_PDF}" ` +
       `--pdf-engine=xelatex ` +
       `--toc --toc-depth=3 ` +
+      `-V papersize=a4 ` +
       `-V geometry:margin=2.5cm ` +
       `-V fontsize=11pt ` +
       `-V documentclass=report ` +
@@ -235,6 +236,7 @@ date: "${new Date().toISOString().split('T')[0]}"
       execSync(
         `"${pandoc}" "${OUTPUT_MD}" -o "${OUTPUT_PDF}" ` +
         `--toc --toc-depth=3 ` +
+        `-V papersize=a4 ` +
         `-V geometry:margin=2.5cm ` +
         `-V fontsize=11pt ` +
         `-V documentclass=report ` +
