@@ -1,0 +1,123 @@
+---
+title: "Adopting ADS"
+description: "A practical guide to rolling out the Architecture Description Standard in your organisation — from first SAD to portfolio adoption."
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Is ADS Right for Your Organisation?
+
+ADS is most useful when:
+
+- Your organisation does not have an established SAD template, or the existing one is inconsistent, outdated, or not machine-readable
+- You want architecture documents to be comparable across projects and teams
+- You want to map documentation requirements to governance gates (e.g., design authority, ARB)
+- You need to share architecture documents with vendors, partners, or auditors
+
+If your organisation has a working template that teams are happy with, there is no urgency to switch. You can still use ADS ideas — documentation depths, compliance scoring, atomic fields — to improve your existing template without fully adopting the standard.
+
+## How Long Does It Take?
+
+With the templates, examples, and AI prompts:
+
+| Depth | Typical Effort |
+|-------|---------------|
+| **Minimum SAD** | 1–3 hours |
+| **Recommended SAD** | 1–2 days drafting + review cycles |
+| **Comprehensive SAD** | 1–2 weeks drafting + review cycles |
+
+Most of that time is conversations with stakeholders and capturing decisions, not writing text. The template structure tells you exactly what to ask and of whom.
+
+## Rollout: Six Steps
+
+### Step 1: Run a Pilot
+
+Pick one willing team and one real project. Do not mandate ADS across the organisation before you have a completed SAD in hand. The first SAD reveals how well the standard fits your context — tooling, governance gates, and terminology.
+
+A good pilot has: a cooperative solution architect, a project in early design phase, and at least one upcoming review (ARB, design authority, or sprint review).
+
+### Step 2: Choose the Right Depth
+
+Match depth to the project's criticality:
+
+| ADS Depth | When to Use |
+|-----------|------------|
+| <span class="maturity-indicator maturity-minimum">Minimum</span> | Early-stage designs, proofs of concept, dev/test reviews |
+| <span class="maturity-indicator maturity-recommended">Recommended</span> | Production-bound designs requiring governance approval |
+| <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> | Critical, regulated, or enterprise-scale systems |
+
+See the [Depth Cheat Sheet](/v1/standard/cheat-sheet/) for exactly what's required at each level.
+
+### Step 3: Map to Your Governance Gates
+
+Before the pilot SAD reaches review, agree with your governance forum (ARB, design authority, or equivalent) how the three depth levels map to their gates:
+
+| ADS Depth | Typical Governance Gate |
+|-----------|------------------------|
+| Minimum | Development / test review |
+| Recommended | Production approval |
+| Comprehensive | Enterprise or regulatory review |
+
+Also define minimum acceptable [compliance scores](/v1/standard/how-to-use/#architecture-compliance-scoring) per section. A reasonable starting point: all sections ≥ 3 for production approval; ≥ 4 for Tier 1/2 critical systems. Publish your thresholds in your governance policy so architects know what's expected before they submit.
+
+### Step 4: Customise for Your Organisation
+
+ADS is designed to be adopted without modification. However, organisations MAY extend it in the following ways:
+
+1. **Organisation Profile** — Map generic sections to your internal tools, standards, and governance processes using the `organisationProfile` field in the JSON Schema
+2. **Custom Sections** — Add organisation-specific content using the `customSections` extension point without modifying the core structure
+3. **Standards Traceability** — Reference your internal design principles, patterns, and standards in Section 6.9 (Compliance Traceability)
+4. **Governance Gate Mapping** — Document which ADS depth level maps to which of your governance stages
+
+Organisations SHALL NOT renumber core sections of the standard. Sections that are not applicable to a solution SHOULD be omitted entirely — do not fill them with "N/A".
+
+### Step 5: Onboard Your Architects
+
+For architects new to the standard:
+
+- **[Quickstart](/v1/standard/quickstart/)** — a first SAD in 30 minutes
+- **[Depth Cheat Sheet](/v1/standard/cheat-sheet/)** — a single-page reference for drafting
+- **[AI Prompts Library](/v1/standard/prompts/)** — ready-to-use prompts for drafting, reviewing, and scoring SADs
+- **[Completed examples](/v1/examples/)** — worked examples across different project types to calibrate expectations
+
+A well-written SAD is typically 20% writing and 80% capturing decisions from stakeholders. The template structure helps architects ask the right questions at the right time.
+
+### Step 6: Measure and Iterate
+
+After the pilot, score the SAD using the [0–5 compliance scoring](/v1/standard/how-to-use/#architecture-compliance-scoring) rubric. Use the scores to:
+
+- Identify which sections consistently need more attention across your portfolio
+- Set and refine thresholds for governance gate approval
+- Track documentation maturity over time as the standard embeds in your practice
+
+Sections scoring below 3 on any submission SHOULD trigger a remediation plan with clear ownership and timelines.
+
+## Common Questions
+
+### Do I have to fill in every section?
+
+No. Fill in only the sections required for your chosen depth. See the [Depth Cheat Sheet](/v1/standard/cheat-sheet/) for the complete list.
+
+### What if a section doesn't apply to the solution?
+
+Omit it entirely. Empty sections filled with "N/A" waste reviewers' time. If you've actively decided not to address something, capture that decision in Guardrail Exceptions (Section 6.7) or as an Architecture Decision Record.
+
+### Can I add organisation-specific sections?
+
+Yes. Use the `customSections` extension point in the JSON Schema, or add new Markdown sections for your organisation's specific needs. ADS is designed to be extended, not forked.
+
+### Can I modify the core standard itself?
+
+You can adapt it under the CC BY 4.0 licence. If your change would be useful to others, consider [contributing it back](https://github.com/andibing/archstandard) via a pull request.
+
+### How does ADS work with our ARB?
+
+ADS provides a consistent structure and vocabulary for review. The 0–5 compliance scoring gives reviewers a common scale. The depth levels let reviewers calibrate expectations to the solution's criticality. See the [Reviewer Perspectives](/v1/guidance/reviewer-perspectives/) guide for what different reviewers look for in a SAD.
+
+<Aside type="tip" title="Can a conformant SAD still fail governance review?">
+Yes. Conformance to the standard means the document is complete and well-structured — not that the architecture is good. Reviewers assess the design. ADS helps them assess it efficiently and consistently.
+</Aside>
+
+### Can I reuse a SAD for a similar future solution?
+
+Yes, and you should. Copy the SAD, update the metadata, and adapt the content. The structural consistency across SADs is one of the main adoption benefits — common patterns become visible across the portfolio.

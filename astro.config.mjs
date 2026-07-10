@@ -90,18 +90,17 @@ export default defineConfig({
 					translations: { fr: 'Pour commencer', de: 'Erste Schritte' },
 					items: [
 						{ label: 'Quickstart', slug: 'standard/quickstart', translations: { fr: 'Démarrage rapide', de: 'Schnellstart' } },
+						{ label: 'Adoption Guide', slug: 'standard/adoption-guide' },
 						{ label: 'Depth Cheat Sheet', slug: 'standard/cheat-sheet', translations: { fr: 'Aide-mémoire', de: 'Spickzettel' } },
 					],
 				},
-				// About ADS — gains Overview and Conformance (both reference reading)
-				// Default-expanded so first-time visitors see the full breadth.
+				// About ADS — default-expanded so first-time visitors see the full breadth.
 				{
 					label: 'About ADS',
 					translations: { fr: 'À propos de ADS', de: 'Über ADS' },
 					collapsed: false,
 					items: [
 						{ label: 'Overview', slug: 'standard/overview', translations: { fr: 'Aperçu', de: 'Übersicht' } },
-						{ label: 'Why ADS?', slug: 'standard/why-ads', translations: { fr: 'Pourquoi ADS ?', de: 'Warum ADS?' } },
 						{ label: 'Conformance and Usage', slug: 'standard/how-to-use', translations: { fr: 'Conformité et utilisation', de: 'Konformität und Verwendung' } },
 						{ label: 'Framework Alignment', slug: 'standard/framework-alignment', translations: { fr: 'Alignement des cadres', de: 'Framework-Zuordnung' } },
 						{ label: 'Design Principles', slug: 'standard/design-principles', translations: { fr: 'Principes de conception', de: 'Designprinzipien' } },

@@ -1,9 +1,9 @@
 ---
 title: "Overview"
-description: "Scope, purpose, audience, and structural overview of ADS."
+description: "What ADS is, why it exists, who benefits, and how it is structured."
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
 import { Image } from 'astro:assets';
 import sectionMap from '../../../assets/section-map.svg';
 
@@ -30,7 +30,7 @@ This standard applies to the documentation of any technology solution architectu
 - **Industry** — the standard is organisation-agnostic and sector-neutral
 - **Lifecycle stage** — new builds, migrations, modernisations, or incremental changes
 
-The standard is **extensible** — organisations can add custom sections, map to internal tools and standards, and define governance gates without modifying the core structure. See [Organisation Customisation](/v1/standard/how-to-use/#organisation-customisation) for details.
+The standard is **extensible** — organisations can add custom sections, map to internal tools and standards, and define governance gates without modifying the core structure. See [Adopting ADS](/v1/standard/adoption-guide/) for a rollout guide.
 
 ## Audience
 
@@ -113,6 +113,72 @@ A Solution Architecture Document **conforms** to this standard when:
 5. The document is validated against the JSON Schema (ADS Schema v1.0.0) if machine-readable output is required
 
 A document that additionally completes all <span class="maturity-indicator maturity-recommended">Recommended</span> sections achieves **full conformance**.
+
+---
+
+## Why ADS?
+
+Architecture documentation is inconsistent across the industry. Teams use a patchwork of templates — some too abstract to guide real work, others too platform-specific to generalise. After analysing widely-used frameworks and real-world architecture documents, gaps appear in every single one.
+
+### What's Missing from Existing Frameworks
+
+<CardGrid>
+  <Card title="Documentation Depth Levels" icon="bars-2">
+    No existing template provides guidance on how much detail is needed for different project scales. ADS defines three tiers (**Minimum**, **Recommended**, **Comprehensive**) with RFC 2119 keywords (SHALL / SHOULD / MAY) so teams right-size their effort.
+  </Card>
+  <Card title="Machine-Readable Schema" icon="seti:json">
+    Every template reviewed is prose-only. ADS provides a JSON Schema with atomic, enumerated fields — enabling automated completeness checks, cross-SAD comparison, and multi-format generation (Markdown, Word, web).
+  </Card>
+  <Card title="Dedicated Security View" icon="warning">
+    Most frameworks have no dedicated Security View. Security is either buried in cross-cutting concepts, treated as a quality pillar, or absent entirely. ADS treats security as a first-class architectural view (Section 3.5).
+  </Card>
+  <Card title="Dedicated Data View" icon="open-book">
+    Most frameworks lack a structured Data View. Data architecture is scattered across other views or missing. ADS provides a dedicated Data View (Section 3.4) covering data models, flows, classification, retention, and sovereignty.
+  </Card>
+  <Card title="Cloud WAF-Aligned Quality Attributes" icon="star">
+    No existing documentation template aligns quality attributes to the cloud Well-Architected Frameworks. ADS maps cross-cutting quality attributes (Section 4) to AWS, Azure, GCP, Oracle, and IBM.
+  </Card>
+</CardGrid>
+
+### Feature Comparison
+
+How ADS compares against the most widely-used frameworks:
+
+| Feature | ADS | arc42 | bflorat | ALMBoK | NHS SAF |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **Architectural views (4+1 aligned)** | 6 views | 4 views | 5 views | 13 views | Guidance only |
+| **Dedicated Security View** | ✅ | ❌ | ✅ | ✅ | Guidance only |
+| **Dedicated Data View** | ✅ | ❌ | ❌ | ✅ | Guidance only |
+| **Integration & Data Flow View** | ✅ | Partial | ❌ | ✅ | Guidance only |
+| **Cloud WAF quality attributes** | ✅ 5 providers | ❌ | ❌ | ❌ | References only |
+| **Documentation depth levels** | ✅ 3 tiers | ❌ | ❌ | ❌ | Informal |
+| **RFC 2119 keywords** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **JSON Schema / validation** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Atomic enumerated fields** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Lifecycle management** | ✅ | ❌ | ❌ | ✅ | ❌ |
+| **Decision making & governance** | ✅ | Partial | ❌ | ❌ | ✅ |
+| **Downloadable templates** | ✅ MD/YAML/JSON/DOCX | ❌ | ✅ AsciiDoc | ❌ | ❌ |
+| **Platform-agnostic** | ✅ | ✅ | ✅ | ✅ | NHS-specific |
+| **Open-source / free** | ✅ | ✅ | ✅ | Partial | ✅ |
+
+See the [Framework Alignment](/v1/standard/framework-alignment/) page for detailed mappings to ISO 42010, TOGAF, and the cloud Well-Architected Frameworks.
+
+### Who Benefits
+
+<CardGrid>
+  <Card title="Solution Architects" icon="pencil">
+    A structured, fill-in template that removes the blank-page problem. Atomic fields mean less ambiguity. Depth levels mean you write only what's needed for your project's scale.
+  </Card>
+  <Card title="Architecture Governance" icon="approve-check-circle">
+    A consistent standard to review SADs against. Machine-readable schema enables automated completeness checks across a portfolio of architecture descriptions.
+  </Card>
+  <Card title="Delivery Teams" icon="rocket">
+    Clear, structured architecture documentation that's navigable by role — infrastructure engineers read the Physical View, security teams read the Security View.
+  </Card>
+  <Card title="Organisations" icon="setting">
+    Comparable architecture descriptions across projects. Portfolio-level analysis of quality attributes, risk posture, and compliance coverage.
+  </Card>
+</CardGrid>
 
 ---
 

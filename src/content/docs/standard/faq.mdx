@@ -3,6 +3,8 @@ title: "Frequently Asked Questions"
 description: "Common questions about adopting and using the Architecture Description Standard."
 ---
 
+For adoption questions — rollout approach, governance mapping, customising the standard for your organisation — see the **[Adoption Guide](/v1/standard/adoption-guide/)**.
+
 ## About the standard
 
 ### Does ADS replace TOGAF, ISO 42010, or arc42?
@@ -32,39 +34,6 @@ Yes. The standard content is licensed under [Creative Commons Attribution 4.0 (C
 ### Who maintains ADS?
 
 [Andi Chandler](https://andi.me/) maintains the standard. Contributions are welcomed via the [GitHub repository](https://github.com/andibing/archstandard).
-
-## Adopting the standard
-
-### Do I have to fill in every section?
-
-No. You fill in the sections required for your chosen Documentation Depth:
-
-- **Minimum** — required for all SADs, enough for dev/test reviews
-- **Recommended** — required for production-bound solutions
-- **Comprehensive** — required for critical, regulated, or enterprise-scale solutions
-
-See the [Depth Cheat Sheet](/v1/standard/cheat-sheet/) for what's required at each level.
-
-### What if a section doesn't apply to my solution?
-
-Omit it. Empty sections filled with "N/A" waste reviewers' time. If the section genuinely doesn't apply (e.g., IoT Devices for a cloud API), skip it entirely. If it might apply but you've decided not to address it, capture that decision in the Guardrail Exceptions (6.6) or as an ADR.
-
-### Can I add organisation-specific sections?
-
-Yes. Use the `customSections` extension point in the JSON Schema, or add new Markdown sections for your organisation's specific needs. ADS is designed to be extended, not forked. See [Conformance and Usage](/v1/standard/how-to-use/#organisation-customisation).
-
-### Can I modify the standard itself?
-
-You can adapt it under the CC BY 4.0 licence. But consider: if your change would be useful to others, [contribute it back](https://github.com/andibing/archstandard) via a pull request. Shared improvements help the whole community.
-
-### How long does it take to write a SAD?
-
-With the templates, examples, and AI prompts:
-- **Minimum-depth SAD** — 1-3 hours
-- **Recommended-depth SAD** — 1-2 days of drafting + review cycles
-- **Comprehensive-depth SAD** — 1-2 weeks of drafting + review cycles
-
-Most of the time is conversation with stakeholders and capturing decisions — not writing text. The template structure means you know exactly what to ask.
 
 ## Using the templates
 
