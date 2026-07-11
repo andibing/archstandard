@@ -39,7 +39,6 @@ const requiredFiles = [
   'src/content/docs/standard/how-to-use.mdx',
   'src/content/docs/standard/design-principles.mdx',
   'src/content/docs/standard/framework-alignment.mdx',
-  'src/content/docs/standard/why-ads.mdx',
   'src/content/docs/standard/0-document-control.mdx',
   'src/content/docs/standard/1-executive-summary.mdx',
   'src/content/docs/standard/2-stakeholders.mdx',
@@ -94,7 +93,6 @@ const TRANSLATED_STANDARD_PAGES = [
   'cheat-sheet.mdx',
   'how-to-use.mdx',
   'quickstart.mdx',
-  'why-ads.mdx',
 ];
 
 const enDir = 'src/content/docs/standard';
