@@ -6,15 +6,15 @@ ADS defines exactly which sections a SAD must contain, what each section must an
 
 Three names appear throughout. **ADS** is this standard. **SAD** (Solution Architecture Document) is the document you produce by following ADS. **HLD** (High Level Design) is the architectural-views and quality-attributes content that lives inside a SAD. So: ADS = the rules, SAD = the artefact, HLD = the design content.
 
-The English version is normative. French and German translations cover orientation pages only (homepage, quickstart, cheat sheet, why-ADS, conformance and usage); the standard sections, examples, and templates remain in English by deliberate policy.
+The English version is normative. French and German translations cover orientation pages only (homepage, quickstart, cheat sheet, conformance and usage); the standard sections, examples, and templates remain in English by deliberate policy.
 
 ## Orientation
 
-- [Overview](https://archstandard.org/v1/standard/overview/): the structure and concepts of ADS in one page.
+- [Overview](https://archstandard.org/v1/standard/overview/): the structure, concepts, and rationale of ADS in one page; includes comparison with TOGAF, arc42, and cloud WAFs.
 - [Quickstart](https://archstandard.org/v1/standard/quickstart/): a 30-minute first-SAD walkthrough at Minimum depth.
+- [Adoption Guide](https://archstandard.org/v1/standard/adoption-guide/): how to roll ADS out in an organisation — evaluate fit, run a pilot, map to governance, customise, onboard architects, measure adoption.
 - [Conformance and Usage](https://archstandard.org/v1/standard/how-to-use/): conformance levels, depth model, RFC 2119 mapping, terminology table, compliance scoring.
 - [Depth Cheat Sheet](https://archstandard.org/v1/standard/cheat-sheet/): single-page table of which sections are required at each depth.
-- [Why ADS?](https://archstandard.org/v1/standard/why-ads/): rationale and comparison with related frameworks.
 - [Design Principles](https://archstandard.org/v1/standard/design-principles/): atomic fields, schema-as-truth, extensibility without ambiguity.
 - [Framework Alignment](https://archstandard.org/v1/standard/framework-alignment/): traceability to ISO 42010, 4+1, TOGAF, AWS/Azure WAF.
 
