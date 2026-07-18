@@ -13,7 +13,11 @@
 # canonical URL resolves directly. A wildcard redirect here would break
 # the schema's self-referencing $id.
 
-# 1. Renamed pages — preserve old bookmarks after a content rename.
+# 1. Sitemap aliases — conventional URLs that crawlers and humans expect.
+/sitemap.xml          /v1/sitemap-index.xml    301
+/sitemap_index.xml    /v1/sitemap-index.xml    301
+
+# 2. Renamed pages — preserve old bookmarks after a content rename.
 #    The localised /fr/ and /de/ rules cover URLs that Google indexed
 #    pre-rename. Starlight serves English content under localised paths
 #    when no translation exists, so the integration-view target resolves
