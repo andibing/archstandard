@@ -8,35 +8,35 @@ Three names appear throughout. **ADS** is this standard. **SAD** (Solution Archi
 
 ## Orientation
 
-- [Overview](https://archstandard.org/v1/standard/overview/): Structure, concepts, and rationale of ADS in one page; includes comparison with TOGAF, arc42, and cloud WAFs.
-- [Quickstart](https://archstandard.org/v1/standard/quickstart/): 30-minute walkthrough to produce a first SAD at Minimum depth.
-- [Adopting ADS](https://archstandard.org/v1/standard/adoption-guide/): How to roll ADS out in an organisation — evaluate fit, pilot, map to governance, customise, onboard, measure.
-- [Conformance and Usage](https://archstandard.org/v1/standard/how-to-use/): Conformance levels, depth model, RFC 2119 mapping, terminology, compliance scoring.
-- [Depth Cheat Sheet](https://archstandard.org/v1/standard/cheat-sheet/): Single-page table of which sections are required at each documentation depth.
-- [Design Principles](https://archstandard.org/v1/standard/design-principles/): Atomic fields, schema-as-truth, extensibility without ambiguity.
-- [Framework Alignment](https://archstandard.org/v1/standard/framework-alignment/): Traceability to ISO 42010, 4+1, TOGAF, AWS/Azure WAF.
+- [overview](https://archstandard.org/v1/standard/overview/): 
+- [quickstart](https://archstandard.org/v1/standard/quickstart/): 
+- [Adopting ADS](https://archstandard.org/v1/standard/adoption-guide/): A practical guide to rolling out the Architecture Description Standard in your organisation — from first SAD to portfolio adoption.
+- [how-to-use](https://archstandard.org/v1/standard/how-to-use/): 
+- [cheat-sheet](https://archstandard.org/v1/standard/cheat-sheet/): 
+- [design-principles](https://archstandard.org/v1/standard/design-principles/): 
+- [Framework Alignment](https://archstandard.org/v1/standard/framework-alignment/): How ADS relates to established architecture frameworks — what it shares and where it differs.
 
 ## The Standard (Sections 0–7)
 
-- [0. Document Control](https://archstandard.org/v1/standard/0-document-control/): Metadata, change history, contributors, sign-offs.
-- [1. Executive Summary](https://archstandard.org/v1/standard/1-executive-summary/): Solution overview, business context and drivers, scope, criticality.
-- [2. Stakeholders & Concerns](https://archstandard.org/v1/standard/2-stakeholders/): Stakeholder register, concerns matrix, compliance and regulatory context.
-- [3. Architectural Views](https://archstandard.org/v1/standard/3-views-overview/): How the six architectural views fit together.
-- [3.1 Logical View](https://archstandard.org/v1/standard/3-1-logical-view/): Components, capabilities, design patterns.
-- [3.2 Integration & Data Flow View](https://archstandard.org/v1/standard/3-2-integration-view/): How components communicate internally and externally.
-- [3.3 Physical View](https://archstandard.org/v1/standard/3-3-physical-view/): Hosting, compute, networks, environments.
-- [3.4 Data View](https://archstandard.org/v1/standard/3-4-data-view/): Data stores, classification, data lifecycle.
-- [3.5 Security View](https://archstandard.org/v1/standard/3-5-security-view/): Authentication, authorisation, encryption, monitoring, threat model.
-- [3.6 Scenarios](https://archstandard.org/v1/standard/3-6-scenarios/): Key use cases and Architecture Decision Records (ADRs).
-- [4. Architectural Quality Attributes](https://archstandard.org/v1/standard/4-quality-attributes-overview/): The five cross-cutting evaluation perspectives.
-- [4.1 Operational Excellence](https://archstandard.org/v1/standard/4-1-operational-excellence/): Logging, monitoring, alerting, runbooks, operational maturity.
-- [4.2 Reliability & Resilience](https://archstandard.org/v1/standard/4-2-reliability/): DR strategy, RTO/RPO, backup, fault tolerance.
-- [4.3 Performance Efficiency](https://archstandard.org/v1/standard/4-3-performance/): Performance targets, growth projections, load testing.
-- [4.4 Cost Optimisation](https://archstandard.org/v1/standard/4-4-cost-optimisation/): Cost analysis, monitoring, right-sizing.
-- [4.5 Sustainability](https://archstandard.org/v1/standard/4-5-sustainability/): Carbon-aware hosting, auto-shutdown, sustainability metrics.
-- [5. Lifecycle Management](https://archstandard.org/v1/standard/5-lifecycle/): CI/CD, migration, test strategy, release, operations, decommissioning, exit planning.
-- [6. Decision Making & Governance](https://archstandard.org/v1/standard/6-decision-making/): RAID log, technical debt, guardrail exceptions, ADRs, compliance traceability, sign-off.
-- [7. Appendices](https://archstandard.org/v1/standard/7-appendices/): Glossary, references, supporting standards.
+- [0. Document Control](https://archstandard.org/v1/standard/0-document-control/): Metadata, change history, contributors, and document purpose.
+- [1-executive-summary](https://archstandard.org/v1/standard/1-executive-summary/): 
+- [2-stakeholders](https://archstandard.org/v1/standard/2-stakeholders/): 
+- [3. Architectural Views](https://archstandard.org/v1/standard/3-views-overview/): Overview of the architectural viewpoints used in this standard.
+- [3-1-logical-view](https://archstandard.org/v1/standard/3-1-logical-view/): 
+- [3-2-integration-view](https://archstandard.org/v1/standard/3-2-integration-view/): 
+- [3-3-physical-view](https://archstandard.org/v1/standard/3-3-physical-view/): 
+- [3-4-data-view](https://archstandard.org/v1/standard/3-4-data-view/): 
+- [3-5-security-view](https://archstandard.org/v1/standard/3-5-security-view/): 
+- [3-6-scenarios](https://archstandard.org/v1/standard/3-6-scenarios/): 
+- [4-quality-attributes-overview](https://archstandard.org/v1/standard/4-quality-attributes-overview/): 
+- [4-1-operational-excellence](https://archstandard.org/v1/standard/4-1-operational-excellence/): 
+- [4-2-reliability](https://archstandard.org/v1/standard/4-2-reliability/): 
+- [4-3-performance](https://archstandard.org/v1/standard/4-3-performance/): 
+- [4-4-cost-optimisation](https://archstandard.org/v1/standard/4-4-cost-optimisation/): 
+- [4-5-sustainability](https://archstandard.org/v1/standard/4-5-sustainability/): 
+- [5-lifecycle](https://archstandard.org/v1/standard/5-lifecycle/): 
+- [6-decision-making](https://archstandard.org/v1/standard/6-decision-making/): 
+- [7-appendices](https://archstandard.org/v1/standard/7-appendices/): 
 
 ## Schema and Templates
 
@@ -49,35 +49,35 @@ Three names appear throughout. **ADS** is this standard. **SAD** (Solution Archi
 
 ## Worked Example SADs
 
-Seven examples, each validated against the schema, covering different industries, scales, and depths.
+Validated against the schema, covering different industries, scales, and depths.
 
-- [Example: Employee Directory](https://archstandard.org/v1/examples/employee-directory/): Minimum depth — internal HR web app. [JSON](https://archstandard.org/v1/examples/employee-directory.json) [Markdown](https://archstandard.org/v1/examples/employee-directory.md)
-- [Example: Customer API Platform](https://archstandard.org/v1/examples/customer-api-platform/): Recommended depth — regulated open-banking API. [JSON](https://archstandard.org/v1/examples/customer-api-platform.json) [Markdown](https://archstandard.org/v1/examples/customer-api-platform.md)
-- [Example: Cloud Migration](https://archstandard.org/v1/examples/cloud-migration/): Recommended depth — lift-and-shift to AWS. [JSON](https://archstandard.org/v1/examples/cloud-migration.json) [Markdown](https://archstandard.org/v1/examples/cloud-migration.md)
-- [Example: NorthWind Retail Online](https://archstandard.org/v1/examples/northwind-retail/): Recommended depth, Tier 2 — PCI-DSS regulated e-commerce on AWS. [JSON](https://archstandard.org/v1/examples/northwind-retail.json) [Markdown](https://archstandard.org/v1/examples/northwind-retail.md)
-- [Example: Medwick Healthcare Trust -- MyMedwick Patient Portal](https://archstandard.org/v1/examples/medwick-healthcare/): Comprehensive depth, Tier 1 — national healthcare patient portal with FHIR R4. [JSON](https://archstandard.org/v1/examples/medwick-healthcare.json) [Markdown](https://archstandard.org/v1/examples/medwick-healthcare.md)
-- [Example: Stellar Platform (Internal Developer Platform)](https://archstandard.org/v1/examples/stellar-platform/): Recommended depth, Tier 3 — multi-cloud Internal Developer Platform on Kubernetes. [JSON](https://archstandard.org/v1/examples/stellar-platform.json) [Markdown](https://archstandard.org/v1/examples/stellar-platform.md)
-- [Example: archstandard.org](https://archstandard.org/v1/examples/archstandard-org/): Minimum depth — SAD for this very site. [JSON](https://archstandard.org/v1/examples/archstandard-org.json) [Markdown](https://archstandard.org/v1/examples/archstandard-org.md)
+- [archstandard-org](https://archstandard.org/v1/examples/archstandard-org/):  [JSON](https://archstandard.org/v1/examples/archstandard-org.json) [Markdown](https://archstandard.org/v1/examples/archstandard-org.md)
+- [cloud-migration](https://archstandard.org/v1/examples/cloud-migration/):  [JSON](https://archstandard.org/v1/examples/cloud-migration.json) [Markdown](https://archstandard.org/v1/examples/cloud-migration.md)
+- [customer-api-platform](https://archstandard.org/v1/examples/customer-api-platform/):  [JSON](https://archstandard.org/v1/examples/customer-api-platform.json) [Markdown](https://archstandard.org/v1/examples/customer-api-platform.md)
+- [employee-directory](https://archstandard.org/v1/examples/employee-directory/):  [JSON](https://archstandard.org/v1/examples/employee-directory.json) [Markdown](https://archstandard.org/v1/examples/employee-directory.md)
+- [medwick-healthcare](https://archstandard.org/v1/examples/medwick-healthcare/):  [JSON](https://archstandard.org/v1/examples/medwick-healthcare.json) [Markdown](https://archstandard.org/v1/examples/medwick-healthcare.md)
+- [northwind-retail](https://archstandard.org/v1/examples/northwind-retail/):  [JSON](https://archstandard.org/v1/examples/northwind-retail.json) [Markdown](https://archstandard.org/v1/examples/northwind-retail.md)
+- [stellar-platform](https://archstandard.org/v1/examples/stellar-platform/):  [JSON](https://archstandard.org/v1/examples/stellar-platform.json) [Markdown](https://archstandard.org/v1/examples/stellar-platform.md)
 
 ## Guidance
 
-- [What Good Looks Like](https://archstandard.org/v1/guidance/what-good-looks-like/): High-quality content excerpts showing what a well-written SAD section looks like.
-- [Anti-Patterns](https://archstandard.org/v1/guidance/anti-patterns/): Common mistakes with before-and-after examples.
-- [Decision Guides](https://archstandard.org/v1/guidance/decision-guides/): Flowcharts for picking depth, threat modelling, splitting SADs, classifying RAID items.
-- [Reviewer Perspectives](https://archstandard.org/v1/guidance/reviewer-perspectives/): What ARB, Security, Data, SRE, Finance, Change, and Product reviewers each look for.
-- [Starter Kits](https://archstandard.org/v1/guidance/starter-kits/): Pre-scoped guidance for new cloud apps, migrations, integrations, and platforms.
-- [Review Checklist](https://archstandard.org/v1/guidance/review-checklist/): Printable one-pager for governance reviewers.
-- [Industry Mappings](https://archstandard.org/v1/guidance/industry-mappings/): Traceability to GDS Service Standard, NIST CSF, PCI-DSS, ISO 27001, NHS DSPT, UK GDPR, FCA.
-- [Cheat Cards](https://archstandard.org/v1/guidance/cheat-cards/): One-page printable quick-reference cards.
-- [The 2-Minute Pitch](https://archstandard.org/v1/guidance/pitch/): Speaker notes for introducing ADS to an organisation in two minutes.
+- [anti-patterns](https://archstandard.org/v1/guidance/anti-patterns/): 
+- [cheat-cards](https://archstandard.org/v1/guidance/cheat-cards/): 
+- [decision-guides](https://archstandard.org/v1/guidance/decision-guides/): 
+- [industry-mappings](https://archstandard.org/v1/guidance/industry-mappings/): 
+- [pitch](https://archstandard.org/v1/guidance/pitch/): 
+- [review-checklist](https://archstandard.org/v1/guidance/review-checklist/): 
+- [reviewer-perspectives](https://archstandard.org/v1/guidance/reviewer-perspectives/): 
+- [starter-kits](https://archstandard.org/v1/guidance/starter-kits/): 
+- [what-good-looks-like](https://archstandard.org/v1/guidance/what-good-looks-like/): 
 
 ## Optional
 
-- [Templates](https://archstandard.org/v1/standard/templates/): How to use templates, customise per organisation, and convert between formats.
-- [Downloads](https://archstandard.org/v1/standard/downloads/): All downloadable files in one place.
-- [AI Prompts Library](https://archstandard.org/v1/standard/prompts/): AI prompt library — first-draft, validation, scoring, improvement, security and governance review.
-- [JSON Schema](https://archstandard.org/v1/standard/schema/): JSON Schema structure, validation instructions in Node and Python.
-- [Frequently Asked Questions](https://archstandard.org/v1/standard/faq/): Frequently asked questions about ADS.
-- [Version History](https://archstandard.org/v1/standard/version-history/): Release notes and schema-compatibility table.
+- [downloads](https://archstandard.org/v1/standard/downloads/): 
+- [faq](https://archstandard.org/v1/standard/faq/): 
+- [prompts](https://archstandard.org/v1/standard/prompts/): 
+- [schema](https://archstandard.org/v1/standard/schema/): 
+- [templates](https://archstandard.org/v1/standard/templates/): 
+- [version-history](https://archstandard.org/v1/standard/version-history/): 
 - [GitHub repository](https://github.com/andibing/archstandard): source for the site, schema, templates, and examples.
 - [Full content (llms-full.txt)](https://archstandard.org/llms-full.txt): all page content concatenated for LLM ingestion.
