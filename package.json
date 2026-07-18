@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && node scripts/post-build.cjs && node scripts/inject-csp-hashes.cjs",
+    "build": "astro build && node scripts/post-build.cjs && node scripts/inject-csp-hashes.cjs && node scripts/generate-llms-txt.cjs",
     "preview": "astro preview",
     "astro": "astro",
     "generate:templates": "node scripts/generate-templates.cjs",

@@ -2,3 +2,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://archstandard.org/v1/sitemap-index.xml
+
+# LLM-friendly content index (llmstxt.org format)
+# llms.txt      — structured link index
+# llms-full.txt — full page content for LLM ingestion
