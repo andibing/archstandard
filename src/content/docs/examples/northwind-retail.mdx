@@ -1148,7 +1148,7 @@ The application is developed internally by the Digital Commerce team.
 | Rollback plan | CloudFront routing rules revert traffic to legacy monolith within 5 minutes per cohort; legacy platform retained for 3 months post-100% cut-over |
 | Transient infrastructure | Yes -- AWS DMS replication tasks decommissioned after final cut-over |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -1159,7 +1159,7 @@ The application is developed internally by the Digital Commerce team.
 | Security | SAST, DAST, SCA, annual pen test | Continuous + annual by external firm | CI + Staging + Prod | Partial (pen test manual) |
 | DR | Failover, restore | Quarterly scripted drill | Prod + DR | Partial |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1167,7 +1167,7 @@ The application is developed internally by the Digital Commerce team.
 | Release process | Feature branch -> PR (automated tests + 1 approval) -> merge to main -> auto-deploy staging -> canary (5% for 15 min) -> full production via Argo Rollouts |
 | Feature flags | LaunchDarkly used extensively for progressive roll-out, A/B testing, and kill switches |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1186,7 +1186,7 @@ The application is developed internally by the Digital Commerce team.
 | Carbon footprint reported alongside cost | Yes — monthly FinOps + Sustainability review using AWS Customer Carbon Footprint Tool; tracked against a 2026 baseline. Sustainability KPI not yet formalised (gap noted in 4.5 scoring). |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Terraform destroy + S3 emptying + KMS schedule deletion; CMDB Retired status only after Cost Explorer confirms zero spend for 30 days. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -1206,7 +1206,7 @@ The application is developed internally by the Digital Commerce team.
 |----------|----------|
 | Can the team fully operate and support this solution in production? | A: Fully capable |
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -1214,7 +1214,7 @@ The application is developed internally by the Digital Commerce team.
 | Certificate management | ACM for public TLS (auto-renewal); AWS Private CA for internal mTLS |
 | Dependency management | Snyk continuous monitoring; Dependabot PRs; quarterly dependency review |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1227,7 +1227,9 @@ The application is developed internally by the Digital Commerce team.
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -1237,7 +1239,7 @@ The application is developed internally by the Digital Commerce team.
 | C-004 | Must integrate with SAP ERP for order fulfilment | Technical | SQS-buffered asynchronous integration; existing SAP APIs consumed as-is | 2025-09-30 |
 | C-005 | Corporate Cloud Landing Zone mandates AWS | Organisational | All hosting on AWS; Azure / GCP not permitted | 2025-07-14 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -1245,7 +1247,7 @@ The application is developed internally by the Digital Commerce team.
 | A-002 | SAP order API will handle 5,000 orders/min sustained during peak | Order backlog in SQS beyond SLA; customer confusion | Medium | Closed | Fred Bloggs | SAP team load-tested at 6,000 orders/min 2025-10-18 |
 | A-003 | Customer mobile app adoption will reach 55% of sessions by 2027 | Over-investment in mobile BFF | Medium | Open | Raj Bloggs | Current: 47%; trending +2pp/quarter |
 
-### 6.3 Risks
+#### Risks
 
 **Risk identification:**
 
@@ -1269,7 +1271,7 @@ The application is developed internally by the Digital Commerce team.
 | R-005 | Mitigate | Early submission 4 weeks before hard deadline; in-flight review with Apple / Google developer support; progressive web app (PWA) fallback if native store delays | Low | 2026-03-01 |
 | R-006 | Accept (with mitigation) | Pilot-light DR in eu-west-1; RTO 2 hours validated quarterly; customer-facing status page; accept 1-minute RPO | Medium | 2026-03-01 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -1278,14 +1280,14 @@ The application is developed internally by the Digital Commerce team.
 | D-003 | Stripe contract signed with UK acquiring and 3-year pricing | Inbound | Resolved | Procurement | Contract NW-PROC-2025-118 signed 2025-05-01 | 2025-05-01 |
 | D-004 | Loyalty platform (APP-0417) supports Cognito identity attribute mapping | Inbound | Committed | Loyalty team | Integration in test; completion 2026-05-01 | 2026-03-01 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
 | I-001 | OpenSearch index rebuild time of 42 minutes blocks catalogue refresh cadence | Operational | Low | Sally Doe | Move to rolling reindex with dual-index alias swap; completion 2026-05-01 | In Progress | 2026-03-18 |
 | I-002 | Mobile app iOS notification permissions prompt shown too early, depressing opt-in | Delivery | Low | Fred Bloggs | Reorder onboarding flow; A/B test via LaunchDarkly | In Progress | 2026-03-10 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -1305,7 +1307,7 @@ The application is developed internally by the Digital Commerce team.
 |----------|----------|
 | Does the design materially change the organisation's technology risk profile? | Yes -- reduces PCI-DSS scope and operational risk by replacing unsupported legacy; introduces elevated SaaS dependency on Stripe. Net impact assessed as favourable by Risk & Controls (RC-2025-118). |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|

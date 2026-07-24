@@ -246,7 +246,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 | Migration must not cause data loss or corruption | Claire Doe, Mary Bloggs | 5.2 Transition Plan, 3.4 Data View |
 | System must be recoverable within 4 hours | IT Operations, Betty Bloggs | 4.2 Reliability (RTO/RPO) |
 | Azure costs must not exceed approved budget | Polly Doe | 4.4 Cost Optimisation |
-| Team must be trained on Azure operations | IT Operations, Joe Bloggs | 5.6 Resourcing & Skills |
+| Team must be trained on Azure operations | IT Operations, Joe Bloggs | 5.5 Resourcing & Skills |
 | Cutover must be reversible (rollback plan) | Polly Doe, Fred Bloggs | 5.2 Transition Plan |
 | Month-end batch performance must improve | Mary Bloggs | 4.3 Performance |
 
@@ -1047,7 +1047,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | 9 | Hypercare and monitoring | 4 weeks | Oct-Nov 2026 |
 | 10 | On-premises decommissioning (after 30-day rollback window) | 2 weeks | Dec 2026 |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -1057,7 +1057,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | DR testing | Region failover from UK South to UK West | Simulated regional failure; App Service deployment to UK West; SQL failover; end-to-end payroll validation | Production (scheduled maintenance window) | No (manual, tested annually) |
 | Data migration testing | DMS full migration rehearsal with reconciliation | Full DMS migration from on-prem to Azure staging; row count and checksum reconciliation | Staging | No (manual rehearsal) |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1066,7 +1066,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | Release validation | Smoke tests run automatically post-deployment; payroll team validates key functions in staging before production approval |
 | Feature flags / toggles | Not currently used; to be evaluated for Phase 2 refactoring |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1085,7 +1085,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | Carbon footprint reported alongside cost | Yes — Azure Emissions Impact Dashboard reviewed monthly alongside cost; tracked against a 2026 baseline established during migration cutover. |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Bicep destroy + Storage Account deletion + Key Vault soft-delete purge after retention. CMDB entry marked Retired only after Cost Management confirms zero spend for 30 days. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -1106,7 +1106,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | If B, C, or D: what additional resources are required? | Azure platform training (see above); 3-month engagement with Microsoft FastTrack for hands-on migration support; Meridian Cloud Centre of Excellence available for advisory support |
 | Is a managed service being considered for ongoing operations? | No — Meridian IT Operations will manage the solution with PaaS reducing operational burden |
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -1115,7 +1115,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | Certificate management | BACS SFTP certificate stored in Key Vault with 30-day expiry alert. TLS certificates managed by Azure App Service (managed certificates for custom domains). |
 | Dependency management | NuGet packages reviewed quarterly; SCA (NuGet Audit) runs on every build; critical vulnerabilities patched within 7 days |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1128,7 +1128,9 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -1138,7 +1140,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | C-004 | Budget ceiling of £200,000 capex | Commercial | Limits scope of Phase 1; defers refactoring and Citrix replacement | 2026-01-20 |
 | C-005 | Must use Meridian Azure Landing Zone (hub-spoke topology) | Organisational | Network design must conform to existing hub-spoke architecture; VPN Gateway deployed in hub | 2026-02-01 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -1148,7 +1150,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | A-004 | Azure SQL Database supports all T-SQL features used by PayrollPro stored procedures | Stored procedures would need rework, potentially delaying migration | Medium | Closed | Claire Doe | Compatibility assessment completed; 3 procedures require rework (linked user queries, cross-database joins); estimated 2 weeks effort |
 | A-005 | BACS, HMRC, and Crestfield integrations will function from Azure without changes to their end | Integration reconfiguration needed; potential re-certification with providers | High | Open | Fred Bloggs | HMRC and Crestfield confirmed no IP allowlisting required. BACS gateway requires new SSH key registration (in progress). |
 
-### 6.3 Risks
+#### Risks
 
 **Risk identification:**
 
@@ -1172,7 +1174,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | R-005 | Mitigate | VPN tested and proven stable (A-002). Monitoring and auto-reconnect configured. Emergency fallback: enable temporary public access to App Service with IP restrictions. | Low | 2026-03-15 |
 | R-006 | Mitigate | PayrollPro migration plan has Entra ID Connect as a dependency; regular check-ins with IAM project team; fallback: temporary Azure AD-only authentication without on-prem sync | Low | 2026-03-15 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -1181,14 +1183,14 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | D-003 | BACS gateway must register new SSH public key for Azure-originated connections | Inbound | Committed | Fred Bloggs | BACS support ticket raised; confirmation pending | 2026-03-10 |
 | D-004 | SAP Finance team must update CSV import job to read from Azure Blob Storage (via ADF) | Outbound | Not Committed | Polly Doe | Meeting scheduled with SAP team for April 2026 | 2026-03-15 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
 | I-001 | DBA resource conflict — Claire Doe is also committed to the SAP upgrade project (PRJ-2026-012) for April-May 2026 | Delivery | Medium | Polly Doe | Escalated to IT Director; agreed David will prioritise PayrollPro migration; SAP project to use contractor DBA for overlap period | In Progress | 2026-03-20 |
 | I-002 | Three stored procedures use cross-database queries not supported by Azure SQL | Technical | Low | Claire Doe | Procedures rewritten to use single-database approach; two completed, one in progress | In Progress | 2026-03-25 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -1211,7 +1213,7 @@ Key findings: Azure monthly OpEx (£4,200) is approximately 30% lower than annua
 | Does the design materially change the organisation's technology risk profile? | No — the migration improves the risk profile by adding DR capability, eliminating hardware EOL risk, and improving security posture (network segmentation, managed patching, field-level encryption) |
 | If yes, has this been evaluated with Risk and Controls teams? | N/A |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|

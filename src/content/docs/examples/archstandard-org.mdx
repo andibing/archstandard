@@ -380,29 +380,31 @@ Not applicable. This is a greenfield project with no migration from an existing 
 
 ## 6. Decision Making and Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design |
 |----|-----------|----------|-----------------|
 | C-001 | Must be free or very low cost | Commercial | Drives selection of free-tier hosting (Cloudflare Pages) and open-source tooling (Astro) |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status |
 |----|-----------|----------------|-----------|--------|
 | A-001 | Cloudflare Pages free tier is sufficient for expected traffic | Would need to evaluate paid tier or alternative host | High | Open |
 
-### 6.3 Risks
+#### Risks
 
 No material risks have been identified. The site is public, contains no sensitive data, and can be rebuilt from git at any time. Cloudflare service disruption would cause temporary unavailability with negligible business impact.
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Type | Impact if Unavailable |
 |----|-----------|------|----------------------|
 | D-001 | GitHub | External service | Cannot push updates; existing site remains live |
 
-### 6.5 Architecture Decision Records
+### 6.2 Architecture Decision Records
 
 See ADR-001 and ADR-002 in Section 3.6.
 

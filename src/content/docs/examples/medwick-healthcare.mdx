@@ -280,7 +280,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Accessibility (WCAG 2.2 AA, digital inclusion) | Nisha Doe, PPG | 3.6, 4.3 |
 | Cost and benefit realisation | Paul Bloggs, Robert Bloggs, Finance | 4.4 |
 | Cyber security (ransomware, credential stuffing, denial of service) | Jane Bloggs | 3.5, 6.3 |
-| Operational support model and ITIL alignment | Tom Doe | 5.5 |
+| Operational support model and ITIL alignment | Tom Doe | 5.4 |
 
 ### 2.3 Compliance & Regulatory Context
 
@@ -1419,7 +1419,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Acceptance criteria | ≥ 95% of active PKB users re-enrolled in MyMedwick or formally opted out; CSG sign-off on post-live clinical safety case |
 | Transient infrastructure | Yes -- ADF pipeline for PKB extract (decommissioned post-migration) |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -1433,7 +1433,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Penetration | Annual | NCC Group | Pre-prod | No |
 | DR | Region failover | Quarterly drill | Prod + DR | Partial |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1443,7 +1443,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Feature flags | LaunchDarkly for phased rollout (per-patient-cohort, per-clinic) |
 | Clinical-safety change control | Any change touching a HAZ-tagged component requires CSO review and CSG sign-off before promotion to production |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1463,7 +1463,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Carbon footprint reported alongside cost | Yes — Azure Emissions Impact Dashboard reviewed monthly alongside cost; reported quarterly to Trust Sustainability Committee against the MediCore Net Zero target (2040). |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Bicep destroy + Storage Account deletion + Key Vault soft-delete purge after retention. Trust CMDB (ServiceNow) entry marked Retired only after Azure Cost Management confirms zero spend for 30 days. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -1482,13 +1482,13 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 
 - A: Fully capable -- established SRE team plus clinical safety officer succession plan.
 
-### 5.7 Service Start
+#### Service Start
 
 1. Azure PaaS resources are always running (App Service, SQL, APIM).
 2. On deployment, App Service slot-swap is the activation step; health checks verify all dependencies.
 3. After any DR failover, startup sequence: promote SQL secondary -> scale up App Service in UK West -> update Front Door origin -> verify EPR connectivity via ExpressRoute backup path -> enable external traffic. Full cold-start ~25 minutes.
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -1497,7 +1497,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Dependency management | Mend + Dependabot; quarterly review |
 | MediCore Spine / e-RS / GP Connect interface updates | MediCore Digital issues are tracked via the Digital Assurance Manager; change windows coordinated |
 
-### 5.9 End-of-Life & Decommissioning
+### 5.6 Decommissioning & Exit
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1507,7 +1507,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Data disposal | Patient data: secure deletion (NIST 800-88 equivalent via Azure Storage secure delete + Key Vault key destruction); audit: retained to legal minimum then lifecycle-expired |
 | Infrastructure disposal | Bicep `what-if` + Terraform destroy; Azure resources deleted; DNS removed; ADO project archived |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1520,7 +1520,9 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -1531,7 +1533,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | C-005 | WCAG 2.2 Level AA accessibility required (public sector body regs) | Regulatory | Accessibility built in from alpha; external audit annually | 2026-01-15 |
 | C-006 | 99.9% availability SLA committed in Trust Digital Strategy | Commercial | Zone-redundant SQL; multi-region DR; App Service Premium v3 | 2026-03-01 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -1541,7 +1543,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | A-004 | MediCore login federation remains optional for Trust portals | Would require emergency MediCore login integration | Medium | Open | Sally Bloggs | Current MediCore Authority policy position; monitored |
 | A-005 | Patients have reliable mobile signal for SMS OTP | MFA failure rate could increase; requires TOTP fallback adoption | High | Closed | Dr Raj Doe | Research shows ≥ 97% UK mobile coverage in Trust catchment |
 
-### 6.3 Risks
+#### Risks
 
 #### Risk Identification
 
@@ -1577,7 +1579,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | R-011 | Mitigate | Breached-password detection; adaptive rate limits; MFA mandatory; Sentinel UEBA; SOC 24x7 | Medium | 2026-03-01 |
 | R-012 | Mitigate | Email fallback; GOV.UK Notify fallback validated in staging; booking office manual call process | Medium | 2026-02-15 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -1591,7 +1593,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | D-008 | DSPT 2025/26 submission | Outbound | Resolved | Sally Bloggs | Submitted 2025-06-30; Standards Met | 2025-06-30 |
 | D-009 | CS-160 deployment safety case for each release | Outbound | In progress (continuous) | Dr Amir Doe | Approved for v2.0 | 2026-03-28 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution | Status | Last Assessed |
 |----|-------|----------|--------|-------|-----------|--------|---------------|
@@ -1599,7 +1601,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | I-002 | Two patients reported receiving SMS reminders at 03:00 due to scheduler timezone misconfiguration | Operational | Medium | Tom Doe | Scheduler corrected to Europe/London; affected patients contacted; CS-160 incident report filed | Resolved | 2025-12-08 |
 | I-003 | Accessibility audit identified 3 AA-level issues (focus order on results page, colour contrast on notification chip, aria-label on cancel button) | Compliance | Low | Nisha Doe | Fixes in current sprint; external auditor re-test booked for 2026-04 | In progress | 2026-03-20 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -1622,7 +1624,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | Materially changes the Trust's risk profile? | Yes -- introduces a new patient-facing external surface and new data processing. Evaluated with Risk Committee; risk appetite confirmed. DPIA DPIA-2025-004 and Clinical Safety Case v3 signed. |
 | Evaluated with Risk and Controls? | Yes |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
@@ -1631,7 +1633,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | ADR-003 | Azure AD B2C over MediCore login for patient identity | Accepted (revised 2026-03-28) | 2026-03-28 | Identity model; MediCore login federation planned |
 | ADR-004 | Outbox pattern for EPR-affecting writes | Accepted | 2025-03-12 | Reliability pattern |
 
-### 6.8 Compliance Traceability
+### 6.5 Compliance Traceability
 
 | Standard / Principle | Requirement | How the Design Satisfies It | Evidence Section |
 |---------------------|-------------|---------------------------|-----------------|
@@ -1727,7 +1729,7 @@ Design scales to 5-year horizon. Seasonal demand pattern: +40% in January (New Y
 | HL7v2 | HL7 v2.5 | 2.5 | 3.2 Integration (legacy inbound) |
 | OWASP-ASVS-4.0 | Application Security Verification Standard | 4.0 | 5.1 |
 | OWASP-CRS | OWASP Core Rule Set | 3.2 | 3.3, 3.5 WAF |
-| NIST-800-88 | Media Sanitisation | Rev 1 | 5.9 |
+| NIST-800-88 | Media Sanitisation | Rev 1 | 5.6 |
 | WCAG | Web Content Accessibility Guidelines | 2.2 AA | 3.6, 4.3, 5.3 |
 | CS-129 | Clinical Risk Management (Manufacturer) | 2018 | 3.5, 3.6, 5.1 |
 | CS-160 | Clinical Risk Management (Deployment) | 2018 | 5.4, 6 |

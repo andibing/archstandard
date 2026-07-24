@@ -222,15 +222,15 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 |---------|---------------|-------------|
 | Regulatory compliance (PSD2, Open Banking) | Alice Doe, Dr. Helen Zhao | 1. Executive Summary, 2.3 Compliance, 3.5 Security View, 6. Governance |
 | Data protection and PII handling | Marcus Doe, Jane Doe | 3.4 Data View, 3.5 Security View |
-| Platform availability and SLA | Tom Bloggs, Sally Doe, External API consumers | 4.2 Reliability, 5.5 Operations & Support |
+| Platform availability and SLA | Tom Bloggs, Sally Doe, External API consumers | 4.2 Reliability, 5.4 Operations |
 | API performance and latency | Amir Doe, External API consumers | 4.3 Performance, 3.2 Integration & Data Flow |
 | Cost-effectiveness and budget | Dr. Helen Zhao, Finance team, Nelly Bloggs | 4.4 Cost Optimisation |
 | Security posture and threat mitigation | Marcus Doe, Joe Bloggs | 3.5 Security View |
 | Partner onboarding and developer experience | Sally Doe, External API consumers | 3.2 Integration & Data Flow, 3.6 Scenarios |
-| Operational supportability | Tom Bloggs | 4.1 Operational Excellence, 5.5 Operations & Support |
+| Operational supportability | Tom Bloggs | 4.1 Operational Excellence, 5.4 Operations |
 | Scalability for growth | Fred Bloggs, Dr. Helen Zhao | 4.2 Reliability, 4.3 Performance, 3.3 Physical View |
 | Migration from legacy PIL | Nelly Bloggs, Amir Doe | 1.5 Current State, 5.2 Service Transition |
-| Vendor lock-in | Fred Bloggs, Dave Bloggs | 3.1 Logical View, 5.10 Exit Planning |
+| Vendor lock-in | Fred Bloggs, Dave Bloggs | 3.1 Logical View, 5.6 Decommissioning & Exit |
 
 ### 2.3 Compliance & Regulatory Context
 
@@ -1257,7 +1257,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Acceptance criteria | All 8 legacy partners migrated and confirmed; PIL traffic at zero for 30 consecutive days; PIL decommission approval from all stakeholders |
 | Transient infrastructure needed? | Yes -- Debezium + Kafka Connect cluster for initial CDC setup (decommissioned after steady-state CDC established via direct Oracle-to-PostgreSQL replication) |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -1267,7 +1267,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Security testing | SAST, DAST, SCA, penetration testing | SAST/SCA: every PR; DAST: weekly; annual penetration test by NCC Group | CI + Staging + Production | Partially (pen test is manual) |
 | DR testing | Failover to eu-west-1, RDS promotion, DNS cutover | Quarterly automated failover drill; annual full DR exercise with SRE team | Production + DR | Partially (scripted but manually triggered) |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1276,7 +1276,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Release validation | Automated smoke tests post-deploy (5-minute suite); canary analysis (10% traffic for 15 minutes); automated rollback if error rate > 0.1% |
 | Feature flags / toggles | LaunchDarkly for feature flags; used for partner-specific feature rollouts and kill switches for new functionality |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1295,7 +1295,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Carbon footprint reported alongside cost | Yes -- monthly FinOps review includes AWS Customer Carbon Footprint Tool output; reported to ARB and Sustainability committee quarterly |
 | Environment retirement actually deletes (vs stops) | Yes -- decommissioning runbook requires Terraform destroy + S3 bucket emptying + KMS key scheduled-deletion; CMDB entry marked Retired only after AWS Cost Explorer confirms zero spend for 30 days |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -1317,7 +1317,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | If B, C, or D: what additional resources are required? | N/A |
 | Is a managed service being considered for ongoing operations? | No -- SRE team operates the platform; AWS managed services (RDS, EKS, ElastiCache) reduce operational burden |
 
-### 5.7 Service Start
+#### Service Start
 
 Application start-up sequence:
 1. EKS cluster and node groups are always running (managed by Karpenter auto-scaling).
@@ -1328,7 +1328,7 @@ Application start-up sequence:
 6. API Gateway is always available (managed service); no start-up required.
 7. Full start-up from cold (e.g., after a DR failover scale-up) takes approximately 8 minutes.
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -1337,7 +1337,7 @@ Application start-up sequence:
 | Certificate management | Partner mTLS certificates: 1-year validity, automated renewal reminders at 60/30/7 days; internal TLS: AWS Certificate Manager (auto-renewal); KMS keys: annual automatic rotation |
 | Dependency management | Snyk monitors all dependencies continuously; Dependabot PRs for automated updates; quarterly dependency review meeting |
 
-### 5.9 End-of-Life & Decommissioning
+### 5.6 Decommissioning & Exit
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1347,7 +1347,7 @@ Application start-up sequence:
 | Data disposal | Customer data: secure deletion from RDS (NIST 800-88 compliant); audit logs: retained in S3 Glacier until 7-year obligation met, then lifecycle-expired; encryption keys: scheduled for deletion after data disposal |
 | Infrastructure disposal | Terraform destroy for all AWS resources; DNS records removed; IAM roles deleted; GitHub repositories archived (not deleted, for audit trail) |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1360,7 +1360,9 @@ Application start-up sequence:
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -1369,7 +1371,7 @@ Application start-up sequence:
 | C-003 | Must integrate with existing core banking Oracle database via read replicas | Technical | Cannot replace core banking data source; must maintain JDBC connectivity via Direct Connect; data model constrained by Oracle schema | 2025-06-15 |
 | C-004 | 99.95% monthly availability SLA committed to partners | Commercial | Multi-AZ deployment mandatory; active-passive DR required; auto-scaling and fault tolerance must support SLA; monthly SLA reporting to partners | 2025-11-01 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -1377,7 +1379,7 @@ Application start-up sequence:
 | A-002 | Sentari Pulse API will maintain &lt;100ms P95 latency under our projected load | Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently | Medium | Open | Fred Bloggs | Sentari SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at our projected 3-year volume |
 | A-003 | Partner adoption will grow linearly to 80 partners over 3 years | Non-linear growth could exceed capacity plans; under-adoption would mean over-provisioned infrastructure (cost waste) | Medium | Open | Sally Doe | Business development pipeline shows 50 partners in negotiation; growth rate tracking to plan |
 
-### 6.3 Risks
+#### Risks
 
 #### Risk Identification
 
@@ -1397,7 +1399,7 @@ Application start-up sequence:
 | R-003 | Mitigate | Snyk continuous monitoring with P1 alert on critical CVEs; pre-built patched base images maintained in ECR; emergency deployment pipeline (bypasses staging for security patches); rollback capability | Medium | 2025-11-01 |
 | R-004 | Accept (with mitigation) | Active-passive DR in eu-west-1; quarterly DR drills; RTO 1 hour validated through testing; accept 15-minute RPO for async replication lag | Low | 2025-11-01 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -1405,14 +1407,14 @@ Application start-up sequence:
 | D-002 | Sentari Pulse API available and contracted for CAP usage | Inbound | Committed | Procurement | Contract MFS-VENDOR-2024-089 signed; API access provisioned | 2025-09-01 |
 | D-003 | Partner Onboarding Portal (APP-0456) consuming Auth Service APIs for partner registration | Outbound | Resolved | Partner Portal team | Integration live since 2025-06-01 | 2025-11-01 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
 | I-001 | Redis cluster failover caused 45-second cache miss spike during October maintenance window | Operational | Low | Tom Bloggs | Updated maintenance procedure to pre-warm cache before failover; implemented dual-write to new primary during planned failover | Resolved | 2025-11-01 |
 | I-002 | Three partners have not completed mTLS certificate renewal (certificates expiring in 60 days) | Operational | Medium | Sally Doe | Automated renewal reminders sent at 90/60/30/7 days; partner manager directly contacting non-responsive partners; contingency: temporary API key fallback (with CISO approval) | In Progress | 2025-11-15 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -1435,7 +1437,7 @@ Application start-up sequence:
 | Does the design materially change the organisation's technology risk profile? | No -- the design reduces risk by replacing unsupported legacy middleware with a modern, actively maintained platform. The introduction of cloud-hosted customer data is covered by the existing AWS risk assessment (MFS-TRA-2023-012). |
 | If yes, has this been evaluated with Risk and Controls teams? | N/A |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
@@ -1443,7 +1445,7 @@ Application start-up sequence:
 | ADR-002 | PostgreSQL over DynamoDB for primary data store | Accepted | 2024-10-05 | Determines database technology, data model, and backup/recovery approach |
 | ADR-003 | Event-driven architecture for notifications and audit | Accepted | 2024-10-08 | Determines async processing pattern and notification architecture |
 
-### 6.8 Compliance Traceability
+### 6.5 Compliance Traceability
 
 | Standard / Principle | Requirement | How the Design Satisfies It | Evidence Section |
 |---------------------|-------------|---------------------------|-----------------|
@@ -1503,7 +1505,7 @@ Application start-up sequence:
 | OBIE-AIS-3.1.11 | Open Banking Account Information API | 3.1.11 | 3.2 Integration & Data Flow |
 | PCI-DSS-4.0 | Payment Card Industry Data Security Standard | 4.0 | 3.5 Security View, 6.8 Compliance Traceability |
 | OWASP-ASVS-4.0 | Application Security Verification Standard | 4.0 | 5.1 Application Security in Development |
-| NIST-800-88 | Guidelines for Media Sanitization | Rev 1 | 5.9 End-of-Life |
+| NIST-800-88 | Guidelines for Media Sanitization | Rev 1 | 5.6 Decommissioning & Exit |
 | C4-Model | C4 Model for Software Architecture | N/A | 3.1 Logical View (diagramming approach) |
 | 12-Factor | The Twelve-Factor App | N/A | 3.1 Logical View (microservice design principles) |
 

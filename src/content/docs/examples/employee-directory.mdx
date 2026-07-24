@@ -856,7 +856,7 @@ The application includes internally developed software.
 | Rollback plan | Revert to the SharePoint spreadsheet. HR retain it as a backup for 4 weeks post-go-live. |
 | Acceptance criteria | 1. All active employees visible in directory. 2. Search returns correct results. 3. HR can update records. 4. Nightly import completes successfully for 5 consecutive days. |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -864,7 +864,7 @@ The application includes internally developed software.
 | Performance testing | Basic load validation | Manual browser testing + Application Insights monitoring during parallel run | Production | No |
 | Security testing | Penetration testing | Not planned (Tier 4; SAST and SCA are sufficient per Meridian policy) | -- | N/A |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -873,7 +873,7 @@ The application includes internally developed software.
 | Release validation | Smoke test (manual check of search and admin functions) after each deployment |
 | Feature flags / toggles | Not used -- the application is simple enough to deploy features directly |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -892,7 +892,7 @@ The application includes internally developed software.
 | Carbon footprint reporting | Tracked at department level via Microsoft Sustainability Manager; not separately reported for this single application. |
 | Environment retirement | Decommissioning runbook (would apply at end-of-life) requires resource group deletion, not just app stop. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -911,7 +911,7 @@ The application includes internally developed software.
 |----------|----------|
 | Can the team fully operate and support this solution in production? | A: Fully capable |
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -920,7 +920,7 @@ The application includes internally developed software.
 | Certificate management | Managed by Azure App Service (managed certificates for custom domain) |
 | Dependency management | Dependabot raises PRs for outdated or vulnerable dependencies weekly |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -933,21 +933,23 @@ The application includes internally developed software.
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
 | C-001 | All new applications must be hosted on the Meridian Azure tenant | Organisational | Limits hosting to Azure services; all technology choices must be Azure-native or Azure-compatible | 2025-09-15 |
 | C-002 | Employee data must be sourced from PeopleSync via its existing CSV export capability | Technical | Integration is batch-based (nightly CSV); real-time sync is not possible without changes to PeopleSync (out of scope) | 2025-09-15 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
 | A-001 | PeopleSync CSV export format will remain stable and will not change without notice | CSV import job would fail; data would become stale until the import is updated | High | Closed | Jane Doe (HR Systems Manager) | Confirmed with PeopleSync vendor that format is contractually stable through 2027 |
 | A-002 | The existing ExpressRoute connection between Meridian data centre and Azure UK South has sufficient bandwidth for the nightly CSV upload (< 10 MB) | CSV upload would fail or be slow | High | Closed | Dave Bloggs (IT Operations Lead) | Confirmed; ExpressRoute has 200 Mbps capacity with < 5% utilisation at 02:00 UTC |
 
-### 6.3 Risks
+#### Risks
 
 **Risk identification:**
 
@@ -963,17 +965,17 @@ The application includes internally developed software.
 | R-001 | Mitigate | The CSV import job is a modular component that can be adapted to a new data source. If PeopleSync is replaced, only the import job needs updating. | Low | 2025-10-01 |
 | R-002 | Mitigate | Monitor database size via Azure Monitor alert. If approaching 2 GB, migrate photographs to Azure Blob Storage (estimated 2-day development effort). | Low | 2025-10-01 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
 | D-001 | PeopleSync nightly CSV export must be enabled and running | Inbound | Committed | Jane Doe | PeopleSync export configured and tested in development | 2025-10-15 |
 
-### 6.5 Issues
+#### Issues
 
 No open issues at the time of writing.
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -993,7 +995,7 @@ No open issues at the time of writing.
 |----------|----------|
 | Does the design materially change the organisation's technology risk profile? | No |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|

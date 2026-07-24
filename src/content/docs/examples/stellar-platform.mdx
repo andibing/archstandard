@@ -1078,7 +1078,7 @@ The platform is built internally (open-source-first where appropriate).
 | Rollback plan | Teams can revert to prior CI or deployment pattern at any time during Wave 2; platform monitors adoption and DORA and escalates if rollback trend emerges |
 | Acceptance criteria (Wave 1) | 1. Five teams onboarded. 2. New-service lead time < 1 day. 3. Net DevEx score positive. 4. SLOs met. |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -1089,7 +1089,7 @@ The platform is built internally (open-source-first where appropriate).
 | Chaos | Control plane resilience | Litmus | Staging | Yes (monthly) |
 | Security | Penetration testing | Annual + on major changes | Staging | No |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1098,7 +1098,7 @@ The platform is built internally (open-source-first where appropriate).
 | Release validation | Automated smoke tests + synthetic after each deploy |
 | Feature flags | LaunchDarkly (shared service) for portal feature toggles |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1118,7 +1118,7 @@ The platform is built internally (open-source-first where appropriate).
 | Carbon footprint reported alongside cost | Yes — monthly multi-cloud FinOps + Sustainability review combines AWS Customer Carbon Footprint Tool, GCP Carbon Footprint reports; tracked against a 2026 platform-wide baseline. |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Terraform destroy + bucket emptying + key destruction; CMDB Retired status only after both AWS Cost Explorer and GCP Billing confirm zero spend for 30 days. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -1139,7 +1139,7 @@ The platform is built internally (open-source-first where appropriate).
 |----------|----------|
 | Can the team fully operate and support this solution in production? | B: Partially capable -- core runtime is in-hand; AWS depth and Backstage plugin velocity are the known gaps with mitigations in place |
 
-### 5.7 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -1149,7 +1149,7 @@ The platform is built internally (open-source-first where appropriate).
 | Dependency management | Renovate + Snyk |
 | Platform deprecation policy | Breaking changes to templates announced N+2 minor versions in advance |
 
-### 5.8 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -1162,7 +1162,9 @@ The platform is built internally (open-source-first where appropriate).
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -1172,7 +1174,7 @@ The platform is built internally (open-source-first where appropriate).
 | C-004 | Platform team headcount capped at 12 for FY26 | Organisational | Forces ruthless prioritisation; reinforces platform-as-a-product discipline | 2026-01-14 |
 | C-005 | Budget cap GBP 1.2M capex + GBP 350k/yr opex | Financial | Commercial IDPs (Port.io, Cortex) are out-of-scope due to per-seat pricing at 400 engineers | 2026-01-14 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -1181,7 +1183,7 @@ The platform is built internally (open-source-first where appropriate).
 | A-003 | Datadog contract can scale to 3x current ingest without renegotiation | Cost surprise mid-year | High | Closed | Sam Doe | Confirmed with Datadog account team; signed addendum |
 | A-004 | GKE Autopilot pricing remains stable for 3 years | Run cost surprise | Medium | Open | Sam Doe | GCP price-hold provisions in enterprise agreement |
 
-### 6.3 Risks
+#### Risks
 
 **Risk identification:**
 
@@ -1211,7 +1213,7 @@ The platform is built internally (open-source-first where appropriate).
 | R-008 | Mitigate | OpenTelemetry Collector as abstraction; dashboards-as-code via Terraform provider (portable); quarterly review of Datadog-specific usage | Medium | 2026-04-10 |
 | R-009 | Mitigate | DORA only shown at team level; engineering handbook explicitly describes DORA as system-health signals; director-level coaching on psychologically safe use | Low | 2026-04-10 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -1221,13 +1223,13 @@ The platform is built internally (open-source-first where appropriate).
 | D-004 | Megaport interconnect between GCP and AWS | Inbound | Resolved | Network team | Live since 2026-02 | 2026-02-20 |
 | D-005 | Product teams adopt golden paths (Wave 1 commitments) | Inbound | Committed | Engineering Directors | MoU signed 2026-03 | 2026-03-20 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|-----------------|--------|---------------|
 | I-001 | Backstage `software-templates` plugin has a known memory leak at > 2,000 catalogue entities | Technical | Medium | Tom Bloggs | Upstream fix in v1.26; pinned our instance to v1.25 with workaround | In progress | 2026-04-05 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -1247,7 +1249,7 @@ The platform is built internally (open-source-first where appropriate).
 |----------|----------|
 | Does the design materially change the organisation's technology risk profile? | Yes -- the platform concentrates supply-chain risk but also concentrates supply-chain controls; net reduction in organisational risk |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
