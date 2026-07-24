@@ -1,6 +1,6 @@
 ---
 title: "6. Decision Making & Governance"
-description: Constraints, assumptions, risks, dependencies, issues, architectural decisions, and compliance traceability.
+description: CRAIDS log, technical debt, architectural decisions, and compliance traceability.
 ---
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
@@ -10,30 +10,27 @@ description: Constraints, assumptions, risks, dependencies, issues, architectura
 
 This section captures the decision-making context for the architecture:
 
-- **Constraints and assumptions** that shaped the design
-- **Risks and dependencies** that must be managed
+- **The CRAIDS log** — constraints, risks, assumptions, issues, and dependencies that shaped and affect the design
 - **Key decisions** made and the rationale behind them
 - **Exceptions** to organisational standards
 - **Compliance evidence** demonstrating the design has been reviewed and approved
 
 | Sub-section | Focus | Depth |
 |------------|-------|-------|
-| 6.1 Constraints | Fixed limitations shaping the design | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 6.2 Assumptions | Factors believed true but not verified | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 6.3 Risks | Potential events that could affect the design | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 6.4 Dependencies | External factors the design relies upon | <span class="maturity-indicator maturity-minimum">Minimum</span> |
-| 6.5 Issues | Problems that have already materialised | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 6.6 Technical Debt Register | Debt introduced or inherited | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 6.7 Guardrail Exceptions | Exceptions to policies and standards | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 6.8 Architectural Decisions Log | Summary index of ADRs | <span class="maturity-indicator maturity-recommended">Recommended</span> |
-| 6.9 Compliance Traceability | Mapping to standards and principles | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> |
-| 6.10 Approval Sign-Off | Governance approval record | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 6.1 CRAIDS Log | Constraints, risks, assumptions, issues, and dependencies | <span class="maturity-indicator maturity-minimum">Minimum</span> |
+| 6.2 Technical Debt Register | Debt introduced or inherited | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 6.3 Guardrail Exceptions | Exceptions to policies and standards | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 6.4 Architectural Decisions Log | Summary index of ADRs | <span class="maturity-indicator maturity-recommended">Recommended</span> |
+| 6.5 Compliance Traceability | Mapping to standards and principles | <span class="maturity-indicator maturity-comprehensive">Comprehensive</span> |
+| 6.6 Approval Sign-Off | Governance approval record | <span class="maturity-indicator maturity-minimum">Minimum</span> |
 
-Sections 6.1 through 6.5 collectively form the **RAID log** (Risks, Assumptions, Issues, Dependencies) — a standard project governance tool — extended with **Constraints** to capture fixed limitations. Each element has its own sub-section for clarity, but they should be maintained together as a single, living governance artefact.
-
-## 6.1 Constraints
+## 6.1 CRAIDS Log
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
+
+The CRAIDS log (Constraints, Risks, Assumptions, Issues, Dependencies) is a standard project governance tool. Maintain it as a single living artefact — items move between categories as the project progresses (an assumption that proves false becomes a risk; a risk that materialises becomes an issue).
+
+### Constraints
 
 Constraints are fixed limitations that the design must work within. They are non-negotiable and shape the solution boundaries.
 
@@ -52,32 +49,7 @@ Common constraints include:
 - **Time** — Fixed delivery deadlines, regulatory compliance dates
 </div>
 
-## 6.2 Assumptions
-
-<span class="maturity-indicator maturity-minimum">Minimum</span>
-
-Assumptions are factors believed to be true but not yet verified. The assumption owner should validate each assumption and track it to closure. An assumption that proves false may become a risk or issue.
-
-| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
-|----|-----------|----------------|-----------|--------|-------|----------|
-| A-001 | *[describe the assumption]* | *[impact on design if wrong]* | High / Medium / Low | Open / Closed | *[person]* | *[reference]* |
-
-<div class="guidance-box">
-<h4>Guidance</h4>
-
-Capture assumptions about:
-- **Technical** — API availability, system capacity, technology compatibility
-- **Organisational** — Resource availability, team skills, process readiness
-- **Third-party** — Vendor timelines, SLA commitments, service availability
-- **Data** — Data quality, volumes, formats, migration feasibility
-- **Timeline** — Dependent delivery dates, approval timelines
-
-Open assumptions should be tracked actively. The owner is responsible for validating the assumption and providing evidence of closure.
-</div>
-
-## 6.3 Risks
-
-<span class="maturity-indicator maturity-minimum">Minimum</span>
+### Risks
 
 Risks are potential events that could negatively affect the design or its delivery. Each risk should have a mitigation strategy and clear ownership.
 
@@ -107,9 +79,46 @@ Consider risks related to:
 Mitigation strategies should be one of: **Accept** (business owner sign-off), **Mitigate** (reduce likelihood or impact), **Transfer** (insurance, contractual), or **Avoid** (change the design).
 </div>
 
-## 6.4 Dependencies
+### Assumptions
 
-<span class="maturity-indicator maturity-minimum">Minimum</span>
+Assumptions are factors believed to be true but not yet verified. The assumption owner should validate each assumption and track it to closure. An assumption that proves false may become a risk or issue.
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | *[describe the assumption]* | *[impact on design if wrong]* | High / Medium / Low | Open / Closed | *[person]* | *[reference]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Capture assumptions about:
+- **Technical** — API availability, system capacity, technology compatibility
+- **Organisational** — Resource availability, team skills, process readiness
+- **Third-party** — Vendor timelines, SLA commitments, service availability
+- **Data** — Data quality, volumes, formats, migration feasibility
+- **Timeline** — Dependent delivery dates, approval timelines
+
+Open assumptions should be tracked actively. The owner is responsible for validating the assumption and providing evidence of closure.
+</div>
+
+### Issues
+
+Issues are problems that have already materialised and require resolution. Unlike risks (which are potential), issues are current and active.
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | *[describe the issue]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[person]* | *[resolution plan]* | Open / In Progress / Resolved | *[date]* |
+
+<div class="guidance-box">
+<h4>Guidance</h4>
+
+Issues differ from risks:
+- A **risk** is something that *might* happen — it is potential
+- An **issue** is something that *has* happened — it is current and requires active resolution
+
+Issues should be escalated when they threaten the project timeline, cost, or quality. Track each issue to resolution and record the outcome.
+</div>
+
+### Dependencies
 
 Dependencies are external factors that the design relies upon or that rely upon this design. Track both inbound (this design depends on) and outbound (other designs depend on this).
 
@@ -128,32 +137,7 @@ Common dependencies include:
 - **Governance** — Approval gates, compliance sign-off, change advisory board
 </div>
 
-## 6.5 Issues
-
-<span class="maturity-indicator maturity-recommended">Recommended</span>
-
-Issues are problems that have already materialised and require resolution. Unlike risks (which are potential), issues are current and active.
-
-| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
-|----|-------|----------|--------|-------|----------------|--------|---------------|
-| I-001 | *[describe the issue]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[person]* | *[resolution plan]* | Open / In Progress / Resolved | *[date]* |
-
-<div class="guidance-box">
-<h4>Guidance</h4>
-
-Issues differ from risks:
-- A **risk** is something that *might* happen — it is potential
-- An **issue** is something that *has* happened — it is current and requires active resolution
-
-Common issues include:
-- **Technical** — A dependency API is not performing as expected; a security vulnerability has been discovered
-- **Delivery** — A key resource has left the team; a vendor has missed a delivery milestone
-- **Commercial** — A licence cost has increased beyond budget; a contract negotiation is stalled
-
-Issues should be escalated when they threaten the project timeline, cost, or quality. Track each issue to resolution and record the outcome.
-</div>
-
-## 6.6 Technical Debt Register
+## 6.2 Technical Debt Register
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -172,10 +156,10 @@ Technical debt should be tracked when:
 - A vendor dependency introduces a constraint that should eventually be removed
 - A security finding is accepted temporarily with a remediation plan
 
-Each item should have clear ownership and a target date for resolution. Unresolved technical debt often becomes a risk (Section 6.3) or an issue (Section 6.5).
+Each item should have clear ownership and a target date for resolution. Unresolved technical debt often becomes a risk or an issue in the CRAIDS log.
 </div>
 
-## 6.7 Guardrail Exceptions
+## 6.3 Guardrail Exceptions
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -202,7 +186,7 @@ Document any exceptions to organisational policies, standards, or guardrails:
 | Does this architecture significantly alter the enterprise threat or risk landscape? | Yes / No |
 | If yes, has this been formally assessed by the appropriate security or risk governance authority? | Yes / No / N/A |
 
-## 6.8 Architectural Decisions Log
+## 6.4 Architectural Decisions Log
 
 <span class="maturity-indicator maturity-recommended">Recommended</span>
 
@@ -216,7 +200,7 @@ This section provides a governance summary index. The full Architecture Decision
 |-------|-------|--------|------|--------|
 | ADR-001 | *[title]* | Accepted / Proposed / Superseded | *[date]* | *[brief impact summary]* |
 
-## 6.9 Compliance Traceability
+## 6.5 Compliance Traceability
 
 <span class="maturity-indicator maturity-comprehensive">Comprehensive</span>
 
@@ -240,11 +224,11 @@ Map design elements to the standards and principles they satisfy:
 | Score | What This Looks Like |
 |:-----:|---------------------|
 | **1** | Some risks listed but no mitigation plans or ownership |
-| **3** | Constraints, assumptions, risks, and dependencies documented with ownership; key ADRs captured; guardrail exceptions logged |
+| **3** | CRAIDS log documented with ownership; key ADRs captured; guardrail exceptions logged |
 | **5** | All of the above plus all items have evidence and dates, compliance traceability complete, issues tracked to resolution |
 </div>
 
-## 6.10 Approval Sign-Off
+## 6.6 Approval Sign-Off
 
 <span class="maturity-indicator maturity-minimum">Minimum</span>
 

@@ -347,7 +347,7 @@ function generateYamlLines(schema, node, key, indent, lines) {
 
 function generateYamlTemplate(schema) {
   const lines = [
-    '# ADS v1.3.2 — Solution Architecture Document Template',
+    '# ADS v1.3.3 — Solution Architecture Document Template',
     '# Standard published by: ArchStandard (archstandard.org)',
     '# Standard licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
     '# Generated from: schema/ads.schema.json',
@@ -478,7 +478,7 @@ function generateMarkdownTemplate(schema) {
     // Without these, all four lines would be joined into one run-on
     // paragraph in the rendered output, even though they look separated
     // in the Markdown source.
-    '> **Standard:** ADS v1.3.2 (Architecture Description Standard)',
+    '> **Standard:** ADS v1.3.3 (Architecture Description Standard)',
     '>',
     '> **Standard published by:** ArchStandard (archstandard.org)',
     '>',
@@ -883,7 +883,7 @@ function main() {
         `Solution Architecture Document\n` +
         `:::\n\n` +
         `:::{custom-style="Subtitle"}\n` +
-        `ADS v1.3.2 — Architecture Description Standard Template\n` +
+        `ADS v1.3.3 — Architecture Description Standard Template\n` +
         `:::\n\n` +
         pageBreak;
 

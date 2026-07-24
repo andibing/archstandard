@@ -172,7 +172,7 @@ function generateIndex({ orientation, sections, examples, guidance, resources })
   lines.push('');
   lines.push('> A free, open-source standard that prescribes the structure, content, and quality criteria of Solution Architecture Documents (SADs). Built upon ISO/IEC/IEEE 42010, the 4+1 View Model, the cloud Well-Architected Frameworks, and TOGAF. Backed by a formal JSON Schema (Draft 2020-12) for machine validation and generation.');
   lines.push('');
-  lines.push('ADS defines which sections a SAD must contain, what each section must answer, and what "good" looks like at three documentation depths (Minimum / Recommended / Comprehensive — mapped to RFC 2119 SHALL / SHOULD / MAY). The current standard version is v1.3.2; the JSON Schema version is v1.0.0. Licensed under CC BY 4.0 (content) and MIT (code).');
+  lines.push('ADS defines which sections a SAD must contain, what each section must answer, and what "good" looks like at three documentation depths (Minimum / Recommended / Comprehensive — mapped to RFC 2119 SHALL / SHOULD / MAY). The current standard version is v1.3.3; the JSON Schema version is v1.0.0. Licensed under CC BY 4.0 (content) and MIT (code).');
   lines.push('');
   lines.push('Three names appear throughout. **ADS** is this standard. **SAD** (Solution Architecture Document) is the document you produce. **HLD** (High Level Design) is the architectural-views and quality-attributes content within a SAD.');
   lines.push('');
@@ -239,7 +239,7 @@ function generateFull({ orientation, sections, examples, guidance, resources }) 
   const parts = [];
 
   parts.push(`# ADS: Architecture Description Standard — Full Content`);
-  parts.push(`> Source: ${BASE} | Standard v1.3.2 | Schema v1.0.0 | CC BY 4.0`);
+  parts.push(`> Source: ${BASE} | Standard v1.3.3 | Schema v1.0.0 | CC BY 4.0`);
   parts.push(`> This file contains the complete text of the ADS website for LLM ingestion.`);
   parts.push(`> For a structured link index see ${BASE}/llms.txt`);
   parts.push('');

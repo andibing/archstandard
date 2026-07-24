@@ -19,7 +19,8 @@ Every v1.x release of the standard targets [JSON Schema v1.0.0](https://archstan
 
 | Version | Status | Notes |
 |---------|--------|-------|
-| **v1.3.2** | **Current** | Schema consistency fixes and section 6.6/6.8/6.10 additions |
+| **v1.3.3** | **Current** | Sections 5 and 6 consolidated (10 sub-sections each → 6) |
+| v1.3.2 | Superseded | Schema consistency fixes and section 6.2/6.4/6.6 additions |
 | v1.3.1 | Superseded | Bug fixes and SAD template polish |
 | v1.3.0 | Superseded | Adoption release |
 | v1.2.0 | Superseded | Public release |
@@ -35,6 +36,28 @@ Third-party builders ([see specification](https://github.com/andibing/archstanda
 
 Releases are listed newest-first.
 
+### v1.3.3 - Sections 5 and 6 simplified
+
+**Date:** 2026-07-24 · **JSON Schema:** v1.0.0 (no schema changes — editorial restructure only)
+
+Structural simplification reducing both Section 5 (Lifecycle Management) and Section 6 (Decision Making & Governance) from 10 sub-sections each to 6.
+
+**Section 5 changes:**
+- 5.3 Test Strategy + 5.4 Release Management → **5.3 Test & Release** (combined under one heading)
+- 5.5 Operations & Support + 5.7 Service Start + 5.8 Maintainability → **5.4 Operations** (with sub-headings)
+- 5.6 Resourcing & Skills → renumbered **5.5**
+- 5.9 Decommissioning & Legacy Removal + 5.10 Exit Planning → **5.6 Decommissioning & Exit**
+
+**Section 6 changes:**
+- 6.1 Constraints + 6.2 Assumptions + 6.3 Risks + 6.4 Dependencies + 6.5 Issues → **6.1 CRAIDS Log** (single section with sub-headings per category)
+- 6.6 Technical Debt Register → renumbered **6.2**
+- 6.7 Guardrail Exceptions → renumbered **6.3**
+- 6.8 Architectural Decisions Log → renumbered **6.4**
+- 6.9 Compliance Traceability → renumbered **6.5**
+- 6.10 Approval Sign-Off → renumbered **6.6**
+
+No content was removed. All fields, tables, and guidance are preserved under the new structure.
+
 ### v1.3.2 - Schema consistency and Section 6 additions
 
 **Date:** 2026-04-28 · **JSON Schema:** v1.0.0 (additions only — backwards compatible)
@@ -42,8 +65,8 @@ Releases are listed newest-first.
 Patch release closing internal-consistency gaps between the schema, the standard text, and the worked examples. All seven examples now validate clean against the schema.
 
 **Schema additions (additive — old SADs remain valid):**
-- `riskGovernance.technicalDebt` — array of TD-NNN entries (id, description, category, impact, remediation plan, target date, owner) for **Section 6.6 Technical Debt Register**
-- `riskGovernance.architectureDecisionsLog` — governance summary index for **Section 6.8 Architectural Decisions Log**, referencing full ADRs in `architecturalViews.scenarios.adrs` (Section 3.6.2) by id
+- `riskGovernance.technicalDebt` — array of TD-NNN entries (id, description, category, impact, remediation plan, target date, owner) for **Section 6.2 Technical Debt Register**
+- `riskGovernance.architectureDecisionsLog` — governance summary index for **Section 6.4 Architectural Decisions Log**, referencing full ADRs in `architecturalViews.scenarios.adrs` (Section 3.6.2) by id
 - `approvals[].conditions` — optional string capturing conditions on a sign-off
 
 **Schema corrections:**

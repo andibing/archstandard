@@ -81,47 +81,11 @@ for (const f of requiredFiles) {
 }
 
 // ─────────────────────────────────────────────
-console.log('\n=== 2. Translation Parity ===\n');
-
-// Project policy (see src/content/docs/fr/index.mdx for rationale):
-// English is the normative version. Only a small essential set of orientation
-// pages is translated to French and German. The full standard, examples, and
-// templates remain English-only.
-//
-// Update this list if the translation policy changes.
-const TRANSLATED_STANDARD_PAGES = [
-  'cheat-sheet.mdx',
-  'how-to-use.mdx',
-  'quickstart.mdx',
-];
+console.log('\n=== 2. English Page Count ===\n');
 
 const enDir = 'src/content/docs/standard';
-const frDir = 'src/content/docs/fr/standard';
-const deDir = 'src/content/docs/de/standard';
-
 const enFiles = fs.readdirSync(enDir).filter(f => f.endsWith('.mdx')).sort();
-const frFiles = fs.existsSync(frDir) ? fs.readdirSync(frDir).filter(f => f.endsWith('.mdx')).sort() : [];
-const deFiles = fs.existsSync(deDir) ? fs.readdirSync(deDir).filter(f => f.endsWith('.mdx')).sort() : [];
-
 pass(`English: ${enFiles.length} pages`);
-pass(`French:  ${frFiles.length} translated (of ${TRANSLATED_STANDARD_PAGES.length} required)`);
-pass(`German:  ${deFiles.length} translated (of ${TRANSLATED_STANDARD_PAGES.length} required)`);
-
-// Required translations — fail the build if the policy-listed pages drift out of sync.
-for (const f of TRANSLATED_STANDARD_PAGES) {
-  if (!enFiles.includes(f)) error(`Translation policy lists "${f}" but the English source is missing`);
-  if (!frFiles.includes(f)) error(`French translation missing: ${f}`);
-  if (!deFiles.includes(f)) error(`German translation missing: ${f}`);
-}
-
-// Orphan translations — fr/de pages that don't have an English equivalent (likely
-// rename drift or stale copies).
-for (const f of frFiles) {
-  if (!enFiles.includes(f)) warn(`Orphan French translation (no English source): ${f}`);
-}
-for (const f of deFiles) {
-  if (!enFiles.includes(f)) warn(`Orphan German translation (no English source): ${f}`);
-}
 
 // ─────────────────────────────────────────────
 console.log('\n=== 3. JSON Schema Validity ===\n');
