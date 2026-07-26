@@ -226,6 +226,7 @@ export default defineConfig({
 						{ label: 'AI Prompts', slug: 'standard/prompts' },
 						{ label: 'Cheat Cards', slug: 'guidance/cheat-cards' },
 						{ label: '2-Minute Pitch', slug: 'guidance/pitch' },
+						{ label: 'Glossary', slug: 'standard/glossary' },
 						{ label: 'FAQ', slug: 'standard/faq' },
 						{ label: 'JSON Schema', slug: 'standard/schema' },
 						{ label: 'Version History', slug: 'standard/version-history' },

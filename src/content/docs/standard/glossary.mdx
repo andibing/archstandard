@@ -1,0 +1,157 @@
+---
+title: "Glossary"
+description: Definitions of terms used throughout the ADS standard, with attribution to source standards and frameworks.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+This glossary defines terms used throughout the Architecture Description Standard and in Solution Architecture Documents generally. Where a definition is drawn from an external standard or framework, the source is noted — the intent is to use terms consistently with their authoritative definitions rather than recoining them.
+
+<Aside type="note">
+Terms used as section headings within the standard (e.g. Logical View, Operational Excellence) are defined in the section itself. This glossary covers cross-cutting vocabulary.
+</Aside>
+
+## ADS Standard Terms
+
+Terms defined by or specific to the Architecture Description Standard.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **ADS** | Architecture Description Standard — this standard. Prescribes the structure, content, and quality criteria of a Solution Architecture Document. | ADS |
+| **SAD** | Solution Architecture Document — the document produced by following ADS. Describes the architecture of a specific solution. Originally "Software Architecture Document" in the Rational Unified Process. | ADS / RUP |
+| **HLD** | High Level Design — the architectural views and quality attributes content within a SAD (Sections 3–4). The terms HLD and SAD are often used interchangeably in industry; ADS treats HLD as a subset of the SAD. | ADS |
+| **Depth Tier** | One of three documentation levels — Minimum, Recommended, or Comprehensive — mapped to RFC 2119 SHALL, SHOULD, and MAY respectively. Each section and sub-section carries a depth badge indicating the minimum tier required. | ADS |
+| **Compliance Score** | A 0–5 governance score applied per section indicating how thoroughly the section has been completed relative to the depth tier requirements. | ADS |
+| **CRAIDS Log** | A consolidated governance log covering Constraints, Risks, Assumptions, Issues, Dependencies, and Standards (Section 6.1). A superset of the common RAID log that adds Constraints and Standards. | ADS / project management |
+| **Guardrail Exception** | A documented, approved deviation from an organisational architecture policy, security standard, or platform constraint. Recorded in Section 6.3. | ADS |
+| **Maturity Indicator** | A visual badge (Minimum / Recommended / Comprehensive) that tags each sub-section with its expected depth of completion. | ADS |
+
+## Architecture Description (ISO/IEC/IEEE 42010)
+
+Terms defined in ISO/IEC/IEEE 42010:2022 — *Systems and software engineering — Architecture description*. This standard is the formal basis for the concept of an architecture description.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **Architecture** | Fundamental concepts or properties of a system in its environment embodied in its elements, relationships, and the principles of its design and evolution. | ISO 42010:2022 §3.3 |
+| **Architecture Description (AD)** | A work product used to express an architecture. The SAD is the AD in the ADS model. | ISO 42010:2022 §3.4 |
+| **Architectural View** | A work product expressing the architecture of a system from the perspective of specific system concerns. ADS defines six views (Sections 3.1–3.6). | ISO 42010:2022 §3.8 |
+| **Architectural Viewpoint** | A specification of the conventions for constructing, interpreting, and using an architectural view. Each ADS section defines an implicit viewpoint. | ISO 42010:2022 §3.9 |
+| **Architectural Model** | A model that expresses architecture information from a specific viewpoint. Diagrams, tables, and structured descriptions within a view are architectural models. | ISO 42010:2022 §3.7 |
+| **Concern** | An interest pertaining to the system's development, its operation, or any other aspect that is critical or otherwise important to one or more stakeholders. | ISO 42010:2022 §3.11 |
+| **Stakeholder** | An individual, team, organisation, or classes thereof, having an interest in a system. Documented in Section 2 of ADS. | ISO 42010:2022 §3.15 |
+| **System of Interest** | The system whose architecture is under consideration in a given architectural description. | ISO 42010:2022 §3.16 |
+| **Architecture Rationale** | A record of the basis for architecture decisions made. Captured in the ADR log (Section 6.4) and in ADRs linked from it. | ISO 42010:2022 §3.6 |
+| **Correspondence** | A relationship between elements of an architecture description — used to trace requirements to design decisions, or sections to stakeholder concerns. | ISO 42010:2022 §3.12 |
+
+## Quality Attributes (ISO/IEC 25010 & WAF)
+
+Terms from ISO/IEC 25010:2023 — *Systems and software quality models* — and from the AWS and Azure Well-Architected Frameworks. ADS Section 4 maps these sources into five pillars.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **Quality Attribute** | A measurable or testable property of a system used to indicate how well the system satisfies the needs of its stakeholders. Often called Non-Functional Requirements (NFRs) in practice. | ISO 25010:2023 |
+| **Non-Functional Requirement (NFR)** | A requirement that specifies criteria for the operation of a system rather than specific behaviours. NFRs correspond to quality attributes; ADS uses "Quality Attributes" as the more precise term. | Industry standard |
+| **Reliability** | The degree to which a system performs specified functions under specified conditions for a specified period. Encompasses availability, fault tolerance, and recoverability. | ISO 25010:2023 |
+| **Availability** | The degree to which a system or component is operational and accessible when required. Typically expressed as a percentage (e.g. 99.9% = ~8.7 hours downtime/year). | ISO 25010:2023 / WAF |
+| **Resilience** | The ability of a system to absorb disruption, adapt, and recover to a previous or improved state. Broader than fault tolerance — includes organisational and process dimensions. | WAF / general |
+| **Fault Tolerance** | The ability of a system to continue operating correctly in the event of one or more component failures. | ISO 25010:2023 |
+| **Scalability** | The capability of a system to handle increasing workload by adding resources. May be vertical (bigger nodes) or horizontal (more nodes). | Industry standard |
+| **Elasticity** | The ability of a system to automatically scale resources up or down in proportion to demand. Distinct from scalability in that it implies automation. | Cloud / WAF |
+| **Operational Excellence** | The ability to run and monitor systems to deliver business value and to continually improve supporting processes. One of the five ADS quality attribute pillars (Section 4.1). | AWS WAF / Azure WAF |
+| **Performance Efficiency** | The ability of a system to perform its functions within stated time and resource constraints. Section 4.3. | ISO 25010:2023 / WAF |
+| **Cost Optimisation** | The ability to run systems to deliver business value at the lowest price point. Section 4.4. Informed by FinOps practices. | AWS WAF / Azure WAF |
+| **Sustainability** | The ability of a system to minimise its environmental impact over its operational lifetime. Section 4.5. | AWS WAF 2022 / Azure WAF |
+| **RPO** | Recovery Point Objective — the maximum acceptable amount of data loss measured in time. Defines how far back in time a recovery must be possible. | ISO 22301 / industry |
+| **RTO** | Recovery Time Objective — the maximum acceptable time to restore a system after an incident. Defines the maximum tolerable downtime. | ISO 22301 / industry |
+| **SLA** | Service Level Agreement — a contract between a provider and a consumer specifying availability, performance, and support commitments. | Industry standard |
+| **SLO** | Service Level Objective — an internal target for reliability or performance, typically more stringent than the SLA. | Google SRE / industry |
+| **SLI** | Service Level Indicator — a quantitative measure of a service's behaviour (e.g. request latency p99, error rate). SLIs are measured against SLOs. | Google SRE / industry |
+
+## Architectural Views (4+1 & General)
+
+Terms from Kruchten's 4+1 Architectural View Model (1995) and general diagramming conventions. ADS Section 3 defines six views derived from this model.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **4+1 View Model** | An architecture description framework using five concurrent views: Logical, Development (Process), Physical (Deployment), Integration (Process), and Scenarios. Proposed by Philippe Kruchten in 1995. ADS adapts this into six views. | Kruchten 1995 |
+| **Logical View** | Describes the functional decomposition of a system into components, services, and their responsibilities. Corresponds to Section 3.1. | 4+1 / ADS |
+| **Integration View** | Describes how the system interacts with external systems via APIs, events, and data flows. Corresponds to Section 3.2. Extends the 4+1 Process view. | ADS |
+| **Physical View** | Describes the deployment topology — infrastructure, environments, networking, and hosting. Corresponds to Section 3.3. Called the Deployment View in some models. | 4+1 / ADS |
+| **Data View** | Describes the data model, storage strategy, classification, and data flows at rest. Corresponds to Section 3.4. | ADS |
+| **Security View** | Describes identity and access management, threat model, data protection controls, and compliance posture. Corresponds to Section 3.5. | ADS |
+| **Scenarios View** | Documents architecturally significant use cases and runtime sequences that validate the design. Corresponds to Section 3.6. The "+1" view in the 4+1 model. | 4+1 / ADS |
+| **Context Diagram** | A diagram showing the system in the context of its external actors and systems, without internal detail. Common entry point for the Logical or Integration view. | Industry standard |
+| **Cross-Cutting Concern** | A concern that affects multiple components or views and cannot be cleanly encapsulated in one place — security, observability, and internationalisation are typical examples. | AOP / general |
+
+## Governance & Decision Making
+
+Terms used in Section 6 (Decision Making & Governance) and in architecture governance generally.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **Architecture Decision Record (ADR)** | A document capturing a significant architectural decision, its context, the options considered, the decision taken, and its consequences. Summarised in the ADR log (Section 6.4). | Nygard 2011 / industry |
+| **Constraint** | A factor that limits the design space and is non-negotiable — a fixed deadline, a mandated technology, a regulatory requirement, or a budget ceiling. | CRAIDS / project management |
+| **Assumption** | A factor believed to be true but not yet verified. Assumptions that prove false become risks or issues. | CRAIDS / project management |
+| **Risk** | A potential future event that could adversely affect the design or delivery. Characterised by likelihood and impact. | CRAIDS / ISO 31000 |
+| **Issue** | A problem that has already materialised and requires resolution. Distinguished from a risk in that it is current, not potential. | CRAIDS / project management |
+| **Dependency** | An external factor, system, decision, or deliverable that the design relies upon and that is outside the team's control. | CRAIDS / project management |
+| **Technical Debt** | The implied cost of future rework resulting from choosing a quick or limited solution now instead of a better approach that would take longer. | Ward Cunningham / industry |
+| **TOGAF** | The Open Group Architecture Framework — an enterprise architecture methodology covering governance, capability, and continuum. Operates at enterprise scope; ADS sits below it at solution scope. | The Open Group |
+| **ARB** | Architecture Review Board — a governance body that reviews and approves architectural decisions, guardrail exceptions, and major design choices. | Industry standard |
+| **Compliance Traceability** | A mapping from design decisions to the specific requirements of applicable standards, regulations, or policies that they satisfy. Section 6.5. | ADS / audit practice |
+
+## Security
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **Zero Trust** | A security model that assumes no implicit trust based on network location — every access request must be authenticated, authorised, and continuously validated. "Never trust, always verify." | NIST SP 800-207 |
+| **Defence in Depth** | A layered security strategy in which multiple independent controls protect against failure or bypass of any single control. | NIST / general |
+| **Least Privilege** | The principle that a user, process, or system should have only the minimum permissions required to perform its function. | NIST / general |
+| **Threat Model** | A structured analysis of potential threats to a system — identifying assets, threat actors, attack vectors, and mitigations. STRIDE is a common methodology. | OWASP / STRIDE |
+| **Data Classification** | The categorisation of data by sensitivity level (e.g. Public, Internal, Confidential, Restricted) to determine appropriate handling, storage, and access controls. | Industry standard |
+| **Data Sovereignty** | The requirement that data is subject to the laws and governance of the country in which it is collected or stored. Relevant to cloud region selection. | Legal / regulatory |
+| **PII** | Personally Identifiable Information — any information that can identify a natural person. Subject to data protection regulations such as GDPR and UK GDPR. | GDPR / UK GDPR |
+| **DPIA** | Data Protection Impact Assessment — a mandatory analysis under GDPR for high-risk personal data processing, identifying risks and mitigations. | GDPR Art. 35 |
+| **Encryption at Rest** | The encryption of stored data so that it is unreadable without the appropriate decryption key. Protects against physical media theft and unauthorised storage access. | Industry standard |
+| **Encryption in Transit** | The encryption of data as it moves between systems — typically via TLS 1.2+ or mTLS. Protects against interception and man-in-the-middle attacks. | Industry standard |
+| **mTLS** | Mutual Transport Layer Security — a protocol in which both client and server authenticate each other via certificates, providing strong mutual identity assurance. | IETF / industry |
+| **IAM** | Identity and Access Management — the framework of policies and technologies ensuring the right individuals access the right resources at the right time. | Industry standard |
+
+## Reliability & Operations
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **High Availability (HA)** | A system design characteristic that ensures a high level of operational continuity over a given period. Typically achieved through redundancy and automatic failover. | Industry standard |
+| **Disaster Recovery (DR)** | The process of restoring system functionality following a catastrophic failure or data loss event. Governed by RPO and RTO targets. | ISO 22301 / industry |
+| **Observability** | The ability to understand the internal state of a system from its external outputs — metrics, logs, and traces. Encompasses monitoring, alerting, and distributed tracing. | DORA / Google SRE |
+| **Telemetry** | Automated collection and transmission of data from a system for monitoring and analysis. Comprises metrics, logs, and traces. | Industry standard |
+| **SRE** | Site Reliability Engineering — a discipline applying software engineering principles to infrastructure and operations, with a focus on reliability, scalability, and automation. | Google / industry |
+| **SDLC** | Software Development Lifecycle — the structured process for planning, creating, testing, and deploying software. | Industry standard |
+| **CI/CD** | Continuous Integration / Continuous Deployment — practices in which code changes are automatically built, tested, and (optionally) deployed. | Industry standard |
+| **Idempotency** | The property of an operation such that performing it multiple times produces the same result as performing it once. Critical for safe retry behaviour in distributed systems. | Maths / distributed systems |
+| **Eventual Consistency** | A consistency model in distributed systems in which, given no new updates, all replicas will eventually converge to the same value. A trade-off against strong consistency for availability and partition tolerance. | CAP theorem / Werner Vogels |
+| **FinOps** | Cloud Financial Operations — a practice combining finance, technology, and business to optimise cloud spending and accountability. | FinOps Foundation / CNCF |
+
+## Data & Integration
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **ACID** | Atomicity, Consistency, Isolation, Durability — the four properties that guarantee reliable database transaction processing. | Database theory / Jim Gray |
+| **CAP Theorem** | A theorem stating that a distributed system can guarantee at most two of: Consistency, Availability, and Partition Tolerance simultaneously. | Brewer 2000 / Gilbert & Lynch 2002 |
+| **CDC** | Change Data Capture — a pattern for tracking changes to database records and propagating them to other systems, typically for real-time integration or event streaming. | Industry standard |
+| **ETL** | Extract, Transform, Load — a data integration pattern for moving data from source systems to a target store (e.g. a data warehouse), transforming it in transit. | Industry standard |
+| **API Gateway** | An intermediary that acts as the single entry point for client requests to backend services, handling routing, authentication, rate limiting, and protocol translation. | Industry standard |
+| **Event-Driven Architecture** | An architectural pattern in which components communicate by producing and consuming events asynchronously, decoupling producers from consumers. | Industry standard |
+| **Microservices** | An architectural style structuring a system as a collection of small, independently deployable services, each responsible for a bounded domain function. | Industry standard |
+| **Service Mesh** | An infrastructure layer that manages service-to-service communication within a microservices architecture, providing observability, security (mTLS), and traffic control without application code changes. | Industry standard |
+| **CMDB** | Configuration Management Database — a repository of information about IT assets (configuration items) and their relationships, used for change management and impact analysis. | ITIL |
+
+## RFC 2119 Terms
+
+ADS uses RFC 2119 keywords to define the normative force of each requirement.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **SHALL** | An absolute requirement. A compliant SAD at Minimum depth must satisfy all SHALL requirements. | RFC 2119 |
+| **SHOULD** | A recommendation. There may be valid reasons to omit a SHOULD requirement, but the implications must be understood. Corresponds to Recommended depth. | RFC 2119 |
+| **MAY** | An option. A compliant SAD may include or omit MAY items at the author's discretion. Corresponds to Comprehensive depth. | RFC 2119 |

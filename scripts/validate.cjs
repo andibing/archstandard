@@ -62,6 +62,7 @@ const requiredFiles = [
   'src/content/docs/standard/templates.mdx',
   'src/content/docs/standard/downloads.mdx',
   'src/content/docs/standard/version-history.mdx',
+  'src/content/docs/standard/glossary.mdx',
   'src/content/docs/examples/index.mdx',
   'src/content/docs/examples/employee-directory.mdx',
   'src/content/docs/examples/customer-api-platform.mdx',

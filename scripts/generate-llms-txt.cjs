@@ -72,7 +72,7 @@ const SKIP_FILES = new Set(['index.mdx']);
 
 // Within standard/, these slugs go into Resources rather than Orientation
 const RESOURCE_SLUGS = new Set([
-  'templates', 'downloads', 'schema', 'faq', 'version-history', 'prompts',
+  'templates', 'downloads', 'schema', 'faq', 'version-history', 'prompts', 'glossary',
 ]);
 
 // Predefined ordering for standard section files (0-7 + their sub-pages)
