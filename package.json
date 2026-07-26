@@ -17,7 +17,8 @@
     "generate:pdf:all": "node scripts/generate-pdf.cjs en && node scripts/generate-pdf.cjs fr && node scripts/generate-pdf.cjs de",
     "generate": "npm run generate:templates",
     "validate": "node scripts/validate.cjs",
-    "check": "npm run validate && npm run build",
+    "validate:a11y": "node scripts/validate-a11y.cjs",
+    "check": "npm run validate && npm run build && npm run validate:a11y",
     "release:version": "bash scripts/release-version.sh"
   },
   "dependencies": {

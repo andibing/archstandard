@@ -50,6 +50,9 @@ jobs:
           test -d dist/v1 || (echo "Build output dist/v1 missing"; exit 1)
           test -f dist/index.html || (echo "Root index.html missing"; exit 1)
 
+      - name: Validate accessibility (WCAG 2.1 AA)
+        run: npm run validate:a11y
+
       - name: Upload build artefact
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v7
