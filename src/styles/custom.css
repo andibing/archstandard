@@ -1,5 +1,8 @@
 /* ADS: Architecture Description Standard - Custom Styles */
 
+/* @import must precede all other rules (PostCSS requirement) */
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 :root {
 	--sl-color-accent-low: #1a365d;
 	--sl-color-accent: #2b6cb0;
@@ -387,8 +390,6 @@ nav a[data-anchor-active="true"] {
 /* ─────────────────────────────────────────────
    Reading Preferences: Font choices
    ───────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
 @font-face {
 	font-family: 'OpenDyslexic';
 	src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Regular.woff') format('woff');
