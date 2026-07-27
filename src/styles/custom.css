@@ -28,7 +28,7 @@
 .sl-markdown-content h2 {
 	margin-top: 2.5rem;
 	padding-top: 1rem;
-	border-top: 1px solid var(--sl-color-gray-5);
+	border-top: 1px solid var(--sl-color-hairline);
 }
 
 .sl-markdown-content h3 {
@@ -149,7 +149,7 @@
 
 /* Quality attribute callouts */
 .quality-attribute-ref {
-	background: var(--sl-color-gray-6);
+	background: var(--sl-color-bg-inline-code);
 	border-left: 3px solid var(--sl-color-accent);
 	padding: 0.75rem 1rem;
 	margin: 1rem 0;
@@ -159,8 +159,8 @@
 
 /* Section guidance boxes */
 .guidance-box {
-	background: var(--sl-color-gray-7);
-	border: 1px solid var(--sl-color-gray-5);
+	background: var(--sl-color-bg-inline-code);
+	border: 1px solid var(--sl-color-hairline);
 	border-radius: 0.5rem;
 	padding: 1rem 1.25rem;
 	margin: 1.5rem 0;
@@ -225,7 +225,7 @@ nav a[data-anchor-active="true"] {
 }
 
 .traceability-table th {
-	background: var(--sl-color-gray-6);
+	background: var(--sl-color-bg-inline-code);
 }
 
 /* Workflow steps - getting started guide */
@@ -233,7 +233,7 @@ nav a[data-anchor-active="true"] {
 	padding: 0.75rem 1rem;
 	margin: 0.5rem 0;
 	border-left: 3px solid var(--sl-color-accent);
-	background: var(--sl-color-gray-7);
+	background: var(--sl-color-bg-inline-code);
 	border-radius: 0 0.375rem 0.375rem 0;
 }
 

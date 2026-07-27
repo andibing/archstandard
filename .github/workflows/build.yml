@@ -45,6 +45,9 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Accessibility validation (WCAG 2.1 AA)
+        run: npm run validate:a11y
+
       - name: Check build output exists
         run: |
           test -d dist/v1 || (echo "Build output dist/v1 missing"; exit 1)
