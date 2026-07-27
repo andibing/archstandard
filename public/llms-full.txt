@@ -1,5 +1,5 @@
 # ADS: Architecture Description Standard — Full Content
-> Source: https://archstandard.org | Standard v1.3.2 | Schema v1.0.0 | CC BY 4.0
+> Source: https://archstandard.org | Standard v1.3.3 | Schema v1.0.0 | CC BY 4.0
 > This file contains the complete text of the ADS website for LLM ingestion.
 > For a structured link index see https://archstandard.org/llms.txt
 
@@ -396,7 +396,7 @@ ADS is designed to be adopted without modification. However, organisations MAY e
 
 1. **Organisation Profile** — Map generic sections to your internal tools, standards, and governance processes using the `organisationProfile` field in the JSON Schema
 2. **Custom Sections** — Add organisation-specific content using the `customSections` extension point without modifying the core structure
-3. **Standards Traceability** — Reference your internal design principles, patterns, and standards in Section 6.9 (Compliance Traceability)
+3. **Standards Traceability** — Reference your internal design principles, patterns, and standards in Section 6.5 (Compliance Traceability)
 4. **Governance Gate Mapping** — Document which ADS depth level maps to which of your governance stages
 
 Organisations SHALL NOT renumber core sections of the standard. Sections that are not applicable to a solution SHOULD be omitted entirely — do not fill them with "N/A".
@@ -430,7 +430,7 @@ No. Fill in only the sections required for your chosen depth. See the [Depth Che
 
 ### What if a section doesn't apply to the solution?
 
-Omit it entirely. Empty sections filled with "N/A" waste reviewers' time. If you've actively decided not to address something, capture that decision in Guardrail Exceptions (Section 6.7) or as an Architecture Decision Record.
+Omit it entirely. Empty sections filled with "N/A" waste reviewers' time. If you've actively decided not to address something, capture that decision in Guardrail Exceptions (Section 6.3) or as an Architecture Decision Record.
 
 ### Can I add organisation-specific sections?
 
@@ -863,7 +863,7 @@ ADS treats sustainability as a quality attribute on equal footing with reliabili
 |-----------|----------------------|
 | **A dedicated quality attribute** | [Section 4.5](/v1/standard/4-5-sustainability/) covers hosting efficiency, carbon measurement, network efficiency, code efficiency, and data efficiency, with prompts and a 0–5 scoring scale. |
 | **Embedded in the views, not bolted on** | The Physical View ([3.3](/v1/standard/3-3-physical-view/)), Data View ([3.4](/v1/standard/3-4-data-view/)), and Logical View ([3.1](/v1/standard/3-1-logical-view/)) each have explicit *Sustainability Considerations* prompts at the point where the carbon-impacting decisions are actually made. |
-| **Operational, not aspirational** | The Lifecycle Management section ([5.5](/v1/standard/5-lifecycle/#55-operations--support)) requires documenting how non-prod auto-shutdown, right-sizing reviews, and orphan-resource reclamation are operationalised — not just intended. |
+| **Operational, not aspirational** | The Lifecycle Management section ([5.4](/v1/standard/5-lifecycle/#54-operations)) requires documenting how non-prod auto-shutdown, right-sizing reviews, and orphan-resource reclamation are operationalised — not just intended. |
 | **Aligned to recognised frameworks** | Cross-references to AWS Well-Architected Sustainability and the Green Software Foundation's [Software Carbon Intensity (SCI)](https://sci.greensoftware.foundation/) specification. |
 | **Trade-offs documented, not buried** | Where sustainability conflicts with another quality attribute (e.g., always-on DR vs cold standby), the trade-off is captured in the [Quality Attribute Trade-offs](/v1/standard/4-quality-attributes-overview/#quality-attribute-tradeoffs) section of the Section 4 overview rather than left implicit. |
 
@@ -1572,7 +1572,7 @@ Consider lock-in across multiple dimensions:
 - **Operational** — Does the team have skills to operate on an alternative platform?
 - **Migration effort** — How much re-engineering would be needed to move to an alternative?
 
-This assessment should inform the Exit Planning section (5.10) and the Cost Optimisation quality attribute (4.4).
+This assessment should inform the Exit Planning section (5.6) and the Cost Optimisation quality attribute (4.4).
 
 
 ## 3.1.7 Sustainability Considerations
@@ -2410,7 +2410,7 @@ Each use case should demonstrate how components from the Logical View communicat
 
 [Recommended]
 
-ADRs live in this section because they emerge from working through the architectural views and use cases above. As you describe how the solution behaves, you naturally encounter trade-offs and decisions worth recording. A summary index of all ADRs also appears in [Section 6.8](/v1/standard/6-decision-making/#68-architectural-decisions-log) for governance review.
+ADRs live in this section because they emerge from working through the architectural views and use cases above. As you describe how the solution behaves, you naturally encounter trade-offs and decisions worth recording. A summary index of all ADRs also appears in [Section 6.4](/v1/standard/6-decision-making/#64-architectural-decisions-log) for governance review.
 
 Document the key architectural decisions using the ADR format:
 
@@ -2933,7 +2933,7 @@ Sustainability is decided at the point of architecture choice, not retrofitted a
 | [3.1.7 Logical View — Sustainability Considerations](/v1/standard/3-1-logical-view/#317-sustainability-considerations) | Caching, async patterns, batch consolidation, framework weight |
 | [3.3.6 Physical View — Sustainability Considerations](/v1/standard/3-3-physical-view/#336-sustainability-considerations) | Region carbon intensity, auto-shutdown, ARM/efficient compute, auto-scaling, DR posture |
 | [3.4.6 Data View — Sustainability Considerations](/v1/standard/3-4-data-view/#346-sustainability-considerations) | Retention minimisation, tiering, replication justification, compression |
-| [5.5 Operations & Support — Sustainability in Operation](/v1/standard/5-lifecycle/#55-operations--support) | Auto-shutdown schedules, right-sizing cadence, orphan-resource reclamation, retirement |
+| [5.4 Operations — Sustainability in Operation](/v1/standard/5-lifecycle/#54-operations) | Auto-shutdown schedules, right-sizing cadence, orphan-resource reclamation, retirement |
 | [Cheat Card 6 — Sustainability Quick Hits](/v1/guidance/cheat-cards/#card-6--sustainability-quick-hits) | One-page summary of where carbon footprint is actually decided |
 
 The remainder of this section captures the underlying measurement and reporting (carbon baseline, SCI metric, code/network/data efficiency) that supports those view-level decisions.
@@ -3055,8 +3055,9 @@ Scoring Guidance
 | **5** | All of the above plus SCI metric tracked, workload patterns optimised, network efficiency addressed, continuous availability justified where required |
 
 ---
-## 5-lifecycle
+## 5. Lifecycle Management
 URL: https://archstandard.org/v1/standard/5-lifecycle/
+> Software development, CI/CD, service transition, operations, and end-of-life.
 
 [Recommended]
 4+1 Development
@@ -3071,14 +3072,10 @@ Lifecycle Management describes how the solution is developed, deployed, operated
 |------------|-------|-------|
 | 5.1 Software Development & CI/CD | Build and deploy pipelines | [Recommended] |
 | 5.2 Service Transition & Migration | Migration strategy and cutover | [Recommended] |
-| 5.3 Test Strategy | Architecturally significant testing | [Recommended] |
-| 5.4 Release Management | Release frequency and process | [Recommended] |
-| 5.5 Operations & Support | Support model and SLAs | [Recommended] |
-| 5.6 Resourcing & Skills | Team capability and readiness | [Recommended] |
-| 5.7 Service Start | Start-up sequence and dependencies | [Comprehensive] |
-| 5.8 Maintainability | Patching, certificates, dependencies | [Recommended] |
-| 5.9 Decommissioning & Legacy Removal | End-of-life and disposal | [Recommended] |
-| 5.10 Exit Planning | Vendor lock-in and exit strategy | [Recommended] |
+| 5.3 Test & Release | Testing strategy and release management | [Recommended] |
+| 5.4 Operations | Support model, service start, and maintainability | [Recommended] |
+| 5.5 Resourcing & Skills | Team capability and readiness | [Recommended] |
+| 5.6 Decommissioning & Exit | End-of-life, disposal, and vendor exit strategy | [Recommended] |
 
 ## 5.1 Software Development & CI/CD
 
@@ -3143,9 +3140,11 @@ If this solution replaces or migrates an existing system, classify the migration
 | Acceptance criteria | *[what must be true before cutover]* |
 | Transient infrastructure needed? | Yes / No — *[if yes, describe temporary infrastructure required during migration]* |
 
-## 5.3 Test Strategy
+## 5.3 Test & Release
 
 [Recommended]
+
+### Test Strategy
 
 Describe the testing approach that validates the architecture:
 
@@ -3158,14 +3157,13 @@ Describe the testing approach that validates the architecture:
 | DR testing | *[failover, recovery]* | *[approach and frequency]* | *[environment]* | Yes / No |
 
 
-Guidance
+**Guidance**
+
 
 This section covers architecturally significant testing — not unit tests or functional test cases (which belong in detailed design / low-level documentation). Focus on testing that validates the architecture itself: integration points, performance characteristics, security posture, and recovery capabilities.
 
 
-## 5.4 Release Management
-
-[Recommended]
+### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -3174,9 +3172,11 @@ This section covers architecturally significant testing — not unit tests or fu
 | Release validation | *[how releases are validated in production]* |
 | Feature flags / toggles | *[if used, how they are managed]* |
 
-## 5.5 Operations & Support
+## 5.4 Operations
 
 [Recommended]
+
+### Support Model
 
 | Attribute | Detail |
 |-----------|--------|
@@ -3199,7 +3199,28 @@ Operational practices have a continuous carbon impact. Document how sustainabili
 | Is the carbon footprint reported alongside cost in operational reviews? | Yes / No |
 | Are environment retirements (e.g., a decommissioned dev cluster) actually deleted, not just stopped? | Yes / No |
 
-## 5.6 Resourcing & Skills
+### Service Start
+
+[Comprehensive]
+
+Describe how the application and its supporting services are started:
+
+*[What steps are needed to bring the solution into operation? Are there manual steps? What is the start-up sequence and dependency order?]*
+
+### Maintainability
+
+[Recommended]
+
+Describe how the solution design enables ongoing maintenance:
+
+| Concern | Approach |
+|---------|----------|
+| Keeping software versions current and supported | *[patching strategy]* |
+| Hardware lifecycle management | *[refresh cadence]* |
+| Certificate management | *[renewal process]* |
+| Dependency management | *[how third-party dependencies are tracked and updated]* |
+
+## 5.5 Resourcing & Skills
 
 [Recommended]
 
@@ -3224,32 +3245,9 @@ Assess whether the team has the skills and resources to build, operate, and supp
 | If B, C, or D: what additional resources are required? | *[e.g., DBA, DevOps engineer, cloud architect, managed service]* |
 | Is a managed service being considered for ongoing operations? | Yes / No — *[details]* |
 
-## 5.7 Service Start
-
-[Comprehensive]
-
-Describe how the application and its supporting services are started:
-
-*[What steps are needed to bring the solution into operation? Are there manual steps? What is the start-up sequence and dependency order?]*
-
-## 5.8 Maintainability
+## 5.6 Decommissioning & Exit
 
 [Recommended]
-
-Describe how the solution design enables ongoing maintenance:
-
-| Concern | Approach |
-|---------|----------|
-| Keeping software versions current and supported | *[patching strategy]* |
-| Hardware lifecycle management | *[refresh cadence]* |
-| Certificate management | *[renewal process]* |
-| Dependency management | *[how third-party dependencies are tracked and updated]* |
-
-## 5.9 Decommissioning & Legacy Removal
-
-[Recommended]
-
-Where this solution replaces or modifies existing systems, document the plan for removing legacy infrastructure.
 
 ### Solution Lifespan
 
@@ -3261,12 +3259,15 @@ Where this solution replaces or modifies existing systems, document the plan for
 
 ### Legacy Infrastructure Removal
 
+Where this solution replaces or modifies existing systems, document the plan for removing legacy infrastructure.
+
 | Legacy Component | Current State | Decommission Date | Owner | Dependencies | Status |
 |-----------------|--------------|-------------------|-------|-------------|--------|
 | *[system/server/service]* | *[running / standby / powered off]* | *[target date]* | *[person/team]* | *[what depends on it]* | Planned / In Progress / Complete |
 
 
-Guidance
+**Guidance**
+
 
 Common items to decommission after migration or replacement:
 - **Servers and VMs** — physical or virtual machines no longer needed
@@ -3278,7 +3279,7 @@ Common items to decommission after migration or replacement:
 - **Documentation** — update or archive architecture documents for retired systems
 
 
-Technical debt is tracked in [Section 6.6 — Technical Debt Register](/v1/standard/6-decision-making/#66-technical-debt-register).
+Technical debt is tracked in [Section 6.2 — Technical Debt Register](/v1/standard/6-decision-making/#62-technical-debt-register).
 
 ### Data and Infrastructure Disposal
 
@@ -3291,9 +3292,7 @@ Technical debt is tracked in [Section 6.6 — Technical Debt Register](/v1/stand
 | Infrastructure disposal | *[how hardware/cloud resources will be decommissioned — resource deletion, subscription cancellation, hardware return]* |
 | Cost savings realised | *[expected cost reduction from decommissioning]* |
 
-## 5.10 Exit Planning
-
-[Recommended]
+### Exit Planning
 
 If hosted in public cloud or with a third-party provider:
 
@@ -3305,7 +3304,8 @@ If hosted in public cloud or with a third-party provider:
 | Exit timeline estimate | *[how long an exit would take]* |
 
 
-Scoring Guidance
+**Scoring Guidance**
+
 
 | Score | What This Looks Like |
 |:-----:|---------------------|
@@ -3314,8 +3314,9 @@ Scoring Guidance
 | **5** | All of the above plus security scanning integrated in pipeline, team skills assessed with action plan, exit strategy documented with vendor lock-in assessment |
 
 ---
-## 6-decision-making
+## 6. Decision Making & Governance
 URL: https://archstandard.org/v1/standard/6-decision-making/
+> CRAIDS log, technical debt, architectural decisions, and compliance traceability.
 
 [Minimum]
 ISO 42010
@@ -3324,30 +3325,27 @@ ISO 42010
 
 This section captures the decision-making context for the architecture:
 
-- **Constraints and assumptions** that shaped the design
-- **Risks and dependencies** that must be managed
+- **The CRAIDS log** — constraints, risks, assumptions, issues, and dependencies that shaped and affect the design
 - **Key decisions** made and the rationale behind them
 - **Exceptions** to organisational standards
 - **Compliance evidence** demonstrating the design has been reviewed and approved
 
 | Sub-section | Focus | Depth |
 |------------|-------|-------|
-| 6.1 Constraints | Fixed limitations shaping the design | [Minimum] |
-| 6.2 Assumptions | Factors believed true but not verified | [Minimum] |
-| 6.3 Risks | Potential events that could affect the design | [Minimum] |
-| 6.4 Dependencies | External factors the design relies upon | [Minimum] |
-| 6.5 Issues | Problems that have already materialised | [Recommended] |
-| 6.6 Technical Debt Register | Debt introduced or inherited | [Recommended] |
-| 6.7 Guardrail Exceptions | Exceptions to policies and standards | [Recommended] |
-| 6.8 Architectural Decisions Log | Summary index of ADRs | [Recommended] |
-| 6.9 Compliance Traceability | Mapping to standards and principles | [Comprehensive] |
-| 6.10 Approval Sign-Off | Governance approval record | [Minimum] |
+| 6.1 CRAIDS Log | Constraints, risks, assumptions, issues, and dependencies | [Minimum] |
+| 6.2 Technical Debt Register | Debt introduced or inherited | [Recommended] |
+| 6.3 Guardrail Exceptions | Exceptions to policies and standards | [Recommended] |
+| 6.4 Architectural Decisions Log | Summary index of ADRs | [Recommended] |
+| 6.5 Compliance Traceability | Mapping to standards and principles | [Comprehensive] |
+| 6.6 Approval Sign-Off | Governance approval record | [Minimum] |
 
-Sections 6.1 through 6.5 collectively form the **RAID log** (Risks, Assumptions, Issues, Dependencies) — a standard project governance tool — extended with **Constraints** to capture fixed limitations. Each element has its own sub-section for clarity, but they should be maintained together as a single, living governance artefact.
-
-## 6.1 Constraints
+## 6.1 CRAIDS Log
 
 [Minimum]
+
+The CRAIDS log (Constraints, Risks, Assumptions, Issues, Dependencies) is a standard project governance tool. Maintain it as a single living artefact — items move between categories as the project progresses (an assumption that proves false becomes a risk; a risk that materialises becomes an issue).
+
+### Constraints
 
 Constraints are fixed limitations that the design must work within. They are non-negotiable and shape the solution boundaries.
 
@@ -3356,7 +3354,8 @@ Constraints are fixed limitations that the design must work within. They are non
 | C-001 | *[describe the constraint]* | Regulatory / Technical / Commercial / Organisational / Time | *[how this constrains the design]* | *[date]* |
 
 
-Guidance
+**Guidance**
+
 
 Common constraints include:
 - **Regulatory** — Data residency, industry compliance (PCI-DSS, GDPR, FCA)
@@ -3366,32 +3365,7 @@ Common constraints include:
 - **Time** — Fixed delivery deadlines, regulatory compliance dates
 
 
-## 6.2 Assumptions
-
-[Minimum]
-
-Assumptions are factors believed to be true but not yet verified. The assumption owner should validate each assumption and track it to closure. An assumption that proves false may become a risk or issue.
-
-| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
-|----|-----------|----------------|-----------|--------|-------|----------|
-| A-001 | *[describe the assumption]* | *[impact on design if wrong]* | High / Medium / Low | Open / Closed | *[person]* | *[reference]* |
-
-
-Guidance
-
-Capture assumptions about:
-- **Technical** — API availability, system capacity, technology compatibility
-- **Organisational** — Resource availability, team skills, process readiness
-- **Third-party** — Vendor timelines, SLA commitments, service availability
-- **Data** — Data quality, volumes, formats, migration feasibility
-- **Timeline** — Dependent delivery dates, approval timelines
-
-Open assumptions should be tracked actively. The owner is responsible for validating the assumption and providing evidence of closure.
-
-
-## 6.3 Risks
-
-[Minimum]
+### Risks
 
 Risks are potential events that could negatively affect the design or its delivery. Each risk should have a mitigation strategy and clear ownership.
 
@@ -3408,7 +3382,8 @@ Risks are potential events that could negatively affect the design or its delive
 | R-001 | Accept / Mitigate / Transfer / Avoid | *[details of the mitigation plan]* | High / Medium / Low | *[date]* |
 
 
-Guidance
+**Guidance**
+
 
 Consider risks related to:
 - **Technical** — Technology choices, complexity, integration, performance
@@ -3421,9 +3396,48 @@ Consider risks related to:
 Mitigation strategies should be one of: **Accept** (business owner sign-off), **Mitigate** (reduce likelihood or impact), **Transfer** (insurance, contractual), or **Avoid** (change the design).
 
 
-## 6.4 Dependencies
+### Assumptions
 
-[Minimum]
+Assumptions are factors believed to be true but not yet verified. The assumption owner should validate each assumption and track it to closure. An assumption that proves false may become a risk or issue.
+
+| ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
+|----|-----------|----------------|-----------|--------|-------|----------|
+| A-001 | *[describe the assumption]* | *[impact on design if wrong]* | High / Medium / Low | Open / Closed | *[person]* | *[reference]* |
+
+
+**Guidance**
+
+
+Capture assumptions about:
+- **Technical** — API availability, system capacity, technology compatibility
+- **Organisational** — Resource availability, team skills, process readiness
+- **Third-party** — Vendor timelines, SLA commitments, service availability
+- **Data** — Data quality, volumes, formats, migration feasibility
+- **Timeline** — Dependent delivery dates, approval timelines
+
+Open assumptions should be tracked actively. The owner is responsible for validating the assumption and providing evidence of closure.
+
+
+### Issues
+
+Issues are problems that have already materialised and require resolution. Unlike risks (which are potential), issues are current and active.
+
+| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
+|----|-------|----------|--------|-------|----------------|--------|---------------|
+| I-001 | *[describe the issue]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[person]* | *[resolution plan]* | Open / In Progress / Resolved | *[date]* |
+
+
+**Guidance**
+
+
+Issues differ from risks:
+- A **risk** is something that *might* happen — it is potential
+- An **issue** is something that *has* happened — it is current and requires active resolution
+
+Issues should be escalated when they threaten the project timeline, cost, or quality. Track each issue to resolution and record the outcome.
+
+
+### Dependencies
 
 Dependencies are external factors that the design relies upon or that rely upon this design. Track both inbound (this design depends on) and outbound (other designs depend on this).
 
@@ -3432,7 +3446,8 @@ Dependencies are external factors that the design relies upon or that rely upon 
 | D-001 | *[describe the dependency]* | Inbound / Outbound | Committed / Not Committed / Resolved | *[person]* | *[reference]* | *[date]* |
 
 
-Guidance
+**Guidance**
+
 
 Common dependencies include:
 - **Infrastructure** — Network connectivity, platform availability, shared services
@@ -3442,32 +3457,7 @@ Common dependencies include:
 - **Governance** — Approval gates, compliance sign-off, change advisory board
 
 
-## 6.5 Issues
-
-[Recommended]
-
-Issues are problems that have already materialised and require resolution. Unlike risks (which are potential), issues are current and active.
-
-| ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
-|----|-------|----------|--------|-------|----------------|--------|---------------|
-| I-001 | *[describe the issue]* | Technical / Security / Operational / Delivery / Commercial | High / Medium / Low | *[person]* | *[resolution plan]* | Open / In Progress / Resolved | *[date]* |
-
-
-Guidance
-
-Issues differ from risks:
-- A **risk** is something that *might* happen — it is potential
-- An **issue** is something that *has* happened — it is current and requires active resolution
-
-Common issues include:
-- **Technical** — A dependency API is not performing as expected; a security vulnerability has been discovered
-- **Delivery** — A key resource has left the team; a vendor has missed a delivery milestone
-- **Commercial** — A licence cost has increased beyond budget; a contract negotiation is stalled
-
-Issues should be escalated when they threaten the project timeline, cost, or quality. Track each issue to resolution and record the outcome.
-
-
-## 6.6 Technical Debt Register
+## 6.2 Technical Debt Register
 
 [Recommended]
 
@@ -3478,7 +3468,8 @@ Document any technical debt introduced or inherited by this solution. Technical 
 | TD-001 | *[describe the debt]* | Design / Code / Infrastructure / Security / Operational | High / Medium / Low | *[plan to resolve]* | *[date]* | *[person]* |
 
 
-Guidance
+**Guidance**
+
 
 Technical debt should be tracked when:
 - A shortcut is taken to meet a deadline (document what was deferred and when it will be addressed)
@@ -3486,10 +3477,10 @@ Technical debt should be tracked when:
 - A vendor dependency introduces a constraint that should eventually be removed
 - A security finding is accepted temporarily with a remediation plan
 
-Each item should have clear ownership and a target date for resolution. Unresolved technical debt often becomes a risk (Section 6.3) or an issue (Section 6.5).
+Each item should have clear ownership and a target date for resolution. Unresolved technical debt often becomes a risk or an issue in the CRAIDS log.
 
 
-## 6.7 Guardrail Exceptions
+## 6.3 Guardrail Exceptions
 
 [Recommended]
 
@@ -3516,12 +3507,13 @@ Document any exceptions to organisational policies, standards, or guardrails:
 | Does this architecture significantly alter the enterprise threat or risk landscape? | Yes / No |
 | If yes, has this been formally assessed by the appropriate security or risk governance authority? | Yes / No / N/A |
 
-## 6.8 Architectural Decisions Log
+## 6.4 Architectural Decisions Log
 
 [Recommended]
 
 
-Note
+**Note**
+
 
 This section provides a governance summary index. The full Architecture Decision Records with context, alternatives, and consequences are documented in [Section 3.6.2 — Scenarios](/v1/standard/3-6-scenarios/#362-architecture-decision-records-adrs).
 
@@ -3530,12 +3522,13 @@ This section provides a governance summary index. The full Architecture Decision
 |-------|-------|--------|------|--------|
 | ADR-001 | *[title]* | Accepted / Proposed / Superseded | *[date]* | *[brief impact summary]* |
 
-## 6.9 Compliance Traceability
+## 6.5 Compliance Traceability
 
 [Comprehensive]
 
 
-Guidance
+**Guidance**
+
 
 This table provides traceability between external standards/principles and the SAD content that demonstrates compliance. It enables reviewers and auditors to verify that all applicable requirements are addressed in the design.
 
@@ -3549,16 +3542,17 @@ Map design elements to the standards and principles they satisfy:
 | *[standard ID]* | *[requirement text]* | *[design approach]* | *[section reference]* |
 
 
-Scoring Guidance
+**Scoring Guidance**
+
 
 | Score | What This Looks Like |
 |:-----:|---------------------|
 | **1** | Some risks listed but no mitigation plans or ownership |
-| **3** | Constraints, assumptions, risks, and dependencies documented with ownership; key ADRs captured; guardrail exceptions logged |
+| **3** | CRAIDS log documented with ownership; key ADRs captured; guardrail exceptions logged |
 | **5** | All of the above plus all items have evidence and dates, compliance traceability complete, issues tracked to resolution |
 
 
-## 6.10 Approval Sign-Off
+## 6.6 Approval Sign-Off
 
 [Minimum]
 
@@ -3572,7 +3566,8 @@ Record who reviewed and approved the architecture:
 | *[additional approvers]* | *[name]* | *[date]* | | |
 
 
-Guidance
+**Guidance**
+
 
 The approval sign-off records who reviewed and approved the architecture. Typical approvers include:
 - **Solution Architect** — the author, confirming the document is complete and accurate
@@ -4065,29 +4060,31 @@ Not applicable. This is a greenfield project with no migration from an existing 
 
 ## 6. Decision Making and Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design |
 |----|-----------|----------|-----------------|
 | C-001 | Must be free or very low cost | Commercial | Drives selection of free-tier hosting (Cloudflare Pages) and open-source tooling (Astro) |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status |
 |----|-----------|----------------|-----------|--------|
 | A-001 | Cloudflare Pages free tier is sufficient for expected traffic | Would need to evaluate paid tier or alternative host | High | Open |
 
-### 6.3 Risks
+#### Risks
 
 No material risks have been identified. The site is public, contains no sensitive data, and can be rebuilt from git at any time. Cloudflare service disruption would cause temporary unavailability with negligible business impact.
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Type | Impact if Unavailable |
 |----|-----------|------|----------------------|
 | D-001 | GitHub | External service | Cannot push updates; existing site remains live |
 
-### 6.5 Architecture Decision Records
+### 6.2 Architecture Decision Records
 
 See ADR-001 and ADR-002 in Section 3.6.
 
@@ -4382,7 +4379,7 @@ PayrollPro is classified as Tier 2 because a prolonged outage during the payroll
 | Migration must not cause data loss or corruption | Claire Doe, Mary Bloggs | 5.2 Transition Plan, 3.4 Data View |
 | System must be recoverable within 4 hours | IT Operations, Betty Bloggs | 4.2 Reliability (RTO/RPO) |
 | Azure costs must not exceed approved budget | Polly Doe | 4.4 Cost Optimisation |
-| Team must be trained on Azure operations | IT Operations, Joe Bloggs | 5.6 Resourcing & Skills |
+| Team must be trained on Azure operations | IT Operations, Joe Bloggs | 5.5 Resourcing & Skills |
 | Cutover must be reversible (rollback plan) | Polly Doe, Fred Bloggs | 5.2 Transition Plan |
 | Month-end batch performance must improve | Mary Bloggs | 4.3 Performance |
 
@@ -5002,7 +4999,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | Carbon footprint reported alongside cost | Yes — Azure Emissions Impact Dashboard reviewed monthly alongside cost; tracked against a 2026 baseline established during migration cutover. |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Bicep destroy + Storage Account deletion + Key Vault soft-delete purge after retention. CMDB entry marked Retired only after Cost Management confirms zero spend for 30 days. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -5023,7 +5020,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | If B, C, or D: what additional resources are required? | Azure platform training (see above); 3-month engagement with Microsoft FastTrack for hands-on migration support; Meridian Cloud Centre of Excellence available for advisory support |
 | Is a managed service being considered for ongoing operations? | No — Meridian IT Operations will manage the solution with PaaS reducing operational burden |
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -5032,7 +5029,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | Certificate management | BACS SFTP certificate stored in Key Vault with 30-day expiry alert. TLS certificates managed by Azure App Service (managed certificates for custom domains). |
 | Dependency management | NuGet packages reviewed quarterly; SCA (NuGet Audit) runs on every build; critical vulnerabilities patched within 7 days |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -5045,7 +5042,9 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -5055,7 +5054,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | C-004 | Budget ceiling of £200,000 capex | Commercial | Limits scope of Phase 1; defers refactoring and Citrix replacement | 2026-01-20 |
 | C-005 | Must use Meridian Azure Landing Zone (hub-spoke topology) | Organisational | Network design must conform to existing hub-spoke architecture; VPN Gateway deployed in hub | 2026-02-01 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -5065,7 +5064,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | R-005 | Mitigate | VPN tested and proven stable (A-002). Monitoring and auto-reconnect configured. Emergency fallback: enable temporary public access to App Service with IP restrictions. | Low | 2026-03-15 |
 | R-006 | Mitigate | PayrollPro migration plan has Entra ID Connect as a dependency; regular check-ins with IAM project team; fallback: temporary Azure AD-only authentication without on-prem sync | Low | 2026-03-15 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -5074,14 +5073,14 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | D-003 | BACS gateway must register new SSH public key for Azure-originated connections | Inbound | Committed | Fred Bloggs | BACS support ticket raised; confirmation pending | 2026-03-10 |
 | D-004 | SAP Finance team must update CSV import job to read from Azure Blob Storage (via ADF) | Outbound | Not Committed | Polly Doe | Meeting scheduled with SAP team for April 2026 | 2026-03-15 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
 | I-001 | DBA resource conflict — Claire Doe is also committed to the SAP upgrade project (PRJ-2026-012) for April-May 2026 | Delivery | Medium | Polly Doe | Escalated to IT Director; agreed David will prioritise PayrollPro migration; SAP project to use contractor DBA for overlap period | In Progress | 2026-03-20 |
 | I-002 | Three stored procedures use cross-database queries not supported by Azure SQL | Technical | Low | Claire Doe | Procedures rewritten to use single-database approach; two completed, one in progress | In Progress | 2026-03-25 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -5104,7 +5103,7 @@ Staging environment uses a masked copy of production data. Masking is applied vi
 | Does the design materially change the organisation's technology risk profile? | No — the migration improves the risk profile by adding DR capability, eliminating hardware EOL risk, and improving security posture (network segmentation, managed patching, field-level encryption) |
 | If yes, has this been evaluated with Risk and Controls teams? | N/A |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
@@ -5405,15 +5404,15 @@ Justification: The Customer API Platform is a regulatory obligation under PSD2/O
 |---------|---------------|-------------|
 | Regulatory compliance (PSD2, Open Banking) | Alice Doe, Dr. Helen Zhao | 1. Executive Summary, 2.3 Compliance, 3.5 Security View, 6. Governance |
 | Data protection and PII handling | Marcus Doe, Jane Doe | 3.4 Data View, 3.5 Security View |
-| Platform availability and SLA | Tom Bloggs, Sally Doe, External API consumers | 4.2 Reliability, 5.5 Operations & Support |
+| Platform availability and SLA | Tom Bloggs, Sally Doe, External API consumers | 4.2 Reliability, 5.4 Operations |
 | API performance and latency | Amir Doe, External API consumers | 4.3 Performance, 3.2 Integration & Data Flow |
 | Cost-effectiveness and budget | Dr. Helen Zhao, Finance team, Nelly Bloggs | 4.4 Cost Optimisation |
 | Security posture and threat mitigation | Marcus Doe, Joe Bloggs | 3.5 Security View |
 | Partner onboarding and developer experience | Sally Doe, External API consumers | 3.2 Integration & Data Flow, 3.6 Scenarios |
-| Operational supportability | Tom Bloggs | 4.1 Operational Excellence, 5.5 Operations & Support |
+| Operational supportability | Tom Bloggs | 4.1 Operational Excellence, 5.4 Operations |
 | Scalability for growth | Fred Bloggs, Dr. Helen Zhao | 4.2 Reliability, 4.3 Performance, 3.3 Physical View |
 | Migration from legacy PIL | Nelly Bloggs, Amir Doe | 1.5 Current State, 5.2 Service Transition |
-| Vendor lock-in | Fred Bloggs, Dave Bloggs | 3.1 Logical View, 5.10 Exit Planning |
+| Vendor lock-in | Fred Bloggs, Dave Bloggs | 3.1 Logical View, 5.6 Decommissioning & Exit |
 
 ### 2.3 Compliance & Regulatory Context
 
@@ -6316,7 +6315,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Acceptance criteria | All 8 legacy partners migrated and confirmed; PIL traffic at zero for 30 consecutive days; PIL decommission approval from all stakeholders |
 | Transient infrastructure needed? | Yes -- Debezium + Kafka Connect cluster for initial CDC setup (decommissioned after steady-state CDC established via direct Oracle-to-PostgreSQL replication) |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -6326,7 +6325,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Security testing | SAST, DAST, SCA, penetration testing | SAST/SCA: every PR; DAST: weekly; annual penetration test by NCC Group | CI + Staging + Production | Partially (pen test is manual) |
 | DR testing | Failover to eu-west-1, RDS promotion, DNS cutover | Quarterly automated failover drill; annual full DR exercise with SRE team | Production + DR | Partially (scripted but manually triggered) |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -6335,7 +6334,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Release validation | Automated smoke tests post-deploy (5-minute suite); canary analysis (10% traffic for 15 minutes); automated rollback if error rate > 0.1% |
 | Feature flags / toggles | LaunchDarkly for feature flags; used for partner-specific feature rollouts and kill switches for new functionality |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -6353,7 +6352,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | Carbon footprint reported alongside cost | Yes -- monthly FinOps review includes AWS Customer Carbon Footprint Tool output; reported to ARB and Sustainability committee quarterly |
 | Environment retirement actually deletes (vs stops) | Yes -- decommissioning runbook requires Terraform destroy + S3 bucket emptying + KMS key scheduled-deletion; CMDB entry marked Retired only after AWS Cost Explorer confirms zero spend for 30 days |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -6375,7 +6374,7 @@ A STRIDE-based threat model was conducted (reference: SEC-TM-2024-019). Key thre
 | If B, C, or D: what additional resources are required? | N/A |
 | Is a managed service being considered for ongoing operations? | No -- SRE team operates the platform; AWS managed services (RDS, EKS, ElastiCache) reduce operational burden |
 
-### 5.7 Service Start
+#### Service Start
 
 Application start-up sequence:
 1. EKS cluster and node groups are always running (managed by Karpenter auto-scaling).
@@ -6386,7 +6385,7 @@ Application start-up sequence:
 6. API Gateway is always available (managed service); no start-up required.
 7. Full start-up from cold (e.g., after a DR failover scale-up) takes approximately 8 minutes.
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -6395,7 +6394,7 @@ Application start-up sequence:
 | Certificate management | Partner mTLS certificates: 1-year validity, automated renewal reminders at 60/30/7 days; internal TLS: AWS Certificate Manager (auto-renewal); KMS keys: annual automatic rotation |
 | Dependency management | Snyk monitors all dependencies continuously; Dependabot PRs for automated updates; quarterly dependency review meeting |
 
-### 5.9 End-of-Life & Decommissioning
+### 5.6 Decommissioning & Exit
 
 | Attribute | Detail |
 |-----------|--------|
@@ -6405,7 +6404,7 @@ Application start-up sequence:
 | Data disposal | Customer data: secure deletion from RDS (NIST 800-88 compliant); audit logs: retained in S3 Glacier until 7-year obligation met, then lifecycle-expired; encryption keys: scheduled for deletion after data disposal |
 | Infrastructure disposal | Terraform destroy for all AWS resources; DNS records removed; IAM roles deleted; GitHub repositories archived (not deleted, for audit trail) |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -6418,7 +6417,9 @@ Application start-up sequence:
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -6427,7 +6428,7 @@ Application start-up sequence:
 | C-003 | Must integrate with existing core banking Oracle database via read replicas | Technical | Cannot replace core banking data source; must maintain JDBC connectivity via Direct Connect; data model constrained by Oracle schema | 2025-06-15 |
 | C-004 | 99.95% monthly availability SLA committed to partners | Commercial | Multi-AZ deployment mandatory; active-passive DR required; auto-scaling and fault tolerance must support SLA; monthly SLA reporting to partners | 2025-11-01 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -6435,7 +6436,7 @@ Application start-up sequence:
 | A-002 | Sentari Pulse API will maintain &lt;100ms P95 latency under our projected load | Fraud checking would increase API response time beyond P95 target; circuit breaker would bypass fraud checks more frequently | Medium | Open | Fred Bloggs | Sentari SLA contractually commits to 100ms P95 at 10,000 req/s; no independent verification at our projected 3-year volume |
 | A-003 | Partner adoption will grow linearly to 80 partners over 3 years | Non-linear growth could exceed capacity plans; under-adoption would mean over-provisioned infrastructure (cost waste) | Medium | Open | Sally Doe | Business development pipeline shows 50 partners in negotiation; growth rate tracking to plan |
 
-### 6.3 Risks
+#### Risks
 
 #### Risk Identification
 
@@ -6455,7 +6456,7 @@ Application start-up sequence:
 | R-003 | Mitigate | Snyk continuous monitoring with P1 alert on critical CVEs; pre-built patched base images maintained in ECR; emergency deployment pipeline (bypasses staging for security patches); rollback capability | Medium | 2025-11-01 |
 | R-004 | Accept (with mitigation) | Active-passive DR in eu-west-1; quarterly DR drills; RTO 1 hour validated through testing; accept 15-minute RPO for async replication lag | Low | 2025-11-01 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -6463,14 +6464,14 @@ Application start-up sequence:
 | D-002 | Sentari Pulse API available and contracted for CAP usage | Inbound | Committed | Procurement | Contract MFS-VENDOR-2024-089 signed; API access provisioned | 2025-09-01 |
 | D-003 | Partner Onboarding Portal (APP-0456) consuming Auth Service APIs for partner registration | Outbound | Resolved | Partner Portal team | Integration live since 2025-06-01 | 2025-11-01 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
 | I-001 | Redis cluster failover caused 45-second cache miss spike during October maintenance window | Operational | Low | Tom Bloggs | Updated maintenance procedure to pre-warm cache before failover; implemented dual-write to new primary during planned failover | Resolved | 2025-11-01 |
 | I-002 | Three partners have not completed mTLS certificate renewal (certificates expiring in 60 days) | Operational | Medium | Sally Doe | Automated renewal reminders sent at 90/60/30/7 days; partner manager directly contacting non-responsive partners; contingency: temporary API key fallback (with CISO approval) | In Progress | 2025-11-15 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -6493,7 +6494,7 @@ Application start-up sequence:
 | Does the design materially change the organisation's technology risk profile? | No -- the design reduces risk by replacing unsupported legacy middleware with a modern, actively maintained platform. The introduction of cloud-hosted customer data is covered by the existing AWS risk assessment (MFS-TRA-2023-012). |
 | If yes, has this been evaluated with Risk and Controls teams? | N/A |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
@@ -6501,7 +6502,7 @@ Application start-up sequence:
 | ADR-002 | PostgreSQL over DynamoDB for primary data store | Accepted | 2024-10-05 | Determines database technology, data model, and backup/recovery approach |
 | ADR-003 | Event-driven architecture for notifications and audit | Accepted | 2024-10-08 | Determines async processing pattern and notification architecture |
 
-### 6.8 Compliance Traceability
+### 6.5 Compliance Traceability
 
 | Standard / Principle | Requirement | How the Design Satisfies It | Evidence Section |
 |---------------------|-------------|---------------------------|-----------------|
@@ -6561,7 +6562,7 @@ Application start-up sequence:
 | OBIE-AIS-3.1.11 | Open Banking Account Information API | 3.1.11 | 3.2 Integration & Data Flow |
 | PCI-DSS-4.0 | Payment Card Industry Data Security Standard | 4.0 | 3.5 Security View, 6.8 Compliance Traceability |
 | OWASP-ASVS-4.0 | Application Security Verification Standard | 4.0 | 5.1 Application Security in Development |
-| NIST-800-88 | Guidelines for Media Sanitization | Rev 1 | 5.9 End-of-Life |
+| NIST-800-88 | Guidelines for Media Sanitization | Rev 1 | 5.6 Decommissioning & Exit |
 | C4-Model | C4 Model for Software Architecture | N/A | 3.1 Logical View (diagramming approach) |
 | 12-Factor | The Twelve-Factor App | N/A | 3.1 Logical View (microservice design principles) |
 
@@ -7085,7 +7086,7 @@ Distributed tracing is not implemented. The application is a simple monolith wit
 | Carbon footprint reporting | Tracked at department level via Microsoft Sustainability Manager; not separately reported for this single application. |
 | Environment retirement | Decommissioning runbook (would apply at end-of-life) requires resource group deletion, not just app stop. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -7104,7 +7105,7 @@ Distributed tracing is not implemented. The application is a simple monolith wit
 |----------|----------|
 | Can the team fully operate and support this solution in production? | A: Fully capable |
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -7113,7 +7114,7 @@ Distributed tracing is not implemented. The application is a simple monolith wit
 | Certificate management | Managed by Azure App Service (managed certificates for custom domain) |
 | Dependency management | Dependabot raises PRs for outdated or vulnerable dependencies weekly |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -7126,21 +7127,23 @@ Distributed tracing is not implemented. The application is a simple monolith wit
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
 | C-001 | All new applications must be hosted on the Meridian Azure tenant | Organisational | Limits hosting to Azure services; all technology choices must be Azure-native or Azure-compatible | 2025-09-15 |
 | C-002 | Employee data must be sourced from PeopleSync via its existing CSV export capability | Technical | Integration is batch-based (nightly CSV); real-time sync is not possible without changes to PeopleSync (out of scope) | 2025-09-15 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
 | A-001 | PeopleSync CSV export format will remain stable and will not change without notice | CSV import job would fail; data would become stale until the import is updated | High | Closed | Jane Doe (HR Systems Manager) | Confirmed with PeopleSync vendor that format is contractually stable through 2027 |
 | A-002 | The existing ExpressRoute connection between Meridian data centre and Azure UK South has sufficient bandwidth for the nightly CSV upload (< 10 MB) | CSV upload would fail or be slow | High | Closed | Dave Bloggs (IT Operations Lead) | Confirmed; ExpressRoute has 200 Mbps capacity with < 5% utilisation at 02:00 UTC |
 
-### 6.3 Risks
+#### Risks
 
 **Risk identification:**
 
@@ -7156,17 +7159,17 @@ Distributed tracing is not implemented. The application is a simple monolith wit
 | R-001 | Mitigate | The CSV import job is a modular component that can be adapted to a new data source. If PeopleSync is replaced, only the import job needs updating. | Low | 2025-10-01 |
 | R-002 | Mitigate | Monitor database size via Azure Monitor alert. If approaching 2 GB, migrate photographs to Azure Blob Storage (estimated 2-day development effort). | Low | 2025-10-01 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
 | D-001 | PeopleSync nightly CSV export must be enabled and running | Inbound | Committed | Jane Doe | PeopleSync export configured and tested in development | 2025-10-15 |
 
-### 6.5 Issues
+#### Issues
 
 No open issues at the time of writing.
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -7186,7 +7189,7 @@ No open issues at the time of writing.
 |----------|----------|
 | Does the design materially change the organisation's technology risk profile? | No |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
@@ -7527,7 +7530,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Accessibility (WCAG 2.2 AA, digital inclusion) | Nisha Doe, PPG | 3.6, 4.3 |
 | Cost and benefit realisation | Paul Bloggs, Robert Bloggs, Finance | 4.4 |
 | Cyber security (ransomware, credential stuffing, denial of service) | Jane Bloggs | 3.5, 6.3 |
-| Operational support model and ITIL alignment | Tom Doe | 5.5 |
+| Operational support model and ITIL alignment | Tom Doe | 5.4 |
 
 ### 2.3 Compliance & Regulatory Context
 
@@ -8288,7 +8291,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Acceptance criteria | ≥ 95% of active PKB users re-enrolled in MyMedwick or formally opted out; CSG sign-off on post-live clinical safety case |
 | Transient infrastructure | Yes -- ADF pipeline for PKB extract (decommissioned post-migration) |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -8302,7 +8305,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Penetration | Annual | NCC Group | Pre-prod | No |
 | DR | Region failover | Quarterly drill | Prod + DR | Partial |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -8312,7 +8315,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Feature flags | LaunchDarkly for phased rollout (per-patient-cohort, per-clinic) |
 | Clinical-safety change control | Any change touching a HAZ-tagged component requires CSO review and CSG sign-off before promotion to production |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -8332,7 +8335,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Carbon footprint reported alongside cost | Yes — Azure Emissions Impact Dashboard reviewed monthly alongside cost; reported quarterly to Trust Sustainability Committee against the MediCore Net Zero target (2040). |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Bicep destroy + Storage Account deletion + Key Vault soft-delete purge after retention. Trust CMDB (ServiceNow) entry marked Retired only after Azure Cost Management confirms zero spend for 30 days. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -8351,13 +8354,13 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 
 - A: Fully capable -- established SRE team plus clinical safety officer succession plan.
 
-### 5.7 Service Start
+#### Service Start
 
 1. Azure PaaS resources are always running (App Service, SQL, APIM).
 2. On deployment, App Service slot-swap is the activation step; health checks verify all dependencies.
 3. After any DR failover, startup sequence: promote SQL secondary -> scale up App Service in UK West -> update Front Door origin -> verify EPR connectivity via ExpressRoute backup path -> enable external traffic. Full cold-start ~25 minutes.
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -8366,7 +8369,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Dependency management | Mend + Dependabot; quarterly review |
 | MediCore Spine / e-RS / GP Connect interface updates | MediCore Digital issues are tracked via the Digital Assurance Manager; change windows coordinated |
 
-### 5.9 End-of-Life & Decommissioning
+### 5.6 Decommissioning & Exit
 
 | Attribute | Detail |
 |-----------|--------|
@@ -8376,7 +8379,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Data disposal | Patient data: secure deletion (NIST 800-88 equivalent via Azure Storage secure delete + Key Vault key destruction); audit: retained to legal minimum then lifecycle-expired |
 | Infrastructure disposal | Bicep `what-if` + Terraform destroy; Azure resources deleted; DNS removed; ADO project archived |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -8389,7 +8392,9 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -8400,7 +8405,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | C-005 | WCAG 2.2 Level AA accessibility required (public sector body regs) | Regulatory | Accessibility built in from alpha; external audit annually | 2026-01-15 |
 | C-006 | 99.9% availability SLA committed in Trust Digital Strategy | Commercial | Zone-redundant SQL; multi-region DR; App Service Premium v3 | 2026-03-01 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -8410,7 +8415,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | A-004 | MediCore login federation remains optional for Trust portals | Would require emergency MediCore login integration | Medium | Open | Sally Bloggs | Current MediCore Authority policy position; monitored |
 | A-005 | Patients have reliable mobile signal for SMS OTP | MFA failure rate could increase; requires TOTP fallback adoption | High | Closed | Dr Raj Doe | Research shows ≥ 97% UK mobile coverage in Trust catchment |
 
-### 6.3 Risks
+#### Risks
 
 #### Risk Identification
 
@@ -8446,7 +8451,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | R-011 | Mitigate | Breached-password detection; adaptive rate limits; MFA mandatory; Sentinel UEBA; SOC 24x7 | Medium | 2026-03-01 |
 | R-012 | Mitigate | Email fallback; GOV.UK Notify fallback validated in staging; booking office manual call process | Medium | 2026-02-15 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -8460,7 +8465,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | D-008 | DSPT 2025/26 submission | Outbound | Resolved | Sally Bloggs | Submitted 2025-06-30; Standards Met | 2025-06-30 |
 | D-009 | CS-160 deployment safety case for each release | Outbound | In progress (continuous) | Dr Amir Doe | Approved for v2.0 | 2026-03-28 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution | Status | Last Assessed |
 |----|-------|----------|--------|-------|-----------|--------|---------------|
@@ -8468,7 +8473,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | I-002 | Two patients reported receiving SMS reminders at 03:00 due to scheduler timezone misconfiguration | Operational | Medium | Tom Doe | Scheduler corrected to Europe/London; affected patients contacted; CS-160 incident report filed | Resolved | 2025-12-08 |
 | I-003 | Accessibility audit identified 3 AA-level issues (focus order on results page, colour contrast on notification chip, aria-label on cancel button) | Compliance | Low | Nisha Doe | Fixes in current sprint; external auditor re-test booked for 2026-04 | In progress | 2026-03-20 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -8491,7 +8496,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | Materially changes the Trust's risk profile? | Yes -- introduces a new patient-facing external surface and new data processing. Evaluated with Risk Committee; risk appetite confirmed. DPIA DPIA-2025-004 and Clinical Safety Case v3 signed. |
 | Evaluated with Risk and Controls? | Yes |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
@@ -8500,7 +8505,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | ADR-003 | Azure AD B2C over MediCore login for patient identity | Accepted (revised 2026-03-28) | 2026-03-28 | Identity model; MediCore login federation planned |
 | ADR-004 | Outbox pattern for EPR-affecting writes | Accepted | 2025-03-12 | Reliability pattern |
 
-### 6.8 Compliance Traceability
+### 6.5 Compliance Traceability
 
 | Standard / Principle | Requirement | How the Design Satisfies It | Evidence Section |
 |---------------------|-------------|---------------------------|-----------------|
@@ -8596,7 +8601,7 @@ Justification: MyMedwick is a Tier 1 Critical clinical system because failure mo
 | HL7v2 | HL7 v2.5 | 2.5 | 3.2 Integration (legacy inbound) |
 | OWASP-ASVS-4.0 | Application Security Verification Standard | 4.0 | 5.1 |
 | OWASP-CRS | OWASP Core Rule Set | 3.2 | 3.3, 3.5 WAF |
-| NIST-800-88 | Media Sanitisation | Rev 1 | 5.9 |
+| NIST-800-88 | Media Sanitisation | Rev 1 | 5.6 |
 | WCAG | Web Content Accessibility Guidelines | 2.2 AA | 3.6, 4.3, 5.3 |
 | CS-129 | Clinical Risk Management (Manufacturer) | 2018 | 3.5, 3.6, 5.1 |
 | CS-160 | Clinical Risk Management (Deployment) | 2018 | 5.4, 6 |
@@ -9471,7 +9476,7 @@ The application is developed internally by the Digital Commerce team.
 | Rollback plan | CloudFront routing rules revert traffic to legacy monolith within 5 minutes per cohort; legacy platform retained for 3 months post-100% cut-over |
 | Transient infrastructure | Yes -- AWS DMS replication tasks decommissioned after final cut-over |
 
-### 5.3 Test Strategy
+### 5.3 Test & Release
 
 | Test Type | Scope | Approach | Environment | Automated? |
 |-----------|-------|----------|-------------|-----------|
@@ -9482,7 +9487,7 @@ The application is developed internally by the Digital Commerce team.
 | Security | SAST, DAST, SCA, annual pen test | Continuous + annual by external firm | CI + Staging + Prod | Partial (pen test manual) |
 | DR | Failover, restore | Quarterly scripted drill | Prod + DR | Partial |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -9490,7 +9495,7 @@ The application is developed internally by the Digital Commerce team.
 | Release process | Feature branch -> PR (automated tests + 1 approval) -> merge to main -> auto-deploy staging -> canary (5% for 15 min) -> full production via Argo Rollouts |
 | Feature flags | LaunchDarkly used extensively for progressive roll-out, A/B testing, and kill switches |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -9508,7 +9513,7 @@ The application is developed internally by the Digital Commerce team.
 | Carbon footprint reported alongside cost | Yes — monthly FinOps + Sustainability review using AWS Customer Carbon Footprint Tool; tracked against a 2026 baseline. Sustainability KPI not yet formalised (gap noted in 4.5 scoring). |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Terraform destroy + S3 emptying + KMS schedule deletion; CMDB Retired status only after Cost Explorer confirms zero spend for 30 days. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -9528,7 +9533,7 @@ The application is developed internally by the Digital Commerce team.
 |----------|----------|
 | Can the team fully operate and support this solution in production? | A: Fully capable |
 
-### 5.8 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -9536,7 +9541,7 @@ The application is developed internally by the Digital Commerce team.
 | Certificate management | ACM for public TLS (auto-renewal); AWS Private CA for internal mTLS |
 | Dependency management | Snyk continuous monitoring; Dependabot PRs; quarterly dependency review |
 
-### 5.10 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -9549,7 +9554,9 @@ The application is developed internally by the Digital Commerce team.
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -9559,7 +9566,7 @@ The application is developed internally by the Digital Commerce team.
 | C-004 | Must integrate with SAP ERP for order fulfilment | Technical | SQS-buffered asynchronous integration; existing SAP APIs consumed as-is | 2025-09-30 |
 | C-005 | Corporate Cloud Landing Zone mandates AWS | Organisational | All hosting on AWS; Azure / GCP not permitted | 2025-07-14 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -9567,7 +9574,7 @@ The application is developed internally by the Digital Commerce team.
 | A-002 | SAP order API will handle 5,000 orders/min sustained during peak | Order backlog in SQS beyond SLA; customer confusion | Medium | Closed | Fred Bloggs | SAP team load-tested at 6,000 orders/min 2025-10-18 |
 | A-003 | Customer mobile app adoption will reach 55% of sessions by 2027 | Over-investment in mobile BFF | Medium | Open | Raj Bloggs | Current: 47%; trending +2pp/quarter |
 
-### 6.3 Risks
+#### Risks
 
 **Risk identification:**
 
@@ -9591,7 +9598,7 @@ The application is developed internally by the Digital Commerce team.
 | R-005 | Mitigate | Early submission 4 weeks before hard deadline; in-flight review with Apple / Google developer support; progressive web app (PWA) fallback if native store delays | Low | 2026-03-01 |
 | R-006 | Accept (with mitigation) | Pilot-light DR in eu-west-1; RTO 2 hours validated quarterly; customer-facing status page; accept 1-minute RPO | Medium | 2026-03-01 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -9600,14 +9607,14 @@ The application is developed internally by the Digital Commerce team.
 | D-003 | Stripe contract signed with UK acquiring and 3-year pricing | Inbound | Resolved | Procurement | Contract NW-PROC-2025-118 signed 2025-05-01 | 2025-05-01 |
 | D-004 | Loyalty platform (APP-0417) supports Cognito identity attribute mapping | Inbound | Committed | Loyalty team | Integration in test; completion 2026-05-01 | 2026-03-01 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|----------------|--------|---------------|
 | I-001 | OpenSearch index rebuild time of 42 minutes blocks catalogue refresh cadence | Operational | Low | Sally Doe | Move to rolling reindex with dual-index alias swap; completion 2026-05-01 | In Progress | 2026-03-18 |
 | I-002 | Mobile app iOS notification permissions prompt shown too early, depressing opt-in | Delivery | Low | Fred Bloggs | Reorder onboarding flow; A/B test via LaunchDarkly | In Progress | 2026-03-10 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -9627,7 +9634,7 @@ The application is developed internally by the Digital Commerce team.
 |----------|----------|
 | Does the design materially change the organisation's technology risk profile? | Yes -- reduces PCI-DSS scope and operational risk by replacing unsupported legacy; introduces elevated SaaS dependency on Stripe. Net impact assessed as favourable by Risk & Controls (RC-2025-118). |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
@@ -10410,7 +10417,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 | Chaos | Control plane resilience | Litmus | Staging | Yes (monthly) |
 | Security | Penetration testing | Annual + on major changes | Staging | No |
 
-### 5.4 Release Management
+#### Release Management
 
 | Attribute | Detail |
 |-----------|--------|
@@ -10419,7 +10426,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 | Release validation | Automated smoke tests + synthetic after each deploy |
 | Feature flags | LaunchDarkly (shared service) for portal feature toggles |
 
-### 5.5 Operations & Support
+### 5.4 Operations
 
 | Attribute | Detail |
 |-----------|--------|
@@ -10439,7 +10446,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 | Carbon footprint reported alongside cost | Yes — monthly multi-cloud FinOps + Sustainability review combines AWS Customer Carbon Footprint Tool, GCP Carbon Footprint reports; tracked against a 2026 platform-wide baseline. |
 | Environment retirement actually deletes (vs stops) | Yes — decommissioning runbook requires Terraform destroy + bucket emptying + key destruction; CMDB Retired status only after both AWS Cost Explorer and GCP Billing confirm zero spend for 30 days. |
 
-### 5.6 Resourcing & Skills
+### 5.5 Resourcing & Skills
 
 #### Team Capability Assessment
 
@@ -10460,7 +10467,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 |----------|----------|
 | Can the team fully operate and support this solution in production? | B: Partially capable -- core runtime is in-hand; AWS depth and Backstage plugin velocity are the known gaps with mitigations in place |
 
-### 5.7 Maintainability
+#### Maintainability
 
 | Concern | Approach |
 |---------|----------|
@@ -10470,7 +10477,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 | Dependency management | Renovate + Snyk |
 | Platform deprecation policy | Breaking changes to templates announced N+2 minor versions in advance |
 
-### 5.8 Exit Planning
+#### Exit Planning
 
 | Attribute | Detail |
 |-----------|--------|
@@ -10483,7 +10490,9 @@ Dev and integration-test environments automatically scale to zero outside busine
 
 ## 6. Decision Making & Governance
 
-### 6.1 Constraints
+### 6.1 CRAIDS Log
+
+#### Constraints
 
 | ID | Constraint | Category | Impact on Design | Last Assessed |
 |----|-----------|----------|-----------------|---------------|
@@ -10493,7 +10502,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 | C-004 | Platform team headcount capped at 12 for FY26 | Organisational | Forces ruthless prioritisation; reinforces platform-as-a-product discipline | 2026-01-14 |
 | C-005 | Budget cap GBP 1.2M capex + GBP 350k/yr opex | Financial | Commercial IDPs (Port.io, Cortex) are out-of-scope due to per-seat pricing at 400 engineers | 2026-01-14 |
 
-### 6.2 Assumptions
+#### Assumptions
 
 | ID | Assumption | Impact if False | Certainty | Status | Owner | Evidence |
 |----|-----------|----------------|-----------|--------|-------|----------|
@@ -10502,7 +10511,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 | A-003 | Datadog contract can scale to 3x current ingest without renegotiation | Cost surprise mid-year | High | Closed | Sam Doe | Confirmed with Datadog account team; signed addendum |
 | A-004 | GKE Autopilot pricing remains stable for 3 years | Run cost surprise | Medium | Open | Sam Doe | GCP price-hold provisions in enterprise agreement |
 
-### 6.3 Risks
+#### Risks
 
 **Risk identification:**
 
@@ -10532,7 +10541,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 | R-008 | Mitigate | OpenTelemetry Collector as abstraction; dashboards-as-code via Terraform provider (portable); quarterly review of Datadog-specific usage | Medium | 2026-04-10 |
 | R-009 | Mitigate | DORA only shown at team level; engineering handbook explicitly describes DORA as system-health signals; director-level coaching on psychologically safe use | Low | 2026-04-10 |
 
-### 6.4 Dependencies
+#### Dependencies
 
 | ID | Dependency | Direction | Status | Owner | Evidence | Last Assessed |
 |----|-----------|-----------|--------|-------|----------|---------------|
@@ -10542,13 +10551,13 @@ Dev and integration-test environments automatically scale to zero outside busine
 | D-004 | Megaport interconnect between GCP and AWS | Inbound | Resolved | Network team | Live since 2026-02 | 2026-02-20 |
 | D-005 | Product teams adopt golden paths (Wave 1 commitments) | Inbound | Committed | Engineering Directors | MoU signed 2026-03 | 2026-03-20 |
 
-### 6.5 Issues
+#### Issues
 
 | ID | Issue | Category | Impact | Owner | Resolution Plan | Status | Last Assessed |
 |----|-------|----------|--------|-------|-----------------|--------|---------------|
 | I-001 | Backstage `software-templates` plugin has a known memory leak at > 2,000 catalogue entities | Technical | Medium | Tom Bloggs | Upstream fix in v1.26; pinned our instance to v1.25 with workaround | In progress | 2026-04-05 |
 
-### 6.6 Guardrail Exceptions
+### 6.3 Guardrail Exceptions
 
 #### Policy Exceptions
 
@@ -10568,7 +10577,7 @@ Dev and integration-test environments automatically scale to zero outside busine
 |----------|----------|
 | Does the design materially change the organisation's technology risk profile? | Yes -- the platform concentrates supply-chain risk but also concentrates supply-chain controls; net reduction in organisational risk |
 
-### 6.7 Architectural Decisions Log
+### 6.4 Architectural Decisions Log
 
 | ADR # | Title | Status | Date | Impact |
 |-------|-------|--------|------|--------|
@@ -12280,6 +12289,162 @@ It becomes a **living document**. Update it whenever the architecture materially
 Yes, and you should. Copy the SAD, update the metadata, and adapt the content. The structural consistency across SADs is one of the adoption benefits — common patterns become visible across the portfolio.
 
 ---
+## Glossary
+URL: https://archstandard.org/v1/standard/glossary/
+> Definitions of terms used throughout the ADS standard, with attribution to source standards and frameworks.
+
+This glossary defines terms used throughout the Architecture Description Standard and in Solution Architecture Documents generally. Where a definition is drawn from an external standard or framework, the source is noted — the intent is to use terms consistently with their authoritative definitions rather than recoining them.
+
+
+Terms used as section headings within the standard (e.g. Logical View, Operational Excellence) are defined in the section itself. This glossary covers cross-cutting vocabulary.
+
+
+## ADS Standard Terms
+
+Terms defined by or specific to the Architecture Description Standard.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **ADS** | Architecture Description Standard — this standard. Prescribes the structure, content, and quality criteria of a Solution Architecture Document. | ADS |
+| **SAD** | Solution Architecture Document — the document produced by following ADS. Describes the architecture of a specific solution. Originally "Software Architecture Document" in the Rational Unified Process. | ADS / RUP |
+| **HLD** | High Level Design — the architectural views and quality attributes content within a SAD (Sections 3–4). The terms HLD and SAD are often used interchangeably in industry; ADS treats HLD as a subset of the SAD. | ADS |
+| **Depth Tier** | One of three documentation levels — Minimum, Recommended, or Comprehensive — mapped to RFC 2119 SHALL, SHOULD, and MAY respectively. Each section and sub-section carries a depth badge indicating the minimum tier required. | ADS |
+| **Compliance Score** | A 0–5 governance score applied per section indicating how thoroughly the section has been completed relative to the depth tier requirements. | ADS |
+| **CRAIDS Log** | A consolidated governance log covering Constraints, Risks, Assumptions, Issues, Dependencies, and Standards (Section 6.1). A superset of the common RAID log that adds Constraints and Standards. | ADS / project management |
+| **Guardrail Exception** | A documented, approved deviation from an organisational architecture policy, security standard, or platform constraint. Recorded in Section 6.3. | ADS |
+| **Maturity Indicator** | A visual badge (Minimum / Recommended / Comprehensive) that tags each sub-section with its expected depth of completion. | ADS |
+
+## Architecture Description (ISO/IEC/IEEE 42010)
+
+Terms defined in ISO/IEC/IEEE 42010:2022 — *Systems and software engineering — Architecture description*. This standard is the formal basis for the concept of an architecture description.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **Architecture** | Fundamental concepts or properties of a system in its environment embodied in its elements, relationships, and the principles of its design and evolution. | ISO 42010:2022 §3.3 |
+| **Architecture Description (AD)** | A work product used to express an architecture. The SAD is the AD in the ADS model. | ISO 42010:2022 §3.4 |
+| **Architectural View** | A work product expressing the architecture of a system from the perspective of specific system concerns. ADS defines six views (Sections 3.1–3.6). | ISO 42010:2022 §3.8 |
+| **Architectural Viewpoint** | A specification of the conventions for constructing, interpreting, and using an architectural view. Each ADS section defines an implicit viewpoint. | ISO 42010:2022 §3.9 |
+| **Architectural Model** | A model that expresses architecture information from a specific viewpoint. Diagrams, tables, and structured descriptions within a view are architectural models. | ISO 42010:2022 §3.7 |
+| **Concern** | An interest pertaining to the system's development, its operation, or any other aspect that is critical or otherwise important to one or more stakeholders. | ISO 42010:2022 §3.11 |
+| **Stakeholder** | An individual, team, organisation, or classes thereof, having an interest in a system. Documented in Section 2 of ADS. | ISO 42010:2022 §3.15 |
+| **System of Interest** | The system whose architecture is under consideration in a given architectural description. | ISO 42010:2022 §3.16 |
+| **Architecture Rationale** | A record of the basis for architecture decisions made. Captured in the ADR log (Section 6.4) and in ADRs linked from it. | ISO 42010:2022 §3.6 |
+| **Correspondence** | A relationship between elements of an architecture description — used to trace requirements to design decisions, or sections to stakeholder concerns. | ISO 42010:2022 §3.12 |
+
+## Quality Attributes (ISO/IEC 25010 & WAF)
+
+Terms from ISO/IEC 25010:2023 — *Systems and software quality models* — and from the AWS and Azure Well-Architected Frameworks. ADS Section 4 maps these sources into five pillars.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **Quality Attribute** | A measurable or testable property of a system used to indicate how well the system satisfies the needs of its stakeholders. Often called Non-Functional Requirements (NFRs) in practice. | ISO 25010:2023 |
+| **Non-Functional Requirement (NFR)** | A requirement that specifies criteria for the operation of a system rather than specific behaviours. NFRs correspond to quality attributes; ADS uses "Quality Attributes" as the more precise term. | Industry standard |
+| **Reliability** | The degree to which a system performs specified functions under specified conditions for a specified period. Encompasses availability, fault tolerance, and recoverability. | ISO 25010:2023 |
+| **Availability** | The degree to which a system or component is operational and accessible when required. Typically expressed as a percentage (e.g. 99.9% = ~8.7 hours downtime/year). | ISO 25010:2023 / WAF |
+| **Resilience** | The ability of a system to absorb disruption, adapt, and recover to a previous or improved state. Broader than fault tolerance — includes organisational and process dimensions. | WAF / general |
+| **Fault Tolerance** | The ability of a system to continue operating correctly in the event of one or more component failures. | ISO 25010:2023 |
+| **Scalability** | The capability of a system to handle increasing workload by adding resources. May be vertical (bigger nodes) or horizontal (more nodes). | Industry standard |
+| **Elasticity** | The ability of a system to automatically scale resources up or down in proportion to demand. Distinct from scalability in that it implies automation. | Cloud / WAF |
+| **Operational Excellence** | The ability to run and monitor systems to deliver business value and to continually improve supporting processes. One of the five ADS quality attribute pillars (Section 4.1). | AWS WAF / Azure WAF |
+| **Performance Efficiency** | The ability of a system to perform its functions within stated time and resource constraints. Section 4.3. | ISO 25010:2023 / WAF |
+| **Cost Optimisation** | The ability to run systems to deliver business value at the lowest price point. Section 4.4. Informed by FinOps practices. | AWS WAF / Azure WAF |
+| **Sustainability** | The ability of a system to minimise its environmental impact over its operational lifetime. Section 4.5. | AWS WAF 2022 / Azure WAF |
+| **RPO** | Recovery Point Objective — the maximum acceptable amount of data loss measured in time. Defines how far back in time a recovery must be possible. | ISO 22301 / industry |
+| **RTO** | Recovery Time Objective — the maximum acceptable time to restore a system after an incident. Defines the maximum tolerable downtime. | ISO 22301 / industry |
+| **SLA** | Service Level Agreement — a contract between a provider and a consumer specifying availability, performance, and support commitments. | Industry standard |
+| **SLO** | Service Level Objective — an internal target for reliability or performance, typically more stringent than the SLA. | Google SRE / industry |
+| **SLI** | Service Level Indicator — a quantitative measure of a service's behaviour (e.g. request latency p99, error rate). SLIs are measured against SLOs. | Google SRE / industry |
+
+## Architectural Views (4+1 & General)
+
+Terms from Kruchten's 4+1 Architectural View Model (1995) and general diagramming conventions. ADS Section 3 defines six views derived from this model.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **4+1 View Model** | An architecture description framework using five concurrent views: Logical, Development (Process), Physical (Deployment), Integration (Process), and Scenarios. Proposed by Philippe Kruchten in 1995. ADS adapts this into six views. | Kruchten 1995 |
+| **Logical View** | Describes the functional decomposition of a system into components, services, and their responsibilities. Corresponds to Section 3.1. | 4+1 / ADS |
+| **Integration View** | Describes how the system interacts with external systems via APIs, events, and data flows. Corresponds to Section 3.2. Extends the 4+1 Process view. | ADS |
+| **Physical View** | Describes the deployment topology — infrastructure, environments, networking, and hosting. Corresponds to Section 3.3. Called the Deployment View in some models. | 4+1 / ADS |
+| **Data View** | Describes the data model, storage strategy, classification, and data flows at rest. Corresponds to Section 3.4. | ADS |
+| **Security View** | Describes identity and access management, threat model, data protection controls, and compliance posture. Corresponds to Section 3.5. | ADS |
+| **Scenarios View** | Documents architecturally significant use cases and runtime sequences that validate the design. Corresponds to Section 3.6. The "+1" view in the 4+1 model. | 4+1 / ADS |
+| **Context Diagram** | A diagram showing the system in the context of its external actors and systems, without internal detail. Common entry point for the Logical or Integration view. | Industry standard |
+| **Cross-Cutting Concern** | A concern that affects multiple components or views and cannot be cleanly encapsulated in one place — security, observability, and internationalisation are typical examples. | AOP / general |
+
+## Governance & Decision Making
+
+Terms used in Section 6 (Decision Making & Governance) and in architecture governance generally.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **Architecture Decision Record (ADR)** | A document capturing a significant architectural decision, its context, the options considered, the decision taken, and its consequences. Summarised in the ADR log (Section 6.4). | Nygard 2011 / industry |
+| **Constraint** | A factor that limits the design space and is non-negotiable — a fixed deadline, a mandated technology, a regulatory requirement, or a budget ceiling. | CRAIDS / project management |
+| **Assumption** | A factor believed to be true but not yet verified. Assumptions that prove false become risks or issues. | CRAIDS / project management |
+| **Risk** | A potential future event that could adversely affect the design or delivery. Characterised by likelihood and impact. | CRAIDS / ISO 31000 |
+| **Issue** | A problem that has already materialised and requires resolution. Distinguished from a risk in that it is current, not potential. | CRAIDS / project management |
+| **Dependency** | An external factor, system, decision, or deliverable that the design relies upon and that is outside the team's control. | CRAIDS / project management |
+| **Technical Debt** | The implied cost of future rework resulting from choosing a quick or limited solution now instead of a better approach that would take longer. | Ward Cunningham / industry |
+| **TOGAF** | The Open Group Architecture Framework — an enterprise architecture methodology covering governance, capability, and continuum. Operates at enterprise scope; ADS sits below it at solution scope. | The Open Group |
+| **ARB** | Architecture Review Board — a governance body that reviews and approves architectural decisions, guardrail exceptions, and major design choices. | Industry standard |
+| **Compliance Traceability** | A mapping from design decisions to the specific requirements of applicable standards, regulations, or policies that they satisfy. Section 6.5. | ADS / audit practice |
+
+## Security
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **Zero Trust** | A security model that assumes no implicit trust based on network location — every access request must be authenticated, authorised, and continuously validated. "Never trust, always verify." | NIST SP 800-207 |
+| **Defence in Depth** | A layered security strategy in which multiple independent controls protect against failure or bypass of any single control. | NIST / general |
+| **Least Privilege** | The principle that a user, process, or system should have only the minimum permissions required to perform its function. | NIST / general |
+| **Threat Model** | A structured analysis of potential threats to a system — identifying assets, threat actors, attack vectors, and mitigations. STRIDE is a common methodology. | OWASP / STRIDE |
+| **Data Classification** | The categorisation of data by sensitivity level (e.g. Public, Internal, Confidential, Restricted) to determine appropriate handling, storage, and access controls. | Industry standard |
+| **Data Sovereignty** | The requirement that data is subject to the laws and governance of the country in which it is collected or stored. Relevant to cloud region selection. | Legal / regulatory |
+| **PII** | Personally Identifiable Information — any information that can identify a natural person. Subject to data protection regulations such as GDPR and UK GDPR. | GDPR / UK GDPR |
+| **DPIA** | Data Protection Impact Assessment — a mandatory analysis under GDPR for high-risk personal data processing, identifying risks and mitigations. | GDPR Art. 35 |
+| **Encryption at Rest** | The encryption of stored data so that it is unreadable without the appropriate decryption key. Protects against physical media theft and unauthorised storage access. | Industry standard |
+| **Encryption in Transit** | The encryption of data as it moves between systems — typically via TLS 1.2+ or mTLS. Protects against interception and man-in-the-middle attacks. | Industry standard |
+| **mTLS** | Mutual Transport Layer Security — a protocol in which both client and server authenticate each other via certificates, providing strong mutual identity assurance. | IETF / industry |
+| **IAM** | Identity and Access Management — the framework of policies and technologies ensuring the right individuals access the right resources at the right time. | Industry standard |
+
+## Reliability & Operations
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **High Availability (HA)** | A system design characteristic that ensures a high level of operational continuity over a given period. Typically achieved through redundancy and automatic failover. | Industry standard |
+| **Disaster Recovery (DR)** | The process of restoring system functionality following a catastrophic failure or data loss event. Governed by RPO and RTO targets. | ISO 22301 / industry |
+| **Observability** | The ability to understand the internal state of a system from its external outputs — metrics, logs, and traces. Encompasses monitoring, alerting, and distributed tracing. | DORA / Google SRE |
+| **Telemetry** | Automated collection and transmission of data from a system for monitoring and analysis. Comprises metrics, logs, and traces. | Industry standard |
+| **SRE** | Site Reliability Engineering — a discipline applying software engineering principles to infrastructure and operations, with a focus on reliability, scalability, and automation. | Google / industry |
+| **SDLC** | Software Development Lifecycle — the structured process for planning, creating, testing, and deploying software. | Industry standard |
+| **CI/CD** | Continuous Integration / Continuous Deployment — practices in which code changes are automatically built, tested, and (optionally) deployed. | Industry standard |
+| **Idempotency** | The property of an operation such that performing it multiple times produces the same result as performing it once. Critical for safe retry behaviour in distributed systems. | Maths / distributed systems |
+| **Eventual Consistency** | A consistency model in distributed systems in which, given no new updates, all replicas will eventually converge to the same value. A trade-off against strong consistency for availability and partition tolerance. | CAP theorem / Werner Vogels |
+| **FinOps** | Cloud Financial Operations — a practice combining finance, technology, and business to optimise cloud spending and accountability. | FinOps Foundation / CNCF |
+
+## Data & Integration
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **ACID** | Atomicity, Consistency, Isolation, Durability — the four properties that guarantee reliable database transaction processing. | Database theory / Jim Gray |
+| **CAP Theorem** | A theorem stating that a distributed system can guarantee at most two of: Consistency, Availability, and Partition Tolerance simultaneously. | Brewer 2000 / Gilbert & Lynch 2002 |
+| **CDC** | Change Data Capture — a pattern for tracking changes to database records and propagating them to other systems, typically for real-time integration or event streaming. | Industry standard |
+| **ETL** | Extract, Transform, Load — a data integration pattern for moving data from source systems to a target store (e.g. a data warehouse), transforming it in transit. | Industry standard |
+| **API Gateway** | An intermediary that acts as the single entry point for client requests to backend services, handling routing, authentication, rate limiting, and protocol translation. | Industry standard |
+| **Event-Driven Architecture** | An architectural pattern in which components communicate by producing and consuming events asynchronously, decoupling producers from consumers. | Industry standard |
+| **Microservices** | An architectural style structuring a system as a collection of small, independently deployable services, each responsible for a bounded domain function. | Industry standard |
+| **Service Mesh** | An infrastructure layer that manages service-to-service communication within a microservices architecture, providing observability, security (mTLS), and traffic control without application code changes. | Industry standard |
+| **CMDB** | Configuration Management Database — a repository of information about IT assets (configuration items) and their relationships, used for change management and impact analysis. | ITIL |
+
+## RFC 2119 Terms
+
+ADS uses RFC 2119 keywords to define the normative force of each requirement.
+
+| Term | Definition | Source |
+|------|-----------|--------|
+| **SHALL** | An absolute requirement. A compliant SAD at Minimum depth must satisfy all SHALL requirements. | RFC 2119 |
+| **SHOULD** | A recommendation. There may be valid reasons to omit a SHOULD requirement, but the implications must be understood. Corresponds to Recommended depth. | RFC 2119 |
+| **MAY** | An option. A compliant SAD may include or omit MAY items at the author's discretion. Corresponds to Comprehensive depth. | RFC 2119 |
+
+---
 ## prompts
 URL: https://archstandard.org/v1/standard/prompts/
 
@@ -12583,7 +12748,8 @@ Every v1.x release of the standard targets [JSON Schema v1.0.0](https://archstan
 
 | Version | Status | Notes |
 |---------|--------|-------|
-| **v1.3.2** | **Current** | Schema consistency fixes and section 6.6/6.8/6.10 additions |
+| **v1.3.3** | **Current** | Sections 5 and 6 consolidated (10 sub-sections each → 6) |
+| v1.3.2 | Superseded | Schema consistency fixes and section 6.2/6.4/6.6 additions |
 | v1.3.1 | Superseded | Bug fixes and SAD template polish |
 | v1.3.0 | Superseded | Adoption release |
 | v1.2.0 | Superseded | Public release |
@@ -12599,6 +12765,28 @@ Third-party builders ([see specification](https://github.com/andibing/archstanda
 
 Releases are listed newest-first.
 
+### v1.3.3 - Sections 5 and 6 simplified
+
+**Date:** 2026-07-24 · **JSON Schema:** v1.0.0 (no schema changes — editorial restructure only)
+
+Structural simplification reducing both Section 5 (Lifecycle Management) and Section 6 (Decision Making & Governance) from 10 sub-sections each to 6.
+
+**Section 5 changes:**
+- 5.3 Test Strategy + 5.4 Release Management → **5.3 Test & Release** (combined under one heading)
+- 5.5 Operations & Support + 5.7 Service Start + 5.8 Maintainability → **5.4 Operations** (with sub-headings)
+- 5.6 Resourcing & Skills → renumbered **5.5**
+- 5.9 Decommissioning & Legacy Removal + 5.10 Exit Planning → **5.6 Decommissioning & Exit**
+
+**Section 6 changes:**
+- 6.1 Constraints + 6.2 Assumptions + 6.3 Risks + 6.4 Dependencies + 6.5 Issues → **6.1 CRAIDS Log** (single section with sub-headings per category)
+- 6.6 Technical Debt Register → renumbered **6.2**
+- 6.7 Guardrail Exceptions → renumbered **6.3**
+- 6.8 Architectural Decisions Log → renumbered **6.4**
+- 6.9 Compliance Traceability → renumbered **6.5**
+- 6.10 Approval Sign-Off → renumbered **6.6**
+
+No content was removed. All fields, tables, and guidance are preserved under the new structure.
+
 ### v1.3.2 - Schema consistency and Section 6 additions
 
 **Date:** 2026-04-28 · **JSON Schema:** v1.0.0 (additions only — backwards compatible)
@@ -12606,8 +12794,8 @@ Releases are listed newest-first.
 Patch release closing internal-consistency gaps between the schema, the standard text, and the worked examples. All seven examples now validate clean against the schema.
 
 **Schema additions (additive — old SADs remain valid):**
-- `riskGovernance.technicalDebt` — array of TD-NNN entries (id, description, category, impact, remediation plan, target date, owner) for **Section 6.6 Technical Debt Register**
-- `riskGovernance.architectureDecisionsLog` — governance summary index for **Section 6.8 Architectural Decisions Log**, referencing full ADRs in `architecturalViews.scenarios.adrs` (Section 3.6.2) by id
+- `riskGovernance.technicalDebt` — array of TD-NNN entries (id, description, category, impact, remediation plan, target date, owner) for **Section 6.2 Technical Debt Register**
+- `riskGovernance.architectureDecisionsLog` — governance summary index for **Section 6.4 Architectural Decisions Log**, referencing full ADRs in `architecturalViews.scenarios.adrs` (Section 3.6.2) by id
 - `approvals[].conditions` — optional string capturing conditions on a sign-off
 
 **Schema corrections:**

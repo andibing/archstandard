@@ -2,7 +2,7 @@
 
 > A free, open-source standard that prescribes the structure, content, and quality criteria of Solution Architecture Documents (SADs). Built upon ISO/IEC/IEEE 42010, the 4+1 View Model, the cloud Well-Architected Frameworks, and TOGAF. Backed by a formal JSON Schema (Draft 2020-12) for machine validation and generation.
 
-ADS defines which sections a SAD must contain, what each section must answer, and what "good" looks like at three documentation depths (Minimum / Recommended / Comprehensive — mapped to RFC 2119 SHALL / SHOULD / MAY). The current standard version is v1.3.2; the JSON Schema version is v1.0.0. Licensed under CC BY 4.0 (content) and MIT (code).
+ADS defines which sections a SAD must contain, what each section must answer, and what "good" looks like at three documentation depths (Minimum / Recommended / Comprehensive — mapped to RFC 2119 SHALL / SHOULD / MAY). The current standard version is v1.3.3; the JSON Schema version is v1.0.0. Licensed under CC BY 4.0 (content) and MIT (code).
 
 Three names appear throughout. **ADS** is this standard. **SAD** (Solution Architecture Document) is the document you produce. **HLD** (High Level Design) is the architectural-views and quality-attributes content within a SAD.
 
@@ -34,8 +34,8 @@ Three names appear throughout. **ADS** is this standard. **SAD** (Solution Archi
 - [4-3-performance](https://archstandard.org/v1/standard/4-3-performance/): 
 - [4-4-cost-optimisation](https://archstandard.org/v1/standard/4-4-cost-optimisation/): 
 - [4-5-sustainability](https://archstandard.org/v1/standard/4-5-sustainability/): 
-- [5-lifecycle](https://archstandard.org/v1/standard/5-lifecycle/): 
-- [6-decision-making](https://archstandard.org/v1/standard/6-decision-making/): 
+- [5. Lifecycle Management](https://archstandard.org/v1/standard/5-lifecycle/): Software development, CI/CD, service transition, operations, and end-of-life.
+- [6. Decision Making & Governance](https://archstandard.org/v1/standard/6-decision-making/): CRAIDS log, technical debt, architectural decisions, and compliance traceability.
 - [7-appendices](https://archstandard.org/v1/standard/7-appendices/): 
 
 ## Schema and Templates
@@ -75,6 +75,7 @@ Validated against the schema, covering different industries, scales, and depths.
 
 - [downloads](https://archstandard.org/v1/standard/downloads/): 
 - [faq](https://archstandard.org/v1/standard/faq/): 
+- [Glossary](https://archstandard.org/v1/standard/glossary/): Definitions of terms used throughout the ADS standard, with attribution to source standards and frameworks.
 - [prompts](https://archstandard.org/v1/standard/prompts/): 
 - [schema](https://archstandard.org/v1/standard/schema/): 
 - [templates](https://archstandard.org/v1/standard/templates/): 
