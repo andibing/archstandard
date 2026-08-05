@@ -22,7 +22,7 @@
     "release:version": "bash scripts/release-version.sh"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.41.5",
+    "@astrojs/starlight": "^0.41.7",
     "astro": "^7.1.6",
     "sharp": "^0.35.3"
   }
