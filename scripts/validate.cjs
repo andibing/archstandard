@@ -34,6 +34,7 @@ const requiredFiles = [
   'src/assets/section-map.svg',
   'src/content/docs/index.mdx',
   'src/content/docs/standard/overview.mdx',
+  'src/content/docs/standard/why-ads.mdx',
   'src/content/docs/standard/quickstart.mdx',
   'src/content/docs/standard/cheat-sheet.mdx',
   'src/content/docs/standard/how-to-use.mdx',

@@ -15,6 +15,7 @@ Three names appear throughout. **ADS** is this standard. **SAD** (Solution Archi
 - [cheat-sheet](https://archstandard.org/v1/standard/cheat-sheet/): 
 - [design-principles](https://archstandard.org/v1/standard/design-principles/): 
 - [Framework Alignment](https://archstandard.org/v1/standard/framework-alignment/): How ADS relates to established architecture frameworks — what it shares and where it differs.
+- [Why ADS?](https://archstandard.org/v1/standard/why-ads/): How ADS compares to ISO 42010, TOGAF, 4+1, AWS/Azure Well-Architected, arc42, and C4 — and why you might choose it.
 
 ## The Standard (Sections 0–7)
 
@@ -48,8 +49,6 @@ Three names appear throughout. **ADS** is this standard. **SAD** (Solution Archi
 - [Complete standard PDF](https://archstandard.org/v1/ads-standard-v1.pdf)
 
 ## Worked Example SADs
-
-Validated against the schema, covering different industries, scales, and depths.
 
 - [archstandard-org](https://archstandard.org/v1/examples/archstandard-org/):  [JSON](https://archstandard.org/v1/examples/archstandard-org.json) [Markdown](https://archstandard.org/v1/examples/archstandard-org.md)
 - [cloud-migration](https://archstandard.org/v1/examples/cloud-migration/):  [JSON](https://archstandard.org/v1/examples/cloud-migration.json) [Markdown](https://archstandard.org/v1/examples/cloud-migration.md)

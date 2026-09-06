@@ -22,9 +22,6 @@
 #    pre-rename. Starlight serves English content under localised paths
 #    when no translation exists, so the integration-view target resolves
 #    cleanly in fr/de.
-/v1/standard/why-ads/               /v1/standard/overview/                  301
-/standard/why-ads/                  /v1/standard/overview/                  301
-
 /v1/standard/3-2-process-view/      /v1/standard/3-2-integration-view/      301
 /standard/3-2-process-view/         /v1/standard/3-2-integration-view/      301
 /v1/fr/standard/3-2-process-view/   /v1/fr/standard/3-2-integration-view/   301

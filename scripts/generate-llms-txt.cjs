@@ -203,8 +203,6 @@ function generateIndex({ orientation, sections, examples, guidance, resources })
 
   lines.push('## Worked Example SADs');
   lines.push('');
-  lines.push('Validated against the schema, covering different industries, scales, and depths.');
-  lines.push('');
   for (const p of examples) {
     const name = p.slug.replace('examples/', '');
     lines.push(`- [${p.title}](${url(p.slug)}): ${p.desc} [JSON](${BASE}/v1/examples/${name}.json) [Markdown](${BASE}/v1/examples/${name}.md)`);

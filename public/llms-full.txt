@@ -1056,6 +1056,118 @@ Both ADS and arc42 aim to provide a practical template for documenting software/
 | Decision Making & Governance | Correspondences | — | — | — |
 
 ---
+## Why ADS?
+URL: https://archstandard.org/v1/standard/why-ads/
+> How ADS compares to ISO 42010, TOGAF, 4+1, AWS/Azure Well-Architected, arc42, and C4 — and why you might choose it.
+
+You've probably encountered other frameworks, standards, or templates before finding this one. This page explains what each alternative is good at, where it falls short for SAD authoring, and where ADS fits in.
+
+
+ADS is not a replacement for most of the alternatives below — it sits alongside them. The question is not "ADS or TOGAF?" but "which tool for which job?"
+
+
+---
+
+## ISO/IEC/IEEE 42010
+
+**What it is:** The international standard that defines the vocabulary and conceptual model for architecture descriptions — viewpoints, views, correspondences, and concerns.
+
+**What it does well:** Provides a rigorous, agreed-upon vocabulary for talking about architecture descriptions. It is the theoretical foundation that ADS is built on.
+
+**The gap:** 42010 tells you *what* an architecture description is — not *what to put in it*. It defines no sections, no content requirements, and no quality criteria. You cannot hand a team "ISO 42010" and ask them to produce a SAD.
+
+**How ADS relates:** ADS is a conforming application of ISO 42010. It takes the standard's concepts (viewpoints, views, concerns, stakeholders) and turns them into concrete, opinionated sections with content requirements, scoring guidance, and three documentation depths.
+
+---
+
+## TOGAF
+
+**What it is:** The Open Group Architecture Framework — a comprehensive enterprise architecture methodology covering governance, capability modelling, the Architecture Development Method (ADM), and the Architecture Repository.
+
+**What it does well:** Running an EA practice at portfolio or enterprise scale. Defining architecture domains (Business, Data, Application, Technology). Managing architecture artefacts across multiple projects over time.
+
+**The gap:** TOGAF is an EA framework, not a SAD template. It describes *how to run an EA practice* — not how to document a single solution design. TOGAF's Architecture Building Blocks and ADM phases are process guidance; they do not prescribe the structure or content of a solution-level HLD.
+
+**How ADS relates:** If your organisation uses TOGAF, ADS is the deliverable that sits within TOGAF's Phase D (Technology Architecture) and Phase E (Opportunities and Solutions). ADS-compliant SADs can reference TOGAF's Architecture Repository as context. The two are complementary, not competing.
+
+---
+
+## 4+1 View Model
+
+**What it is:** Philippe Kruchten's 1995 paper introducing five views for documenting software architecture: Logical, Process, Physical, Development, and Scenarios.
+
+**What it does well:** Separating architectural concerns into distinct, stakeholder-relevant views. It remains one of the most cited models in architecture documentation.
+
+**The gap:** 4+1 is a *view model*, not a document standard. It defines which perspectives to describe, not what content each view must contain, how to assess quality, how to document decisions, or what "complete" looks like.
+
+**How ADS relates:** ADS's Section 3 (Architectural Views) is directly informed by 4+1. The Logical View (3.1), Integration View (3.2), Physical View (3.3), Data View (3.4), Security View (3.5), and Scenarios (3.6) extend 4+1's structure with explicit content requirements and scoring at three depths. ADS is 4+1 made actionable.
+
+---
+
+## AWS Well-Architected Framework / Azure Well-Architected Framework
+
+**What they are:** Cloud-provider review checklists organised around quality pillars (Operational Excellence, Reliability, Performance, Cost Optimisation, Sustainability/Security). Delivered as review tools, questionnaires, and guidance documentation.
+
+**What they do well:** Reviewing a cloud workload against provider best practice. Identifying gaps in reliability or cost management. Generating findings for a specific cloud environment.
+
+**The gap:** Both frameworks are *review tools*, not *documentation standards*. They do not prescribe how to structure a SAD, what views to include, or how to document architectural decisions. They are also provider-specific — AWS WAF does not cover Azure patterns, and vice versa.
+
+**How ADS relates:** ADS borrows the quality attribute taxonomy (the five pillars) from the cloud WAFs and integrates it as Section 4 (Quality Attributes) — cloud-agnostic and applicable to any deployment model. An ADS-compliant SAD can then reference AWS or Azure WAF findings in the relevant sub-section, grounding provider-specific review outcomes in a provider-neutral document structure.
+
+---
+
+## arc42
+
+**What it is:** A popular, free SAD template from Peter Hruschka and Gernot Starke (German/European origin). Twelve sections covering introduction, constraints, context, solution strategy, building block view, runtime view, deployment view, crosscutting concepts, decisions, quality requirements, risks, and a glossary.
+
+**What it does well:** A battle-tested, community-maintained template with good tooling support (Structurizr, Confluence templates, AsciiDoc). Well-suited to teams that want a lightweight, opinionated structure without a heavy governance layer.
+
+**The gap:** arc42 has no formal schema — there is no machine-readable contract to validate against. It has no tiered depth model (Minimum / Recommended / Comprehensive), so "done" is hard to define. Its quality section is lightweight relative to the cloud WAF taxonomy. The governance section (decisions, risks) is not consolidated. There is no scoring model.
+
+**ADS vs arc42 at a glance:**
+
+| | ADS | arc42 |
+|---|---|---|
+| Sections | 8 (0–7) | 12 |
+| JSON Schema | Yes (Draft 2020-12) | No |
+| Depth tiers | Minimum / Recommended / Comprehensive | None |
+| Quality attributes | 5 (cloud WAF taxonomy) | Lightweight (quality tree) |
+| Decision governance | CRAIDS Log, ADL, Debt Register | ADR section |
+| Scoring model | Per-section scoring guidance | None |
+| Licence | CC BY 4.0 + MIT | CC BY 4.0 |
+
+Neither is universally better. arc42 has broader community tooling; ADS has a formal schema, depth model, and scoring.
+
+---
+
+## C4 Model
+
+**What it is:** Simon Brown's notation for software architecture diagrams — four levels of abstraction: System Context, Container, Component, and Code diagrams.
+
+**What it does well:** Producing clear, consistent diagrams at the right level of abstraction for different audiences. Widely adopted, tool-agnostic, and easy to learn.
+
+**The gap:** C4 is a *diagramming notation*, not a document standard. It does not define what sections a SAD should contain, what quality attributes to address, how to record decisions, or what "complete" means for a given project.
+
+**How ADS relates:** C4 diagrams are an excellent choice for illustrating ADS sections — particularly Section 3.1 (Logical View) for system context and container diagrams, and Section 3.3 (Physical View) for deployment context. ADS does not mandate a notation; C4 is a recommended option.
+
+---
+
+## Summary
+
+| | Purpose | Prescribes SAD content? | Schema? | Depth tiers? | Cloud-agnostic? |
+|---|---|---|---|---|---|
+| **ADS** | SAD document standard | Yes | Yes | Yes | Yes |
+| ISO 42010 | AD vocabulary & concepts | No | No | No | Yes |
+| TOGAF | EA framework & methodology | No | No | No | Yes |
+| 4+1 | View model | Partially | No | No | Yes |
+| AWS WAF | Cloud workload review | No | No | No | No (AWS) |
+| Azure WAF | Cloud workload review | No | No | No | No (Azure) |
+| arc42 | SAD template | Yes | No | No | Yes |
+| C4 | Diagram notation | No | No | No | Yes |
+
+ADS is the only entry in this table that is simultaneously a **document standard**, **machine-validatable via JSON Schema**, **tiered by depth**, and **cloud-agnostic**. Use the others where they are strong; use ADS to hold the SAD together.
+
+---
 ## 0. Document Control
 URL: https://archstandard.org/v1/standard/0-document-control/
 > Metadata, change history, contributors, and document purpose.

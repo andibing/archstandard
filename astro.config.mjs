@@ -84,6 +84,7 @@ export default defineConfig({
 					collapsed: false,
 					items: [
 						{ label: 'Overview', slug: 'standard/overview' },
+						{ label: 'Why ADS?', slug: 'standard/why-ads' },
 						{ label: 'Conformance and Usage', slug: 'standard/how-to-use' },
 						{ label: 'Framework Alignment', slug: 'standard/framework-alignment' },
 						{ label: 'Design Principles', slug: 'standard/design-principles' },
