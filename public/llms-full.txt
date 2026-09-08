@@ -12560,11 +12560,25 @@ ADS uses RFC 2119 keywords to define the normative force of each requirement.
 ## prompts
 URL: https://archstandard.org/v1/standard/prompts/
 
-A collection of prompts for using Large Language Models (ChatGPT, Claude, Copilot, Gemini) alongside the ADS standard. Each prompt is a self-contained Markdown file you can paste into any LLM.
+A collection of prompts and skills for using Large Language Models (ChatGPT, Claude, Copilot, Gemini) alongside the ADS standard.
 
 
 These prompts help you draft, review, and improve SADs faster — they do not replace your judgement. Always review AI output for accuracy, check assumptions, and confirm with subject matter experts before submitting for governance.
 
+
+## Claude Code Skill
+
+### ADS Architect Skill
+
+A persistent skill for [Claude Code](https://claude.ai/code) that gives your AI assistant full ADS knowledge whenever it is working in your project. Unlike the one-shot prompts below, this skill is always available — no copy-pasting required.
+
+**[Download ads-skill.md](/v1/prompts/ads-skill.md)**
+
+**To install:** copy `ads-skill.md` into `.claude/agents/` at the root of your project repository.
+
+Once installed, Claude Code can find and read your SAD, generate new sections from a brief, review completeness against the standard, validate depth tiers, and maintain the CRAIDS log — all without you needing to explain what ADS is each time.
+
+---
 
 ## Drafting
 
