@@ -9,13 +9,13 @@ Three names appear throughout. **ADS** is this standard. **SAD** (Solution Archi
 ## Orientation
 
 - [overview](https://archstandard.org/v1/standard/overview/): 
+- [Why ADS?](https://archstandard.org/v1/standard/why-ads/): How ADS compares to ISO 42010, TOGAF, 4+1, AWS/Azure Well-Architected, arc42, and C4 — and why you might choose it.
 - [quickstart](https://archstandard.org/v1/standard/quickstart/): 
 - [Adopting ADS](https://archstandard.org/v1/standard/adoption-guide/): A practical guide to rolling out the Architecture Description Standard in your organisation — from first SAD to portfolio adoption.
 - [how-to-use](https://archstandard.org/v1/standard/how-to-use/): 
 - [cheat-sheet](https://archstandard.org/v1/standard/cheat-sheet/): 
 - [design-principles](https://archstandard.org/v1/standard/design-principles/): 
 - [Framework Alignment](https://archstandard.org/v1/standard/framework-alignment/): How ADS relates to established architecture frameworks — what it shares and where it differs.
-- [Why ADS?](https://archstandard.org/v1/standard/why-ads/): How ADS compares to ISO 42010, TOGAF, 4+1, AWS/Azure Well-Architected, arc42, and C4 — and why you might choose it.
 
 ## The Standard (Sections 0–7)
 

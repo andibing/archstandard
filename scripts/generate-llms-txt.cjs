@@ -88,7 +88,7 @@ const SECTION_ORDER = [
 
 // Predefined ordering for orientation pages
 const ORIENTATION_ORDER = [
-  'overview', 'quickstart', 'adoption-guide', 'how-to-use', 'cheat-sheet',
+  'overview', 'why-ads', 'quickstart', 'adoption-guide', 'how-to-use', 'cheat-sheet',
   'design-principles', 'framework-alignment',
 ];
 
