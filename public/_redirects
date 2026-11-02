@@ -45,6 +45,16 @@
 #    shadow them.
 /standard/*    /v1/standard/:splat    301
 /examples/*    /v1/examples/:splat    301
-/fr/*          /v1/fr/:splat          301
-/de/*          /v1/de/:splat          301
 /templates/*   /v1/templates/:splat   301
+
+# 4. Removed FR/DE locales — redirect all localised paths to English equivalents.
+#    FR/DE content was removed; Google had indexed ~99 of these URLs which now 404.
+#    Bare locale roots go to the English overview; deep paths map splat to /v1/.
+/v1/fr/     /v1/standard/overview/    301
+/v1/de/     /v1/standard/overview/    301
+/v1/fr/*    /v1/:splat                301
+/v1/de/*    /v1/:splat                301
+/fr/        /v1/standard/overview/    301
+/de/        /v1/standard/overview/    301
+/fr/*       /v1/:splat                301
+/de/*       /v1/:splat                301
